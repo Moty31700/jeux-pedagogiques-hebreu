@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>אַהֲבַת נְעוּרַי — גרסת הערסים</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Frank+Ruhl+Libre:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--card:#161616;--card-hover:#1e1e1e;--border:#2a2a2a;--gold:#c9a84c;--gold-light:#e8c96a;--gold-dim:rgba(201,168,76,0.15);--text:#e8e4dc;--text-muted:#888;--success:#3d7a55;--success-bg:#1a2e22;--error:#8b3a3a;--error-bg:#2a1515;--played-border:#3d7a55;--purple:#7c5cbf;--purple-dim:rgba(124,92,191,0.18);--purple-light:#b49ee8;--purple-bg:#100d1a;--blue:#1a6aaa;--blue-dim:rgba(26,106,170,0.18);--blue-light:#70b0e0;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding:0 0 80px}
+.nav{display:flex;border-bottom:1px solid var(--border);background:#111;position:sticky;top:0;z-index:100;overflow-x:auto}
+.nav-tab{flex:1;min-width:66px;padding:12px 4px;text-align:center;cursor:pointer;font-size:0.67rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap}
+.nav-tab:hover{color:var(--text)}.nav-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.nav-tab.moti-tab{color:var(--purple-light)}.nav-tab.moti-tab.active{color:var(--purple-light);border-bottom-color:var(--purple-light)}
+.nav-tab.vid-tab{color:var(--blue-light)}.nav-tab.vid-tab.active{color:var(--blue-light);border-bottom-color:var(--blue-light)}
+.nav-heb{font-family:'Frank Ruhl Libre',serif;font-size:0.9rem;direction:rtl}
+.page{display:none;padding:26px 16px;max-width:780px;margin:0 auto}.page.active{display:block}
+.page-header{text-align:center;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--border)}
+.heb-title{font-family:'Frank Ruhl Libre',serif;font-size:2rem;color:var(--gold);direction:rtl;margin-bottom:5px;line-height:1.3}
+.heb-title.purple{color:var(--purple-light)}.heb-title.blue{color:var(--blue-light)}
+.page-header h2{font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:400;color:var(--text-muted);letter-spacing:0.2em;text-transform:uppercase}
+.sub{font-size:0.78rem;color:var(--text-muted);margin-top:6px;font-style:italic}
+.score-bar{display:flex;gap:9px;margin-bottom:22px;flex-wrap:wrap;align-items:center}
+.score-pill{padding:5px 13px;border:1px solid var(--border);border-radius:20px;font-size:0.77rem;color:var(--text-muted)}
+.score-pill span{color:var(--gold);font-weight:500;margin-left:4px}.score-pill.streak span{color:#e88c3a}
+.prog-bar{height:2px;background:var(--border);border-radius:2px;margin-bottom:22px;overflow:hidden}
+.prog-fill{height:100%;background:var(--gold);transition:width 0.5s ease}.prog-fill.purple{background:var(--purple)}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:22px;margin-bottom:16px;animation:fadeIn 0.35s ease}
+.q-mode{font-size:0.67rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:11px}
+.q-mode.purple{color:var(--purple-light)}.q-fr{text-align:center;font-size:0.97rem;color:var(--text);margin-bottom:5px}
+.audio-btn{display:flex;align-items:center;justify-content:center;margin:9px auto 0;gap:6px;padding:6px 15px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--text-muted);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.77rem;transition:all 0.2s}
+.audio-btn:hover{border-color:var(--gold);color:var(--gold)}.audio-btn.playing{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.audio-btn.pur:hover{border-color:var(--purple-light);color:var(--purple-light)}.audio-btn.pur.playing{border-color:var(--purple-light);color:var(--purple-light);background:var(--purple-dim)}
+.sent-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:7px}
+.drop-zone{min-height:52px;background:#111;border:1.5px dashed var(--border);border-radius:6px;padding:8px 10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:16px;transition:border-color 0.2s;direction:rtl}
+.drop-zone.has-tiles{border-color:#3a3a3a;border-style:solid}.drop-zone.correct{border-color:var(--success);background:var(--success-bg)}.drop-zone.wrong{border-color:var(--error);background:var(--error-bg)}
+.drop-hint{font-size:0.76rem;color:var(--text-muted);font-style:italic;direction:rtl}
+.tile{display:inline-flex;align-items:center;padding:5px 11px;background:var(--card);border:1px solid #3a3a3a;border-radius:4px;cursor:pointer;font-family:'Frank Ruhl Libre',serif;font-size:1rem;color:var(--gold-light);direction:rtl;transition:all 0.18s;user-select:none;animation:tileIn 0.18s ease}
+.tile:hover{border-color:var(--gold);background:var(--gold-dim);transform:translateY(-1px)}.tile.placed{background:var(--gold-dim);border-color:var(--gold)}
+.tile-pool{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;min-height:42px;direction:rtl}
+.choices-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.choice{padding:12px 13px;background:var(--card);border:1px solid var(--border);border-radius:6px;cursor:pointer;text-align:center;font-family:'Frank Ruhl Libre',serif;font-size:1.1rem;color:var(--gold-light);direction:rtl;transition:all 0.2s}
+.choice:hover{border-color:var(--gold);background:var(--gold-dim)}.choice.pur-choice:hover{border-color:var(--purple-light);background:var(--purple-dim)}
+.choice.correct-choice{background:var(--success-bg);border-color:var(--played-border);color:#7fcc97;cursor:default}.choice.wrong-choice{background:var(--error-bg);border-color:var(--error);color:#cc7f7f;cursor:default}
+.listen-choices{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.l-choice{padding:10px 15px;background:var(--card);border:1px solid var(--border);border-radius:5px;cursor:pointer;display:flex;align-items:center;gap:9px;transition:all 0.2s}
+.l-choice:hover{border-color:var(--gold);background:var(--gold-dim)}.l-choice.correct-choice{background:var(--success-bg);border-color:var(--played-border)}.l-choice.wrong-choice{background:var(--error-bg);border-color:var(--error)}
+.lc-fr{font-size:0.88rem;color:var(--text)}.lc-heb{font-family:'Frank Ruhl Libre',serif;font-size:1.02rem;color:var(--text-muted);direction:rtl;margin-left:auto}
+.feedback{padding:11px 15px;border-radius:6px;margin-bottom:16px;font-size:0.86rem;animation:fadeIn 0.3s ease}
+.feedback.correct{background:var(--success-bg);border:1px solid var(--played-border);color:#7fcc97}.feedback.wrong{background:var(--error-bg);border:1px solid var(--error);color:#cc7f7f}
+.corr-ans{margin-top:4px;direction:rtl;font-family:'Frank Ruhl Libre',serif;font-size:0.98rem;color:var(--text-muted)}
+.game-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:8px 18px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.8rem;letter-spacing:0.04em;transition:all 0.2s}
+.btn:hover{border-color:var(--gold);color:var(--gold)}.btn:disabled{opacity:0.4;cursor:not-allowed}
+.btn-primary{background:var(--gold);color:#0d0d0d;border-color:var(--gold);font-weight:500}.btn-primary:hover{background:var(--gold-light);border-color:var(--gold-light);color:#0d0d0d}
+.btn-purple{background:var(--purple);color:#fff;border-color:var(--purple);font-weight:500}.btn-purple:hover{background:var(--purple-light);border-color:var(--purple-light);color:#0d0d0d}
+.btn-sm{padding:5px 12px;font-size:0.74rem}.btn-sh.active{border-color:var(--gold);color:var(--gold)}
+.game-over{text-align:center;padding:34px 14px;animation:fadeIn 0.5s ease}
+.big-score{font-family:'Playfair Display',serif;font-size:3.6rem;color:var(--gold);margin:12px 0}.big-score.purple{color:var(--purple-light)}
+.medal{font-size:2.6rem;margin-bottom:6px}
+.stats-row{display:flex;gap:12px;justify-content:center;margin:18px 0;flex-wrap:wrap}
+.stat-box{padding:12px 18px;background:var(--card);border:1px solid var(--border);border-radius:6px;text-align:center}
+.stat-box .sv{font-size:1.4rem;font-weight:500;color:var(--gold)}.stat-box .sv.purple{color:var(--purple-light)}
+.stat-box .sl{font-size:0.7rem;color:var(--text-muted);letter-spacing:0.08em;margin-top:3px}
+.listen-controls{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.speed-ctl{display:flex;align-items:center;gap:6px;margin-left:auto}
+.speed-ctl label{font-size:0.76rem;color:var(--text-muted)}
+.speed-ctl select{background:var(--card);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:0.76rem;cursor:pointer}
+.pb-text{font-size:0.7rem;color:var(--text-muted);text-align:right;margin-bottom:4px}
+.listen-list{display:flex;flex-direction:column;gap:5px}
+.listen-item{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:11px;padding:11px 15px;background:var(--card);border:1px solid var(--border);border-radius:5px;cursor:pointer;transition:all 0.2s}
+.listen-item:hover{border-color:#3a3a3a;background:var(--card-hover)}.listen-item.playing{border-color:var(--gold);background:#1a1500}.listen-item.played{border-color:var(--played-border);background:var(--success-bg)}
+.li-heb{font-family:'Frank Ruhl Libre',serif;font-size:1.2rem;color:var(--gold-light);direction:rtl}
+.li-fr{font-size:0.8rem;color:var(--text-muted);margin-top:2px}
+.li-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all 0.2s;flex-shrink:0}
+.li-btn:hover{border-color:var(--gold);color:var(--gold)}.listen-item.playing .li-btn{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}.listen-item.played .li-btn{border-color:var(--played-border);color:#5db87a}
+.song-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:12px}
+.strophe-label{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);margin-bottom:9px}
+.song-verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-size:1.1rem;color:var(--gold-light);line-height:1.9;cursor:pointer;padding:3px 5px;border-radius:4px;transition:background 0.2s}
+.song-verse:hover,.song-verse.active-verse{background:var(--gold-dim)}
+.song-verse-fr{font-size:0.76rem;color:var(--text-muted);font-style:italic;direction:ltr;text-align:left;margin-bottom:8px;padding:0 5px}
+.song-play-row{margin-bottom:16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.song-links{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.song-link-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:5px;font-size:0.78rem;font-family:'DM Sans',sans-serif;text-decoration:none;border:1px solid;transition:all 0.2s}
+.song-link-fb{border-color:#2a4a7a;color:var(--blue-light);background:var(--blue-dim)}.song-link-fb:hover{background:rgba(26,106,170,0.35);border-color:var(--blue)}
+.lex-search{width:100%;padding:8px 13px;background:var(--card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.86rem;margin-bottom:18px}
+.lex-search::placeholder{color:var(--text-muted)}.lex-search:focus{outline:none;border-color:var(--gold)}
+.lex-grid{display:flex;flex-direction:column;gap:5px}
+.lex-item{display:grid;grid-template-columns:26px 120px 1fr auto;align-items:start;gap:10px;padding:11px 14px;background:var(--card);border:1px solid var(--border);border-radius:5px;transition:all 0.2s;cursor:pointer}
+.lex-item:hover{border-color:#3a3a3a;background:var(--card-hover)}
+.lex-num{font-size:0.68rem;color:var(--text-muted);text-align:center;padding-top:3px}
+.lex-heb{font-family:'Frank Ruhl Libre',serif;font-size:1.2rem;color:var(--gold-light);direction:rtl;line-height:1.5}
+.lex-info{display:flex;flex-direction:column;gap:2px}.lex-fr{font-size:0.86rem;color:var(--text)}.lex-translit{font-size:0.72rem;color:var(--text-muted);font-style:italic}
+.lex-audio{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all 0.2s;flex-shrink:0;margin-top:2px}
+.lex-audio:hover{border-color:var(--gold);color:var(--gold)}.lex-audio.playing{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.cat-badge{display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;border:1px solid;margin-top:2px}
+.cat-v{background:#1a2500;color:#7ab83a;border-color:#3d6020}.cat-n{background:#001a2e;color:#5aace8;border-color:#1a4a7a}
+.cat-adj{background:#1e0d2e;color:#c07aff;border-color:#5a2a8a}.cat-adv{background:#002a1a;color:#50dda0;border-color:#10704a}
+.vid-meta{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:16px}
+.vid-meta h3{font-family:'Frank Ruhl Libre',serif;font-size:1.3rem;color:var(--gold-light);direction:rtl;margin-bottom:6px}
+.vsub{font-size:0.82rem;color:var(--text-muted);margin-bottom:10px}
+.vid-links-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.word-hl-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.word-hl{padding:4px 10px;background:var(--gold-dim);border:1px solid var(--gold);border-radius:20px;font-family:'Frank Ruhl Libre',serif;font-size:0.98rem;color:var(--gold-light);direction:rtl;cursor:pointer;transition:all 0.2s}
+.word-hl:hover{background:var(--gold);color:#0d0d0d}
+.fb-embed-wrap{background:var(--card);border:1px solid var(--blue);border-radius:8px;padding:20px;margin-bottom:16px;text-align:center}
+.fb-link-big{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;background:var(--blue-dim);border:1px solid var(--blue);border-radius:8px;color:var(--blue-light);text-decoration:none;font-size:0.95rem;font-family:'DM Sans',sans-serif;transition:all 0.2s;margin-bottom:12px}
+.fb-link-big:hover{background:rgba(26,106,170,0.35);border-color:var(--blue-light);color:#fff}
+.fb-note{font-size:0.78rem;color:var(--text-muted);line-height:1.6}
+.context-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:16px}
+.context-card h3{font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px}
+.context-card p{font-size:0.86rem;color:var(--text);line-height:1.7;margin-bottom:8px}
+.ctx-tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:0.74rem;border:1px solid;margin:3px 3px 3px 0}
+.ct-red{border-color:#8b3a3a;color:#cc7f7f;background:var(--error-bg)}.ct-blue{border-color:var(--blue);color:var(--blue-light);background:var(--blue-dim)}
+.ct-gold{border-color:var(--gold);color:var(--gold-light);background:var(--gold-dim)}.ct-purple{border-color:var(--purple);color:var(--purple-light);background:var(--purple-dim)}
+.moti-banner{background:var(--purple-dim);border:1px solid var(--purple);border-radius:8px;padding:13px 16px;margin-bottom:18px;display:flex;align-items:center;gap:13px}
+.moti-banner .mb-icon{font-size:1.5rem}.moti-banner h3{font-size:0.92rem;font-weight:500;color:var(--purple-light);margin-bottom:2px}.moti-banner p{font-size:0.78rem;color:var(--text-muted)}
+.moti-tabs{display:flex;gap:5px;margin-bottom:16px;flex-wrap:wrap}
+.moti-tab{padding:5px 13px;border-radius:20px;border:1px solid var(--border);font-size:0.76rem;cursor:pointer;color:var(--text-muted);background:var(--card);transition:all 0.2s}
+.moti-tab:hover{border-color:var(--purple);color:var(--purple-light)}.moti-tab.active{background:var(--purple);border-color:var(--purple);color:#fff}
+.fc-wrap{perspective:800px;margin-bottom:18px;cursor:pointer}
+.fc{width:100%;min-height:210px;position:relative;transform-style:preserve-3d;transition:transform 0.5s ease}.fc.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;width:100%;min-height:210px;backface-visibility:hidden;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;border:1px solid}
+.fc-front{background:var(--card);border-color:var(--purple)}.fc-back{background:var(--purple-bg);border-color:var(--purple);transform:rotateY(180deg)}
+.fc-heb{font-family:'Frank Ruhl Libre',serif;font-size:2.2rem;color:var(--purple-light);direction:rtl;margin-bottom:6px;text-align:center}
+.fc-translit{font-size:0.9rem;color:var(--text-muted);font-style:italic;margin-bottom:3px}.fc-num{font-size:0.68rem;color:var(--text-muted);margin-bottom:10px}
+.fc-fr{font-size:1.15rem;color:var(--text);margin-bottom:6px;text-align:center}.fc-morph{font-size:0.75rem;color:var(--text-muted);text-align:center;max-width:420px;line-height:1.5}
+.fc-family{font-family:'Frank Ruhl Libre',serif;font-size:0.9rem;direction:rtl;color:var(--purple-light);margin-top:6px;text-align:center}
+.fc-ex{font-size:0.74rem;direction:rtl;color:var(--purple-light);font-family:'Frank Ruhl Libre',serif;margin-top:7px;padding-top:7px;border-top:0.5px solid var(--border);text-align:center;width:100%}
+.fc-ex-fr{font-size:0.72rem;color:var(--text-muted);font-style:italic;direction:ltr;text-align:center;margin-top:2px}.fc-hint{font-size:0.7rem;color:var(--text-muted);margin-top:13px;opacity:0.5}
+.fam-grid{display:flex;flex-direction:column;gap:6px}
+.fam-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 15px;transition:border-color 0.2s}.fam-card:hover{border-color:var(--purple)}
+.fam-header{display:flex;align-items:baseline;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.fam-num{font-size:0.68rem;color:var(--text-muted);min-width:18px}.fam-main-heb{font-family:'Frank Ruhl Libre',serif;font-size:1.4rem;color:var(--purple-light);direction:rtl}
+.fam-main-fr{font-size:0.82rem;color:var(--text-muted);font-style:italic}
+.fam-racine{font-size:0.66px;padding:1px 7px;border:1px solid var(--purple);border-radius:3px;color:var(--purple-light);direction:rtl;margin-left:auto;font-size:0.66rem}
+.fam-aud{width:24px;height:24px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-size:9px;transition:all 0.2s;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.fam-aud:hover{border-color:var(--purple-light);color:var(--purple-light)}
+.fam-forms{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.fam-form{display:flex;align-items:center;gap:5px;padding:4px 8px;background:var(--purple-bg);border:1px solid var(--purple);border-radius:4px}
+.fam-form-heb{font-family:'Frank Ruhl Libre',serif;font-size:1rem;color:var(--purple-light);direction:rtl}.fam-form-lbl{font-size:0.66rem;color:var(--text-muted)}
+.fam-ex{font-size:0.76rem;color:var(--text-muted);direction:rtl;font-family:'Frank Ruhl Libre',serif;margin-top:5px;padding-top:5px;border-top:0.5px solid var(--border)}
+.fam-ex-fr{font-size:0.72rem;color:var(--text-muted);font-style:italic;direction:ltr;text-align:left;margin-top:2px}
+.mq-card{background:var(--card);border:1px solid var(--purple);border-radius:8px;padding:20px;margin-bottom:16px;animation:fadeIn 0.35s ease}
+.mq-score-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.mq-pill{padding:4px 12px;border:1px solid var(--border);border-radius:20px;font-size:0.76rem;color:var(--text-muted)}
+.mq-pill span{color:var(--purple-light);font-weight:500;margin-left:4px}
+.mq-prog{height:2px;background:var(--border);border-radius:2px;margin-bottom:16px;overflow:hidden}.mq-prog-fill{height:100%;background:var(--purple);transition:width 0.5s}
+.mli-heb{font-family:'Frank Ruhl Libre',serif;font-size:1.15rem;color:var(--purple-light);direction:rtl}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tileIn{from{opacity:0;transform:scale(0.87)}to{opacity:1;transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-tab active" onclick="showPage('game')" id="tab-game">🎮 Jeu</div>
+  <div class="nav-tab vid-tab" onclick="showPage('video')" id="tab-video">▶ Vidéo</div>
+  <div class="nav-tab" onclick="showPage('listen')" id="tab-listen"><span class="nav-heb">שמע</span></div>
+  <div class="nav-tab" onclick="showPage('song')" id="tab-song"><span class="nav-heb">שיר</span></div>
+  <div class="nav-tab" onclick="showPage('lexicon')" id="tab-lexicon">📖 Lex.</div>
+  <div class="nav-tab moti-tab" onclick="showPage('moti')" id="tab-moti">✦ מוטי</div>
+</nav>
+
+<!-- GAME -->
+<div id="page-game" class="page active">
+  <div class="page-header">
+    <div class="heb-title">אַהֲבַת נְעוּרַי<br><span style="font-size:1rem;color:var(--text-muted)">גרסת הערסים</span></div>
+    <h2>Jeu pédagogique · Argot israélien</h2>
+    <div class="sub">Hébreu courant &amp; registre des rues · 24 questions</div>
+  </div>
+  <div id="game-content"></div>
+</div>
+
+<!-- VIDEO -->
+<div id="page-video" class="page">
+  <div class="page-header">
+    <div class="heb-title blue">אַהֲבַת נְעוּרַי</div>
+    <h2>Vidéo &amp; contexte culturel</h2>
+    <div class="sub">גרסת הערסים — La version des voyous</div>
+  </div>
+  <div class="context-card">
+    <h3>🎵 À propos de cette chanson</h3>
+    <p><strong style="color:var(--gold-light)">אַהֲבַת נְעוּרַי — גרסת הערסים</strong> est une réinterprétation argotique et populaire d'un thème classique : l'amour de jeunesse. Elle oppose deux mondes radicalement différents — le narrateur, un <em>ערס</em> (voyou des quartiers populaires), arrêté et en conflit avec la loi, et la femme aimée, devenue policière (<em>שוֹטֶרֶת</em>) et moucharde (<em>מַלְשִׁינָה</em>).</p>
+    <p>Le mot <strong style="color:var(--purple-light)">נְהוּרַי</strong> — « mes lumières » en araméen — est une métaphore poétique archaïque désignant l'amour ou les moments heureux de la jeunesse. Son usage crée un contraste saisissant avec le langage de rue qui l'entoure : argot (<em>טַפִּי</em>, <em>ערסים</em>), lexique carcéral (<em>עָצוּר</em>, <em>סוֹהֵר רָקוּב</em>, <em>נַיֶּידֶת</em>) et registre de la trahison (<em>מַלְשִׁין</em>).</p>
+    <p>Le narrateur cache ses sentiments (<em>לֹא נָתַתִּי לְאִישׁ לָדַעַת</em>), observe de loin (<em>מְקַלֵּל מֵהַצַּד</em>), et se retrouve face à l'ironie du destin : son amour de jeunesse est devenu l'enquêtrice qui le retient derrière les barreaux.</p>
+    <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px">
+      <span class="ctx-tag ct-red">Argot israélien (ערסים)</span>
+      <span class="ctx-tag ct-blue">Univers carcéral</span>
+      <span class="ctx-tag ct-gold">Nostalgie &amp; amour perdu</span>
+      <span class="ctx-tag ct-purple">Mélange de registres</span>
+    </div>
+  </div>
+  <div class="vid-meta">
+    <h3>אַהֲבַת נְעוּרַי — גרסת הערסים</h3>
+    <div class="vsub">Version disponible sur Facebook · גרסת הערסים</div>
+    <div class="vid-links-row">
+      <a class="song-link-btn song-link-fb" href="https://www.facebook.com/watch/?v=1654077455855582" target="_blank"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.88v2.27h3.32l-.53 3.49h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg> Voir sur Facebook</a>
+    </div>
+  </div>
+  <div class="fb-embed-wrap">
+    <a class="fb-link-big" href="https://www.facebook.com/watch/?v=1654077455855582" target="_blank"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.88v2.27h3.32l-.53 3.49h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg> ▶ Ouvrir la vidéo sur Facebook</a>
+    <div class="fb-note">La vidéo est hébergée sur Facebook (connexion requise pour certains pays).<br>
+    <span style="font-size:0.74rem;color:var(--text-muted)">facebook.com/watch/?v=1654077455855582</span></div>
+  </div>
+  <div class="q-card">
+    <div class="q-mode">Mots-clés de la chanson — cliquez pour écouter</div>
+    <div class="word-hl-list" id="videoWordList"></div>
+  </div>
+</div>
+
+<!-- LISTEN -->
+<div id="page-listen" class="page">
+  <div class="page-header"><div class="heb-title">שמע ולמד</div><h2>Écoute &amp; mémorise · 24 mots</h2></div>
+  <div class="listen-controls">
+    <button class="btn btn-primary btn-sm" onclick="listenPlayAll()">▶ Lire tout</button>
+    <button class="btn btn-sm" onclick="listenStop()">■ Stop</button>
+    <button class="btn btn-sm" onclick="listenReset()">↺ Reset</button>
+    <div class="speed-ctl"><label>Vitesse :</label><select id="listenSpeed"><option value="0.6">Lente</option><option value="0.8" selected>Normale</option><option value="1.0">Rapide</option></select></div>
+  </div>
+  <div class="pb-text" id="listenPbText">0 / 24 écoutés</div>
+  <div class="prog-bar" style="margin-bottom:16px"><div class="prog-fill" id="listenPbFill" style="width:0%"></div></div>
+  <div class="listen-list" id="listenList"></div>
+</div>
+
+<!-- SONG -->
+<div id="page-song" class="page">
+  <div class="page-header"><div class="heb-title">אַהֲבַת נְעוּרַי</div><h2>Texte &amp; traduction</h2><div class="sub">גרסת הערסים · La version des voyous</div></div>
+  <div class="song-links">
+    <a class="song-link-btn song-link-fb" href="https://www.facebook.com/watch/?v=1654077455855582" target="_blank"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.88v2.27h3.32l-.53 3.49h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg> Vidéo Facebook</a>
+  </div>
+  <div class="song-play-row">
+    <button class="btn btn-primary btn-sm" onclick="songPlayAll()">▶ Lire la chanson</button>
+    <button class="btn btn-sm" onclick="songStop()">■ Stop</button>
+    <div class="speed-ctl"><label>Vitesse :</label><select id="songSpeed"><option value="0.6">Lente</option><option value="0.8" selected>Normale</option><option value="1.0">Rapide</option></select></div>
+  </div>
+  <div id="songContent"></div>
+</div>
+
+<!-- LEXICON -->
+<div id="page-lexicon" class="page">
+  <div class="page-header"><div class="heb-title">מִלּוֹן</div><h2>Lexique complet · 24 mots-clés</h2></div>
+  <div class="listen-controls" style="margin-bottom:12px;flex-wrap:wrap;gap:7px">
+    <button class="btn btn-primary btn-sm" onclick="lexPlayAll('ordered')">▶ Tout lire</button>
+    <button class="btn btn-sm btn-sh" id="lexSH" onclick="lexPlayAll('heb')">⇄ Hébreu</button>
+    <button class="btn btn-sm btn-sh" id="lexSF" onclick="lexPlayAll('fr')">⇄ Français</button>
+    <button class="btn btn-sm btn-sh" id="lexSM" onclick="lexPlayAll('mix')">⇄ Mixte</button>
+    <button class="btn btn-sm" onclick="lexStop()">■ Stop</button>
+    <div class="speed-ctl"><label>Vitesse :</label><select id="lexSpeed"><option value="0.6">Lente</option><option value="0.8" selected>Normale</option><option value="1.0">Rapide</option></select></div>
+    <div class="speed-ctl"><label>Voix FR :</label><select id="frVoiceSelect"><option value="">Par défaut</option></select></div>
+  </div>
+  <div id="lexNowPlaying" style="min-height:32px;margin-bottom:9px;text-align:center;font-family:'Frank Ruhl Libre',serif;font-size:1.2rem;color:var(--gold-light);direction:rtl;display:none"></div>
+  <input class="lex-search" type="text" placeholder="Chercher en hébreu, français ou transcription…" oninput="filterLex(this.value)"/>
+  <div class="lex-grid" id="lexGrid"></div>
+</div>
+
+<!-- MOTI -->
+<div id="page-moti" class="page">
+  <div class="page-header"><div class="heb-title purple">רשימת מוטי</div><h2>Liste spéciale · 14 mots</h2><div class="sub">Analyse morphologique · Racines sémitiques · Argot israélien</div></div>
+  <div class="moti-banner"><div class="mb-icon">✦</div><div><h3>מוטי — Vocabulaire ciblé</h3><p>14 mots avec familles morphologiques, racines trilitères et contexte sociolinguistique</p></div></div>
+  <div class="moti-tabs">
+    <button class="moti-tab active" onclick="switchMotiTab('fc')">🃏 Flashcards</button>
+    <button class="moti-tab" onclick="switchMotiTab('fam')">🌿 Familles</button>
+    <button class="moti-tab" onclick="switchMotiTab('quiz')">🎯 Quiz</button>
+    <button class="moti-tab" onclick="switchMotiTab('ecoute')">♪ Écoute</button>
+  </div>
+  <div id="moti-fc-panel"></div>
+  <div id="moti-fam-panel" style="display:none"></div>
+  <div id="moti-quiz-panel" style="display:none"></div>
+  <div id="moti-ecoute-panel" style="display:none"></div>
+</div>
+
+<script>
+const words=[
+  {heb:"אַהֲבָה",translit:"ahavá",fr:"amour",cat:"n",sentences:[
+    ["הִיא הָיְתָה אַהֲבַת נְעוּרַי","Elle était l'amour de ma jeunesse"],
+    ["אַהֲבָה אֲמִיתִּית אֵינָהּ נִשְׁכַּחַת","Un amour vrai ne s'oublie pas"],
+    ["אַהֲבָה בְּלִי גְּבוּלוֹת","Un amour sans frontières"]]},
+  {heb:"נְעוּרַי",translit:"ne'uráy",fr:"ma jeunesse",cat:"n",sentences:[
+    ["הִיא הָיְתָה אַהֲבַת נְעוּרַי","Elle était l'amour de ma jeunesse"],
+    ["זְכָרִים מִן הַנְּעוּרִים","Des souvenirs de jeunesse"],
+    ["בִּימֵי נְעוּרַי לֹא יָדַעְתִּי","Dans ma jeunesse je ne savais pas"]]},
+  {heb:"הָיִיתִי",translit:"hayíti",fr:"j'étais",cat:"v",sentences:[
+    ["הָיִיתִי יֶלֶד בַּלֵּילוֹת","J'étais un enfant dans les nuits"],
+    ["הָיִיתִי לְבַד בְּחַדְרִי","J'étais seul dans ma chambre"],
+    ["הָיִיתִי מְאֻשָּׁר אִיתָּהּ","J'étais heureux avec elle"]]},
+  {heb:"יֶלֶד",translit:"yéled",fr:"enfant / garçon",cat:"n",sentences:[
+    ["הָיִיתִי יֶלֶד עָצוּב","J'étais un enfant triste"],
+    ["הַיֶּלֶד שָׂחַק בַּחוּץ","L'enfant jouait dehors"],
+    ["כְּיֶלֶד לֹא הֵבַנְתִּי","Comme enfant je ne comprenais pas"]]},
+  {heb:"עָצוּב",translit:"atzúv",fr:"triste",cat:"adj",sentences:[
+    ["הָיִיתִי יֶלֶד עָצוּב","J'étais un enfant triste"],
+    ["הוּא עָצוּב כִּי הִיא עָזְבָה","Il est triste parce qu'elle est partie"],
+    ["לֵב עָצוּב לֹא שׁוֹכֵחַ","Un coeur triste n'oublie pas"]]},
+  {heb:"נְהוּרַי",translit:"nehorái",fr:"mes lumières (araméen)",cat:"n",sentences:[
+    ["אַתְּ הָיִית אַהֲבַת נְהוּרַי","Tu étais l'amour de mes lumières"],
+    ["נְהוּרַי מֶטָפוֹרָה לָאַהֲבָה","Néhorai métaphore pour l'amour"],
+    ["הַנֵּר נְהוֹרָא בָּאֲרַמִּית","La bougie est néhora en araméen"]]},
+  {heb:"הָעַרְסִים",translit:"ha-arsím",fr:"les voyous / les caïds",cat:"n",sentences:[
+    ["גרסת הָעַרְסִים","La version des voyous"],
+    ["הָעַרְסִים מִן הַשְּׁכוּנָה","Les caïds du quartier"],
+    ["הָעַרְסִים מְדַבְּרִים בְּשָׂפָה מְיֻחֶדֶת","Les voyous parlent un langage particulier"]]},
+  {heb:"מְדַמְיֵין",translit:"medaméyen",fr:"j'imagine",cat:"v",sentences:[
+    ["מְדַמְיֵין שֶׁאַתְּ פּוֹתַחַת אֶת הַתִּיק","J'imagine que tu ouvres le dossier"],
+    ["הוּא מְדַמְיֵין עוֹלָם טוֹב יוֹתֵר","Il imagine un monde meilleur"],
+    ["אֲנִי מְדַמְיֵין אֶת הָעֲתִיד","J'imagine le futur"]]},
+  {heb:"הַתִּיק",translit:"ha-tík",fr:"le dossier / la valise",cat:"n",sentences:[
+    ["פּוֹתַחַת אֶת הַתִּיק הָרִאשׁוֹן בְּחַיַּי","Tu ouvres le premier dossier de ma vie"],
+    ["הַתִּיק שֶׁלִּי מָלֵא מִסְמָכִים","Mon dossier est plein de documents"],
+    ["מִי פָּתַח אֶת הַתִּיק הַזֶּה","Qui a ouvert ce dossier"]]},
+  {heb:"מִסְתַּכֵּל",translit:"mistakél",fr:"je regarde / j'observe",cat:"v",sentences:[
+    ["מִסְתַּכֵּל אֵיךְ אַתְּ יוֹרֶקֶת","Je regarde comment tu craches"],
+    ["הוּא מִסְתַּכֵּל בַּחַלּוֹן","Il regarde par la fenêtre"],
+    ["אֲנִי מִסְתַּכֵּל עָלֶיהָ","Je la regarde"]]},
+  {heb:"הַחוֹקֶרֶת",translit:"ha-khokéret",fr:"l'enquêtrice",cat:"n",sentences:[
+    ["לֹא מוֹדֶה מוּל הַחוֹקֶרֶת","Je n'avoue pas devant l'enquêtrice"],
+    ["הַחוֹקֶרֶת שָׁאֲלָה שְׁאֵלוֹת קָשׁוֹת","L'enquêtrice a posé des questions difficiles"],
+    ["הִיא עוֹבֶדֶת כְּחוֹקֶרֶת","Elle travaille comme enquêtrice"]]},
+  {heb:"מְקַלֵּל",translit:"mekalél",fr:"je maudis / j'insulte",cat:"v",sentences:[
+    ["רַק אֲנִי מְקַלֵּל מֵהַצַּד","Moi seul je maudis de côté"],
+    ["אַל תְּקַלֵּל אֶת הָאֲנָשִׁים","Ne maudis pas les gens"],
+    ["הוּא מְקַלֵּל כְּשֶׁהוּא כּוֹעֵס","Il insulte quand il est en colère"]]},
+  {heb:"עָצוּר",translit:"atzúr",fr:"arrêté / détenu",cat:"adj",sentences:[
+    ["אֲנִי עָצוּר וְאַתְּ שׁוֹטֶרֶת","Je suis arrêté et toi tu es policière"],
+    ["הוּא עָצוּר בַּתַּחֲנָה","Il est détenu au commissariat"],
+    ["הֶעָצוּר זָכַאי לְעוֹרֵךְ דִּין","Le détenu a droit à un avocat"]]},
+  {heb:"שׁוֹטֶרֶת",translit:"shotéret",fr:"policière",cat:"n",sentences:[
+    ["אַתְּ שׁוֹטֶרֶת וַאֲנִי עָצוּר","Tu es policière et moi je suis arrêté"],
+    ["הַשּׁוֹטֶרֶת עָצְרָה אוֹתוֹ","La policière l'a arrêté"],
+    ["הִיא הַשּׁוֹטֶרֶת הַטּוֹבָה בַּצָּוֶות","Elle est la meilleure policière de l'équipe"]]},
+  {heb:"הַנַּיֶּידֶת",translit:"ha-nayédet",fr:"le fourgon de police",cat:"n",sentences:[
+    ["יְחַכֶּה לִי בַּנַּיֶּידֶת","M'attendra dans le fourgon de police"],
+    ["הַנַּיֶּידֶת עָמְדָה בָּרְחוֹב","Le fourgon de police était dans la rue"],
+    ["הֵם הֶעֱמִיסוּ אוֹתוֹ לַנַּיֶּידֶת","Ils l'ont chargé dans le fourgon"]]},
+  {heb:"זִכָּרוֹן",translit:"zikharón",fr:"souvenir / mémoire",cat:"n",sentences:[
+    ["זִכָּרוֹן שֶׁעָלָה בִּי שׁוּב","Un souvenir qui est remonté en moi"],
+    ["יֵשׁ לִי זִכָּרוֹן טוֹב","J'ai une bonne mémoire"],
+    ["הַזִּכָּרוֹן לֹא שׁוֹכֵחַ","Le souvenir n'oublie pas"]]},
+  {heb:"סוֹהֵר רָקוּב",translit:"sohér rakúv",fr:"gardien corrompu",cat:"n",sentences:[
+    ["סוֹהֵר רָקוּב יַלֲלַת הַמַּלְשִׁין","Un gardien corrompu le cri du délateur"],
+    ["הַסּוֹהֵר שׁוֹמֵר עַל הַכֶּלֶא","Le gardien surveille la prison"],
+    ["סוֹהֵר רָקוּב הוּא סַכָּנָה","Un gardien corrompu est un danger"]]},
+  {heb:"הַמַּלְשִׁין",translit:"ha-malshín",fr:"le mouchard / le délateur",cat:"n",sentences:[
+    ["יַלֲלַת הַמַּלְשִׁין","Le cri du mouchard"],
+    ["אַל תִּהְיֶה מַלְשִׁין","Ne sois pas un délateur"],
+    ["הַמַּלְשִׁין נִמְאַס לְכֻּלָּם","Le mouchard est détesté de tous"]]},
+  {heb:"מַלְשִׁינָה",translit:"malshíná",fr:"moucharde / dénonciatrice",cat:"n",sentences:[
+    ["טַפִּי יָא מַלְשִׁינָה","Davantage oh moucharde"],
+    ["הִיא נֶחְשֶׁבֶת מַלְשִׁינָה","Elle est considérée comme une moucharde"],
+    ["לֹא רוֹצֶה מַלְשִׁינָה לְיָד","Je ne veux pas de moucharde à côté"]]},
+  {heb:"מֵהַצַּד",translit:"mehatzád",fr:"de côté / à l'écart",cat:"adv",sentences:[
+    ["רַק אֲנִי מְקַלֵּל מֵהַצַּד","Moi seul j'insulte de côté"],
+    ["הוּא עָמַד מֵהַצַּד","Il s'est tenu à l'écart"],
+    ["לְהִסְתַּכֵּל מֵהַצַּד","Regarder de côté"]]},
+  {heb:"שַׁבָּת",translit:"shabát",fr:"Shabbat / absolument (argot)",cat:"n",sentences:[
+    ["מִילֵּל שַׁבָּת לֹא נָתַתִּי לְאִישׁ","Absolument je n'ai donné à personne"],
+    ["שַׁבָּת שָׁלוֹם","Bon Shabbat"],
+    ["בְּשַׁבָּת לֹא עוֹבְדִים","Le Shabbat on ne travaille pas"]]},
+  {heb:"טַפִּי",translit:"tapí",fr:"davantage / encore plus (argot)",cat:"adv",sentences:[
+    ["טַפִּי יָא מַלְשִׁינָה","Davantage oh moucharde"],
+    ["טַפִּי הוּא מִלּוֹן סְלֶנְג","Tapi est un mot d'argot"],
+    ["רוֹצֶה טַפִּי","Je veux davantage"]]},
+  {heb:"יוֹרֶקֶת",translit:"yoréket",fr:"tu craches",cat:"v",sentences:[
+    ["מִסְתַּכֵּל אֵיךְ אַתְּ יוֹרֶקֶת","Je regarde comment tu craches"],
+    ["הִיא יוֹרֶקֶת עַל הָרִצְפָּה","Elle crache sur le sol"],
+    ["לֹא יוֹרְקִים עַל אֲנָשִׁים","On ne crache pas sur les gens"]]},
+  {heb:"לֹא נָתַתִּי לְאִישׁ",translit:"lo natáti le'ish",fr:"je n'ai donné à personne",cat:"v",sentences:[
+    ["לֹא נָתַתִּי לְאִישׁ לָדַעַת","Je n'ai donné à personne de savoir"],
+    ["לֹא נָתַתִּי לְאִישׁ לְהִכָּנֵס","Je n'ai laissé personne entrer"],
+    ["לֹא נָתַתִּי לְאִישׁ אֶת הַסּוֹד","Je n'ai donné le secret à personne"]]}
+];
+
+const songVerses=[
+  {label:"בֵּית א · Premier couplet",lines:[
+    ["הָיִיתִי יֶלֶד בַּלֵּילוֹת עָצוּב","J'étais un enfant triste dans les nuits"],
+    ["מִילֵּל שַׁבָּת לֹא נָתַתִּי לְאִישׁ לָדַעַת","Absolument, je n'ai donné à personne de savoir"],
+    ["אַתְּ הָיִית אַהֲבַת נְהוּרַי","Tu étais l'amour de mes lumières"]]},
+  {label:"בֵּית ב · Deuxième couplet",lines:[
+    ["הָיִיתִי יֶלֶד בַּיָּמִים דּוֹקֵר","J'étais un enfant poignant dans les jours"],
+    ["מְדַמְיֵין לִי שֶׁאַתְּ פּוֹתַחַת אֶת הַתִּיק הָרִאשׁוֹן בְּחַיַּי","J'imagine que tu ouvres le premier dossier de ma vie"],
+    ["מִסְתַּכֵּל אֵיךְ אַתְּ יוֹרֶקֶת","Je regarde comment tu craches"],
+    ["לֹא מוֹדֶה מוּל הַחוֹקֶרֶת","Je n'avoue pas devant l'enquêtrice"],
+    ["רַק אֲנִי מְקַלֵּל מֵהַצַּד","Moi seul j'insulte de côté"]]},
+  {label:"פַּזְמוֹן · Refrain",lines:[
+    ["אֲנִי עָצוּר וְאַתְּ שׁוֹטֶרֶת","Je suis arrêté et toi tu es policière"],
+    ["יְחַכֶּה לִי בַּנַּיֶּידֶת","M'attendra dans le fourgon de police"],
+    ["זִכָּרוֹן שֶׁעָלָה בִּי שׁוּב","Un souvenir qui est remonté en moi"],
+    ["סוֹהֵר רָקוּב יַלֲלַת הַמַּלְשִׁין","Un gardien corrompu le cri du délateur"],
+    ["וְאַתְּ שֶׁהָיִית אַהֲבָה נְהוּרַי","Et toi qui étais mon amour de lumière"]]},
+  {label:"סיום · Final",lines:[
+    ["טַפִּי יָא מַלְשִׁינָה","Davantage oh moucharde"]]}
+];
+
+const motiList=[
+  {num:1,heb:"אַהֲבָה",translit:"ahavá",fr:"amour",cat:"n",racine:"א-ה-ב",
+   morph:"Nom fém. sg. Racine א-ה-ב. אָהַב (il aima) · לֶאֱהֹב (aimer) · אוֹהֵב (qui aime) · אַהֲבַת (construit).",
+   forms:[{h:"אַהֲבָה",l:"sg."},{h:"אַהֲבַת",l:"construit"},{h:"אָהַב",l:"passé 3m"},{h:"אוֹהֵב",l:"présent"}],
+   example:["הִיא הָיְתָה אַהֲבַת נְהוּרַי","Elle était l'amour de mes lumières"]},
+  {num:2,heb:"נְעוּרַי",translit:"ne'uráy",fr:"ma jeunesse",cat:"n",racine:"נ-ע-ר",
+   morph:"Nom masc. pl. + suf. 1ère pers. נַעַר = jeune homme · נַעֲרָה = jeune fille · נְעוּרִים = jeunesse · עֲלוּמִים = synonyme poétique.",
+   forms:[{h:"נַעַר",l:"jeune homme"},{h:"נַעֲרָה",l:"jeune fille"},{h:"נְעוּרִים",l:"jeunesse"},{h:"נְעוּרַי",l:"ma jeunesse"}],
+   example:["אַהֲבַת נְעוּרַי","L'amour de ma jeunesse"]},
+  {num:3,heb:"נְהוּרַי",translit:"nehorái",fr:"mes lumières (araméen)",cat:"n",racine:"נ-ה-ר",
+   morph:"Terme araméen (נְהוֹרָא = lumière). Pl. + suf. 1ère pers. Métaphore poétique archaïque. Contraste fort avec l'argot du texte. En hébreu moderne : אוֹר (lumière).",
+   forms:[{h:"נְהוֹרָא",l:"araméen sg."},{h:"נְהוּרַי",l:"mes lumières"},{h:"אוֹר",l:"lumière (hébreu)"},{h:"מְאִיר",l:"qui éclaire"}],
+   example:["אַתְּ הָיִית אַהֲבַת נְהוּרַי","Tu étais l'amour de mes lumières"]},
+  {num:4,heb:"הָעַרְסִים",translit:"ha-arsím",fr:"les voyous / les caïds",cat:"n",racine:"ע-ר-ס",
+   morph:"Nom masc. pl. défini. Argot israélien. עַרְסָן = voyou. Origine probablement de l'arabe. Connotation rebelle/identité de rue. Adj. dérivé : עַרְסִי (style voyou).",
+   forms:[{h:"עַרְסָן",l:"voyou sg."},{h:"עַרְסִים",l:"voyous pl."},{h:"עַרְסִי",l:"style voyou"},{h:"גרסת הָעַרְסִים",l:"version des voyous"}],
+   example:["גרסת הָעַרְסִים","La version des voyous"]},
+  {num:5,heb:"עָצוּב",translit:"atzúv",fr:"triste",cat:"adj",racine:"ע-צ-ב",
+   morph:"Adj. masc. sg. Fém. : עֲצוּבָה · Pl. m. : עֲצוּבִים · Nom : עַצְבּוּת (tristesse) · עָצֶב = nerf / peine.",
+   forms:[{h:"עָצוּב",l:"masc. sg."},{h:"עֲצוּבָה",l:"fém. sg."},{h:"עֲצוּבִים",l:"pl. m."},{h:"עַצְבּוּת",l:"tristesse"}],
+   example:["הָיִיתִי יֶלֶד עָצוּב","J'étais un enfant triste"]},
+  {num:6,heb:"מְדַמְיֵין",translit:"medaméyen",fr:"j'imagine",cat:"v",racine:"ד-מ-י",
+   morph:"Pi'el participe actif masc. sg. Racine ד-מ-י = ressembler/imaginer. Inf. : לְדַמְיֵין · Nom : דִּמְיוֹן (imagination) · Adj. : דִּמְיוֹנִי (imaginaire).",
+   forms:[{h:"מְדַמְיֵין",l:"présent m."},{h:"לְדַמְיֵין",l:"infinitif"},{h:"דִּמְיוֹן",l:"imagination"},{h:"דִּמְיוֹנִי",l:"imaginaire"}],
+   example:["מְדַמְיֵין שֶׁאַתְּ פּוֹתַחַת אֶת הַתִּיק","J'imagine que tu ouvres le dossier"]},
+  {num:7,heb:"הַתִּיק",translit:"ha-tík",fr:"le dossier / la valise",cat:"n",racine:"ת-י-ק",
+   morph:"Nom masc. sg. défini. Double sens : valise (תִּיק נָסִיעָה) et dossier judiciaire (תִּיק פְּלִילִי). Pl. : תִּיקִים.",
+   forms:[{h:"תִּיק",l:"sg."},{h:"תִּיקִים",l:"pl."},{h:"תִּיק פְּלִילִי",l:"dossier pénal"},{h:"תִּיק נָסִיעָה",l:"valise"}],
+   example:["פּוֹתַחַת אֶת הַתִּיק הָרִאשׁוֹן בְּחַיַּי","Tu ouvres le premier dossier de ma vie"]},
+  {num:8,heb:"הַחוֹקֶרֶת",translit:"ha-khokéret",fr:"l'enquêtrice",cat:"n",racine:"ח-ק-ר",
+   morph:"Nom fém. défini. Racine ח-ק-ר = enquêter. Masc. : חוֹקֵר · Inf. : לַחְקֹר · Nom abstrait : חֲקִירָה (interrogatoire).",
+   forms:[{h:"חוֹקֵר",l:"enquêteur m."},{h:"חוֹקֶרֶת",l:"enquêtrice f."},{h:"חֲקִירָה",l:"interrogatoire"},{h:"לַחְקֹר",l:"enquêter"}],
+   example:["לֹא מוֹדֶה מוּל הַחוֹקֶרֶת","Je n'avoue pas devant l'enquêtrice"]},
+  {num:9,heb:"עָצוּר",translit:"atzúr",fr:"arrêté / détenu",cat:"adj",racine:"ע-צ-ר",
+   morph:"Participe passif masc. sg. Racine ע-צ-ר = arrêter. Inf. : לֶעֱצֹר · Nom : מַעֲצָר (garde à vue) · Fém. : עֲצוּרָה.",
+   forms:[{h:"עָצוּר",l:"détenu m."},{h:"עֲצוּרָה",l:"détenue f."},{h:"מַעֲצָר",l:"garde à vue"},{h:"לֶעֱצֹר",l:"arrêter"}],
+   example:["אֲנִי עָצוּר וְאַתְּ שׁוֹטֶרֶת","Je suis arrêté et toi tu es policière"]},
+  {num:10,heb:"שׁוֹטֶרֶת",translit:"shotéret",fr:"policière",cat:"n",racine:"ש-ט-ר",
+   morph:"Nom fém. sg. Racine ש-ט-ר. Masc. : שׁוֹטֵר · Pl. m. : שׁוֹטְרִים · Institution : מִשְׁטָרָה (police).",
+   forms:[{h:"שׁוֹטֵר",l:"policier m."},{h:"שׁוֹטֶרֶת",l:"policière f."},{h:"שׁוֹטְרִים",l:"pl. m."},{h:"מִשְׁטָרָה",l:"police"}],
+   example:["אֲנִי עָצוּר וְאַתְּ שׁוֹטֶרֶת","Je suis arrêté et toi tu es policière"]},
+  {num:11,heb:"הַנַּיֶּידֶת",translit:"ha-nayédet",fr:"le fourgon de police",cat:"n",racine:"נ-י-ד",
+   morph:"Nom fém. défini. Racine נ-י-ד = se déplacer. נָד = nomade · נַיֶּידֶת = véhicule mobile (police). Famille : נָדַד (errer) · נוֹדֵד (nomade).",
+   forms:[{h:"נַיֶּידֶת",l:"fourgon"},{h:"נָד",l:"nomade"},{h:"נוֹדֵד",l:"errant"},{h:"נָדַד",l:"errer"}],
+   example:["יְחַכֶּה לִי בַּנַּיֶּידֶת","M'attendra dans le fourgon de police"]},
+  {num:12,heb:"סוֹהֵר רָקוּב",translit:"sohér rakúv",fr:"gardien corrompu",cat:"n",racine:"ס-ה-ר",
+   morph:"סוֹהֵר : racine ס-ה-ר · בֵּית סוֹהַר = prison. רָקוּב : racine ר-ק-ב (pourrir) · רִקָּבוֹן = pourriture · הִרְקִיב = a pourri.",
+   forms:[{h:"סוֹהֵר",l:"gardien"},{h:"בֵּית סוֹהַר",l:"prison"},{h:"רָקוּב",l:"pourri"},{h:"רִקָּבוֹן",l:"pourriture"}],
+   example:["סוֹהֵר רָקוּב יַלֲלַת הַמַּלְשִׁין","Un gardien corrompu le cri du délateur"]},
+  {num:13,heb:"הַמַּלְשִׁין / מַלְשִׁינָה",translit:"ha-malshín / malshíná",fr:"le mouchard / la moucharde",cat:"n",racine:"ל-ש-נ",
+   morph:"Racine ל-ש-נ = langue/dénoncer. מַלְשִׁין (m.) / מַלְשִׁינָה (f.) · לָשׁוֹן = langue · הַלְשָׁנָה = dénonciation · לִלְשֹׁן = dénoncer.",
+   forms:[{h:"מַלְשִׁין",l:"mouchard m."},{h:"מַלְשִׁינָה",l:"moucharde f."},{h:"הַלְשָׁנָה",l:"dénonciation"},{h:"לָשׁוֹן",l:"langue"}],
+   example:["יַלֲלַת הַמַּלְשִׁין — טַפִּי יָא מַלְשִׁינָה","Le cri du mouchard — davantage oh moucharde"]},
+  {num:14,heb:"טַפִּי",translit:"tapí",fr:"davantage / encore plus (argot)",cat:"adv",racine:"—",
+   morph:"Adverbe d'argot israélien. Origine probable : arabe طَفِّي. Intensificateur ou exclamation de mépris. יָא = interjection arabe. Registre très familier / rue.",
+   forms:[{h:"טַפִּי",l:"davantage (argot)"},{h:"יָא",l:"interjection"},{h:"סְלֶנְג",l:"argot"},{h:"שָׂפַת רְחוֹב",l:"langue de rue"}],
+   example:["טַפִּי יָא מַלְשִׁינָה","Davantage oh moucharde"]}
+];
+
+// AUDIO
+let hV=null,frV=[];
+function loadVoices(){const vs=speechSynthesis.getVoices();hV=vs.find(v=>v.lang==='he-IL')||vs.find(v=>v.lang.startsWith('he'))||null;frV=vs.filter(v=>v.lang.startsWith('fr'));const s=document.getElementById('frVoiceSelect');if(s&&frV.length){const c=s.value;s.innerHTML='<option value="">Par défaut</option>';frV.forEach((v,i)=>{const o=document.createElement('option');o.value=i;o.textContent=v.name;if(v.name===c)o.selected=true;s.appendChild(o);});}}
+if('speechSynthesis'in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+function speak(t,r=0.8){return new Promise(res=>{speechSynthesis.cancel();setTimeout(()=>{const u=new SpeechSynthesisUtterance(t);u.lang='he-IL';u.rate=r;if(hV)u.voice=hV;u.onend=u.onerror=res;speechSynthesis.speak(u);},80);});}
+function speakFr(t,r=0.8){return new Promise(res=>{speechSynthesis.cancel();setTimeout(()=>{const u=new SpeechSynthesisUtterance(t);u.lang='fr-FR';u.rate=r;const s=document.getElementById('frVoiceSelect');if(s&&s.value!==''&&frV[+s.value])u.voice=frV[+s.value];u.onend=u.onerror=res;speechSynthesis.speak(u);},80);});}
+function es(s){return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');document.getElementById('tab-'+p).classList.add('active');}
+
+// GAME
+let gQ=[],gI=0,score=0,streak=0,maxS=0,corr=0;
+const ROUNDS=24;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=0|Math.random()*(i+1);[b[i],b[j]]=[b[j],b[i]]}return b;}
+function startGame(){gQ=shuffle([...words]).map((w,i)=>({word:w,mode:i%3,si:0|Math.random()*3}));gI=0;score=0;streak=0;maxS=0;corr=0;renderRound();}
+function renderRound(){
+  const gc=document.getElementById('game-content');
+  if(gI>=ROUNDS){renderOver();return;}
+  const r=gQ[gI],pct=0|gI/ROUNDS*100;
+  let h=`<div class="score-bar"><div class="score-pill">Score<span id="sv">${score}</span></div><div class="score-pill streak">Série<span id="stv">${streak}</span></div><div class="score-pill">Q<span>${gI+1}/${ROUNDS}</span></div></div><div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>`;
+  if(r.mode===0)h+=buildTile(r);else if(r.mode===1)h+=buildChoose(r);else h+=buildListen(r);
+  gc.innerHTML=h;
+  setTimeout(()=>playQ(r.mode===0?r.word.sentences[r.si][0]:r.word.heb),300);
+  if(r.mode===0)setTimeout(initPool,80);
+}
+function buildTile(r){
+  const w=r.word,s=w.sentences[r.si],hw=s[0].split(' ');
+  window._ts={correct:hw,placed:[],pool:[...shuffle(hw)],sent:s};
+  return `<div class="q-card"><div class="q-mode">Mode Phrases — Reconstituez la phrase</div><div class="q-fr" style="font-size:1.05rem">${s[1]}</div><div style="font-size:0.76rem;color:var(--text-muted);text-align:center;margin-top:3px">${w.fr} · <em>${w.translit}</em></div><button class="audio-btn" id="qab" onclick="playQ('${es(s[0])}')">▶ Écouter</button></div><div class="sent-label">Votre phrase (droite → gauche) :</div><div class="drop-zone" id="dz"><span class="drop-hint">← cliquez les tuiles dans l'ordre</span></div><div class="sent-label">Tuiles disponibles :</div><div class="tile-pool" id="tp"></div><div id="fb"></div><div class="game-actions"><button class="btn btn-primary" onclick="checkTile()">Vérifier</button><button class="btn btn-sm" onclick="clearZone()">Effacer</button><button class="btn btn-sm" onclick="skip()">Passer →</button></div>`;
+}
+function initPool(){const st=window._ts,tp=document.getElementById('tp');if(!tp)return;tp.innerHTML='';st.pool.forEach((t,i)=>{if(t!==null){const el=document.createElement('div');el.className='tile';el.textContent=t;el.onclick=()=>{if(st.pool[i]===null)return;st.pool[i]=null;st.placed.push({w:t,i});refreshTile();};tp.appendChild(el);}});}
+function refreshTile(){
+  const st=window._ts,tp=document.getElementById('tp'),dz=document.getElementById('dz');if(!tp||!dz)return;
+  tp.innerHTML='';st.pool.forEach((t,i)=>{if(t!==null){const el=document.createElement('div');el.className='tile';el.textContent=t;el.onclick=()=>{st.pool[i]=null;st.placed.push({w:t,i});refreshTile();};tp.appendChild(el);}});
+  dz.innerHTML='';dz.className='drop-zone'+(st.placed.length?' has-tiles':'');
+  if(!st.placed.length){const h=document.createElement('span');h.className='drop-hint';h.textContent="← cliquez les tuiles dans l'ordre";dz.appendChild(h);}
+  st.placed.forEach((item,pi)=>{const el=document.createElement('div');el.className='tile placed';el.textContent=item.w;el.onclick=()=>{st.pool[item.i]=item.w;st.placed.splice(pi,1);refreshTile();};dz.appendChild(el);});
+}
+function clearZone(){const st=window._ts;st.placed.forEach(it=>st.pool[it.i]=it.w);st.placed=[];refreshTile();}
+function checkTile(){
+  const st=window._ts;if(!st.placed.length)return;
+  const user=st.placed.map(p=>p.w).join(' '),ok=user===st.correct.join(' ');
+  const fb=document.getElementById('fb'),dz=document.getElementById('dz');
+  document.querySelectorAll('.game-actions .btn').forEach(b=>b.disabled=true);
+  if(ok){dz.className='drop-zone correct';fb.className='feedback correct';fb.innerHTML='✓ Excellent !';score+=10;streak++;if(streak>maxS)maxS=streak;corr++;}
+  else{dz.className='drop-zone wrong';dz.style.animation='shake 0.3s ease';fb.className='feedback wrong';fb.innerHTML=`✗ <div class="corr-ans">${st.correct.join(' ')}</div><div style="font-size:0.74rem;color:var(--text-muted);margin-top:3px;direction:ltr">${st.sent[1]}</div>`;streak=0;}
+  updSc();setTimeout(()=>nextR(),2400);
+}
+function buildChoose(r){
+  const w=r.word,ds=shuffle(words.filter(x=>x.heb!==w.heb)).slice(0,3),cs=shuffle([w,...ds]);
+  const h=cs.map(c=>`<div class="choice" onclick="checkCh('${es(c.heb)}','${es(w.heb)}')">${c.heb}<div style="font-size:0.67rem;color:var(--text-muted);font-family:sans-serif;margin-top:2px">${c.translit}</div></div>`).join('');
+  return `<div class="q-card"><div class="q-mode">Mode Vocabulaire — Quel mot hébreu ?</div><div class="q-fr" style="font-size:1.3rem;font-weight:500">${w.fr}</div><button class="audio-btn" id="qab" onclick="playQ('${es(w.heb)}')">▶ Écouter</button></div><div class="choices-grid">${h}</div><div id="fb"></div><div class="game-actions"><button class="btn btn-sm" onclick="skip()">Passer →</button></div>`;
+}
+function checkCh(chosen,correct){
+  document.querySelectorAll('#game-content .choice').forEach(el=>{el.onclick=null;const h=el.childNodes[0].textContent.trim();if(h===correct)el.className='choice correct-choice';else if(h===chosen&&chosen!==correct)el.className='choice wrong-choice';});
+  const ok=chosen===correct,fb=document.getElementById('fb');fb.className='feedback '+(ok?'correct':'wrong');fb.textContent=ok?'✓ Bravo !':'✗ Ce n\'était pas le bon mot.';
+  if(ok){score+=10;streak++;if(streak>maxS)maxS=streak;corr++;}else streak=0;
+  updSc();setTimeout(()=>nextR(),1800);
+}
+function buildListen(r){
+  const w=r.word,ds=shuffle(words.filter(x=>x.fr!==w.fr)).slice(0,3),cs=shuffle([w,...ds]);
+  const h=cs.map(c=>`<div class="l-choice" onclick="checkLi('${es(c.fr)}','${es(w.fr)}')"><span class="lc-fr">${c.fr}</span><span class="lc-heb">${c.heb}</span></div>`).join('');
+  return `<div class="q-card"><div class="q-mode">Mode Écoute — Identifiez le mot</div><button class="audio-btn playing" id="qab" onclick="playQ('${es(w.heb)}')">♪ Réécouter</button><div style="text-align:center;font-size:0.8rem;color:var(--text-muted);margin-top:6px">Choisissez la traduction :</div></div><div class="listen-choices">${h}</div><div id="fb"></div><div class="game-actions"><button class="btn btn-sm" onclick="skip()">Passer →</button></div>`;
+}
+function checkLi(chosen,correct){
+  document.querySelectorAll('#game-content .l-choice').forEach(el=>{el.onclick=null;const fr=el.querySelector('.lc-fr').textContent;if(fr===correct)el.className='l-choice correct-choice';else if(fr===chosen&&chosen!==correct)el.className='l-choice wrong-choice';});
+  const ok=chosen===correct,fb=document.getElementById('fb');fb.className='feedback '+(ok?'correct':'wrong');fb.textContent=ok?'✓ Parfait !':'✗ Ce n\'était pas ça.';
+  if(ok){score+=10;streak++;if(streak>maxS)maxS=streak;corr++;}else streak=0;
+  updSc();setTimeout(()=>nextR(),1800);
+}
+function playQ(h){const b=document.getElementById('qab');if(b)b.classList.add('playing');speak(h).then(()=>{if(b)b.classList.remove('playing');});}
+function updSc(){const a=document.getElementById('sv'),b=document.getElementById('stv');if(a)a.textContent=score;if(b)b.textContent=streak;}
+function nextR(){gI++;renderRound();}
+function skip(){streak=0;nextR();}
+function renderOver(){
+  const pct=0|corr/ROUNDS*100;let m='📚';if(pct>=90)m='🏆';else if(pct>=70)m='🥇';else if(pct>=50)m='🥈';
+  document.getElementById('game-content').innerHTML=`<div class="game-over"><div class="medal">${m}</div><div style="font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--text-muted);letter-spacing:0.2em;text-transform:uppercase">Score final</div><div class="big-score">${score}</div><div class="stats-row"><div class="stat-box"><div class="sv">${corr}/${ROUNDS}</div><div class="sl">Réponses correctes</div></div><div class="stat-box"><div class="sv">${pct}%</div><div class="sl">Réussite</div></div><div class="stat-box"><div class="sv">${maxS}</div><div class="sl">Série max</div></div></div><div class="game-actions" style="justify-content:center;margin-top:10px"><button class="btn btn-primary" onclick="startGame()">↺ Rejouer</button><button class="btn" onclick="showPage('video')">▶ Vidéo</button><button class="btn" onclick="showPage('moti')">✦ מוטי</button></div></div>`;
+}
+function buildVideoWordList(){const c=document.getElementById('videoWordList');if(!c)return;c.innerHTML='';words.forEach(w=>{const d=document.createElement('div');d.className='word-hl';d.textContent=w.heb;d.title=w.fr+' · '+w.translit;d.onclick=()=>speak(w.heb,0.8);c.appendChild(d);});}
+
+// LISTEN
+let lsPlayed=new Set(),lsPlaying=false,lsStop=false;
+function buildListenPage(){const ll=document.getElementById('listenList');ll.innerHTML='';words.forEach((w,i)=>{const d=document.createElement('div');d.className='listen-item';d.id='li-'+i;d.onclick=()=>lsOne(i);d.innerHTML=`<div style="font-size:0.68rem;color:var(--text-muted);text-align:center">${String(i+1).padStart(2,'0')}</div><div><div class="li-heb">${w.heb}</div><div class="li-fr">${w.fr} · <em>${w.translit}</em></div></div><button class="li-btn" onclick="event.stopPropagation();lsOne(${i})">▶</button>`;ll.appendChild(d);});lsUpdPb();}
+function lsSet(i,s){const el=document.getElementById('li-'+i);if(!el)return;const b=el.querySelector('.li-btn');el.className='listen-item'+(s==='playing'?' playing':s==='played'?' played':'');b.textContent=s==='playing'?'♪':s==='played'?'✓':'▶';}
+function lsUpdPb(){const c=lsPlayed.size;document.getElementById('listenPbFill').style.width=(c/words.length*100)+'%';document.getElementById('listenPbText').textContent=`${c} / ${words.length} écoutés`;}
+async function lsOne(i){speechSynthesis.cancel();lsSet(i,'playing');await speak(words[i].heb,parseFloat(document.getElementById('listenSpeed').value));lsPlayed.add(i);lsSet(i,'played');lsUpdPb();}
+async function listenPlayAll(){if(lsPlaying)return;lsPlaying=true;lsStop=false;const spd=parseFloat(document.getElementById('listenSpeed').value);for(let i=0;i<words.length;i++){if(lsStop)break;lsSet(i,'playing');document.getElementById('li-'+i).scrollIntoView({behavior:'smooth',block:'nearest'});await speak(words[i].heb,spd);if(!lsStop){lsPlayed.add(i);lsSet(i,'played');lsUpdPb();}await new Promise(r=>setTimeout(r,500));}lsPlaying=false;}
+function listenStop(){lsStop=true;lsPlaying=false;speechSynthesis.cancel();words.forEach((_,i)=>lsSet(i,lsPlayed.has(i)?'played':''));}
+function listenReset(){listenStop();lsPlayed.clear();words.forEach((_,i)=>lsSet(i,''));lsUpdPb();}
+
+// SONG
+let spPlay=false,spStop=false;
+function buildSongPage(){const sc=document.getElementById('songContent');sc.innerHTML='';songVerses.forEach((st,si)=>{const c=document.createElement('div');c.className='song-card';c.innerHTML=`<div class="strophe-label">${st.label}</div>`;st.lines.forEach((ln,li)=>{const d=document.createElement('div');d.innerHTML=`<div class="song-verse" id="sv-${si}-${li}" onclick="spVerse('${es(ln[0])}')">${ln[0]}</div><div class="song-verse-fr">${ln[1]}</div>`;c.appendChild(d);});sc.appendChild(c);});}
+function spVerse(t){speak(t,parseFloat(document.getElementById('songSpeed').value));}
+async function songPlayAll(){if(spPlay){songStop();return;}spPlay=true;spStop=false;const spd=parseFloat(document.getElementById('songSpeed').value);for(let si=0;si<songVerses.length;si++){for(let li=0;li<songVerses[si].lines.length;li++){if(spStop)break;const el=document.getElementById('sv-'+si+'-'+li);if(el){el.classList.add('active-verse');el.scrollIntoView({behavior:'smooth',block:'nearest'});}await speak(songVerses[si].lines[li][0],spd);if(el)el.classList.remove('active-verse');await new Promise(r=>setTimeout(r,350));}if(spStop)break;await new Promise(r=>setTimeout(r,650));}spPlay=false;}
+function songStop(){spStop=true;spPlay=false;speechSynthesis.cancel();document.querySelectorAll('.song-verse').forEach(el=>el.classList.remove('active-verse'));}
+
+// LEXICON
+const catL={n:"nom",v:"verbe",adj:"adjectif",adv:"adverbe",expr:"expression"};
+function buildLexicon(){renderLex(words);}
+function renderLex(list){const g=document.getElementById('lexGrid');g.innerHTML='';list.forEach(w=>{const num=String(words.indexOf(w)+1).padStart(2,'0');const d=document.createElement('div');d.className='lex-item';const cat=w.cat||'n';d.innerHTML=`<div class="lex-num">${num}</div><div class="lex-heb">${w.heb}</div><div class="lex-info"><div class="lex-fr">${w.fr}</div><div class="lex-translit">${w.translit}</div><span class="cat-badge cat-${cat}">${catL[cat]||cat}</span><div style="margin-top:4px;font-size:0.73rem;color:var(--text-muted);direction:rtl">${w.sentences[0][0]}</div><div style="font-size:0.73rem;color:var(--text-muted);font-style:italic">${w.sentences[0][1]}</div></div><button class="lex-audio" data-heb="${w.heb}">▶</button>`;const b=d.querySelector('.lex-audio');b.addEventListener('click',ev=>{ev.stopPropagation();speakLex(w.heb,b);});d.addEventListener('click',()=>speakLex(w.heb,b));g.appendChild(d);});}
+function speakLex(h,b){document.querySelectorAll('.lex-audio').forEach(x=>{x.classList.remove('playing');x.textContent='▶';});if(b){b.classList.add('playing');b.textContent='♪';}speak(h).then(()=>{if(b){b.classList.remove('playing');b.textContent='▶';}});}
+function filterLex(q){const lq=q.toLowerCase().trim();if(!lq){renderLex(words);return;}renderLex(words.filter(w=>w.heb.includes(q)||w.fr.toLowerCase().includes(lq)||w.translit.toLowerCase().includes(lq)||w.sentences.some(s=>s[0].includes(q)||s[1].toLowerCase().includes(lq))));}
+let lxPlay=false,lxStop=false;
+function lexSAB(m){['lexSH','lexSF','lexSM'].forEach(id=>{const b=document.getElementById(id);if(b)b.classList.remove('active');});const mp={heb:'lexSH',fr:'lexSF',mix:'lexSM'};if(mp[m]){const b=document.getElementById(mp[m]);if(b)b.classList.add('active');}}
+function lexShowNow(t,isFr){const el=document.getElementById('lexNowPlaying');if(!el)return;el.style.display='block';el.style.direction=isFr?'ltr':'rtl';el.style.fontStyle=isFr?'italic':'normal';el.style.fontSize=isFr?'0.92rem':'1.2rem';el.style.color=isFr?'var(--text-muted)':'var(--gold-light)';el.textContent=t;}
+function lexHideNow(){const el=document.getElementById('lexNowPlaying');if(el)el.style.display='none';}
+async function lexPlayAll(mode){if(lxPlay){lexStop();return;}lxPlay=true;lxStop=false;lexSAB(mode);const spd=parseFloat(document.getElementById('lexSpeed').value);const list=mode==='ordered'?[...words]:shuffle([...words]);for(let i=0;i<list.length;i++){if(lxStop)break;const w=list[i];const db=document.querySelector(`.lex-audio[data-heb="${w.heb}"]`);document.querySelectorAll('.lex-audio').forEach(b=>{b.classList.remove('playing');b.textContent='▶';});const sayFr=(mode==='fr')||(mode==='mix'&&i%2===0);if(db){db.classList.add('playing');db.textContent='♪';db.closest('.lex-item').scrollIntoView({behavior:'smooth',block:'nearest'});}if(sayFr){lexShowNow(w.fr,true);await speakFr(w.fr,spd);}else{lexShowNow(w.heb,false);await speak(w.heb,spd);}if(db){db.classList.remove('playing');db.textContent='▶';}if(!lxStop)await new Promise(r=>setTimeout(r,mode==='ordered'?530:1050));}lxPlay=false;lexHideNow();lexSAB(null);}
+function lexStop(){lxStop=true;lxPlay=false;speechSynthesis.cancel();document.querySelectorAll('.lex-audio').forEach(b=>{b.classList.remove('playing');b.textContent='▶';});lexHideNow();lexSAB(null);}
+
+// MOTI
+let curMT='fc',fcIdx=0,fcFlipped=false,mqQ=[],mqI=0,mqSc=0,mqStr=0,mqCorr=0,mliPlayed=new Set(),mliPlaying=false,mliStop=false;
+function switchMotiTab(tab){curMT=tab;const tabs=document.querySelectorAll('.moti-tab'),order=['fc','fam','quiz','ecoute'];tabs.forEach((t,i)=>t.classList.toggle('active',order[i]===tab));order.forEach(t=>{document.getElementById('moti-'+t+'-panel').style.display=t===tab?'block':'none';});if(tab==='fc')renderFC();else if(tab==='fam')renderFam();else if(tab==='quiz')startMQ();else renderMListen();}
+function renderFC(){
+  const p=document.getElementById('moti-fc-panel'),m=motiList[fcIdx];fcFlipped=false;
+  const hb=m.heb.split('/')[0].trim();
+  p.innerHTML=`<div style="display:flex;gap:8px;align-items:center;margin-bottom:13px;flex-wrap:wrap"><button class="btn btn-sm" onclick="fcGo(-1)">← Préc.</button><span style="font-size:0.8rem;color:var(--text-muted);flex:1;text-align:center">${fcIdx+1} / ${motiList.length}</span><button class="btn btn-sm" onclick="fcGo(1)">Suiv. →</button><button class="btn btn-sm btn-purple" onclick="fcRand()">⇄</button></div><div class="fc-wrap" onclick="flipFC()"><div class="fc" id="fc-el"><div class="fc-face fc-front"><div class="fc-num">${m.num}. ${catL[m.cat]||m.cat}</div><div class="fc-heb">${m.heb}</div><div class="fc-translit">${m.translit}</div><button class="audio-btn pur" style="margin:7px auto 0" onclick="event.stopPropagation();speak('${es(hb)}')">▶ Écouter</button><div class="fc-hint">Cliquez pour voir →</div></div><div class="fc-face fc-back"><div class="fc-fr">${m.fr}</div><div class="fc-morph">${m.morph}</div>${m.racine&&m.racine!=='—'?'<div class="fc-family">Racine : '+m.racine+'</div>':''}<div class="fc-ex">${m.example[0]}<div class="fc-ex-fr">${m.example[1]}</div></div></div></div></div><div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap"><button class="btn btn-sm" onclick="fcGo(-1)">← Précédent</button><button class="btn btn-sm btn-purple" onclick="flipFC()">↩ Retourner</button><button class="btn btn-sm" onclick="fcGo(1)">Suivant →</button></div>`;
+}
+function flipFC(){fcFlipped=!fcFlipped;const el=document.getElementById('fc-el');if(el)el.classList.toggle('flipped',fcFlipped);}
+function fcGo(d){fcIdx=(fcIdx+d+motiList.length)%motiList.length;renderFC();}
+function fcRand(){fcIdx=0|Math.random()*motiList.length;renderFC();}
+function renderFam(){
+  const p=document.getElementById('moti-fam-panel');
+  let h=`<div style="display:flex;gap:8px;margin-bottom:13px;flex-wrap:wrap"><button class="btn btn-purple btn-sm" onclick="famAll()">▶ Lire tout</button><button class="btn btn-sm" onclick="speechSynthesis.cancel()">■ Stop</button></div><div class="fam-grid">`;
+  motiList.forEach(m=>{const hb=m.heb.split('/')[0].trim();const fh=m.forms.map(f=>`<div class="fam-form"><div class="fam-form-heb">${f.h}</div><div class="fam-form-lbl">${f.l}</div><button class="fam-aud" onclick="speak('${es(f.h.split('/')[0].trim())}')">▶</button></div>`).join('');h+=`<div class="fam-card"><div class="fam-header"><div class="fam-num">${m.num}.</div><div class="fam-main-heb">${m.heb}</div><div class="fam-main-fr">${m.fr}</div>${m.racine&&m.racine!=='—'?'<div class="fam-racine">'+m.racine+'</div>':''}<button class="fam-aud" style="margin-left:auto" onclick="speak('${es(hb)}')">▶</button></div><div class="fam-forms">${fh}</div><div class="fam-ex">${m.example[0]}<div class="fam-ex-fr">${m.example[1]}</div></div></div>`;});
+  h+='</div>';p.innerHTML=h;
+}
+async function famAll(){speechSynthesis.cancel();for(const m of motiList){await speak(m.heb.split('/')[0].trim(),0.8);await new Promise(r=>setTimeout(r,450));for(const f of m.forms){await speak(f.h.split('/')[0].trim(),0.8);await new Promise(r=>setTimeout(r,320));}await new Promise(r=>setTimeout(r,650));}}
+const MQR=14;
+function startMQ(){mqQ=shuffle([...motiList]);mqI=0;mqSc=0;mqStr=0;mqCorr=0;renderMQ();}
+function renderMQ(){
+  const p=document.getElementById('moti-quiz-panel');if(mqI>=MQR){renderMQOver();return;}
+  const m=mqQ[mqI],pct=0|mqI/MQR*100,mode=mqI%2,hb=m.heb.split('/')[0].trim();
+  let h=`<div class="mq-score-row"><div class="mq-pill">Score<span>${mqSc}</span></div><div class="mq-pill">Série<span>${mqStr}</span></div><div class="mq-pill">Q<span>${mqI+1}/${MQR}</span></div></div><div class="mq-prog"><div class="mq-prog-fill" style="width:${pct}%"></div></div>`;
+  if(mode===0){
+    const ds=shuffle(motiList.filter(x=>x.fr!==m.fr)).slice(0,3),cs=shuffle([m,...ds]);
+    h+=`<div class="mq-card"><div class="q-mode purple">Quelle est la traduction française ?</div><div style="font-family:'Frank Ruhl Libre',serif;font-size:1.9rem;color:var(--purple-light);text-align:center;direction:rtl;margin:9px 0">${m.heb}</div><div style="text-align:center;font-size:0.78rem;color:var(--text-muted);font-style:italic;margin-bottom:7px">${m.translit}</div><button class="audio-btn pur" id="mqa" onclick="mqSpk('${es(hb)}')">▶ Écouter</button></div><div class="choices-grid">`;
+    cs.forEach(c=>{h+=`<div class="choice pur-choice" onclick="chkMQ('${es(c.fr)}','${es(m.fr)}')" style="font-size:0.85rem;font-family:sans-serif;direction:ltr">${c.fr}</div>`;});
+    h+=`</div><div id="mqfb"></div><div class="game-actions"><button class="btn btn-sm" onclick="mqSkip()">Passer →</button></div>`;
+    p.innerHTML=h;setTimeout(()=>mqSpk(hb),300);
+  }else{
+    const ds=shuffle(motiList.filter(x=>x.heb!==m.heb)).slice(0,3),cs=shuffle([m,...ds]);
+    h+=`<div class="mq-card"><div class="q-mode purple">Quel est le mot hébreu ?</div><div style="font-size:1.15rem;font-weight:500;text-align:center;color:var(--text);margin:9px 0">${m.fr}</div></div><div class="choices-grid">`;
+    cs.forEach(c=>{h+=`<div class="choice pur-choice" onclick="chkMQ('${es(c.heb)}','${es(m.heb)}')" style="font-family:'Frank Ruhl Libre',serif;font-size:1.1rem;direction:rtl">${c.heb}</div>`;});
+    h+=`</div><div id="mqfb"></div><div class="game-actions"><button class="btn btn-sm" onclick="mqSkip()">Passer →</button></div>`;
+    p.innerHTML=h;
+  }
+}
+function mqSpk(h){const b=document.getElementById('mqa');if(b)b.classList.add('playing');speak(h).then(()=>{if(b)b.classList.remove('playing');});}
+function chkMQ(chosen,correct){
+  document.querySelectorAll('#moti-quiz-panel .choice').forEach(el=>{el.onclick=null;const t=el.textContent.trim();if(t===correct)el.className='choice correct-choice';else if(t===chosen&&chosen!==correct)el.className='choice wrong-choice';});
+  const ok=chosen===correct,fb=document.getElementById('mqfb');fb.className='feedback '+(ok?'correct':'wrong');fb.textContent=ok?'✓ Bravo !':'✗ Pas cette fois.';
+  if(ok){mqSc+=10;mqStr++;mqCorr++;}else mqStr=0;
+  setTimeout(()=>{mqI++;renderMQ();},1800);
+}
+function mqSkip(){mqI++;renderMQ();}
+function renderMQOver(){
+  const pct=0|mqCorr/MQR*100;let m='📚';if(pct>=90)m='🏆';else if(pct>=70)m='🥇';else if(pct>=50)m='🥈';
+  document.getElementById('moti-quiz-panel').innerHTML=`<div class="game-over"><div class="medal">${m}</div><div style="font-family:'Playfair Display',serif;font-size:0.9rem;color:var(--text-muted);letter-spacing:0.2em;text-transform:uppercase">Score liste מוטי</div><div class="big-score purple">${mqSc}</div><div class="stats-row"><div class="stat-box"><div class="sv purple">${mqCorr}/${MQR}</div><div class="sl">Corrects</div></div><div class="stat-box"><div class="sv purple">${pct}%</div><div class="sl">Réussite</div></div></div><div class="game-actions" style="justify-content:center;margin-top:9px"><button class="btn btn-purple" onclick="startMQ()">↺ Rejouer</button><button class="btn btn-sm" onclick="switchMotiTab('fc')">🃏 Flashcards</button><button class="btn btn-sm" onclick="switchMotiTab('fam')">🌿 Familles</button></div></div>`;
+}
+function renderMListen(){
+  const p=document.getElementById('moti-ecoute-panel');
+  let h=`<div class="listen-controls"><button class="btn btn-purple btn-sm" onclick="mliAll()">▶ Lire tout</button><button class="btn btn-sm" onclick="mliStopFn()">■ Stop</button><button class="btn btn-sm" onclick="mliResetFn()">↺ Reset</button><div class="speed-ctl"><label>Vitesse :</label><select id="mliSpd"><option value="0.6">Lente</option><option value="0.8" selected>Normale</option></select></div></div>`;
+  h+=`<div class="pb-text" id="mliPbT">0 / ${motiList.length} écoutés</div><div class="prog-bar" style="margin-bottom:13px"><div class="prog-fill purple" id="mliPbF" style="width:0%"></div></div><div class="listen-list" id="mliList">`;
+  motiList.forEach((m,i)=>{h+=`<div class="listen-item" id="mli-${i}" onclick="mliOne(${i})"><div style="font-size:0.68rem;color:var(--text-muted);text-align:center">${String(i+1).padStart(2,'0')}</div><div><div class="mli-heb">${m.heb}</div><div class="li-fr">${m.fr} · <em>${m.translit}</em></div></div><button class="li-btn" onclick="event.stopPropagation();mliOne(${i})">▶</button></div>`;});
+  h+='</div>';p.innerHTML=h;mliUpdPb();
+}
+function mliSet(i,s){const el=document.getElementById('mli-'+i);if(!el)return;const b=el.querySelector('.li-btn');el.className='listen-item'+(s==='playing'?' playing':s==='played'?' played':'');b.textContent=s==='playing'?'♪':s==='played'?'✓':'▶';}
+function mliUpdPb(){const c=mliPlayed.size;const pf=document.getElementById('mliPbF'),pt=document.getElementById('mliPbT');if(pf)pf.style.width=(c/motiList.length*100)+'%';if(pt)pt.textContent=`${c} / ${motiList.length} écoutés`;}
+async function mliOne(i){speechSynthesis.cancel();mliSet(i,'playing');const spd=parseFloat(document.getElementById('mliSpd')?.value||0.8);await speak(motiList[i].heb.split('/')[0].trim(),spd);mliPlayed.add(i);mliSet(i,'played');mliUpdPb();}
+async function mliAll(){if(mliPlaying)return;mliPlaying=true;mliStop=false;const spd=parseFloat(document.getElementById('mliSpd')?.value||0.8);for(let i=0;i<motiList.length;i++){if(mliStop)break;mliSet(i,'playing');document.getElementById('mli-'+i)?.scrollIntoView({behavior:'smooth',block:'nearest'});await speak(motiList[i].heb.split('/')[0].trim(),spd);if(!mliStop){mliPlayed.add(i);mliSet(i,'played');mliUpdPb();}await new Promise(r=>setTimeout(r,580));}mliPlaying=false;}
+function mliStopFn(){mliStop=true;mliPlaying=false;speechSynthesis.cancel();motiList.forEach((_,i)=>mliSet(i,mliPlayed.has(i)?'played':''));}
+function mliResetFn(){mliStopFn();mliPlayed.clear();motiList.forEach((_,i)=>mliSet(i,''));mliUpdPb();}
+
+window.addEventListener('load',()=>{
+  startGame();buildListenPage();buildLexicon();buildSongPage();buildVideoWordList();renderFC();
+  new MutationObserver(()=>{const tp=document.getElementById('tp');if(tp&&tp.children.length===0&&window._ts)initPool();})
+    .observe(document.getElementById('game-content'),{childList:true});
+});
+</script>
+</body>
+</html>
