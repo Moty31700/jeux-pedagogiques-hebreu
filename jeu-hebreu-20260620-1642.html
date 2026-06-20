@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>רשימת מוטי — Quiz pédagogique · 160 mots</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700&family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0d0d;--card:#181818;--card2:#1e1e1e;--border:#252525;
+  --gold:#c9a84c;--gold-l:#e8c96a;--gold-dim:rgba(201,168,76,0.12);
+  --txt:#e8e4dc;--muted:#777;--sub:#aaa;
+  --ok:#3d9b60;--ok-bg:#0f2018;--err:#b04040;--err-bg:#250e0e;
+  --warn:#b87d20;--warn-bg:#1e1505;
+  --purple:#7c5cbf;--purple-l:#c5b0f5;--teal:#2a9d8f;
+  --round1:#c9a84c;--round2:#4ea8de;--round3:#c084fc;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;min-height:100vh}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:#080808;border-bottom:1px solid var(--border);
+  display:flex;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.tab{padding:13px 15px;cursor:pointer;white-space:nowrap;color:var(--muted);font-size:0.8rem;
+  font-weight:500;border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0}
+.tab:hover{color:var(--txt);background:rgba(255,255,255,0.03)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab.t-flash.active{color:#7ed6c8;border-bottom-color:var(--teal)}
+.tab.t-liste.active{color:var(--purple-l);border-bottom-color:var(--purple)}
+
+/* PAGES */
+.page{display:none;max-width:820px;margin:0 auto;padding:22px 14px 70px}
+.page.active{display:block}
+.ph{text-align:center;padding:24px 0 18px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.ph-heb{font-family:"Frank Ruhl Libre",serif;font-size:2rem;color:var(--gold);line-height:1.3}
+.ph h2{font-family:"Playfair Display",serif;font-size:1.05rem;color:var(--sub);margin-top:5px;font-weight:400}
+.ph .sub{font-size:0.76rem;color:var(--muted);margin-top:3px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:none;border-radius:7px;
+  cursor:pointer;font-size:0.83rem;font-weight:500;transition:all .15s;font-family:"DM Sans",sans-serif}
+.btn-g{background:var(--gold);color:#000}.btn-g:hover{filter:brightness(1.1)}
+.btn-o{background:rgba(255,255,255,0.07);color:var(--txt);border:1px solid var(--border)}
+.btn-o:hover{background:rgba(255,255,255,0.12)}
+.btn-sm{padding:6px 12px;font-size:0.76rem}
+.btn-err{background:rgba(176,64,64,0.2);color:#d47070;border:1px solid var(--err)}
+.btn-err:hover{background:rgba(176,64,64,0.35)}
+.ab{background:none;border:1px solid var(--border);color:var(--gold);border-radius:5px;
+  padding:3px 9px;cursor:pointer;font-size:0.78rem;transition:all .15s}
+.ab:hover{background:var(--gold-dim);border-color:var(--gold)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* QUIZ — SÉLECTEUR DE MODE */
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:9px;margin-bottom:16px}
+.mode-card{background:var(--card);border:2px solid var(--border);border-radius:9px;padding:15px 12px;
+  cursor:pointer;transition:all .2s;text-align:center}
+.mode-card:hover,.mode-card.sel{border-color:var(--gold);background:var(--gold-dim)}
+.mode-card .mi{font-size:1.6rem;margin-bottom:5px}
+.mode-card .mt{font-size:0.82rem;font-weight:600;color:var(--txt);margin-bottom:2px}
+.mode-card .ms{font-size:0.71rem;color:var(--muted)}
+
+/* QUIZ — BANDEAU DE SESSION */
+.session-bar{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:10px 14px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sbar-item{display:flex;align-items:center;gap:5px;font-size:0.78rem}
+.sbar-label{color:var(--muted)}
+.sbar-val{font-weight:700;color:var(--gold)}
+.sbar-val.ok{color:#6ecf99}
+.sbar-val.err{color:#d47070}
+.sbar-val.warn{color:#d4a44c}
+.round-badge{font-size:0.7rem;font-weight:700;padding:3px 9px;border-radius:12px;letter-spacing:.05em}
+.r1{background:rgba(201,168,76,0.2);color:var(--round1);border:1px solid rgba(201,168,76,0.35)}
+.r2{background:rgba(78,168,222,0.18);color:var(--round2);border:1px solid rgba(78,168,222,0.3)}
+.r3{background:rgba(192,132,252,0.18);color:var(--round3);border:1px solid rgba(192,132,252,0.3)}
+
+/* QUIZ — CARTE */
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:18px 16px;margin-bottom:12px}
+.qmode-lbl{font-size:0.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;font-weight:700}
+.qword{font-size:2.7rem;text-align:center;color:var(--gold-l);padding:12px 0 2px;
+  font-family:"Frank Ruhl Libre",serif;direction:rtl;cursor:pointer;line-height:1.2}
+.qword:hover{color:var(--gold)}
+.qtrans{text-align:center;font-size:0.82rem;color:var(--muted);margin-bottom:4px}
+.qforms-row{text-align:center;font-size:0.85rem;color:var(--sub);margin-bottom:12px;
+  font-family:"Frank Ruhl Libre",serif;direction:rtl;line-height:2.2;padding:6px 0}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.opt{padding:12px 10px;border:1px solid var(--border);border-radius:8px;cursor:pointer;
+  text-align:center;transition:all .15s;font-size:0.87rem;line-height:1.4;user-select:none}
+.opt:hover{border-color:var(--gold);background:var(--gold-dim)}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg);color:#7ecf9f;pointer-events:none;
+  animation:popOk .3s ease}
+.opt.err{border-color:var(--err);background:var(--err-bg);color:#d47070;pointer-events:none}
+.opt.reveal{border-color:var(--ok);background:var(--ok-bg);color:#7ecf9f}
+.opt.locked{pointer-events:none;opacity:.55}
+@keyframes popOk{0%{transform:scale(.96)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+
+/* FEEDBACK MORPHO */
+.morph-fb{display:none;margin-top:12px;background:rgba(201,168,76,0.07);
+  border:1px solid rgba(201,168,76,0.2);border-radius:7px;padding:11px 13px;
+  font-size:0.82rem;color:var(--sub);line-height:1.65}
+.morph-fb-heb{font-family:"Frank Ruhl Libre",serif;font-size:1.05rem;color:var(--gold-l);direction:rtl;margin-bottom:3px}
+.morph-fb-ex{margin-top:6px;font-style:italic;color:var(--muted);font-size:0.78rem;direction:rtl;text-align:right;
+  border-top:1px solid rgba(201,168,76,0.15);padding-top:6px}
+
+/* BARRE DE PROGRESSION DUALE */
+.prog-wrap{margin-bottom:12px}
+.prog-labels{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:4px}
+.prog{height:6px;background:var(--border);border-radius:3px;overflow:hidden;display:flex}
+.prog-ok{height:100%;background:var(--ok);transition:width .4s ease}
+.prog-err{height:100%;background:var(--err);transition:width .4s ease;opacity:.7}
+
+/* STATUS LISTE DES MOTS */
+.word-status-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:5px;margin-top:10px}
+.ws-chip{width:42px;height:34px;border-radius:5px;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Frank Ruhl Libre",serif;font-size:0.8rem;direction:rtl;cursor:pointer;transition:all .15s}
+.ws-chip:hover{border-color:var(--gold)}
+.ws-chip.ws-ok{background:var(--ok-bg);border-color:rgba(61,155,96,.4);color:#6ecf99}
+.ws-chip.ws-err{background:var(--err-bg);border-color:rgba(176,64,64,.4);color:#d47070}
+.ws-chip.ws-cur{border-color:var(--gold);background:var(--gold-dim)}
+.ws-chip.ws-todo{color:var(--muted)}
+
+/* ÉCRAN DE FIN DE ROUND */
+.round-end{text-align:center;padding:28px 16px}
+.re-icon{font-size:3rem;margin-bottom:10px}
+.re-title{font-family:"Playfair Display",serif;font-size:1.4rem;margin-bottom:6px}
+.re-msg{font-size:0.88rem;color:var(--sub);margin-bottom:18px;line-height:1.6}
+.re-stats{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.re-stat{text-align:center}
+.re-stat-n{font-size:1.8rem;font-weight:700}
+.re-stat-l{font-size:0.72rem;color:var(--muted);margin-top:2px}
+
+/* ÉCRAN FIN TOTALE */
+.end-box{text-align:center;padding:30px 16px}
+.end-stars{font-size:2.2rem;margin-bottom:8px}
+.end-sc{font-size:2rem;color:var(--gold);font-family:"Playfair Display",serif;margin-bottom:6px}
+.end-pct{font-size:0.88rem;color:var(--sub);margin-bottom:18px}
+
+/* FLASHCARDS */
+.fc-wrap{perspective:1100px;max-width:420px;margin:0 auto 14px;height:210px}
+.fc{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s;cursor:pointer}
+.fc.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:20px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--border)}
+.face-f{background:var(--card)}
+.face-b{background:rgba(124,92,191,0.1);border-color:var(--purple);transform:rotateY(180deg)}
+.fc-heb{font-family:"Frank Ruhl Libre",serif;font-size:2.3rem;direction:rtl;color:var(--gold-l);text-align:center}
+.fc-forms{font-family:"Frank Ruhl Libre",serif;font-size:0.88rem;direction:rtl;color:var(--muted);text-align:center;margin-top:4px}
+.fc-fr{font-size:1rem;color:var(--txt);text-align:center;margin-bottom:6px;font-weight:600}
+.fc-morph{font-size:0.71rem;color:var(--muted);text-align:center;font-style:italic;max-width:300px;line-height:1.5}
+.fc-prog{text-align:center;font-size:0.75rem;color:var(--muted);margin-bottom:5px}
+.fc-hint{text-align:center;font-size:0.71rem;color:var(--muted);margin-bottom:9px}
+.fc-ctrl{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:9px}
+.fc-filter-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+
+/* ÉCOUTE */
+.li{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--border);
+  border-radius:7px;margin-bottom:6px;cursor:pointer;transition:border-color .15s}
+.li:hover,.li.playing{border-color:var(--gold);background:var(--gold-dim)}
+.li.played{border-color:var(--ok)}
+.li-n{font-size:0.7rem;color:var(--muted);width:20px;flex-shrink:0;text-align:right}
+.li-heb{font-family:"Frank Ruhl Libre",serif;font-size:1.15rem;direction:rtl;color:var(--gold-l);flex:1;text-align:right}
+.li-fr{font-size:0.79rem;color:var(--sub);flex:1}
+
+/* LISTE LEXIQUE */
+.lex-search{width:100%;background:var(--card);border:1px solid var(--border);color:var(--txt);
+  padding:10px 14px;border-radius:7px;font-size:0.87rem;margin-bottom:12px;outline:none;transition:border-color .15s}
+.lex-search:focus{border-color:var(--gold)}
+.lex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:9px}
+.lc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 11px;cursor:pointer;transition:all .15s}
+.lc:hover{border-color:var(--gold);background:var(--card2);transform:translateY(-1px)}
+.lc-heb{font-family:"Frank Ruhl Libre",serif;font-size:1.25rem;direction:rtl;text-align:right;color:var(--gold-l);margin-bottom:3px}
+.lc-tr{font-size:0.7rem;color:var(--muted);margin-bottom:4px}
+.lc-fr{font-size:0.81rem;color:var(--sub);margin-bottom:8px}
+.lc-foot{display:flex;justify-content:space-between;align-items:center}
+.badge{font-size:0.62rem;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:3px;text-transform:uppercase}
+.bn{background:rgba(58,107,201,.3);color:#8ab4f8}
+.bv{background:rgba(42,153,96,.3);color:#7fcfa0}
+.badj{background:rgba(201,122,32,.3);color:#f5b870}
+.badv{background:rgba(136,85,204,.3);color:#d4b0f5}
+.bprep{background:rgba(100,100,100,.3);color:#ccc}
+.bexpr{background:rgba(176,64,64,.3);color:#f09090}
+.rac{font-size:0.67rem;color:var(--muted)}
+
+/* SELECT */
+select.sel-ui{background:var(--card);border:1px solid var(--border);color:var(--txt);
+  padding:7px 10px;border-radius:6px;font-size:0.78rem;outline:none}
+.spd-row{display:flex;align-items:center;gap:6px;font-size:0.76rem;color:var(--muted)}
+.spd-row select{background:var(--card);border:1px solid var(--border);color:var(--txt);
+  padding:4px 6px;border-radius:4px;font-size:0.76rem}
+
+@media(max-width:480px){
+  .qword{font-size:2rem}.opts{grid-template-columns:1fr}
+  .fc-heb{font-size:1.9rem}.fc-wrap{height:185px}
+  .lex-grid{grid-template-columns:1fr 1fr}
+  .mode-grid{grid-template-columns:1fr 1fr}
+  .re-stats{gap:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="tab active" onclick="showPage('quiz')" id="tab-quiz">&#127919; Quiz</div>
+  <div class="tab t-flash" onclick="showPage('flash')" id="tab-flash">&#127183; Flashcards</div>
+  <div class="tab" onclick="showPage('listen')" id="tab-listen">&#128266; &#1513;&#1502;&#1506;</div>
+  <div class="tab t-liste" onclick="showPage('liste')" id="tab-liste">&#128214; Liste</div>
+</div>
+
+<!-- ═══ PAGE QUIZ ═══ -->
+<div id="page-quiz" class="page active">
+  <div class="ph">
+    <div class="ph-heb">&#1512;&#1513;&#1497;&#1502;&#1514; &#1502;&#1493;&#1496;&#1497;</div>
+    <h2>Quiz p&eacute;dagogique &middot; Apprentissage adaptatif</h2>
+    <div class="sub">Les mots r&eacute;ussis sont valid&eacute;s &bull; Les erreurs reviennent jusqu&rsquo;&agrave; ma&icirc;trise</div>
+  </div>
+
+  <!-- Écran de configuration -->
+  <div id="config-screen">
+    <div style="font-size:0.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:700">Mode de quiz</div>
+    <div class="mode-grid">
+      <div class="mode-card sel" id="mc-hf" onclick="selMode('he-fr')">
+        <div class="mi">&#127470;&#127473;&rarr;&#127467;&#127479;</div>
+        <div class="mt">H&eacute;breu &rarr; Fran&ccedil;ais</div>
+        <div class="ms">Voir le mot, choisir le sens</div>
+      </div>
+      <div class="mode-card" id="mc-fh" onclick="selMode('fr-he')">
+        <div class="mi">&#127467;&#127479;&rarr;&#127470;&#127473;</div>
+        <div class="ms">Voir la d&eacute;finition, choisir le mot</div>
+      </div>
+      <div class="mode-card" id="mc-forms" onclick="selMode('forms')">
+        <div class="mi">&#127807;</div>
+        <div class="mt">Formes &rarr; Sens</div>
+        <div class="ms">Voir les d&eacute;riv&eacute;s, trouver le sens</div>
+      </div>
+      <div class="mode-card" id="mc-mix" onclick="selMode('mix')">
+        <div class="mi">&#128256;</div>
+        <div class="mt">Mode mixte</div>
+        <div class="ms">3 modes en alternance</div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:6px;margin-bottom:18px">
+      <select id="catFilter" class="sel-ui">
+        <option value="">Tous les mots (160)</option>
+        <option value="n">Noms</option>
+        <option value="v">Verbes</option>
+        <option value="adj">Adjectifs</option>
+        <option value="other">Adv. / Expr. / Pr&eacute;p.</option>
+      </select>
+    </div>
+    <div style="background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:14px;margin-bottom:18px;font-size:0.83rem;color:var(--sub);line-height:1.7">
+      <strong style="color:var(--gold)">&#127891; Principe p&eacute;dagogique :</strong><br>
+      <b style="color:#6ecf99">&#10003; R&eacute;ponse juste</b> &rarr; mot valid&eacute;, il ne revient plus dans cette session.<br>
+      <b style="color:#d47070">&#10007; R&eacute;ponse fausse</b> &rarr; mot remis dans la pile, il reviendra jusqu&rsquo;&agrave; ma&icirc;trise.<br>
+      La session se termine quand <em>tous</em> les mots sont valid&eacute;s.
+    </div>
+    <button class="btn btn-g" id="startBtn" style="width:100%;justify-content:center;padding:12px">&#9654; Commencer la session</button>
+  </div>
+
+  <!-- Zone de jeu -->
+  <div id="quiz-zone" style="display:none">
+    <!-- Bandeau session -->
+    <div class="session-bar">
+      <div class="sbar-item"><span class="sbar-label">Session :</span><span class="sbar-val" id="sb-round"></span></div>
+      <div class="sbar-item"><span class="sbar-label">Valid&eacute;s :</span><span class="sbar-val ok" id="sb-ok">0</span></div>
+      <div class="sbar-item"><span class="sbar-label">&Agrave; retravailler :</span><span class="sbar-val err" id="sb-err">0</span></div>
+      <div class="sbar-item"><span class="sbar-label">Restants :</span><span class="sbar-val warn" id="sb-left">0</span></div>
+      <div class="sbar-item"><span class="sbar-label">Score :</span><span class="sbar-val" id="sb-score">0</span></div>
+    </div>
+    <!-- Barre de progression duale -->
+    <div class="prog-wrap">
+      <div class="prog-labels">
+        <span id="pl-ok" style="color:#6ecf99">0 valid&eacute;s</span>
+        <span id="pl-tot" style="color:var(--muted)">sur 0</span>
+        <span id="pl-err" style="color:#d47070">0 erreurs</span>
+      </div>
+      <div class="prog" id="mainProg">
+        <div class="prog-ok" id="progOk" style="width:0%"></div>
+        <div class="prog-err" id="progErr" style="width:0%"></div>
+      </div>
+    </div>
+    <!-- Grille statut mots -->
+    <div id="wordStatusGrid" class="word-status-grid" style="margin-bottom:12px"></div>
+    <!-- Carte question -->
+    <div class="card" id="qCard"></div>
+    <!-- Boutons session -->
+    <div class="row" style="margin-top:10px">
+      <button class="btn btn-o btn-sm" id="restartBtn">&#8634; Recommencer</button>
+      <button class="btn btn-o btn-sm" id="skipBtn">&#9197; Passer</button>
+      <button class="btn btn-o btn-sm" id="modesBtn">&#9881; Modes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE FLASHCARDS ═══ -->
+<div id="page-flash" class="page">
+  <div class="ph">
+    <div class="ph-heb" style="color:#7ed6c8">&#1499;&#1512;&#1496;&#1497;&#1505;&#1497;&#1493;&#1468;&#1514;</div>
+    <h2>Flashcards recto / verso</h2>
+    <div class="sub">Cliquez pour retourner &middot; 160 mots</div>
+  </div>
+  <div class="fc-prog" id="fcProg">1 / 160</div>
+  <div class="fc-hint">Cliquez sur la carte pour r&eacute;v&eacute;ler la traduction et l&rsquo;analyse</div>
+  <div class="fc-wrap">
+    <div class="fc" id="fcCard">
+      <div class="face face-f">
+        <div class="fc-heb" id="fcHeb"></div>
+        <div class="fc-forms" id="fcForms"></div>
+      </div>
+      <div class="face face-b">
+        <div class="fc-fr" id="fcFr"></div>
+        <div class="fc-morph" id="fcMorph"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-ctrl">
+    <button class="btn btn-o btn-sm" id="fcPrev">&#8592; Pr&eacute;c.</button>
+    <button class="btn btn-o btn-sm" id="fcSpeak">&#9654; &Eacute;couter</button>
+    <button class="btn btn-o btn-sm" id="fcNext">Suiv. &rarr;</button>
+    <button class="btn btn-o btn-sm" id="fcShuf">&#8644; M&eacute;langer</button>
+  </div>
+  <div class="fc-filter-row">
+    <button class="btn btn-o btn-sm" onclick="fcFilter('')">Tous</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('n')">Noms</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('v')">Verbes</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('adj')">Adj.</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('other')">Adv./Expr.</button>
+  </div>
+</div>
+
+<!-- ═══ PAGE ÉCOUTE ═══ -->
+<div id="page-listen" class="page">
+  <div class="ph">
+    <div class="ph-heb">&#1492;&#1511;&#1513;&#1461;&#1489;</div>
+    <h2>&Eacute;coute mot par mot</h2>
+    <div class="sub">Cliquez sur un mot &middot; ou lisez toute la liste</div>
+  </div>
+  <div class="row" style="margin-bottom:12px">
+    <button class="btn btn-g btn-sm" id="listenHeb">&#9654; H&eacute;breu seul</button>
+    <button class="btn btn-o btn-sm" id="listenBoth">&#9654; H&eacute;breu + FR</button>
+    <button class="btn btn-o btn-sm" id="stopBtn">&#9632; Stop</button>
+    <div class="spd-row"><label>Vitesse :</label>
+      <select id="spd"><option value="0.5">Lente</option><option value="0.75" selected>Normale</option><option value="1">Rapide</option></select>
+    </div>
+    <span id="liPb" style="font-size:0.74rem;color:var(--muted)">0 / 160 &eacute;cout&eacute;s</span>
+  </div>
+  <div id="liList"></div>
+</div>
+
+<!-- ═══ PAGE LISTE ═══ -->
+<div id="page-liste" class="page">
+  <div class="ph">
+    <div class="ph-heb" style="color:var(--purple-l)">&#1502;&#1460;&#1500;&#1468;&#1493;&#1465;&#1503;</div>
+    <h2>Liste compl&egrave;te &middot; 160 mots</h2>
+    <div class="sub">Cliquez pour &eacute;couter</div>
+  </div>
+  <input class="lex-search" id="lsearch" type="text" placeholder="Rechercher — h&eacute;breu, fran&ccedil;ais, racine...">
+  <div id="lexG" class="lex-grid"></div>
+</div>
+
+<script>
+// =====================================================
+// DONNÉES (syntaxe propre — pas d'apostrophes dans les clés de template)
+// =====================================================
+const MOTY = [{"h":"אָפוֹר / אֲפוּרָה / אֲפוּרִים / אֲפוּרוֹת","t":"afór / afurá / afurím / afurót","f":"gris (m.s. / f.s. / m.pl. / f.pl.)","c":"adj","r":"א-פ-ר","m":"Adjectif de couleur décliné en genre et nombre, dérivé de la racine א-פ-ר évoquant la cendre.","fs":[["אֲפַרְפַּר","grisâtre"],["אֵפֶר","cendre (nom associé)"]],"eh":"הַשָּׁמַיִם הָיוּ אֲפוּרִים הַבֹּקֶר.","ef":"Le ciel était gris ce matin.","ex":[["הוּא לוֹבֵשׁ חֻלְצָה אֲפוּרָה.","[description] Il porte une chemise grise."],["יָמִים אֲפוּרִים מְדַכְּאִים אוֹתִי.","[humeur] Les jours gris me déprimont."]]},{"h":"זִכָּרוֹן / זִכְרוֹנוֹת (זוֹכֵר / לִזְכֹּר)","t":"zikkarón / zikhronót (zokhér / lizkor)","f":"mémoire, souvenir / souvenirs (se souvenir / se rappeler)","c":"n","r":"ז-כ-ר","m":"Nom masculin dérivé de la racine ז-כ-ר (se souvenir), formé avec le schème קִטָּרוֹן ; le verbe לִזְכֹּר est de binyan Pa'al.","fs":[["לִזְכֹּר","se souvenir (inf.)"],["זוֹכֵר","se souvient (part. présent)"],["הַנְצָחָה","commémoration"],["מַזְכֶּרֶת","souvenir (objet)"]],"eh":"יֵשׁ לִי זִכְרוֹנוֹת יָפִים מִיַּלְדוּתִי.","ef":"J'ai de beaux souvenirs de mon enfance.","ex":[["אֲנִי לֹא זוֹכֵר אֶת שְׁמוֹ.","[oubli] Je ne me souviens pas de son nom."],["הַזִּכָּרוֹן שֶׁלּוֹ מְצֻיָּן.","[capacité] Sa mémoire est excellente."]]},{"h":"מִן הַסְּתָם","t":"min ha-setam","f":"probablement, sans doute, vraisemblablement","c":"adv","r":"ס-ת-מ","m":"Expression adverbiale figée composée de מִן (de) et הַסְּתָם (l'ordinaire, le banal), signifiant littéralement « du commun » et utilisée pour exprimer une supposition logique.","fs":[["סְתָם","ordinaire, sans raison, juste comme ça"],["כְּנִרְאֶה","apparemment (synonyme courant)"]],"eh":"מִן הַסְּתָם הוּא כְּבָר יוֹדֵעַ אֶת הַחֲדָשׁוֹת.","ef":"Il sait probablement déjà les nouvelles.","ex":[["מִן הַסְּתָם הִיא תָּבוֹא מְאֻחֶרֶת.","[supposition] Elle arrivera sans doute en retard."],["מִן הַסְּתָם זֶה לֹא יִהְיֶה זוֹל.","[estimation] Ça ne sera probablement pas bon marché."]]},{"h":"כֵּן / כַּנָּה","t":"ken / kaná","f":"sincère, honnête (m. / f.)","c":"adj","r":"כ-נ-נ","m":"Adjectif de la racine כ-נ-נ évoquant la droiture et la sincérité, à distinguer de l'adverbe כֵּן (oui).","fs":[["כְּנוּת","sincérité (nom féminin)"],["בְּכֵנוּת","sincèrement (adverbe)"],["כַּנִּים","sincères (m. pl.)"],["כַּנּוֹת","sincères (f. pl.)"]],"eh":"הוּא אָדָם כֵּן וְיָשָׁר.","ef":"C'est un homme sincère et droit.","ex":[["תְּנִי לִי תְּשׁוּבָה כַּנָּה.","[demande] Donne-moi une réponse sincère."],["הַחֲבֵרִים הַכַּנִּים נְדִירִים.","[sagesse] Les amis sincères sont rares."]]},{"h":"זוֹעֵק / לִזְעֹק","t":"zo'ék / liz'ok","f":"crier (en signe de détresse, protester) / crier de désespoir","c":"v","r":"ז-ע-ק","m":"Verbe de binyan Pa'al de la racine ז-ע-ק, exprimant un cri de détresse, d'appel au secours ou de protestation profonde.","fs":[["זְעָקָה","cri de détresse (nom)"],["זַעַק","il a crié (passé)"],["זְעָקוֹת","cris de détresse (pl.)"]],"eh":"הָעָם זוֹעֵק לְצֶדֶק.","ef":"Le peuple crie pour la justice.","ex":[["הִיא זָעֲקָה לְעֶזְרָה בַּחֹשֶׁךְ.","[détresse] Elle a crié à l'aide dans l'obscurité."],["הַדָּם זוֹעֵק מִן הָאֲדָמָה.","[biblique] Le sang crie depuis la terre."]]},{"h":"צוֹעֵק / לִצְעֹק","t":"tso'ék / lits'ok","f":"crier (à voix haute) / crier","c":"v","r":"צ-ע-ק","m":"Verbe de binyan Pa'al de la racine צ-ע-ק, exprimant un cri fort et sonore, souvent de colère, de douleur ou pour attirer l'attention.","fs":[["צְעָקָה","cri (nom féminin)"],["צָעַק","il a crié (passé)"],["צְעָקוֹת","cris (pl.)"],["צַעֲקָן","criard (adjectif/nom)"]],"eh":"אַל תִּצְעַק, אֲנִי שׁוֹמֵעַ אוֹתְךָ.","ef":"Ne crie pas, je t'entends.","ex":[["הַיֶּלֶד צָעַק כְּשֶׁנָּפַל.","[douleur] L'enfant a crié quand il est tombé."],["הִיא צוֹעֶקֶת עַל הַיְּלָדִים כָּל הַזְּמַן.","[quotidien] Elle crie constamment sur les enfants."]]},{"h":"דְּמָמָה","t":"demamá","f":"silence, calme profond","c":"n","r":"ד-מ-מ","m":"Nom féminin de la racine ד-מ-מ, désignant un silence total et solennel, souvent avec une connotation poétique ou spirituelle.","fs":[["דּוּמִיָּה","silence, mutisme"],["דּוֹמֵם","silencieux, inanimé (adj.)"],["קוֹל דְּמָמָה דַּקָּה","voix de fin silence (expression biblique)"]],"eh":"שָׁרְרָה דְּמָמָה בַּחֲדַר הַמְּתָנָה.","ef":"Un silence profond régnait dans la salle d'attente.","ex":[["אַחֲרֵי הַפִּצּוּץ שָׁרְרָה דְּמָמָה מוּחְלֶטֶת.","[après-choc] Après l'explosion, un silence absolu régnait."],["הַיַּעַר שָׁקַט בִּדְמָמָה עֲמֻקָּה.","[nature] La forêt était plongée dans un silence profond."]]},{"h":"נִדַּם / דּוּם / דּוּמִיָּה","t":"niddám / dum / dumiyyá","f":"être réduit au silence / tais-toi ! / silence, mutisme","c":"v","r":"ד-מ-מ","m":"Formes diverses de la racine ד-מ-מ : נִדַּם est le passé de binyan Nif'al (être réduit au silence), דּוּם est l'impératif Pa'al (tais-toi), דּוּמִיָּה est un nom féminin poétique désignant le silence.","fs":[["דְּמָמָה","silence solennel"],["דּוֹמֵם","silencieux, inanimé"],["לִדְמֹם","se taire (infinitif)"]],"eh":"הַקָּהָל נִדַּם לְרֶגַע אַחֲרֵי הַנְּאוּם.","ef":"Le public a été réduit au silence un instant après le discours.","ex":[["דּוּם וַהֲקְשֵׁב!","[ordre] Tais-toi et écoute !"],["נַפְשִׁי דּוּמִיָּה לֵאלֹהִים.","[biblique/poétique] Mon âme est en silence devant Dieu."]]},{"h":"פִּינָה / פִּינוֹת","t":"piná / pinót","f":"coin, angle, rubrique / coins","c":"n","r":"פ-נ-ה","m":"Nom féminin dérivé de la racine פ-נ-ה (tourner, se diriger), désignant un coin physique, un angle, ou une rubrique dans un journal/émission.","fs":[["אֶבֶן פִּינָּה","pierre angulaire"],["פִּינַת רְחוֹב","coin de rue"],["פִּינַת חַי","coin des animaux (à l'école)"]],"eh":"הַחֲנוּת נִמְצֵאת בַּפִּינָה שֶׁל הָרְחוֹב.","ef":"Le magasin se trouve au coin de la rue.","ex":[["הוּא יָשַׁב בַּפִּינָה וְלֹא דִּבֵּר עִם אִישׁ.","[isolement] Il était assis dans le coin et ne parlait à personne."],["יֵשׁ לּוֹ פִּינָה קְבוּעָה בָּעִתּוֹן.","[médias] Il a une rubrique régulière dans le journal."]]},{"h":"בְּלִי / בִּלְעָדַי / בִּלְעָדֶיךָ / בִּלְעָדֵינוּ","t":"belí / bil'adái / bil'adéykha / bil'adéynu","f":"sans / sans moi / sans toi / sans nous","c":"prep","r":"ב-ל-י","m":"Préposition בְּלִי (sans) qui, à la forme conjointe בִּלְעֲדֵי, se conjugue avec les suffixes pronominaux personnels pour exprimer l'absence ou l'exclusion.","fs":[["בִּלְעָדֶיהָ","sans elle"],["בִּלְעָדָיו","sans lui"],["בִּלְעֲדֵיכֶם","sans vous"],["בִּלְעֲדֵיהֶם","sans eux"]],"eh":"אֲנִי לֹא יָכוֹל לִחְיוֹת בִּלְעָדֶיךָ.","ef":"Je ne peux pas vivre sans toi.","ex":[["בִּלְעָדַי הַמְּסִיבָּה לֹא הָיְתָה אוֹתוֹ דָּבָר.","[absence] Sans moi, la fête n'aurait pas été la même."],["בִּלְעָדֵינוּ הַפְּרוֹיֶקְט לֹא יַצְלִיחַ.","[équipe] Sans nous, le projet ne réussira pas."]]},{"h":"יָתוֹם / מְיֻתָּם","t":"yatom / meyutam","f":"orphelin / rendu orphelin","c":"n","r":"י-ת-מ","m":"יָתוֹם est un nom/adjectif de forme qatol désignant l'orphelin ; מְיֻתָּם est le participe passif puʿal signifiant 'rendu orphelin'.","fs":[["יְתוֹמָה","orpheline (f.)"],["יְתוֹמִים","orphelins (pl.)"],["יְתֻמּוֹת","orphelines (pl. f.)"],["יִתְמוּת","condition d'orphelin"]],"eh":"הַיֶּלֶד הַיָּתוֹם גָּדַל בְּבֵית יְתוֹמִים.","ef":"L'enfant orphelin a grandi dans un orphelinat.","ex":[["אַל תִּגְעוּ בַּיָּתוֹם וּבָאַלְמָנָה.","[Bible] Ne touchez pas à l'orphelin ni à la veuve."],["הַמִּלְחָמָה מְיַתֶּמֶת אֶלֶף יְלָדִים בְּכָל יוֹם.","[actualité] La guerre rend mille enfants orphelins chaque jour."]]},{"h":"דַּף / דַּפִּים / לְדַפְדֵּף","t":"daf / dapim / ledafdef","f":"page / pages / feuilleter","c":"n","r":"ד-פ-פ","m":"דַּף est un nom masculin singulier (page, feuille) ; דַּפִּים en est le pluriel ; לְדַפְדֵּף est un verbe quadriconsonantique (בניין פִּעֵל dénominatif) signifiant 'feuilleter, parcourir'.","fs":[["דַּף הַבַּיִת","page d'accueil"],["דַּפְדְּפָן","navigateur (web)"],["דַּפְדּוּף","feuilletage, navigation"]],"eh":"הוּא דִּפְדֵּף בַּסֵּפֶר מִבְּלִי לִקְרֹא אַף דַּף.","ef":"Il a feuilleté le livre sans lire une seule page.","ex":[["פִּתְחִי אֶת הַדַּף הַשְּׁלִישִׁי בַּסֵּפֶר.","[école] Ouvre à la troisième page du livre."],["אֲנִי מְדַפְדֵּף בָּאִינְטֶרְנֶט כָּל הַבֹּקֶר.","[quotidien] Je navigue sur Internet toute la matinée."]]},{"h":"לִדְהוֹת / דָּהָה / דָּהוּי","t":"lidhot / daha / dahuy","f":"pâlir, se décolorer / pâli, décoloré (adj.) / décoloration, pâlissement","c":"v","r":"ד-ה-ה","m":"לִדְהוֹת est un verbe paʿal à radical faible (ה״ה) signifiant 'pâlir, se ternir' ; דָּהָה est le participe/adjectif 'décoloré, terne' ; דָּהוּי est le nom verbal ou forme adjectivale passive désignant l'état de décoloration.","fs":[["דָּהוּי","décoloré, passé (adj.)"],["דְּהִיָּה","pâlissement (n.f.)"],["דָּהֶה","qui pâlit (participe)"]],"eh":"הַצֶּבַע שֶׁל הַחֻלְצָה דָּהָה אַחֲרֵי כַּמָּה כְּבִיסוֹת.","ef":"La couleur de la chemise a pâli après quelques lavages.","ex":[["הַזִּכָּרוֹן דָּהָה עִם הַזְּמַן.","[poétique] Le souvenir s'est estompé avec le temps."],["הַתַּצְלוּם הַדָּהוּי תָּלוּי עַל הַקִּיר.","[quotidien] La photo décolorée est accrochée au mur."]]},{"h":"מִפְלָגָה / מִפְלָגוֹת","t":"miflaga / miflагот","f":"parti (politique) / partis (politiques)","c":"n","r":"פ-ל-ג","m":"מִפְלָגָה est un nom féminin de forme מִפְעָלָה dérivé de la racine פ-ל-ג (diviser, séparer), désignant un parti politique ; מִפְלָגוֹת en est le pluriel.","fs":[["מִפְלַגְתִּי","partisan, de parti (adj.)"],["רֹאשׁ מִפְלָגָה","chef de parti"],["חֲבַר מִפְלָגָה","membre d'un parti"]],"eh":"הַמִּפְלָגָה הַגְּדוֹלָה זָכְתָה בְּרֹב הַמַּנְדָּטִים בַּבְּחִירוֹת.","ef":"Le grand parti a remporté la majorité des mandats aux élections.","ex":[["הוּא הִצְטָרֵף לַמִּפְלָגָה בְּגִיל עֶשְׂרִים.","[politique] Il a rejoint le parti à l'âge de vingt ans."],["יֵשׁ בְּיִשְׂרָאֵל מִפְלָגוֹת רַבּוֹת.","[société] Il existe de nombreux partis en Israël."]]},{"h":"מוּעָמָד / מוּעָמָדִים","t":"mu'amad / mu'amadim","f":"candidat / candidats","c":"n","r":"ע-מ-ד","m":"מוּעָמָד est le participe passif houfʿal de la racine ע-מ-ד (se tenir, être debout), littéralement 'celui qui a été mis en position', donc 'candidat' ; מוּעָמָדִים en est le pluriel masculin.","fs":[["מוּעָמֶדֶת","candidate (f.)"],["מוּעָמָדוֹת","candidates (pl. f.)"],["מוּעָמְדוּת","candidature"],["הַעֲמָדָה","mise en candidature"]],"eh":"הַמּוּעָמָד הִצִּיג אֶת תָּכְנִיתוֹ הַכַּלְכָּלִית בַּנְּאוּם.","ef":"Le candidat a présenté son programme économique dans le discours.","ex":[["שְׁלֹשָׁה מוּעָמָדִים הִתְמַוְּדוּ עַל רֹאשׁ הָעִיר.","[élections] Trois candidats se sont disputé le poste de maire."],["הִיא הוּכְרְזָה כְּמוּעֶמֶדֶת הַמִּפְלָגָה.","[politique] Elle a été désignée comme candidate du parti."]]},{"h":"קֵן","t":"ken","f":"nid","c":"n","r":"ק-נ-נ","m":"קֵן est un nom masculin singulier de forme qel, désignant le nid d'un oiseau ou, par extension, un repaire, un foyer ; son pluriel est קִנִּים.","fs":[["קִנִּים","nids (pl.)"],["לְקַנֵּן","nidifier, faire son nid"],["מְקַנֵּן","qui nidifie, qui se niche"]],"eh":"הַצִּפּוֹר בָּנְתָה קֵן בֵּין עַנְפֵי הָעֵץ.","ef":"L'oiseau a construit un nid entre les branches de l'arbre.","ex":[["אַל תִּגַּע בְּקֵן הַצִּפּוֹר.","[nature] Ne touche pas au nid de l'oiseau."],["הָעִיר הָיְתָה קֵן לְרַגְּלָנִים בִּזְמַן הַמִּלְחָמָה.","[hist.] La ville était un nid d'espions pendant la guerre."]]},{"h":"מִגְזָר","t":"migzar","f":"secteur, segment (de population ou d'économie)","c":"n","r":"ג-ז-ר","m":"מִגְזָר est un nom masculin de forme מִפְעָל dérivé de ג-ז-ר (découper, trancher), désignant un secteur délimité de la société, de l'économie ou d'un territoire ; son pluriel est מִגְזָרִים.","fs":[["מִגְזָרִים","secteurs (pl.)"],["מִגְזָרִי","sectoriel (adj.)"],["מִגְזַר הַפְּרָטִי","secteur privé"],["מִגְזַר הַצִּבּוּרִי","secteur public"]],"eh":"הַמִּגְזָר הַחֲרֵדִי גָּדַל בְּמְהִירוּת בְּשָׁנִים הָאַחֲרוֹנוֹת.","ef":"Le secteur ultra-orthodoxe a grandi rapidement ces dernières années.","ex":[["יֵשׁ לְהַשְׁקִיעַ יוֹתֵר בְּמִגְזַר הַחִינּוּךְ.","[éducation] Il faut investir davantage dans le secteur de l'éducation."],["הַמִּגְזָר הָעַרְבִי מְיֻצָּג פָּחוֹת בַּשֵּׁרוּת הַצִּבּוּרִי.","[société] Le secteur arabe est sous-représenté dans la fonction publique."]]},{"h":"נַעַר / נַעֲרָה (בָּחוּר / בַּחוּרָה, עֶלֶם / עַלְמָה)","t":"na'ar / na'ara (bachur / bachura, elem / alma)","f":"jeune homme / jeune fille (jeune homme / jeune fille, jouvenceau / jouvencelle)","c":"n","r":"נ-ע-ר","m":"נַעַר/נַעֲרָה désignent un adolescent/une adolescente (racine נ-ע-ר) ; בָּחוּר/בַּחוּרָה (racine ב-ח-ר) soulignent le jeune adulte choisi/vigoureux ; עֶלֶם/עַלְמָה (racine ע-ל-מ) évoquent la jeunesse cachée, épanouissante, souvent poétique.","fs":[["נְעָרִים","jeunes gens (pl.)"],["נַעֲרוֹת","jeunes filles (pl.)"],["בַּחוּרִים","jeunes hommes (pl.)"],["עֲלָמוֹת","jouvencelles (pl.)"]],"eh":"הַנַּעַר רָץ בָּרְחוֹב בְּשִׂמְחָה.","ef":"Le jeune garçon courait dans la rue avec joie.","ex":[["הָעֶלֶם הָיָה יָפֶה וּמָלֵא חַיִּים.","[poétique] Le jouvenceau était beau et plein de vie."],["הַבַּחוּר הִתְנַדֵּב לַצָּבָא בְּגִיל שְׁמוֹנֶה עֶשְׂרֵה.","[armée] Le jeune homme s'est engagé dans l'armée à dix-huit ans."]]},{"h":"לְשׁוֹטֵט / מְשׁוֹטֵט","t":"leshotet / meshotet","f":"errer, vagabonder / vagabond, celui qui erre","c":"v","r":"ש-ט-ט","m":"לְשׁוֹטֵט est un verbe piʿel à racine רבועי (ש-ט-ט) signifiant 'errer, rôder, vagabonder' ; מְשׁוֹטֵט est le participe présent piʿel fonctionnant aussi comme nom 'vagabond, rôdeur'.","fs":[["שִׁיטוּט","errance, vagabondage (n.m.)"],["מְשׁוֹטֶטֶת","vagabonde (f.)"],["שׁוֹטֵט","erre (forme courte)"]],"eh":"הוּא אוֹהֵב לְשׁוֹטֵט בְּרַחֲבֵי הָעִיר הָעַתִּיקָה.","ef":"Il aime errer dans les ruelles de la vieille ville.","ex":[["הַכֶּלֶב הַמְּשׁוֹטֵט נִמְצָא בַּגַּן.","[quotidien] Le chien errant a été trouvé dans le parc."],["הִיא שׁוֹטֶטֶת בָּרְחוֹבוֹת בְּלִי מַטָּרָה.","[littéraire] Elle erre dans les rues sans but."]]},{"h":"נְעוּרִים","t":"ne'urim","f":"jeunesse (période de la vie)","c":"n","r":"נ-ע-ר","m":"נְעוּרִים est un nom pluriel tantum de forme qeʿulim dérivé de נ-ע-ר, désignant la période de la jeunesse ; il n'a pas de forme singulière usuelle et s'emploie toujours au pluriel.","fs":[["יְמֵי נְעוּרִים","jours de jeunesse"],["זִכְרוֹנוֹת נְעוּרִים","souvenirs de jeunesse"],["חֲבֵר נְעוּרִים","ami d'enfance/jeunesse"]],"eh":"הוּא נִזְכַּר בְּנוֹסְטַלְגְיָה בִּימֵי נְעוּרָיו.","ef":"Il se souvient avec nostalgie de ses années de jeunesse.","ex":[["בִּנְעוּרַי גָּרַתִּי בְּכַפָּר קָטָן.","[autobiographique] Dans ma jeunesse, je vivais dans un petit village."],["חֲטָאוֹת הַנְּעוּרִים נִסְלָחִים בְּקַלּוּת.","[sagesse] Les fautes de jeunesse sont facilement pardonnées."]]},{"h":"לְדַמּוֹת / מְדַמֶּה","t":"ledamot / medame","f":"comparer / ressembler à / assimiler","c":"v","r":"ד-מ-ה","m":"Verbe en binyan Pi'el exprimant la comparaison ou l'assimilation ; מְדַמֶּה est le participe présent.","fs":[["דְּמוּת","image/figure"],["דָּמִיּוֹן","ressemblance"],["דּוֹמֶה","semblable (adj)"]],"eh":"הוּא מְדַמֶּה אֶת הַחַיִּים לְמִשְׂחָק.","ef":"Il compare la vie à un jeu.","ex":[["אַל תְּדַמֶּה אוֹתִי לְאַחֵר.","[mise en garde] Ne me compare pas à quelqu'un d'autre."],["הִיא דִּמְּתָה אֶת הַנֹּף לְגַן עֵדֶן.","[description] Elle compara le paysage au paradis."]]},{"h":"לְדַמְיֵין / מְדַמְיֵין","t":"ledamyen / medamyen","f":"imaginer / se représenter","c":"v","r":"ד-מ-י","m":"Verbe dénominatif en binyan Pi'el dérivé de דִּמְיוֹן (imagination) ; מְדַמְיֵין est le participe présent.","fs":[["דִּמְיוֹן","imagination"],["דִּמְיוֹנִי","imaginaire (adj)"],["דִּמְיוּן","fantaisie/imagination"]],"eh":"הַיֶּלֶד מְדַמְיֵין עוֹלָמוֹת שׁוֹנִים.","ef":"L'enfant imagine des mondes différents.","ex":[["קָשֶׁה לְדַמְיֵין חַיִּים בְּלִי מוּזִיקָה.","[réflexion] Il est difficile d'imaginer une vie sans musique."],["דַּמְיֵין שֶׁאַתָּה עַל הַיָּם.","[exercice] Imagine-toi sur la mer."]]},{"h":"כִּמְעַט","t":"kim'at","f":"presque / quasiment","c":"adv","r":"מ-ע-ט","m":"Adverbe formé du préfixe כְּ (comme) et מְעַט (peu), signifiant 'presque' ; invariable.","fs":[["מְעַט","peu (adv/adj)"],["כִּמְעַט וְ-","construction : il a failli..."]],"eh":"כִּמְעַט נָפַלְתִּי בַּדֶּרֶךְ.","ef":"J'ai failli tomber sur le chemin.","ex":[["הָאֹכֶל כִּמְעַט מוּכָן.","[cuisine] La nourriture est presque prête."],["כִּמְעַט כָּל הַתַּלְמִידִים עָמְדוּ בַּבְּחִינָה.","[école] Presque tous les élèves ont réussi l'examen."]]},{"h":"מְעַט","t":"me'at","f":"peu / un peu","c":"adv","r":"מ-ע-ט","m":"Adverbe ou quantifieur indéfini exprimant une petite quantité ; peut fonctionner comme nom ou adverbe.","fs":[["מְעַט מְעַט","peu à peu"],["מְעַטִים","peu nombreux (pl masc)"],["מְעַטוֹת","peu nombreuses (pl fém)"]],"eh":"שְׁתֵה מְעַט מַיִם וְתַרְגִּישׁ טוֹב יוֹתֵר.","ef":"Bois un peu d'eau et tu te sentiras mieux.","ex":[["יֵשׁ לִי מְעַט זְמַן פָּנוּי הַיּוֹם.","[quotidien] J'ai peu de temps libre aujourd'hui."],["רַק מְעַטִים יָדְעוּ אֶת הָאֱמֶת.","[récit] Seuls quelques-uns connaissaient la vérité."]]},{"h":"מְאַרְגֵּן / לְאַרְגֵּן / אִרְגּוּן","t":"me'argen / le'argen / irgun","f":"organiser (participe) / organiser (infinitif) / organisation","c":"v","r":"א-ר-ג","m":"Verbe en binyan Pi'el exprimant l'action d'organiser ; אִרְגּוּן est le nom d'action (masdar) correspondant.","fs":[["מְאוּרְגָּן","organisé (adj, participe passif)"],["אַרְגָּנִיזַציָה","organisation (emprunt)"],["אִרְגּוּנִי","organisationnel (adj)"]],"eh":"הִיא מְאַרְגֶּנֶת אֶת הַכְּנָס הַשָּׁנָתִי.","ef":"Elle organise la conférence annuelle.","ex":[["צָרִיךְ לְאַרְגֵּן אֶת הַמִּסְמָכִים לְפִי תַּאֲרִיךְ.","[bureau] Il faut organiser les documents par date."],["הָאִרְגּוּן הַזֶּה עוֹזֵר לְנִזְקָקִים.","[social] Cette organisation aide les personnes dans le besoin."]]},{"h":"שׁוּרָה / שׁוּרוֹת","t":"shura / shurot","f":"ligne / rangée / file ; lignes / rangées","c":"n","r":"ש-ו-ר","m":"Nom féminin au singulier שׁוּרָה et au pluriel שׁוּרוֹת, désignant une ligne, une rangée ou une file.","fs":[["שׁוּרַת טֶקְסְט","ligne de texte"],["בְּשׁוּרָה אַחַת","en une seule rangée"],["שׁוּרָה רִאשׁוֹנָה","première ligne/rangée"]],"eh":"קְרָא אֶת הַשּׁוּרָה הָרִאשׁוֹנָה בַּסֵּפֶר.","ef":"Lis la première ligne du livre.","ex":[["הַיְּלָדִים עָמְדוּ בְּשׁוּרָה אַחַת מוּל הַמּוֹרֶה.","[école] Les enfants se tenaient en rang devant le professeur."],["יֵשׁ חֲמֵשׁ שׁוּרוֹת בַּטַּבְלָה הַזֹּאת.","[données] Il y a cinq lignes dans ce tableau."]]},{"h":"סוֹהֵר","t":"soher","f":"gardien de prison / geôlier","c":"n","r":"ס-ה-ר","m":"Nom masculin désignant le gardien d'une prison, dérivé du mot בֵּית סֹהַר (prison) ; féminin סוֹהֶרֶת.","fs":[["סוֹהֶרֶת","gardienne de prison (fém)"],["בֵּית סֹהַר","prison"],["סוֹהֲרִים","gardiens de prison (pl)"]],"eh":"הַסּוֹהֵר פָּתַח אֶת דֶּלֶת הַתָּא.","ef":"Le gardien de prison ouvrit la porte de la cellule.","ex":[["הַסּוֹהֵר בָּדַק אֶת הָאֲסִירִים בְּכָל בֹּקֶר.","[prison] Le gardien vérifiait les détenus chaque matin."],["הִיא עָבְדָה כְּסוֹהֶרֶת בְּבֵית הַסֹּהַר הַמֶּרְכָּזִי.","[travail] Elle travaillait comme gardienne à la prison centrale."]]},{"h":"רָקוּב / רִקָּבוֹן","t":"rakuv / riqavon","f":"pourri / putréfaction ; pourriture","c":"adj","r":"ר-ק-ב","m":"רָקוּב est un adjectif (participe passif binyan Pa'ul) signifiant 'pourri' ; רִקָּבוֹן est le nom abstrait désignant la putréfaction.","fs":[["לִרְקֹב","pourrir (verbe)"],["מִרְקָב","décomposition"],["רְקִיבָה","pourriture (processus)"]],"eh":"הָעֵץ הָרָקוּב נָפַל בַּסַּעֲרָה.","ef":"L'arbre pourri est tombé pendant la tempête.","ex":[["אַל תֹּאכַל אֶת הַפְּרִי הַזֶּה, הוּא רָקוּב.","[cuisine] Ne mange pas ce fruit, il est pourri."],["רִקָּבוֹן הַמַּעֲרֶכֶת הַפּוֹלִיטִית מַדְאִיג רַבִּים.","[politique] La pourriture du système politique inquiète beaucoup."]]},{"h":"יְלָלָה","t":"yelala","f":"hurlement / gémissement / plainte","c":"n","r":"י-ל-ל","m":"Nom féminin de structure CeCaCa désignant un hurlement ou un gémissement ; pluriel יְלָלוֹת.","fs":[["יְלָלוֹת","hurlements (pl)"],["לְיַלֵּל","hurler / gémir (verbe)"],["יֵלֵל","il hurla (passé)"]],"eh":"יְלָלַת הַזְּאֵב נִשְׁמְעָה בַּלַּיְלָה.","ef":"Le hurlement du loup se fit entendre dans la nuit.","ex":[["שָׁמַעְנוּ יְלָלוֹת כְּאֵב מֵהַחֶדֶר הַשָּׁכֵן.","[drame] Nous avons entendu des gémissements de douleur de la pièce voisine."],["הַכֶּלֶב יִלֵּל כָּל הַלַּיְלָה.","[quotidien] Le chien a hurlé toute la nuit."]]},{"h":"מַלְשִׁין / לְהַלְשִׁין","t":"malshin / lehalshin","f":"délateur / mouchard ; dénoncer / moucharder","c":"v","r":"ל-ש-נ","m":"Verbe en binyan Hif'il exprimant l'acte de dénoncer ; מַלְשִׁין est le participe présent/nom d'agent signifiant 'mouchard'.","fs":[["מַלְשִׁינָה","moucharde (fém)"],["הַלְשָׁנָה","dénonciation (nom)"],["מַלְשִׁינוּת","délation (nom abstrait)"]],"eh":"הוּא הִלְשִׁין עַל חֲבֵרָיו לַמְּנַהֵל.","ef":"Il a dénoncé ses amis au directeur.","ex":[["אַל תִּהְיֶה מַלְשִׁין בַּכִּיתָה.","[école] Ne sois pas un mouchard en classe."],["הַהַלְשָׁנָה שֶׁלּוֹ גָּרְמָה לְהֶסְתַּבְּכוּת רַבָּה.","[conséquences] Sa dénonciation a causé beaucoup de complications."]]},{"h":"סוּג","t":"sug","f":"type, sorte, genre","c":"n","r":"ס-ו-ג","m":"Nom masculin singulier, au pluriel סוּגִים, désigne une catégorie ou un type.","fs":[["סוּגִים","pluriel"],["סוּגָה","féminin"]],"eh":"יֵשׁ הַרְבֵּה סוּגִים שֶׁל פְּרָחִים בַּגִּינָּה.","ef":"Il y a beaucoup de types de fleurs dans le jardin.","ex":[["אֵיזֶה סוּג מוּסִיקָה אַתָּה אוֹהֵב?","[courant] Quel genre de musique aimes-tu?"],["זֶה סוּג אַחֵר לְגַמְרֵי.","[courant] C'est un tout autre type."]]},{"h":"עָף / לָעוּף","t":"af / la'uf","f":"voler (dans les airs)","c":"v","r":"ע-ו-פ","m":"Verbe en binyan Pa'al, racine ע-ו-פ, exprimant le mouvement aérien; עָף est la forme au passé 3e pers. masc. sing.","fs":[["עָפָה","passé fém. sing."],["יָעוּף","futur masc. sing."],["עוֹפֵף","présent – piél, voleter"],["עֲפִיפָה","nom – vol"]],"eh":"הַצִּפּוֹר עָפָה גְּבוֹהַּ בַּשָּׁמַיִם.","ef":"L'oiseau a volé haut dans le ciel.","ex":[["הַמָּטוֹס עָף מֵעַל הֶעָנָן.","[courant] L'avion a volé au-dessus du nuage."],["אֲנִי רוֹצֶה לָעוּף כְּמוֹ צִפּוֹר.","[poétique] Je veux voler comme un oiseau."]]},{"h":"חָלַף / לַחֲלוֹף","t":"khalaf / lakhalov","f":"passer, s'écouler, disparaître","c":"v","r":"ח-ל-פ","m":"Verbe en binyan Pa'al, racine ח-ל-פ, indiquant le passage du temps ou le fait de passer rapidement.","fs":[["חָלְפָה","passé fém. sing."],["יַחֲלוֹף","futur masc. sing."],["חֲלִיפָה","nom – costume/échange"],["הֶחֱלִיף","hiph'il – remplacer"]],"eh":"הַזְּמַן חָלַף מַהֵר מְאוֹד.","ef":"Le temps a passé très vite.","ex":[["הַסַּעַר חָלַף וְהַשֶּׁמֶשׁ זָרְחָה.","[littéraire] La tempête passa et le soleil brilla."],["שָׁנִים רַבּוֹת חָלְפוּ מֵאָז.","[courant] De nombreuses années se sont écoulées depuis."]]},{"h":"הִפְצִיעַ / לְהַפְצִיעַ","t":"hiftzi'a / lehaftzi'a","f":"blesser, infliger une blessure","c":"v","r":"פ-צ-ע","m":"Verbe en binyan Hif'il, racine פ-צ-ע, signifiant causer une blessure à quelqu'un.","fs":[["פָּצוּעַ","adjectif – blessé"],["פֶּצַע","nom – blessure"],["הִתְפַּצֵּעַ","hitpa'el – se blesser"]],"eh":"הַחַיָּל הֻפְצַע בַּקְּרָב.","ef":"Le soldat a été blessé au combat.","ex":[["הַתְּאוּנָה הִפְצִיעָה שְׁנֵי אֲנָשִׁים.","[courant] L'accident a blessé deux personnes."],["אַל תַּפְצִיעַ אֶת רְגָשׁוֹתָיו.","[figuré] Ne blesse pas ses sentiments."]]},{"h":"שָׁב / לָשׁוּב","t":"shav / lashuv","f":"revenir, retourner","c":"v","r":"ש-ו-ב","m":"Verbe en binyan Pa'al, racine ש-ו-ב, exprimant le retour vers un lieu ou un état antérieur.","fs":[["שָׁבָה","passé fém. sing."],["יָשׁוּב","futur masc. sing."],["תְּשׁוּבָה","nom – retour/réponse/repentir"],["הֶחְזִיר","hiph'il – ramener"]],"eh":"הוּא שָׁב הַבַּיְתָה אַחֲרֵי מַסָּע אָרֹךְ.","ef":"Il est revenu chez lui après un long voyage.","ex":[["הִיא שָׁבָה לְעִירָהּ אַחֲרֵי שָׁנִים רַבּוֹת.","[courant] Elle est retournée dans sa ville après de nombreuses années."],["שׁוּב לַעֲבוֹדָה!","[familier] Retourne au travail!"]]},{"h":"אָבָק","t":"avak","f":"poussière","c":"n","r":"א-ב-ק","m":"Nom masculin singulier, généralement indénombrable, désignant les fines particules de poussière.","fs":[["אֲבַק","construct – poussière de"],["אָבְקָה","pollen/poudre fine"],["לְאַבֵּק","verbe – dépoussiérer"]],"eh":"הָיָה הַרְבֵּה אָבָק עַל הַמַּדָּף.","ef":"Il y avait beaucoup de poussière sur l'étagère.","ex":[["הָרוּחַ הֵרִימָה עֲנַן אָבָק.","[littéraire] Le vent souleva un nuage de poussière."],["צְרִיךְ לְנַקּוֹת אֶת הָאָבָק בְּכָל שָׁבוּעַ.","[courant] Il faut enlever la poussière chaque semaine."]]},{"h":"תַּלְתַּלִּים","t":"taltallim","f":"boucles (de cheveux)","c":"n","r":"ת-ל-ל","m":"Nom masculin pluriel, formé par redoublement de la racine ת-ל-ל, désignant des boucles ou des frisures dans les cheveux.","fs":[["תַּלְתַּל","singulier – une boucle"],["מְתֻלְתָּל","adjectif – bouclé"]],"eh":"לַיַּלְדָּה יֵשׁ תַּלְתַּלִּים יָפִים.","ef":"La fillette a de belles boucles.","ex":[["הַתַּלְתַּלִּים שֶׁלָּהּ זָהֲבוּ בַּשֶּׁמֶשׁ.","[poétique] Ses boucles dorèrent au soleil."],["הוּא אוֹהֵב אֶת הַתַּלְתַּלִּים שֶׁלָּהּ.","[courant] Il aime ses boucles."]]},{"h":"רִקְמָה / לִרְקֹם","t":"rikma / lirkom","f":"broderie / broder","c":"n","r":"ר-ק-מ","m":"רִקְמָה est un nom féminin désignant la broderie; לִרְקֹם est le verbe en binyan Pa'al de la même racine ר-ק-מ, signifiant broder ou tisser.","fs":[["רָקַם","passé – il a brodé"],["רוֹקֶמֶת","présent fém. – elle brode"],["רַקָּמָה","brodeuse"],["רְקוּמָה","adj. fém. – brodé"]],"eh":"הִיא רָקְמָה פְּרָחִים יָפִים עַל הַבֶּגֶד.","ef":"Elle a brodé de belles fleurs sur le vêtement.","ex":[["הָרִקְמָה הַמָּרוֹקָאִית מְפֻרְסֶמֶת בְּצִבְעֵיהָ.","[culturel] La broderie marocaine est célèbre pour ses couleurs."],["הוּא רוֹקֵם חֲלוֹמוֹת.","[figuré] Il tisse des rêves."]]},{"h":"שׁוֹשַׁנָּה / וֶרֶד","t":"shoshana / vered","f":"rose / rose (fleur)","c":"n","r":"ש-ש-נ","m":"שׁוֹשַׁנָּה (racine ש-ש-נ) désigne traditionnellement le lys ou la rose en hébreu biblique; וֶרֶד est le terme moderne courant pour la rose, tous deux noms féminins.","fs":[["שׁוֹשַׁנִּים","pluriel de שׁוֹשַׁנָּה"],["וְרָדִים","pluriel de וֶרֶד"],["וַרְדִּי","adjectif – rose (couleur)"]],"eh":"הוּא נָתַן לָהּ זֵר וְרָדִים אֲדֻמִּים.","ef":"Il lui a donné un bouquet de roses rouges.","ex":[["הַשּׁוֹשַׁנָּה פּוֹרַחַת בָּאָבִיב.","[poétique] La rose fleurit au printemps."],["רֵיחַ הַוֶּרֶד מִתְפַּשֵּׁט בָּאֲוִיר.","[courant] Le parfum de la rose se répand dans l'air."]]},{"h":"קָלַע / לִקְלֹעַ","t":"kala / liklo'a","f":"tresser / lancer (avec une fronde) / atteindre sa cible","c":"v","r":"ק-ל-ע","m":"Verbe en binyan Pa'al, racine ק-ל-ע, ayant plusieurs sens: tresser des nattes ou des cheveux, lancer une pierre avec une fronde, ou atteindre une cible.","fs":[["קָלְעָה","passé fém. sing."],["יִקְלַע","futur masc. sing."],["קֶלַע","nom – fronde"],["קַלָּע","tireur d'élite"],["קְלִיעָה","nom verbal – tressage/lancement"]],"eh":"דָּוִד קָלַע אֶל גָּלְיַת בָּאֶבֶן.","ef":"David a atteint Goliath avec une pierre.","ex":[["הִיא קָלְעָה אֶת שְׂעָרָהּ לְצַמָּה.","[courant] Elle a tressé ses cheveux en natte."],["הַחַיָּל קָלַע לַמַּטָּרָה בְּדִיּוּק.","[militaire] Le soldat a atteint la cible avec précision."]]},{"h":"עֲטֶרֶת","t":"atarot","f":"couronne, diadème","c":"n","r":"ע-ט-ר","m":"Nom féminin singulier de la racine ע-ט-ר, dérivé du verbe עָטַר (couronner), forme construct féminine de עֲטָרָה.","fs":[["עֲטָרָה","forme absolue sg.f"],["עֲטָרוֹת","pluriel f"],["עִטֵּר","verbe: couronner"]],"eh":"עֲטֶרֶת הַמֶּלֶךְ הָיְתָה עֲשׂוּיָה זָהָב טָהוֹר.","ef":"La couronne du roi était faite d'or pur.","ex":[["הִיא עֲטֶרֶת בַּעְלָהּ.","[Proverbes] Elle est la couronne de son mari."],["עֲטֶרֶת תִּפְאֶרֶת","[expr. biblique] couronne de gloire"]]},{"h":"תִּפְאֶרֶת","t":"tif'eret","f":"gloire, splendeur, beauté, majesté","c":"n","r":"פ-א-ר","m":"Nom féminin singulier de la racine פ-א-ר, formé avec le préfixe ת-, désignant la splendeur ou la beauté dans un sens élevé, souvent poétique ou religieux.","fs":[["פְּאֵר","splendeur, ornement"],["הִתְפָּאֵר","verbe: se glorifier"],["תִּפְאַרְתּוֹ","sa gloire (const. + pronom)"]],"eh":"תִּפְאֶרֶת הַשָּׁקִיעָה הִדְהִימָה אֶת כֻּלָּם.","ef":"La splendeur du coucher de soleil a stupéfait tout le monde.","ex":[["זֶה לְתִפְאַרְתְּךָ!","[courant] C'est pour ta gloire / c'est magnifique !"],["עֵץ תִּפְאֶרֶת","[expr.] arbre majestueux / arbre de gloire"]]},{"h":"מַעֲרִיץ / מַעֲרִיצִים","t":"ma'arits / ma'aritsim","f":"admirateur, fan / admirateurs, fans","c":"n","r":"ע-ר-ץ","m":"Nom masculin (participe présent actif piel de עָרַץ, vénérer/admirer), au singulier et au pluriel masculin.","fs":[["מַעֲרִיצָה","admiratrice (sg.f)"],["מַעֲרִיצוֹת","admiratrices (pl.f)"],["עָרַץ","verbe: admirer, vénérer"]],"eh":"יֵשׁ לָהּ הַרְבֵּה מַעֲרִיצִים בְּכָל הָעוֹלָם.","ef":"Elle a beaucoup d'admirateurs dans le monde entier.","ex":[["הַמַּעֲרִיץ חִיכָּה שָׁעוֹת לְחֲתִימָה.","[courant] Le fan a attendu des heures pour un autographe."],["הִיא מַעֲרִיצָה גְּדוֹלָה שֶׁל הַזַּמֶּרֶת.","[courant] Elle est une grande admiratrice de la chanteuse."]]},{"h":"אַמִּיץ / אַמִּיצָה","t":"amits / amitsa","f":"courageux / courageuse, brave","c":"adj","r":"א-מ-ץ","m":"Adjectif qualificatif dérivé de la racine א-מ-ץ, accordé en genre (masculin / féminin singulier), signifiant la bravoure ou la force morale.","fs":[["אַמִּיצִים","courageux (pl.m)"],["אַמִּיצוֹת","courageuses (pl.f)"],["אֹמֶץ","courage (nom)"],["הִתְאַמֵּץ","verbe: s'efforcer, faire preuve de force"]],"eh":"הַחַיָּל הָיָה אַמִּיץ מְאֹד בַּקְּרָב.","ef":"Le soldat était très courageux au combat.","ex":[["צָרִיךְ לִהְיוֹת אַמִּיץ כְּדֵי לְדַבֵּר בְּפֻמְבֵּי.","[courant] Il faut être courageux pour parler en public."],["הִיא אַמִּיצָה וְלֹא מְפַחֶדֶת מִשּׁוּם דָּבָר.","[courant] Elle est courageuse et ne craint rien."]]},{"h":"מְיֻחָד / מְיֻחֶדֶת","t":"meyuḥad / meyuḥedet","f":"spécial, unique, particulier / spéciale, unique, particulière","c":"adj","r":"י-ח-ד","m":"Adjectif au participe passé pual de la racine י-ח-ד (être uni, être unique), accordé en genre masculin et féminin singulier.","fs":[["מְיֻחָדִים","spéciaux (pl.m)"],["מְיֻחָדוֹת","spéciales (pl.f)"],["יִחוּד","unicité, spécificité (nom)"],["יִחֵד","verbe: distinguer, dédier"]],"eh":"הַמָּקוֹם הַזֶּה מְיֻחָד עֲבוּרִי מְאֹד.","ef":"Cet endroit est très spécial pour moi.","ex":[["הִיא אִישָׁה מְיֻחֶדֶת בְּכָל מַה שֶּׁהִיא עוֹשָׂה.","[courant] Elle est quelqu'un de particulier dans tout ce qu'elle fait."],["זֶה אֵירוּעַ מְיֻחָד שֶׁלֹּא יִשָּׁכַח.","[courant] C'est un événement unique qui ne sera pas oublié."]]},{"h":"תְּקוּפָה (לִתְקוּפָתָהּ / לִתְקוּפָתִי)","t":"tekufa (litkulofatah / litkulofati)","f":"époque, période, ère (pour son époque / pour mon époque)","c":"n","r":"נ-ק-פ","m":"Nom féminin singulier dérivé de la racine נ-ק-פ (tourner, faire le tour), désignant un cycle ou une période de temps ; les formes entre parenthèses sont construites avec des suffixes pronominaux.","fs":[["תְּקוּפוֹת","périodes, époques (pl.f)"],["תְּקוּפָתוֹ","son époque (à lui)"],["תְּקוּפָתֵנוּ","notre époque"]],"eh":"אָנוּ חַיִּים בִּתְקוּפָה מְאֹד מוּרְכֶּבֶת.","ef":"Nous vivons à une époque très complexe.","ex":[["לִתְקוּפָתָהּ, הִיא הָיְתָה חֲלוּצָה אֲמִתִּית.","[courant] Pour son époque, elle était une vraie pionnière."],["לִתְקוּפָתִי, הַטֶּכְנוֹלוֹגְיָה הִשְׁתַּנְּתָה בְּמֵהִירוּת.","[courant] De mon époque, la technologie a changé rapidement."]]},{"h":"הַצָּגָה","t":"hatsaga","f":"spectacle, pièce de théâtre, représentation","c":"n","r":"י-צ-ג","m":"Nom féminin singulier de la racine י-צ-ג, dérivé du verbe הִצִּיג (présenter, mettre en scène), désignant une représentation scénique ou une présentation.","fs":[["הַצָּגוֹת","spectacles (pl.f)"],["הִצִּיג","verbe: présenter, mettre en scène"],["הַצָּגַת בְּכוֹרָה","première (représentation)"]],"eh":"הָלַכְנוּ לִרְאוֹת הַצָּגָה נִפְלָאָה בַּתֵּיאַטְרוֹן אֶמֶשׁ.","ef":"Nous sommes allés voir un magnifique spectacle au théâtre hier soir.","ex":[["הַהַצָּגָה הִתְחִילָה בְּדִיּוּק בְּשָׁמוֹנֶה בָּעֶרֶב.","[courant] Le spectacle a commencé exactement à vingt heures."],["הִיא שִׂחֲקָה תַּפְקִיד רָאשִׁי בַּהַצָּגָה.","[courant] Elle jouait le rôle principal dans la pièce."]]},{"h":"מַקְלִיט / לְהַקְלִיט","t":"maklît / lehaklît","f":"enregistre (il) / enregistrer","c":"v","r":"ק-ל-ט","m":"Verbe au binyan hif'il de la racine ק-ל-ט (absorber, capter) ; מַקְלִיט est le participe présent masculin singulier (= forme du présent), לְהַקְלִיט est l'infinitif.","fs":[["הִקְלִיט","passé 3sg.m: il a enregistré"],["יַקְלִיט","futur 3sg.m: il enregistrera"],["הַקְלָטָה","enregistrement (nom)"],["מוּקְלָט","enregistré (participe passif)"]],"eh":"הוּא מַקְלִיט אַלְבּוֹם חָדָשׁ בְּאוּלְפָּן.","ef":"Il enregistre un nouvel album en studio.","ex":[["הִיא רָצְתָה לְהַקְלִיט אֶת הַשִּׁיר לִפְנֵי שֶׁתִּשְׁכַּח אוֹתוֹ.","[courant] Elle voulait enregistrer la chanson avant de l'oublier."],["הַמּוֹרֶה הִקְלִיט אֶת הַשִּׁעוּר לַסְּטוּדֶנְטִים.","[courant] Le professeur a enregistré le cours pour les étudiants."]]},{"h":"שָׁפַךְ / לִשְׁפּוֹךְ","t":"shafakh / lishpokh","f":"a versé, a répandu / verser, répandre","c":"v","r":"ש-פ-כ","m":"Verbe au binyan pa'al de la racine ש-פ-כ ; שָׁפַךְ est la forme du passé 3sg.m, לִשְׁפּוֹךְ est l'infinitif, indiquant l'action de verser un liquide ou de répandre.","fs":[["שׁוֹפֵךְ","présent sg.m: il verse"],["יִשְׁפּוֹךְ","futur 3sg.m: il versera"],["שְׁפִיכָה","action de verser (nom)"],["שְׁפִיכַת דָּמִים","effusion de sang (expr.)"]],"eh":"הוּא שָׁפַךְ אֶת הַמַּיִם עַל הָרִצְפָּה בְּשׁוֹגֵג.","ef":"Il a renversé l'eau sur le sol par inadvertance.","ex":[["אַל תִּשְׁפּוֹךְ אֶת הַמַּיִם לִפְנֵי שֶׁאַתָּה צָמֵא.","[expr.] Ne verse pas l'eau avant d'avoir soif (ne brûle pas tes vaisseaux)."],["הִיא שָׁפְכָה אֶת לִבָּהּ לִפְנֵי חֲבֵרָתָהּ.","[courant] Elle a épanché son cœur devant son amie."]]},{"h":"הִצִּית / לְהַצִּית / מַצִּית","t":"hitsît / lehatsît / matsît","f":"a allumé, a mis le feu / allumer, enflammer / allume (il), allumeur","c":"v","r":"י-צ-ת","m":"Verbe au binyan hif'il de la racine י-צ-ת (prendre feu, brûler) ; הִצִּית est le passé 3sg.m, לְהַצִּית l'infinitif, מַצִּית le participe présent masculin singulier (également utilisé comme nom : briquet/allumeur).","fs":[["יַצִּית","futur 3sg.m: il allumera"],["מַצִּית","briquet / allumeur (nom)"],["הַצָּתָה","incendie volontaire, mise à feu (nom)"],["מֻצָּת","enflammé (participe passif)"]],"eh":"הוּא הִצִּית אֶת הַמְּדוּרָה בִּשְׂדֵה הַחֲנִיָּה.","ef":"Il a allumé le feu de camp dans le champ de camping.","ex":[["הַנֵּר הִצִּית אֶת הַוִּילוֹן וְגָרַם לִשְׂרֵפָה.","[courant] La bougie a enflammé le rideau et a causé un incendie."],["הַנְּאוּם שֶׁלּוֹ הִצִּית אֶת הָעָם.","[fig.] Son discours a enflammé le peuple."]]},{"h":"נִפְגַּע / לְהִיפָּגַע","t":"nifga / lehipaga","f":"être blessé / se faire blesser","c":"v","r":"פ-ג-ע","m":"Verbe à la forme nifal (passif/réflexif) de la racine פ-ג-ע, exprimant le fait de subir une blessure ou un dommage.","fs":[["פָּגַע","blesser (qal)"],["פְּגִיעָה","blessure (n.f.)"],["פָּגוּעַ","blessé (adj.)"],["לְהַפְגִּיעַ","blesser (hifil)"]],"eh":"הוּא נִפְגַּע בְּתְאוּנַת דְּרָכִים אֶמֶשׁ.","ef":"Il a été blessé dans un accident de voiture hier soir.","ex":[["הִיא נִפְגְּעָה מֵהַדְּבָרִים שֶׁאָמַרְתָּ.","[émotionnel] Elle a été blessée par ce que tu as dit."],["כַּמָּה אֲנָשִׁים נִפְגְּעוּ בָּאָסוֹן?","[actualité] Combien de personnes ont été blessées dans la catastrophe?"]]},{"h":"לְוָיָה","t":"levaya","f":"enterrement, funérailles","c":"n","r":"ל-ו-י","m":"Nom féminin dérivé de la racine ל-ו-י (accompagner), désignant la cérémonie d'accompagnement du défunt jusqu'à sa sépulture.","fs":[["לִלְווֹת","accompagner (v.)"],["לֵוִי","lévite (n.)"],["לִוּוּי","accompagnement (n.m.)"]],"eh":"הַלְּוָיָה תִּתְקַיֵּים מָחָר בְּצָהֳרַיִם בְּבֵית הַקְּבָרוֹת.","ef":"Les funérailles auront lieu demain à midi au cimetière.","ex":[["כָּל הַמִּשְׁפָּחָה הִשְׁתַּתְּפָה בַּלְּוָיָה.","[famille] Toute la famille a participé aux funérailles."],["הִגַּעְנוּ לַלְּוָיָה בְּסוֹף שָׁבוּעַ קָשֶׁה.","[deuil] Nous sommes arrivés aux funérailles après une semaine difficile."]]},{"h":"בּוּל","t":"bul","f":"timbre(-poste)","c":"n","r":"ב-ו-ל","m":"Nom masculin désignant le timbre postal, terme moderne intégré à l'hébreu contemporain, également utilisé au sens d'exactement/précisément en argot.","fs":[["בּוּלִים","timbres (pl.)"],["אַלְבּוּם בּוּלִים","album de timbres (expr.)"]],"eh":"צָרַכְתִּי בּוּל כְּדֵי לִשְׁלוֹחַ אֶת הַמִּכְתָּב.","ef":"J'avais besoin d'un timbre pour envoyer la lettre.","ex":[["הוּא אוֹסֵף בּוּלִים מִכָּל רְחֲבֵי הָעוֹלָם.","[loisir] Il collectionne des timbres du monde entier."],["הַבּוּל נִדְבַּק בִּצְדָדִים שֶׁל הַמַּעֲטָפָה.","[courrier] Le timbre a été collé sur le côté de l'enveloppe."]]},{"h":"רַשְׁמִי","t":"rashmi","f":"officiel, formel","c":"adj","r":"ר-ש-מ","m":"Adjectif dérivé du nom רֶשֶׁם (enregistrement/registre), désignant ce qui est reconnu officiellement ou qui relève du cadre formel.","fs":[["רֶשֶׁם","registre (n.m.)"],["רִשְׁמִית","officielle (f.)"],["בְּרַשְׁמִיּוּת","officiellement (adv.)"],["רִשְׁמִיּוּת","caractère officiel (n.f.)"]],"eh":"זוֹ הַהוֹדָעָה הָרַשְׁמִית שֶׁל הַמֶּמְשָׁלָה.","ef":"C'est l'annonce officielle du gouvernement.","ex":[["הַבִּיקּוּר הָרַשְׁמִי שֶׁל הַנָּשִׂיא יִתְחַיֵּל מָחָר.","[politique] La visite officielle du président commence demain."],["עָלַיְךָ לִלְבּוֹשׁ בְּגָדִים רַשְׁמִיִּים לָאֵרוּעַ.","[tenue] Tu dois porter des vêtements formels pour l'événement."]]},{"h":"אֶפְרוֹחַ","t":"efroa'h","f":"poussin","c":"n","r":"פ-ר-ח","m":"Nom masculin désignant le poussin nouvellement éclos, dérivé de la racine פ-ר-ח (fleurir, éclore), utilisé aussi familièrement pour un jeune inexpérimenté.","fs":[["אֶפְרוֹחִים","poussins (pl.)"],["פָּרַח","a fleuri / a éclos (v.)"],["פֶּרַח","fleur (n.m.)"]],"eh":"הָאֶפְרוֹחַ הַקָּטָן יָצָא מִן הַבֵּיצָה הַבֹּקֶר.","ef":"Le petit poussin est sorti de l'œuf ce matin.","ex":[["הַיְּלָדִים הִתְרַגְּשׁוּ לִרְאוֹת אֶת הָאֶפְרוֹחִים בַּחֲוָה.","[enfants] Les enfants étaient excités de voir les poussins à la ferme."],["הוּא עֲדַיִן אֶפְרוֹחַ בַּתַּחוּם הַזֶּה.","[figuré] Il est encore un novice dans ce domaine."]]},{"h":"זְעִיר","t":"ze'ir","f":"minuscule, infime, tout petit","c":"adj","r":"ז-ע-ר","m":"Adjectif hébreu classique et littéraire signifiant très petit ou insignifiant, utilisé dans des registres soutenus ou dans des expressions figées.","fs":[["זְעִירָה","minuscule (f.)"],["זְעִירוּת","petitesse, insignifiance (n.f.)"],["זְעִיר שָׁם זְעִיר שָׁם","petit à petit (expr.)"]],"eh":"מָצָאנוּ זְבוּב זְעִיר בַּתּוֹךְ הַכּוֹס.","ef":"Nous avons trouvé une minuscule mouche dans le verre.","ex":[["הַהֶבְדֵּל בֵּינֵיהֶם הוּא זְעִיר וְכִמְעַט בִּלְתִּי מוּרְגָּשׁ.","[comparaison] La différence entre eux est infime et presque imperceptible."],["זְעִיר פֹּה זְעִיר שָׁם, הוּא לָמַד אֶת הַשָּׂפָה.","[progrès] Petit à petit, il a appris la langue."]]},{"h":"לִקְטוֹף","t":"liktof","f":"cueillir, récolter","c":"v","r":"ק-ט-פ","m":"Verbe à la forme qal de la racine ק-ט-פ, exprimant l'action de cueillir des fruits, des fleurs ou d'en retirer les bénéfices au sens figuré.","fs":[["קָטַף","il a cueilli (passé)"],["קְטִיפָה","cueillette (n.f.)"],["קוֹטֵף","cueillant (participe)"],["קָטוּף","cueilli (adj.)"]],"eh":"אֲנַחְנוּ יוֹצְאִים לִקְטוֹף תּוּתִים בַּשָּׂדֶה.","ef":"Nous allons cueillir des fraises dans le champ.","ex":[["הִיא קָטְפָה פְּרָחִים יָפִים לַאֲמָּהּ.","[cadeau] Elle a cueilli de belles fleurs pour sa mère."],["לְאַחַר שָׁנִים שֶׁל עָמָל, הִגִּיעַ הַזְּמַן לִקְטוֹף אֶת הַפֵּרוֹת.","[figuré] Après des années de labeur, il est temps de récolter les fruits."]]},{"h":"סְתָיו","t":"stav","f":"automne","c":"n","r":"ס-ת-ו","m":"Nom masculin désignant la saison automnale, terme biblique attesté dans le Cantique des Cantiques, racine liée à l'idée de la fin de la période estivale.","fs":[["סְתָיוִי","automnal (adj.)"],["בַּסְּתָיו","en automne (prép.)"],["עוֹנַת הַסְּתָיו","la saison d'automne (expr.)"]],"eh":"בַּסְּתָיו הֶעָלִים מִשְׁתַּנִּים לְצְבָעִים אֲדֻמִּים וּכְתֻמִּים.","ef":"En automne, les feuilles deviennent rouges et orangées.","ex":[["הַסְּתָיו הוּא הָעוֹנָה הָאֲהוּבָה עָלַי בְּיוֹתֵר.","[préférence] L'automne est ma saison préférée."],["הַגֶּשֶׁם הָרִאשׁוֹן שֶׁל הַסְּתָיו יָרַד אֶמֶשׁ.","[météo] La première pluie d'automne est tombée hier soir."]]},{"h":"גְּבָעוֹל","t":"gviol","f":"tige (de plante)","c":"n","r":"ג-ב-ע","m":"Nom masculin désignant la tige ou le tronc d'une plante herbacée, dérivé de la racine ג-ב-ע liée à l'idée d'élévation ou de hauteur.","fs":[["גְּבָעוֹלִים","tiges (pl.)"],["גִּבְעָה","colline (n.f.)"],["גָּבֹהַּ","grand, élevé (adj.)"]],"eh":"הַגְּבָעוֹל שֶׁל הַחִינָנִית הָיָה דַּק וְעָדִין.","ef":"La tige de l'anémone était fine et délicate.","ex":[["שְׁבַרְתִּי אֶת גְּבָעוֹל הַפֶּרַח בְּטָעוּת.","[accident] J'ai cassé la tige de la fleur par accident."],["הַגְּבָעוֹל נוֹשֵׂא אֶת הַמַּיִם מִן הַשֹּׁרֶשׁ אֶל הֶעָלִים.","[botanique] La tige transporte l'eau de la racine vers les feuilles."]]},{"h":"נָשַׁר / לִנְשׁוֹר","t":"nashar / linshore","f":"tomber (feuilles, cheveux), se détacher","c":"v","r":"נ-ש-ר","m":"Verbe à la forme qal de la racine נ-ש-ר, décrivant la chute naturelle de feuilles, de cheveux ou d'autres éléments qui se détachent progressivement.","fs":[["נְשִׁירָה","chute (des feuilles/cheveux) (n.f.)"],["נוֹשֵׁר","tombant, déserteur (participe/n.)"],["נָשׁוּר","tombé, détaché (adj.)"],["עֲצֵי נְשִׁירָה","arbres à feuilles caduques (expr.)"]],"eh":"הֶעָלִים נוֹשְׁרִים מִן הָעֵץ בַּסְּתָיו.","ef":"Les feuilles tombent de l'arbre en automne.","ex":[["שְׂעָרָהּ הִתְחִיל לִנְשׁוֹר לְאַחַר הַטִּיפּוּל.","[médical] Ses cheveux ont commencé à tomber après le traitement."],["כַּמָּה חַיָּלִים נָשְׁרוּ בַּדֶּרֶךְ וְלֹא הִשְׁלִימוּ אֶת הַמַּסָּע.","[militaire] Plusieurs soldats ont abandonné en chemin et n'ont pas terminé la marche."]]},{"h":"הֵיכָן = אֵיפֹה","t":"heikhan = eifo","f":"où","c":"adv","r":"א-י-פ","m":"הֵיכָן est un adverbe interrogatif de lieu, forme littéraire ou soutenue synonyme de אֵיפֹה (forme courante).","fs":[["היכן שהוא","quelque part (forme soutenue)"]],"eh":"הֵיכָן הִנַּחְתָּ אֶת הַמַּפְתֵּחַ?","ef":"Où as-tu posé la clé ?","ex":[["הֵיכָן אַתָּה גָּר?","[courant] Où habites-tu ?"],["אֵיפֹה הַשֵּׁרוּתִים?","[familier] Où sont les toilettes ?"]]},{"h":"שָׁב / לָשׁוּב","t":"shav / lashuv","f":"revenir, retourner","c":"v","r":"ש-ו-ב","m":"Verbe de la binyan Qal, racine ש-ו-ב (lamed-vav), exprimant le retour à un lieu ou à un état antérieur.","fs":[["חָזַר","revenir (synonyme courant)"],["שׁוֹב","en revenant (participe)"],["הֲשָׁבָה","retour, restitution"]],"eh":"הוּא שָׁב הַבַּיְתָה אַחֲרֵי שָׁנָה בַּחוּ\"ל.","ef":"Il est revenu à la maison après un an à l'étranger.","ex":[["הִיא לֹא תָּשׁוּב לְאוֹתוֹ מָקוֹם.","[futur] Elle ne reviendra pas à cet endroit."],["שׁוּב לַעֲבוֹדָה!","[impératif] Retourne au travail !"]]},{"h":"נוֹבֵל / לִנְבֹּל","t":"novel / linbol","f":"se faner, se flétrir, dépérir","c":"v","r":"נ-ב-ל","m":"Verbe de la binyan Qal, racine נ-ב-ל, décrivant le processus de flétrissure d'une plante ou le déclin d'une personne ou d'une chose.","fs":[["נָבוּל","fané, flétri (adj)"],["נְבִילָה","flétrissure, déclin"]],"eh":"הַפְּרָחִים נָבְלוּ בִּגְלַל הַחֹם.","ef":"Les fleurs se sont fanées à cause de la chaleur.","ex":[["הֶעָלִים נוֹבְלִים בַּסְּתָו.","[nature] Les feuilles se fanent en automne."],["חֲלוֹמוֹתָיו נָבְלוּ עִם הַשָּׁנִים.","[figuré] Ses rêves se sont flétris avec les années."]]},{"h":"קָרַץ / לִקְרֹץ","t":"karats / liqrots","f":"cligner de l'œil, faire un clin d'œil","c":"v","r":"ק-ר-צ","m":"Verbe de la binyan Qal, racine ק-ר-צ, signifiant cligner ou fermer brièvement un œil comme signal non verbal.","fs":[["קְרִיצָה","clin d'œil (n.f.)"],["קוֹרֵץ","celui qui fait un clin d'œil (participe)"]],"eh":"הוּא קָרַץ לִי בְּעַיִן אַחַת וְחִיֵּךְ.","ef":"Il m'a fait un clin d'œil et a souri.","ex":[["הִיא קָרְצָה לְחֶבְרָתָהּ כְּסִימַן שֶׁהַכֹּל בְּסֵדֶר.","[signal] Elle a fait un clin d'œil à son amie pour signaler que tout allait bien."],["אַל תִּקְרֹץ בְּמַהֲלַךְ שִׂיחָה רְצִינִית.","[conseil] Ne fais pas de clin d'œil lors d'une conversation sérieuse."]]},{"h":"מַשְׁבֵּר","t":"mashber","f":"crise, point critique","c":"n","r":"ש-ב-ר","m":"Nom masculin de la binyan Hif'il nominalisée, racine ש-ב-ר (briser), désignant un point de rupture, une crise ou une situation critique.","fs":[["מַשְׁבֵּר כַּלְכָּלִי","crise économique"],["מַשְׁבֵּרִים","crises (pluriel)"],["שֶׁבֶר","rupture, fracture"]],"eh":"הַמְּדִינָה נְתוּנָה בְּמַשְׁבֵּר פּוֹלִיטִי חָמוּר.","ef":"Le pays est plongé dans une grave crise politique.","ex":[["בְּעֵת מַשְׁבֵּר, חָשׁוּב לִשְׁמֹר עַל קֹר רוּחַ.","[conseil] En temps de crise, il est important de garder son calme."],["הַמַּשְׁבֵּר הַכַּלְכָּלִי פָּגַע בְּמִשְׁפָּחוֹת רַבּוֹת.","[économie] La crise économique a touché de nombreuses familles."]]},{"h":"חָסַךְ / לַחְסֹךְ","t":"khasakh / lakhsokh","f":"économiser, épargner, éviter","c":"v","r":"ח-ס-כ","m":"Verbe de la binyan Qal, racine ח-ס-כ, signifiant mettre de côté des ressources ou éviter une dépense ou un effort inutile.","fs":[["חִסָּכוֹן","économie, épargne (n.m.)"],["חוֹסֵךְ","qui économise (participe)"],["חִסְכָנִי","économe (adj)"]],"eh":"הִיא חָסְכָה כֶּסֶף כָּל שָׁנָה כְּדֵי לִנְסֹעַ לַחוּ\"ל.","ef":"Elle a économisé de l'argent chaque année pour voyager à l'étranger.","ex":[["כְּדַאי לַחְסֹךְ זְמַן וְלָקַחַת אֶת הַדֶּרֶךְ הַקְּצָרָה.","[conseil] Il vaut mieux économiser du temps et prendre le chemin le plus court."],["הוּא חָסַךְ לְעַצְמוֹ הַרְבֵּה צָרוֹת.","[figuré] Il s'est épargné beaucoup de problèmes."]]},{"h":"לְהַפְחִית / מַפְחִית","t":"lehafhit / mafhit","f":"réduire, diminuer / canette","c":"v","r":"פ-ח-ת","m":"לְהַפְחִית est un verbe de la binyan Hif'il, racine פ-ח-ת, signifiant réduire ou diminuer ; מַפְחִית est à la fois le participe actif (celui qui réduit) et un nom masculin désignant une canette (boîte métallique).","fs":[["הַפְחָתָה","réduction, diminution (n.f.)"],["מַפְחִיתִים","canettes (pluriel)"],["פְּחָת","décroissance, amortissement"]],"eh":"הַמֶּמְשָׁלָה מְנַסָּה לְהַפְחִית אֶת הַזִּיהוּם בָּאֲוִיר.","ef":"Le gouvernement essaie de réduire la pollution de l'air.","ex":[["קָנִיתִי מַפְחִית קוֹלָה בַּמִּכֹּנָה.","[quotidien] J'ai acheté une canette de coca au distributeur."],["עָלֵינוּ לְהַפְחִית אֶת צְרִיכַת הַחַשְׁמַל בַּבַּיִת.","[environnement] Nous devons réduire la consommation d'électricité à la maison."]]},{"h":"תְּאוּנַת דְּרָכִים","t":"te'unat drakhim","f":"accident de la route","c":"expr","r":"א-נ-ה","m":"Expression nominale féminine composée de תְּאוּנָה (accident, de la racine א-נ-ה) et de דְּרָכִים (routes, pluriel de דֶּרֶךְ), désignant un accident de circulation.","fs":[["תְּאוּנוֹת דְּרָכִים","accidents de la route (pluriel)"],["תְּאוּנַת עֲבוֹדָה","accident du travail"],["תְּאוּנָה","accident"]],"eh":"הָיְתָה תְּאוּנַת דְּרָכִים חֲמוּרָה בַּכְּבִישׁ הַמְּהִיר.","ef":"Il y a eu un grave accident de la route sur l'autoroute.","ex":[["הוּא נִפְצַע בִּתְאוּנַת דְּרָכִים לִפְנֵי שָׁנָה.","[récit] Il a été blessé dans un accident de la route il y a un an."],["חֲגִירַת חֲגוֹרַת בִּטָּחוֹן יְכוֹלָה לְהַצִּיל חַיִּים בִּתְאוּנַת דְּרָכִים.","[sécurité] Le port de la ceinture de sécurité peut sauver des vies lors d'un accident de la route."]]},{"h":"הִגְבִּיל / לְהַגְבִּיל","t":"higbil / lehagbil","f":"limiter, restreindre","c":"v","r":"ג-ב-ל","m":"Verbe de la binyan Hif'il, racine ג-ב-ל, signifiant imposer une limite ou une restriction à quelque chose ou quelqu'un.","fs":[["הַגְבָּלָה","limitation, restriction (n.f.)"],["מוּגְבָּל","limité (adj, Pu'al)"],["גְּבוּל","frontière, limite (n.m.)"]],"eh":"הַחֹק מַגְבִּיל אֶת מְהִירוּת הַנְּסִיעָה בְּתוֹךְ הָעִיר.","ef":"La loi limite la vitesse de conduite en ville.","ex":[["הָרוֹפֵא הִגְבִּיל אוֹתוֹ בְּאָכְלוֹ מֶלַח.","[médical] Le médecin lui a restreint la consommation de sel."],["אֵין לְהַגְבִּיל אֶת חֵרוּת הַבִּטּוּי.","[droits] On ne doit pas limiter la liberté d'expression."]]},{"h":"עַכְבָּר / עַכְבָּרִים","t":"akhbar / akhbarim","f":"souris / souris (pluriel) ; aussi : rat","c":"n","r":"ע-כ-ב","m":"Nom masculin, racine ע-כ-ב, désignant la souris ou le rat (animal), et par extension la souris informatique ; le pluriel régulier est עַכְבָּרִים.","fs":[["עַכְבָּרִים","souris/rats (pluriel)"],["עַכְבָּר מַחְשֵׁב","souris d'ordinateur"],["עַכְבָּרוֹן","petite souris (diminutif)"]],"eh":"עַכְבָּר קָטָן נִכְנַס לַמִּטְבָּח וְאָכַל מִן הַגְּבִינָה.","ef":"Une petite souris est entrée dans la cuisine et a mangé du fromage.","ex":[["הַחָתוּל צָד עַכְבָּר בַּחָצֵר.","[nature] Le chat a chassé une souris dans la cour."],["הַעַכְבָּר שֶׁל הַמַּחְשֵׁב שֶׁלִּי מְקֻלְקָל.","[informatique] La souris de mon ordinateur est cassée."]]},{"h":"מַכָּה / מַכַּת עַכְבָּרִים (מַכּוֹת מִצְרַיִם)","t":"maka /akat akbarim (makot mitsrayim)","f":"plaie / plaie des souris (les plaies d'Égypte)","c":"n","r":"נ-כ-ה","m":"מַכָּה est un nom féminin dérivé de la racine נ-כ-ה (frapper), désignant un coup, une blessure ou une plaie ; au pluriel מַכּוֹת, il désigne les dix plaies bibliques d'Égypte.","fs":[["מַכּוֹת","pluriel"],["מַכַּת עַכְבָּרִים","plaie des souris"],["מַכּוֹת מִצְרַיִם","plaies d'Égypte"]],"eh":"אַחַת מִמַּכּוֹת מִצְרַיִם הָיְתָה מַכַּת הַחֹשֶׁךְ.","ef":"L'une des plaies d'Égypte était la plaie des ténèbres.","ex":[["הוּא קִבֵּל מַכָּה חֲזָקָה בָּרֶגֶל.","[courant] Il a reçu un fort coup à la jambe."],["מַכּוֹת מִצְרַיִם מְתוּאָרוֹת בְּסֵפֶר שְׁמוֹת.","[biblique] Les plaies d'Égypte sont décrites dans le livre de l'Exode."]]},{"h":"יְבוּל","t":"yevul","f":"récolte, moisson, production agricole","c":"n","r":"י-ב-ל","m":"יְבוּל est un nom masculin dérivé de la racine י-ב-ל (porter, produire), désignant le produit de la terre, la récolte d'une saison agricole.","fs":[["יְבוּלִים","pluriel"],["יְבוּל הַשָּׁנָה","récolte de l'année"]],"eh":"הַיְבוּל הַשָּׁנָה הָיָה עָשִׁיר מְאוֹד בִּגְלַל הַגְּשָׁמִים.","ef":"La récolte cette année était très abondante grâce aux pluies.","ex":[["הַחַקְלָאִים שָׂמְחוּ עַל יְבוּל הַחִיטָּה הַמְּצֻיָּן.","[agriculture] Les agriculteurs se réjouissaient de l'excellente récolte de blé."],["הַבַּצֹּרֶת פָּגְעָה קָשׁוֹת בַּיְבוּל.","[météo] La sécheresse a gravement affecté la récolte."]]},{"h":"יוֹבֵל","t":"yovel","f":"jubilé, anniversaire (50 ans) ; corne de bélier","c":"n","r":"י-ב-ל","m":"יוֹבֵל est un nom masculin désignant bibliquement l'année jubilaire (tous les 50 ans), et dans l'hébreu moderne un anniversaire marquant (souvent 50 ans) ou une corne de bélier servant de trompette.","fs":[["יוֹבֵל הַמְּדִינָה","jubilé de l'État"],["שְׁנַת הַיּוֹבֵל","l'année jubilaire"]],"eh":"אֲנַחְנוּ חוֹגְגִים אֶת יוֹבֵל הַחֲמִשִּׁים שֶׁל הָאוּנִיבֶרְסִיטָה.","ef":"Nous célébrons le cinquantième jubilé de l'université.","ex":[["שְׁנַת הַיּוֹבֵל בַּתּוֹרָה הִיא שְׁנַת הַחֵרוּת.","[biblique] L'année jubilaire dans la Torah est l'année de la liberté."],["הַמוּזֵיאוֹן חָגַג יוֹבֵל לְיִסּוּדוֹ.","[courant] Le musée a célébré le jubilé de sa fondation."]]},{"h":"רַעַל / רְעָלִים","t":"ra'al / re'alim","f":"poison, venin / voiles (sens biblique : voiles de femme)","c":"n","r":"ר-ע-ל","m":"רַעַל est un nom masculin signifiant poison ou venin ; רְעָלִים est son pluriel qui dans la Bible désigne des voiles ou des parures féminines, illustrant la polysémie de cette racine.","fs":[["רְעָלִים","pluriel / voiles (biblique)"],["מַשְׁקֵה רַעַל","boisson empoisonnée"]],"eh":"הַנָּחָשׁ הִזְרִיק רַעַל לְתוֹךְ הַפֶּצַע.","ef":"Le serpent a injecté du venin dans la blessure.","ex":[["הֵם גִּלּוּ שֶׁהַמַּיִם נִזְהֲמוּ בְּרַעַל מְסֻכָּן.","[santé/environnement] Ils ont découvert que l'eau était contaminée par un poison dangereux."],["בְּסֵפֶר יְשַׁעְיָהוּ נִזְכָּרִים הָרְעָלִים כְּתַכְשִׁיטֵי נָשִׁים.","[biblique] Dans le livre d'Isaïe, les re'alim sont mentionnés comme des parures de femmes."]]},{"h":"מְאַיֵּם / לְאַיֵּם","t":"me'ayem / le'ayem","f":"menaçant / menacer","c":"v","r":"א-י-מ","m":"לְאַיֵּם est un verbe à la forme פִּיעֵל dérivé de la racine א-י-מ (inspirer la crainte, menacer) ; מְאַיֵּם en est le participe présent actif masculin singulier.","fs":[["אִיּוּם","menace (nom)"],["מְאַיֵּם","menaçant (participe)"],["אִיֵּם","il a menacé (passé)"],["יְאַיֵּם","il menacera (futur)"]],"eh":"הָאִישׁ הַזֶּה מְאַיֵּם עַל שְׁכֵנָיו כָּל הַזְּמַן.","ef":"Cet homme menace ses voisins en permanence.","ex":[["הַמַּנְהִיג אִיֵּם לְהִשְׁתַּמֵּשׁ בְּנֶשֶׁק אִם לֹא יִפְגְּשׁוּ דְּרִישׁוֹתָיו.","[politique] Le dirigeant a menacé d'utiliser des armes si ses exigences n'étaient pas satisfaites."],["הַסּוּפָה הַמְּתַקֶּרֶבֶת מְאַיֶּמֶת עַל הָעִיר.","[météo] La tempête qui approche menace la ville."]]},{"h":"מֻקְדָּשׁ","t":"mukdash","f":"dédié, consacré, sacré","c":"adj","r":"ק-ד-שׁ","m":"מֻקְדָּשׁ est le participe passif (בִּנְיַן הֻפְעַל) du verbe הִקְדִּישׁ, signifiant littéralement « qui a été consacré/dédié », utilisé comme adjectif ou attribut.","fs":[["מֻקְדֶּשֶׁת","féminin singulier"],["מֻקְדָּשִׁים","masculin pluriel"],["מֻקְדָּשׁוֹת","féminin pluriel"]],"eh":"הַסֵּפֶר מֻקְדָּשׁ לְזֵכֶר אִמּוֹ שֶׁל הַמְּחַבֵּר.","ef":"Le livre est dédié à la mémoire de la mère de l'auteur.","ex":[["הַשִּׁעוּר הַזֶּה מֻקְדָּשׁ לְנוֹשֵׂא הָאֶקוֹלוֹגְיָה.","[éducation] Ce cours est consacré au thème de l'écologie."],["הַמָּקוֹם מֻקְדָּשׁ לִזְכַּר חַלְלֵי הַמִּלְחָמָה.","[commémoratif] Le lieu est dédié à la mémoire des soldats tombés à la guerre."]]},{"h":"מַקְדִּישׁ / לְהַקְדִּישׁ","t":"makdish / lehakdish","f":"dédier, consacrer, sanctifier","c":"v","r":"ק-ד-שׁ","m":"לְהַקְדִּישׁ est un verbe à la forme הִפְעִיל dérivé de la racine ק-ד-שׁ (être saint, consacrer) ; מַקְדִּישׁ en est le participe présent actif masculin singulier.","fs":[["הִקְדִּישׁ","il a dédié (passé)"],["יַקְדִּישׁ","il dédiera (futur)"],["הַקְדֵּשׁ","impératif"],["הַקְדָּשָׁה","dédicace (nom)"]],"eh":"הִיא מַקְדִּישָׁה אֶת כָּל זְמַנָּהּ לַמְּחְקָר.","ef":"Elle consacre tout son temps à la recherche.","ex":[["הוּא הִקְדִּישׁ אֶת הַשִּׁיר לְאִשְׁתּוֹ הָאֲהוּבָה.","[sentimental] Il a dédié la chanson à sa femme bien-aimée."],["צָרִיךְ לְהַקְדִּישׁ זְמַן לְכָל אֶחָד מִן הַיְּלָדִים.","[éducation] Il faut consacrer du temps à chacun des enfants."]]},{"h":"הַקְדָּשָׁה","t":"hakdasha","f":"dédicace, consécration","c":"n","r":"ק-ד-שׁ","m":"הַקְדָּשָׁה est un nom féminin dérivé du verbe הִקְדִּישׁ (הִפְעִיל), désignant l'acte de dédier ou la dédicace écrite en tête d'un livre ou d'une œuvre.","fs":[["הַקְדָּשׁוֹת","pluriel"],["הַקְדָּשַׁת הַסֵּפֶר","dédicace du livre"]],"eh":"קָרָאתִי אֶת הַהַקְדָּשָׁה שֶׁכָּתַב הַמְּחַבֵּר בְּתַחִלַּת הַסֵּפֶר.","ef":"J'ai lu la dédicace que l'auteur a écrite au début du livre.","ex":[["הַהַקְדָּשָׁה בַּסֵּפֶר נֶאֶמְרָה לְזֵכֶר קָרְבָּנוֹת הַשּׁוֹאָה.","[commémoratif] La dédicace dans le livre était à la mémoire des victimes de la Shoah."],["הוּא כָּתַב הַקְדָּשָׁה אִישִׁית בַּסֵּפֶר שֶׁהֵגִישׁ כְּמַתָּנָה.","[courant] Il a écrit une dédicace personnelle dans le livre qu'il a offert en cadeau."]]},{"h":"סִבָּה","t":"siba","f":"cause, raison, motif","c":"n","r":"ס-ב-ב","m":"סִבָּה est un nom féminin dérivé de la racine ס-ב-ב (tourner autour, causer), désignant la cause ou la raison d'un événement ou d'une situation.","fs":[["סִבּוֹת","pluriel"],["בִּגְלַל סִבָּה זוֹ","pour cette raison"],["סִבַּת הַמָּוֶת","cause du décès"]],"eh":"מַה הַסִּבָּה לְאִחוּרְךָ הַיּוֹם?","ef":"Quelle est la raison de ton retard aujourd'hui ?","ex":[["הַרּוֹפֵא חִפֵּשׂ אֶת סִבַּת הַמַּחֲלָה.","[médical] Le médecin cherchait la cause de la maladie."],["אֵין סִבָּה לִדְאֹג, הַכֹּל בְּסֵדֶר.","[courant] Il n'y a aucune raison de s'inquiéter, tout va bien."]]},{"h":"רְצִינִי","t":"retsinî","f":"sérieux, grave","c":"adj","r":"ר-צ-נ","m":"רְצִינִי est un adjectif masculin singulier dont la racine est ר-צ-נ, désignant quelqu'un ou quelque chose de sérieux, posé ou grave ; il se décline en genre et en nombre.","fs":[["רְצִינִית","féminin singulier"],["רְצִינִיִּים","masculin pluriel"],["רְצִינִיּוֹת","féminin pluriel"],["רְצִינִיּוּת","sérieux (nom abstrait)"]],"eh":"הוּא אָדָם רְצִינִי שֶׁתָּמִיד עוֹמֵד בְּהַבְטָחוֹתָיו.","ef":"C'est un homme sérieux qui tient toujours ses promesses.","ex":[["הַמַּצָּב רְצִינִי וְדוֹרֵשׁ טִיפּוּל מִיָּדִי.","[urgence] La situation est grave et nécessite une prise en charge immédiate."],["הִיא סְטוּדֶנְטִית רְצִינִית שֶׁלּוֹמֶדֶת כָּל יוֹם.","[éducation] C'est une étudiante sérieuse qui étudie chaque jour."]]},{"h":"זָקוּק","t":"zakuk","f":"avoir besoin de, nécessiter (qui a besoin de)","c":"adj","r":"ז-ק-ק","m":"Participe passif paal de la racine ז-ק-ק, exprimant un état de besoin ou de nécessité.","fs":[["זְקוּקָה","féminin singulier"],["זְקוּקִים","masculin pluriel"],["זְקוּקוֹת","féminin pluriel"]],"eh":"אֲנִי זָקוּק לְעֶזְרָה עַכְשָׁיו.","ef":"J'ai besoin d'aide maintenant.","ex":[["הַיֶּלֶד זָקוּק לְתְּשׁוּמַת לֵב.","[soin] L'enfant a besoin d'attention."],["הִיא זְקוּקָה לְמַנוּחָה אַחֲרֵי הַמַּסָּע.","[repos] Elle a besoin de repos après le voyage."]]},{"h":"עִידּוּד","t":"idud","f":"encouragement","c":"n","r":"ע-ד-ד","m":"Nom d'action (שם פעולה) du binyan piel de la racine ע-ד-ד, au sens de soutenir et motiver.","fs":[["עוֹדֵד","verbe piel - encourager"],["מְעוֹדֵד","participe actif - encourageant"],["עִידּוּדִים","pluriel - encouragements"]],"eh":"הַמּוֹרָה נָתְנָה לַתַּלְמִידִים הַרְבֵּה עִידּוּד.","ef":"La professeure a donné beaucoup d'encouragement aux élèves.","ex":[["הוּא הִצְלִיחַ בִּזְכוּת עִידּוּד מִשְׁפַּחְתּוֹ.","[soutien] Il a réussi grâce à l'encouragement de sa famille."],["מִלִּים שֶׁל עִידּוּד יְכוֹלוֹת לְשַׁנּוֹת הַכֹּל.","[motivation] Des mots d'encouragement peuvent tout changer."]]},{"h":"מְעַט / מְעַטִּים","t":"me'at / me'atim","f":"peu / peu (nombreux), quelques-uns","c":"adv","r":"מ-ע-ט","m":"מְעַט est un adverbe ou déterminant de quantité indiquant une petite quantité ; מְעַטִּים est sa forme plurielle accordée au masculin.","fs":[["מְעַטָּה","féminin singulier - peu (accordé)"],["מְעַטּוֹת","féminin pluriel"],["מִעוּט","nom - minorité, minorité"]],"eh":"יֵשׁ לִי מְעַט זְמַן פָּנוּי הַיּוֹם.","ef":"J'ai peu de temps libre aujourd'hui.","ex":[["רַק מְעַטִּים הִצְלִיחוּ לַעֲבֹר אֶת הַמִּבְחָן.","[résultat] Seulement quelques-uns ont réussi à passer l'examen."],["הוּא אָכַל מְעַט וְהָלַךְ לִישֹׁן.","[quotidien] Il a mangé peu et est allé dormir."]]},{"h":"לְפִיכָךְ","t":"lefichach","f":"c'est pourquoi, par conséquent, donc","c":"conj","r":"פ-כ-כ","m":"Conjonction logique composée de לְ (pour) et פִיכָךְ (cela), indiquant une conclusion ou une conséquence.","fs":[["לָכֵן","synonyme - donc, c'est pourquoi"],["עַל כֵּן","synonyme formel - par conséquent"]],"eh":"הַמֶּזֶג אֲוִויר הָיָה גָּרוּעַ, לְפִיכָךְ בִּטַּלְנוּ אֶת הַטִּיּוּל.","ef":"Le temps était mauvais, c'est pourquoi nous avons annulé l'excursion.","ex":[["הוּא לֹא הִתְאַמֵּן מַסְפִּיק, לְפִיכָךְ הִפְסִיד בַּתַּחֲרוּת.","[sport] Il ne s'est pas assez entraîné, par conséquent il a perdu la compétition."],["הַחוֹק שֻׁנָּה, לְפִיכָךְ עָלֵינוּ לְהִתְאַרְגֵּן מֵחָדָשׁ.","[droit] La loi a changé, donc nous devons nous réorganiser."]]},{"h":"מְבַקֵּר","t":"mevaker","f":"critique (d'art, de littérature, de musique…)","c":"n","r":"ב-ק-ר","m":"Participe actif piel de la racine ב-ק-ר, désignant celui qui évalue et juge des œuvres artistiques ou culturelles.","fs":[["מְבַקֶּרֶת","féminin - critique (femme)"],["מְבַקְּרִים","masculin pluriel - critiques"],["בִּקֹּרֶת","nom - critique, recension"],["לְבַקֵּר","verbe - critiquer, rendre visite"]],"eh":"הַמְּבַקֵּר כָּתַב בִּקֹּרֶת חִיּוּבִית עַל הַסֶּפֶר הֶחָדָשׁ.","ef":"Le critique a écrit une critique positive sur le nouveau livre.","ex":[["מְבַקֵּר אוֹמָנוּת מְפֻרְסָם בִּקֵּר אֶת הַתַּעֲרוּכָה.","[art] Un critique d'art célèbre a visité l'exposition."],["מְבַקֵּר הַמּוּזִיקָה לֹא אָהַב אֶת הַקּוֹנְצֶרְט.","[musique] Le critique musical n'a pas aimé le concert."],["מְבַקֶּרֶת הַסִּפְרוּת פִּרְסְמָה אֶת דַּעְתָּהּ בָּעִיתּוֹן.","[littérature] La critique littéraire a publié son avis dans le journal."]]},{"h":"נִכְבַּשׁ / לְהִיכָּבֵשׁ","t":"nichbash / lehikavesh","f":"être conquis / se faire conquérir","c":"v","r":"כ-ב-שׁ","m":"Verbe au binyan nifal de la racine כ-ב-שׁ, exprimant une action passive de conquête ou de soumission.","fs":[["כָּבַשׁ","paal - conquérir, soumettre"],["כִּבֵּשׁ","piel - subjuguer, dominer"],["כִּבּוּשׁ","nom - conquête, occupation"]],"eh":"הָעִיר נִכְבְּשָׁה לְאַחַר מָאתַיִם שָׁנָה שֶׁל עֶמְדָה עַצְמָאִית.","ef":"La ville fut conquise après deux cents ans d'indépendance.","ex":[["הַמָּצוֹד נִכְבַּשׁ בְּסוֹף הַמַּצּוֹר הַמְּפֹרְסָם.","[histoire] La forteresse fut conquise à la fin du célèbre siège."],["הַשֶּׁטַח הִצְלִיחַ לְהִיכָּבֵשׁ רַק לְאַחַר קְרָבוֹת קָשִׁים.","[guerre] Le territoire ne put être conquis qu'après de durs combats."]]},{"h":"בּוֹרֵחַ / לִבְרֹחַ","t":"boreach / livroach","f":"fuir / s'enfuir","c":"v","r":"ב-ר-ח","m":"Verbe au binyan paal de la racine ב-ר-ח ; בּוֹרֵחַ est le participe présent (qui fuit) et לִבְרֹחַ est l'infinitif.","fs":[["בָּרַח","passé 3ms - il a fui"],["בְּרִיחָה","nom - fuite"],["בּוֹרַחַת","participe féminin - qui fuit"],["הִתְחַמֵּק","synonyme - esquiver, se dérober"]],"eh":"הַגַּנָּב בָּרַח מִן הַמַּשְׁטָרָה בְּמָהִירוּת רַבָּה.","ef":"Le voleur a fui la police à toute vitesse.","ex":[["הוּא בּוֹרֵחַ מִן הַמְּצִיאוּת בְּעֶזְרַת סְפָרִים.","[figuré] Il fuit la réalité grâce aux livres."],["הֵם הִצְלִיחוּ לִבְרֹחַ מִן הָעִיר לִפְנֵי הַמִּלְחָמָה.","[guerre] Ils ont réussi à fuir la ville avant la guerre."]]},{"h":"יַעַר / יְעָרוֹת","t":"ya'ar / ye'arot","f":"forêt / forêts","c":"n","r":"י-ע-ר","m":"Nom masculin singulier dont le pluriel יְעָרוֹת est de forme féminine, désignant une étendue boisée.","fs":[["יַעֲרָנִי","adjectif - forestier"],["שׁוֹמֵר יַעַר","expression - garde forestier"],["יַעַר גֶּשֶׁם","expression - forêt tropicale humide"]],"eh":"טִיַּלְנוּ בַּיַּעַר כָּל הַיּוֹם וְנֶהֱנֵינוּ מֵהַשֶּׁקֶט.","ef":"Nous avons randonnée dans la forêt toute la journée et avons profité du silence.","ex":[["בְּיִשְׂרָאֵל יֵשׁ יְעָרוֹת רַבִּים שֶׁנִּטְּעוּ בַּמֵּאָה הָעֶשְׂרִים.","[nature] En Israël, il existe de nombreuses forêts plantées au vingtième siècle."],["הַשּׂוֹרֵף יַעַר עָרַב בְּחַיֵּי עָנְשׁ.","[loi] Incendier une forêt est passible d'une peine d'emprisonnement."]]},{"h":"נָחָשׁ בָּרִיחַ","t":"nachash bariach","f":"serpent fuyard / serpent glissant (serpent mythique ou figuré)","c":"expr","r":"נ-ח-שׁ","m":"Expression biblique composée de נָחָשׁ (serpent) et בָּרִיחַ (qui fuit, glissant), tirée d'Isaïe 27:1, désignant un serpent mythique ou un ennemi insaisissable.","fs":[["נָחָשׁ עֲקַלָּתוֹן","expression biblique - serpent tortueux (Isaïe 27:1)"],["לִוְיָתָן","nom biblique - Léviathan, monstre marin"]],"eh":"בַּיּוֹם הַהוּא יִפְקֹד ה' עַל נָחָשׁ בָּרִיחַ.","ef":"En ce jour-là, l'Éternel punira le serpent fuyard.","ex":[["הַנָּחָשׁ בָּרִיחַ מְסַמֵּל כֹּחַ אַכְזָרִי שֶׁקָּשֶׁה לְהַכְנִיעַ.","[symbolique] Le serpent fuyard symbolise une puissance cruelle difficile à soumettre."],["בְּסִפְרוּת הָעַתִּיקָה, הַנָּחָשׁ בָּרִיחַ הוּא יְצוּר מִיתוֹלוֹגִי.","[mythologie] Dans la littérature ancienne, le serpent fuyard est une créature mythologique."]]},{"h":"הֶעְתֵּק","t":"he'tek","f":"copie, exemplaire, duplicata","c":"n","r":"ע-ת-ק","m":"Nom dérivé du binyan hifil de la racine ע-ת-ק, désignant une reproduction fidèle d'un document ou d'un fichier.","fs":[["לְהַעְתִּיק","verbe hifil - copier, reproduire"],["הַעְתָּקָה","nom d'action - copie, transcription"],["מַעְתִּיק","participe actif - celui qui copie"],["הֶעְתֵּקִים","pluriel - copies, exemplaires"]],"eh":"שָׁלַחְתִּי הֶעְתֵּק שֶׁל הַמִּסְמָךְ לַמַּנְהֵל.","ef":"J'ai envoyé une copie du document au directeur.","ex":[["אֲנָא שְׁמֹר הֶעְתֵּק שֶׁל הַחוֹזֶה לְצָרְכֵי בִּטָּחוֹן.","[administratif] Veuillez conserver une copie du contrat à des fins de sécurité."],["הַמַּחְשֵׁב יָצַר הֶעְתֵּק אוֹטוֹמָטִי שֶׁל כָּל הַקְּבָצִים.","[informatique] L'ordinateur a créé une copie automatique de tous les fichiers."]]},{"h":"טָרַף","t":"taraf","f":"dévorer / déchirer (une proie)","c":"v","r":"ט-ר-פ","m":"Verbe pa'al à la 3e personne du singulier masculin passé, signifiant déchirer ou dévorer comme un prédateur.","fs":[["טֶרֶף","proie (n.)"],["טָרוּף","déchiré / fou (adj.)"],["טְרֵפָה","tréfa – viande non cachère (n.)"]],"eh":"הָאַרְיֵה טָרַף אֶת הָאַיָּל בַּשָּׂדֶה.","ef":"Le lion a dévoré le cerf dans le champ.","ex":[["הַזְּאֵב טָרַף אֶת הַכֶּבֶשׂ.","[nature] Le loup a déchiré l'agneau."],["הַיֶּלֶד טָרַף אֶת הַדַּפִּים.","[figuré] L'enfant a arraché les pages."]]},{"h":"מְסֻגָּל","t":"mesugal","f":"capable / apte","c":"adj","r":"ס-ג-ל","m":"Participe passif du verbe pu'al de la racine ס-ג-ל, utilisé comme adjectif signifiant être capable ou avoir la capacité de faire quelque chose.","fs":[["לְהיוֹת מְסֻגָּל","être capable (expr.)"],["סְגוּלָה","vertu / propriété (n.)"],["סִגֵּל","adopter / acquérir (v.)"]],"eh":"הוּא מְסֻגָּל לִלְמוֹד שָׁלוֹשׁ שָׂפוֹת בּוֹ זְמַנִּית.","ef":"Il est capable d'apprendre trois langues simultanément.","ex":[["אַתָּה מְסֻגָּל לַעֲשׂוֹת זֹאת בְּקַלּוּת.","[encouragement] Tu es capable de faire cela facilement."],["הִיא לֹא מְסֻגֶּלֶת לִסְבֹּל רַעַשׁ חָזָק.","[limitation] Elle n'est pas capable de supporter un bruit fort."]]},{"h":"לוֹעֵס / לִלְעוֹס","t":"lo'es / lil'os","f":"mâcher / mastiquer","c":"v","r":"ל-ע-ס","m":"Verbe pa'al : לוֹעֵס est le participe présent (3e pers. masc. sing.) et לִלְעוֹס est l'infinitif, de la racine ל-ע-ס signifiant mâcher.","fs":[["לְעִיסָה","mastication (n.)"],["לָעוּס","mâché (adj.)"],["לֶעֱסָן","chewing-gum (n. fam.)"]],"eh":"חָשׁוּב לִלְעוֹס אֶת הָאֹכֶל הֵיטֵב לִפְנֵי הַבְּלִיעָה.","ef":"Il est important de bien mâcher la nourriture avant de l'avaler.","ex":[["הַיֶּלֶד לוֹעֵס מַסְטִיק בַּכִּתָּה.","[école] L'enfant mâche du chewing-gum en classe."],["הִיא לוֹעֶסֶת לְאַט כִּי כּוֹאֲבִים לָהּ הַשִּׁנַּיִם.","[santé] Elle mâche lentement car elle a mal aux dents."]]},{"h":"עִיכּוּל","t":"ikkul","f":"digestion","c":"n","r":"ע-כ-ל","m":"Nom masculin singulier de la forme pi'ul, dérivé de la racine ע-כ-ל, désignant le processus de digestion.","fs":[["עִיכּוּל קַשֶּׁה","digestion difficile (expr.)"],["עִכֵּל","digérer (v.)"],["מְעִיִּים","intestins (n.)"]],"eh":"הָעִיכּוּל שֶׁל מָזוֹן כָּבֵד לוֹקֵחַ זְמַן רַב.","ef":"La digestion d'un repas lourd prend beaucoup de temps.","ex":[["בְּעָיוֹת עִיכּוּל יְכוֹלוֹת לִגְרוֹם לְכְאֵבֵי בֶּטֶן.","[médecine] Les problèmes de digestion peuvent causer des douleurs abdominales."],["הַסִּיבִים עוֹזְרִים לְעִיכּוּל תָּקִין.","[nutrition] Les fibres aident à une digestion normale."]]},{"h":"חֲצוֹת","t":"khatsot","f":"minuit / midi (milieu du jour ou de la nuit)","c":"n","r":"ח-צ-י","m":"Nom féminin invariable dérivé de la racine ח-צ-י (moitié), désignant le point médian du jour (midi) ou de la nuit (minuit).","fs":[["חֲצוֹת לַיְלָה","minuit (expr.)"],["חֲצִי","moitié (n.)"],["חָצָה","diviser en deux (v.)"]],"eh":"הוּא חָזַר הַבַּיְתָה רַק בַּחֲצוֹת הַלַּיְלָה.","ef":"Il n'est rentré à la maison qu'à minuit.","ex":[["הַמְּסִיבָּה נִגְמְרָה בַּחֲצוֹת.","[fête] La fête s'est terminée à minuit."],["בַּחֲצוֹת יוֹם כִּפּוּר פּוֹתְחִים אֶת הַנְּאִילָה.","[religion] À la mi-journée de Kippour on ouvre la prière de Neïla."]]},{"h":"חוֹנֵק / לַחֲנוֹק","t":"khonek / lakhanok","f":"étrangler / étouffer","c":"v","r":"ח-נ-ק","m":"Verbe pa'al : חוֹנֵק est le participe présent masculin singulier et לַחֲנוֹק l'infinitif, de la racine ח-נ-ק signifiant étrangler ou étouffer.","fs":[["חֲנִיקָה","étranglement (n.)"],["חָנוּק","étranglé / étouffé (adj.)"],["מַחֲנֵק","étouffement / suffocation (n.)"]],"eh":"הַצַּוָּארוֹן הַצַּר חוֹנֵק אוֹתִי.","ef":"Le col étroit m'étrangle.","ex":[["הוּא הִרְגִּישׁ שֶׁהָעֲנִיבָה חוֹנֶקֶת אוֹתוֹ.","[figuré] Il sentait que la cravate l'étranglait."],["אָסוּר לַחֲנוֹק בְּעָלֵי חַיִּים.","[éthique] Il est interdit d'étouffer des animaux."]]},{"h":"מַרְפֶּה / לְהַרְפּוֹת","t":"marpe / lekharpot","f":"relâcher / lâcher prise / desserrer","c":"v","r":"ר-פ-י","m":"Verbe hif'il : מַרְפֶּה est le participe présent masculin singulier et לְהַרְפּוֹת l'infinitif, de la racine ר-פ-י/ה signifiant relâcher, lâcher ou desserrer.","fs":[["הַרְפָּיָה","relaxation / relâchement (n.)"],["רָפוּי","lâche / mou (adj.)"],["רֶפֶשׁ","mollesse (n.)"]],"eh":"הוּא לֹא מַרְפֶּה מֵהַחֲלוֹם שֶׁלּוֹ.","ef":"Il ne lâche pas prise de son rêve.","ex":[["לְהַרְפּוֹת אֶת הַשְּׁרִירִים חָשׁוּב אַחֲרֵי הַאִימּוּן.","[sport] Relâcher les muscles est important après l'entraînement."],["הִיא סוֹף סוֹף הִרְפְּתָה מֵהַכַּעַס שֶׁלָּהּ.","[émotions] Elle a finalement lâché prise de sa colère."]]},{"h":"לַחוּת","t":"lakhut","f":"humidité","c":"n","r":"ל-ח-ח","m":"Nom féminin abstrait dérivé de l'adjectif לַח (humide), de la racine ל-ח-ח, désignant l'état ou la qualité d'être humide.","fs":[["לַח","humide (adj.)"],["לַחוּת יְחָסִית","humidité relative (expr.)"],["הִתְלַחְלֵחַ","s'humidifier (v.)"]],"eh":"הַלַּחוּת הַגְּבוֹהָה בַּקַּיִץ גּוֹרֶמֶת לְאִי נוֹחוּת.","ef":"La forte humidité en été cause de l'inconfort.","ex":[["הַלַּחוּת בַּחֶדֶר גָּרְמָה לְעֻבֵּשׁ עַל הַקִּירוֹת.","[maison] L'humidité dans la pièce a causé des moisissures sur les murs."],["מַד הַלַּחוּת מְרָאֶה שִׁשִּׁים אָחוּז הַיּוֹם.","[météo] L'hygromètre indique soixante pour cent aujourd'hui."]]},{"h":"כִּיבָּה / מְכַבֶּה / לְכַבּוֹת","t":"kibba / mekhabbe / lekhabot","f":"éteindre","c":"v","r":"כ-ב-י","m":"Verbe pi'el : כִּיבָּה est le passé 3e pers. masc. sing., מְכַבֶּה le participe présent, et לְכַבּוֹת l'infinitif, de la racine כ-ב-י/ה signifiant éteindre (feu, lumière, appareil).","fs":[["כִּיבּוּי","extinction (n.)"],["כָּבוּי","éteint (adj.)"],["כַּבַּאי","pompier (n.)"],["כִּיבּוּי אֵשׁ","extinction d'incendie (expr.)"]],"eh":"אַל תִּשְׁכַּח לְכַבּוֹת אֶת הָאוֹר לִפְנֵי שֶׁתֵּצֵא.","ef":"N'oublie pas d'éteindre la lumière avant de partir.","ex":[["הוּא כִּיבָּה אֶת הַטֵּלֵוִיזְיָה וְהָלַךְ לִישׁוֹן.","[quotidien] Il a éteint la télévision et est allé dormir."],["הַכַּבָּאִים כִּיבּוּ אֶת הַשְּׂרֵפָה בִּמְהִירוּת.","[urgence] Les pompiers ont éteint l'incendie rapidement."]]},{"h":"נִיגַּשׁ / לָגֶשֶׁת","t":"niggash / lagéshet","f":"s'approcher / aborder","c":"v","r":"נ-ג-שׁ","m":"Verbe pa'al : נִיגַּשׁ est le passé 3e pers. masc. sing. et לָגֶשֶׁת l'infinitif, de la racine נ-ג-שׁ signifiant s'approcher ou se diriger vers quelqu'un ou quelque chose.","fs":[["גִּישָׁה","approche / accès (n.)"],["נָגִישׁ","accessible (adj.)"],["הִתְקָרֵב","se rapprocher (v. syn.)"]],"eh":"הוּא נִיגַּשׁ אֵלֶיהָ וְשָׁאַל לִשְׁמָהּ.","ef":"Il s'est approché d'elle et lui a demandé son nom.","ex":[["הִיא נִיגְּשָׁה לַמּוֹרֶה אַחֲרֵי הַשִּׁיעוּר.","[école] Elle s'est approchée du professeur après le cours."],["אַל תִּגַּשׁ לַכֶּלֶב הַזֶּה, הוּא נוֹשֵׁךְ.","[avertissement] Ne t'approche pas de ce chien, il mord."]]},{"h":"לִסְגֹּת","t":"lisgot","f":"reculer, se retirer, rétrograder","c":"v","r":"ס-ג-ת","m":"Verbe à l'infinitif construit de la racine ס-ג-ת, binyan kal, signifiant reculer ou se retirer.","fs":[["סָגַת","passé 3ms"],["סוֹגֵת","présent fs"],["יִסְגֹּת","futur 3ms"]],"eh":"הַצָּבָא נֶאֱלַץ לִסְגֹּת מֵהַשֶּׁטַח.","ef":"L'armée a été forcée de se retirer du territoire.","ex":[["הַמְּנַהֵל הֶחְלִיט לִסְגֹּת מֵהַהַצָּעָה.","[professionnel] Le directeur a décidé de se retirer de la proposition."]]},{"h":"מַשְׁלִיךְ / לְהַשְׁלִיךְ","t":"mashlikh / lehashlikh","f":"jeter, lancer, projeter","c":"v","r":"ש-ל-כ","m":"Verbe au binyan hif'il, forme participiale présente (מַשְׁלִיךְ) et infinitif (לְהַשְׁלִיךְ), exprimant l'action de jeter ou lancer quelque chose.","fs":[["הִשְׁלִיךְ","passé 3ms"],["תַּשְׁלִיךְ","futur 2fs"],["הַשְׁלָכָה","nom féminin: action de jeter"]],"eh":"הוּא הִשְׁלִיךְ אֶת הַכַּדּוּר לְמֶרְחַק רַב.","ef":"Il a lancé le ballon à grande distance.","ex":[["אַל תַּשְׁלִיךְ אַשְׁפָּה בָּרְחוֹב!","[public] Ne jette pas de déchets dans la rue!"]]},{"h":"מַבָּט","t":"mabat","f":"regard, coup d'œil, vue","c":"n","r":"נ-ב-ט","m":"Nom masculin de la racine נ-ב-ט au schème מַפָּעָל, dérivé du verbe לְהַבִּיט (regarder).","fs":[["מַבָּטִים","pluriel: regards"],["מַבָּטוֹ","construit possessif 3ms: son regard"]],"eh":"הִיא שָׁלְחָה אֵלָיו מַבָּט חַמִּים.","ef":"Elle lui a lancé un regard chaleureux.","ex":[["מַבָּטוֹ שֶׁל הַיֶּלֶד הָיָה מָלֵא סַקְרָנוּת.","[descriptif] Le regard de l'enfant était plein de curiosité."]]},{"h":"שִׁכּוֹרָה","t":"shikora","f":"ivre (féminin), soûle","c":"adj","r":"ש-כ-ר","m":"Adjectif féminin singulier de la racine ש-כ-ר, au schème קִטּוֹל, forme féminine de שִׁכּוֹר.","fs":[["שִׁכּוֹר","masculin singulier: ivre"],["שִׁכּוֹרִים","masculin pluriel"],["שִׁכּוֹרוֹת","féminin pluriel"]],"eh":"הִיא שָׁתְתָה יַיִן רַב וְהָיְתָה שִׁכּוֹרָה.","ef":"Elle a bu beaucoup de vin et était ivre.","ex":[["הִיא נִרְאֲתָה שִׁכּוֹרָה לְגַמְרֵי אַחֲרֵי הַמְּסִיבָּה.","[social] Elle semblait complètement soûle après la fête."]]},{"h":"כּוּרְסָה","t":"kursa","f":"fauteuil, chaise rembourrée","c":"n","r":"כ-ר-ס","m":"Nom féminin d'origine araméenne/arabe, désignant un fauteuil confortable ou un siège rembourré.","fs":[["כּוּרְסוֹת","pluriel: fauteuils"],["כּוּרְסָתִי","possessif 1s: mon fauteuil"]],"eh":"הַסַּבָּא יָשַׁב בְּנוֹחוּת עַל הַכּוּרְסָה.","ef":"Le grand-père était assis confortablement dans le fauteuil.","ex":[["הִיא קָרְאָה סֵפֶר בְּכּוּרְסָה הָרַכָּה.","[domestique] Elle lisait un livre dans le doux fauteuil."]]},{"h":"מוֹזֵג / לִמְזֹג","t":"mozeg / limzog","f":"verser, servir (une boisson)","c":"v","r":"מ-ז-ג","m":"Verbe au binyan kal, forme participiale présente masculine singulier (מוֹזֵג) et infinitif (לִמְזֹג), désignant l'action de verser un liquide.","fs":[["מָזַג","passé 3ms"],["תִּמְזֹג","futur 2fs"],["מְזִיגָה","nom féminin: action de verser"]],"eh":"הוּא מָזַג כּוֹס מַיִם לְאוֹרְחָיו.","ef":"Il a versé un verre d'eau à ses invités.","ex":[["הַמֶּלְצָר מָזַג יַיִן אָדֹם לַסּוֹעֲדִים.","[restaurant] Le serveur a versé du vin rouge aux convives."]]},{"h":"מֵכִיל / לְהָכִיל","t":"mekhil / lekhakil","f":"contenir, inclure, tolérer","c":"v","r":"כ-ו-ל","m":"Verbe au binyan hif'il, forme participiale présente masculine singulier (מֵכִיל) et infinitif (לְהָכִיל), exprimant la capacité de contenir ou d'inclure.","fs":[["הֵכִיל","passé 3ms"],["יָכִיל","futur 3ms"],["הֲכָלָה","nom féminin: inclusion, tolérance"]],"eh":"הַבַּקְבּוּק מֵכִיל שְׁנֵי לִיטְרִים שֶׁל מַיִם.","ef":"La bouteille contient deux litres d'eau.","ex":[["הַחֶדֶר מֵכִיל עֶשְׂרִים אִישׁ לְכָל הַיּוֹתֵר.","[logistique] La salle peut contenir vingt personnes au maximum."]]},{"h":"מְצַפֶּה / לְצַפּוֹת","t":"metsapeh / letsapot","f":"attendre (avec espoir), espérer, anticiper","c":"v","r":"צ-פ-ה","m":"Verbe au binyan pi'el, forme participiale présente masculine singulier (מְצַפֶּה) et infinitif (לְצַפּוֹת), exprimant l'attente ou l'espoir actif.","fs":[["צִפָּה","passé 3ms"],["יְצַפֶּה","futur 3ms"],["צִפִּיָּה","nom féminin: attente, espoir"]],"eh":"אֲנִי מְצַפֶּה לְתְשׁוּבָתְךָ בְּקָרוֹב.","ef":"J'attends ta réponse prochainement.","ex":[["הִיא מְצַפָּה לַחֻפְשָׁה בְּקוֹצֶר רוּחַ.","[personnel] Elle attend les vacances avec impatience."]]},{"h":"לְהִתְלוֹנֵן / מִתְלוֹנֵן","t":"lehitlonen / mitlonen","f":"se plaindre, porter plainte","c":"v","r":"ל-ו-נ","m":"Verbe au binyan hitpa'el, infinitif (לְהִתְלוֹנֵן) et forme participiale présente masculine singulier (מִתְלוֹנֵן), exprimant l'action de se plaindre.","fs":[["הִתְלוֹנֵן","passé 3ms"],["יִתְלוֹנֵן","futur 3ms"],["תְּלוּנָה","nom féminin: plainte, réclamation"]],"eh":"הוּא תָּמִיד מִתְלוֹנֵן עַל הָאֹכֶל.","ef":"Il se plaint toujours de la nourriture.","ex":[["הַדַּיְּרִים הִתְלוֹנְנוּ לַוַּעַד הַבַּיִת עַל הָרַעַשׁ.","[voisinage] Les locataires ont porté plainte au comité de l'immeuble à cause du bruit."]]},{"h":"מָשָׁל / מַשְׁלִים","t":"mashal / mashlim","f":"proverbe, parabole / complète, complément","c":"n","r":"מ-ש-ל","m":"מָשָׁל est un nom masculin (proverbe/parabole) de la racine מ-ש-ל; מַשְׁלִים est la forme participiale présente masculine singulier du binyan hif'il signifiant 'compléter'.","fs":[["מְשָׁלִים","pluriel de מָשָׁל: proverbes"],["מַשְׁלִימָה","féminin singulier de מַשְׁלִים"],["הִשְׁלִים","passé 3ms: il a complété"]],"eh":"הַחָכָם סִפֵּר מָשָׁל יָפֶה לַתַּלְמִידִים.","ef":"Le sage a raconté une belle parabole aux élèves.","ex":[["סֵפֶר מִשְׁלֵי מָלֵא חָכְמָה.","[biblique] Le livre des Proverbes est plein de sagesse."]]},{"h":"נָסִיךְ / נְסִיכָה","t":"nasikh / nesikhah","f":"prince / princesse","c":"n","r":"נ-ס-כ","m":"Nom de la mishkal פְּעִילָה/פָּעִיל désignant un titre royal ou noble, formé sur la racine נ-ס-כ (verser, oindre, consacrer).","fs":[["נְסִיכוּת","principauté"],["נְסִיכִים","princes (pl.)"],["נְסִיכוֹת","princesses (pl.)"]],"eh":"הַנָּסִיךְ פָּגַשׁ אֶת הַנְּסִיכָה בַּטִּירָה.","ef":"Le prince a rencontré la princesse dans le château.","ex":[["הַנָּסִיךְ הַקָּטָן טָס מִכּוֹכָב לְכוֹכָב.","[littérature] Le Petit Prince volait de planète en planète."],["הִיא חָלְמָה לִהְיוֹת נְסִיכָה.","[courant] Elle rêvait d'être une princesse."]]},{"h":"גְּנִיזָה","t":"genizah","f":"geniza (dépôt d'écrits sacrés hors d'usage) ; archivage, mise de côté","c":"n","r":"ג-נ-ז","m":"Nom féminin de la mishkal פְּעִילָה, dérivé de la racine ג-נ-ז (cacher, archiver) ; désigne traditionnellement le lieu où l'on entrepose les textes sacrés usés.","fs":[["גָּנַז","il a archivé / mis de côté (v.)"],["גְּנִיזוֹת","genizot (pl.)"]],"eh":"גְּנִיזַת קַהִיר גִּלְּתָה אֶלֶף שָׁנָה שֶׁל כְּתָבִים יְהוּדִיִּים.","ef":"La Geniza du Caire a révélé mille ans d'écrits juifs.","ex":[["הַסֵּפֶר נֶאֱסַף לַגְּנִיזָה כִּי הָיוּ בּוֹ שְׁמוֹת קְדוֹשִׁים.","[religieux] Le livre fut placé à la geniza car il contenait des noms sacrés."],["הַתָּכְנִית גֻּנְּזָה וְלֹא יָצְאָה לַפֹּעַל.","[courant] Le projet a été archivé et n'a pas été réalisé."]]},{"h":"יַחַס / יְחָסִים","t":"yakhas / yekhasim","f":"rapport, relation, attitude ; (pl.) relations","c":"n","r":"י-ח-ס","m":"Nom masculin (singulier יַחַס, pluriel יְחָסִים) issu de la racine י-ח-ס (attribuer, se rapporter à) ; couvre aussi bien les relations interpersonnelles que les proportions mathématiques.","fs":[["יִחֵס","il a attribué / imputé (v.)"],["יַחֲסָנִי","relatif (adj.)"],["יַחֲסָנוּת","relativité (n.)"],["יְחוּס","généalogie, ascendance"]],"eh":"הַיְּחָסִים בֵּין שְׁתֵּי הַמְּדִינוֹת הִשְׁתַּפְּרוּ מְאֹד.","ef":"Les relations entre les deux pays se sont beaucoup améliorées.","ex":[["יֵשׁ לוֹ יַחַס טוֹב לַעֲבוֹדָה.","[courant] Il a une bonne attitude envers le travail."],["יְחָסֵי הַצִּבּוּר שֶׁל הַחֶבְרָה מְצוּיָנִים.","[professionnel] Les relations publiques de l'entreprise sont excellentes."]]},{"h":"מְבוּסָּס / מְבוּסֶּסֶת","t":"mevusas / mevuseset","f":"fondé, bien établi, solide / fondée, bien établie","c":"adj","r":"ב-ס-ס","m":"Participe passif (בִּנְיָן פֻּעַל) de la racine ב-ס-ס (fonder, baser), accordé en genre ; décrit ce qui repose sur des fondements solides.","fs":[["בִּסֵּס","il a fondé, établi (v. piel)"],["בָּסִיס","base, fondement (n.)"],["מְבוּסָּסִים","bien établis (pl. masc.)"],["מְבוּסָּסוֹת","bien établies (pl. fém.)"]],"eh":"הַטַּעֲנָה שֶׁלּוֹ מְבוּסֶּסֶת עַל עֻבְדּוֹת מְדַעִיּוֹת.","ef":"Son argument est fondé sur des faits scientifiques.","ex":[["זוֹ חֶבְרָה מְבוּסֶּסֶת וּמִקְצוֹעִית.","[professionnel] C'est une entreprise solide et professionnelle."],["הַפַּחְדָּנוּת שֶׁלּוֹ אֵינָהּ מְבוּסֶּסֶת עַל שׁוּם דָּבָר.","[courant] Sa crainte n'est fondée sur rien."]]},{"h":"מִן הַמְּעַט","t":"min ha-me'at","f":"du moins, au moins, pour le moins","c":"expr","r":"מ-ע-ט","m":"Expression adverbiale figée composée de מִן (de) + הַמְּעַט (le peu) ; utilisée pour introduire une concession minimale ou une restriction.","fs":[["מְעַט","peu (adj./adv.)"],["הַמְּעַט","le peu (n.)"]],"eh":"מִן הַמְּעַט שֶׁאֶפְשָׁר לַעֲשׂוֹת, כְּבָר עָשִׂינוּ הַכֹּל.","ef":"Du peu qu'il est possible de faire, nous avons déjà tout fait.","ex":[["מִן הַמְּעַט הַיָּדוּעַ לָנוּ, נִיתָּן לְהַסִּיק מַסְקָנוֹת.","[académique] Du peu que nous savons, on peut tirer des conclusions."],["מִן הַמְּעַט שֶׁקָּרָאתִי, הַסֵּפֶר נִרְאֶה מְעַנְיֵן.","[courant] Du peu que j'ai lu, le livre semble intéressant."]]},{"h":"לְהִתְגּוֹרֵר / מִתְגּוֹרֵר","t":"lehitgorer / mitgorer","f":"habiter, résider / habitant, résidant","c":"v","r":"ג-ו-ר","m":"Verbe à la forme הִתְפַּעֵל de la racine ג-ו-ר (séjourner, résider) ; exprime une résidence durable, plus soutenu que גָּר.","fs":[["גָּר","il habite (v. qal, courant)"],["מְגוּרִים","logement, domicile (n.)"],["אֲזוֹר מְגוּרִים","zone résidentielle"],["תּוֹשָׁב","résident (n.)"]],"eh":"הַמִּשְׁפָּחָה מִתְגּוֹרֶרֶת בַּעִיר תֵּל אָבִיב כְּבָר עֶשֶׂר שָׁנִים.","ef":"La famille réside à Tel Aviv depuis dix ans déjà.","ex":[["הוּא מִתְגּוֹרֵר בְּדִירָה קְטַנָּה בַּמֶּרְכָּז.","[courant] Il habite dans un petit appartement au centre-ville."],["הֵיכָן אַתָּה מִתְגּוֹרֵר כָּעֵת?","[courant] Où résides-tu en ce moment ?"]]},{"h":"לְרֶגֶל … (עֲסָקָיו / הַחַגִּים, הַחֲתוּנָּה)","t":"le-regel … (asaqav / ha-khagim, ha-khatunah)","f":"à l'occasion de … (ses affaires / les fêtes, le mariage)","c":"prep","r":"ר-ג-ל","m":"Expression prépositionnelle figée composée de לְ + רֶגֶל (pied, occasion) ; introduit la cause ou l'occasion d'un événement, équivalent de « à l'occasion de ».","fs":[["רֶגֶל","pied ; occasion (n.)"],["בִּרְגַל","à cause de, en raison de (prép. littéraire)"]],"eh":"הוּא נָסַע לְחוּץ לָאָרֶץ לְרֶגֶל עֲסָקָיו.","ef":"Il a voyagé à l'étranger pour ses affaires (à l'occasion de ses affaires).","ex":[["שָׁלַחְנוּ לָהֶם פְּרָחִים לְרֶגֶל הַחֲתוּנָּה.","[courant] Nous leur avons envoyé des fleurs à l'occasion du mariage."],["הַחֲנוּיוֹת עוֹרְכוֹת מְבִיצָעִים לְרֶגֶל הַחַגִּים.","[commercial] Les magasins font des promotions à l'occasion des fêtes."]]},{"h":"מַצָּב (מַצָּבִי, מַצָּבָהּ, מַצָּבֵנוּ)","t":"matsav (matsavi, matsavah, matsavenu)","f":"situation, état, condition (ma situation, sa situation, notre situation)","c":"n","r":"י-צ-ב","m":"Nom masculin de la mishkal מַפְעָל, issu de la racine י-צ-ב (se tenir debout, être stable) ; prend des suffixes pronominaux possessifs : מַצָּבִי (ma situation), מַצָּבָהּ (sa situation, fém.), מַצָּבֵנוּ (notre situation).","fs":[["מַצָּבִים","situations (pl.)"],["מַצָּבָה","stèle funéraire (n. fém., autre sens)"],["הִתְיַצֵּב","se stabiliser, se présenter (v.)"],["יַצִּיב","stable (adj.)"]],"eh":"מַצָּבֵנוּ הַכַּלְכָּלִי הִשְׁתַּפֵּר בְּשָׁנָה הָאַחֲרוֹנָה.","ef":"Notre situation économique s'est améliorée au cours de la dernière année.","ex":[["הָרוֹפֵא אָמַר שֶׁמַּצָּבָהּ יָצִיב.","[médical] Le médecin a dit que son état est stable."],["מַצָּבִי לֹא מַרְשֶׁה לִי לָצֵאת לְחוּפְשָׁה.","[courant] Ma situation ne me permet pas de partir en vacances."]]},{"h":"שִׁלֵּב / לְשַׁלֵּב","t":"shilev / leshалev","f":"combiner, intégrer, incorporer","c":"v","r":"ש-ל-ב","m":"Verbe au בִּנְיָן פִּיעֵל de la racine ש-ל-ב (entrelacer, combiner) ; exprime l'action d'intégrer ou de mêler harmonieusement plusieurs éléments.","fs":[["שֻׁלַּב","a été intégré (פֻּעַל)"],["שִׁלּוּב","combinaison, intégration (n.)"],["מְשׁוּלָּב","intégré, combiné (adj.)"],["שֶׁלֶב","barreau, échelon (n. qal)"]],"eh":"הַמּוֹרָה שִׁלְּבָה מִשְׂחָקִים בְּתוֹךְ הַשִּׁעוּר.","ef":"L'enseignante a intégré des jeux dans le cours.","ex":[["הוּא יָדַע לְשַׁלֵּב הוּמוֹר וּרְצִינוּת בְּנְאוּמוֹ.","[courant] Il savait combiner humour et sérieux dans son discours."],["הַפְּרוֹיֶקְט מְשַׁלֵּב טֶכְנוֹלוֹגְיָה וְאָמָּנוּת.","[professionnel] Le projet combine technologie et art."]]},{"h":"הִידַּרְדֵּר","t":"hidarder","f":"se détériorer, dégringoler, décliner","c":"v","r":"ד-ר-ד","m":"Verbe au בִּנְיָן הִתְפַּעֵל d'une racine quadrilitère רֶדֶת/ד-ר-ד (dégringoler, glisser vers le bas) ; exprime une dégradation progressive et souvent irréversible.","fs":[["הִידַּרְדְּרוּת","détérioration, déclin (n.)"],["מִידַּרְדֵּר","en train de se détériorer (participe présent)"],["דַּרְדָּר","chardon ; il a fait dégringoler (pi'el)"]],"eh":"מַצָּבוֹ שֶׁל הַחוֹלֶה הִידַּרְדֵּר בְּמַהֵרָה.","ef":"L'état du patient s'est détérioré rapidement.","ex":[["הַמַּצָּב הַבִּטְחוֹנִי הִידַּרְדֵּר לְאַחַר הַבְּחִירוֹת.","[politique] La situation sécuritaire s'est détériorée après les élections."],["הַיְּחָסִים בֵּינֵיהֶם הִידַּרְדְּרוּ עַד לְכְּדֵי קֶרַע מָלֵא.","[courant] Leurs relations se sont dégradées jusqu'à une rupture totale."]]},{"h":"הֶעְדֵּר / נֶעְדָּר","t":"he'der / ne'dar","f":"absence / absent","c":"n","r":"ע-ד-ר","m":"הֶעְדֵּר est un nom d'action (masdar) à la forme הִפְעִיל ; נֶעְדָּר est le participe passif à la forme נִפְעַל de la même racine.","fs":[["נֶעְדֶּרֶת","absent (fém.)"],["הֶעְדֵּר נוֹכְחוּת","absence de présence"],["נֶעְדָּרִים","absents (pl.)"]],"eh":"הֶעְדֵּר הַתְּשׁוּבָה הִדְאִיג אוֹתִי מְאוֹד.","ef":"L'absence de réponse m'a beaucoup inquiété.","ex":[["הַתַּלְמִיד נֶעְדָּר מִן הַכִּיתָּה הַיּוֹם.","[école] L'élève est absent de la classe aujourd'hui."],["הֶעְדֵּר שֵׁנָה פּוֹגֵעַ בַּבְּרִיאוּת.","[santé] Le manque de sommeil nuit à la santé."]]},{"h":"נֶאֱמָן","t":"ne'eman","f":"fidèle, loyal, fiable","c":"adj","r":"א-מ-נ","m":"Participe passif à la forme נִפְעַל, exprimant une qualité stable de fiabilité ou de loyauté.","fs":[["נֶאֱמֶנֶת","fidèle (fém.)"],["נֶאֱמָנִים","fidèles (pl. masc.)"],["נֶאֱמָנוּת","fidélité (nom)"]],"eh":"הוּא חָבֵר נֶאֱמָן שֶׁתָּמִיד עוֹזֵר לִי.","ef":"C'est un ami fidèle qui m'aide toujours.","ex":[["הַכֶּלֶב הוּא חַיָּה נֶאֱמֶנֶת לְבְּעָלֶיהָ.","[animaux] Le chien est un animal fidèle à son maître."],["הֵם עוֹבְדִים נֶאֱמָנִים שֶׁל הַחֶבְרָה.","[travail] Ce sont des employés loyaux de l'entreprise."]]},{"h":"לְהַנִּיחַ / הִנִּיחַ / מַנִּיחַ","t":"le'hani'ach / hini'ach / mani'ach","f":"poser, supposer, laisser / il a posé / il pose (participe)","c":"v","r":"נ-ו-ח","m":"Verbe à la forme הִפְעִיל de la racine נ-ו-ח (se reposer) ; לְהַנִּיחַ est l'infinitif, הִנִּיחַ le passé, מַנִּיחַ le présent-participe.","fs":[["יַנִּיחַ","il posera (futur)"],["הַנָּחָה","hypothèse / rabais (nom)"],["מוּנָּח","posé / terme (adj./nom)"]],"eh":"הוּא הִנִּיחַ אֶת הַסֵּפֶר עַל הַשֻּׁלְחָן.","ef":"Il a posé le livre sur la table.","ex":[["בּוֹאוּ נַנִּיחַ שֶׁהַהַנָּחָה שֶׁלְּךָ נְכוֹנָה.","[logique] Supposons que ton hypothèse soit correcte."],["הִיא מַנִּיחָה אֶת הַיְּלָדִים לִישׁוֹן.","[maison] Elle laisse les enfants dormir."]]},{"h":"לֶהָבָה / לֶהָבוֹת","t":"lehava / lehavot","f":"flamme / flammes","c":"n","r":"ל-ה-ב","m":"Nom féminin singulier au schème קְטָלָה ; לֶהָבוֹת en est le pluriel régulier féminin.","fs":[["לַהַב","lame (de couteau) / flamme"],["מְלַהֵב","enflammant, enthousiasmant (adj.)"],["לְהַלְהִיב","enflammer, enthousiasmer (v.)"]],"eh":"הַלֶּהָבוֹת הִתְפַּשְּׁטוּ בִּמְהִירוּת בַּיַּעַר.","ef":"Les flammes se sont propagées rapidement dans la forêt.","ex":[["הַנֵּר בּוֹעֵר בְּלֶהָבָה קְטַנָּה.","[maison] La bougie brûle d'une petite flamme."],["הַמְדַבֵּר דִּיבֵּר בְּלֶהָבָה וּבְהִתְלַהֲבוּת.","[discours] L'orateur a parlé avec fougue et enthousiasme."]]},{"h":"לְהָנִיף / הֵנִיף (מָנוֹף)","t":"lehānif / hēnif (manof)","f":"brandir, lever / il a brandi (grue)","c":"v","r":"נ-ו-פ","m":"Verbe à la forme הִפְעִיל de la racine נ-ו-פ (agiter, balancer) ; מָנוֹף (grue) est un nom d'instrument dérivé de la même racine.","fs":[["מֵנִיף","il brandit (présent)"],["יָנִיף","il brandira (futur)"],["מָנוֹף","grue (instrument)"],["תְּנוּפָה","élan, essor (nom)"]],"eh":"הַשּׂוֹטֵר הֵנִיף אֶת יָדוֹ לְעָצוֹר אֶת הַתְּנוּעָה.","ef":"Le policier a levé la main pour arrêter la circulation.","ex":[["הַמַּפְגִּינִים הֵנִיפוּ שְׁלָטִים גְּדוֹלִים בָּרְחוֹב.","[manifestation] Les manifestants ont brandi de grandes pancartes dans la rue."],["הַמָּנוֹף הֵנִיף אֶת הַקּוֹרוֹת לְרֹאשׁ הַבִּנְיָן.","[construction] La grue a soulevé les poutres au sommet de l'immeuble."]]},{"h":"מוֹחֵא כַּפַּיִם","t":"moché kapayim","f":"qui applaudit, applaudissement","c":"expr","r":"מ-ח-א","m":"Expression composée du participe מוֹחֵא (frappant, forme קַל) et du nom duel כַּפַּיִם (les deux paumes) ; ensemble signifie littéralement « frappant les paumes ».","fs":[["מְחִיאַת כַּפַּיִם","applaudissements (nom féminin)"],["מָחֲאוּ כַּפַּיִם","ils ont applaudi (passé)"]],"eh":"הַקָּהָל הָיָה מוֹחֵא כַּפַּיִם בְּהִתְלַהֲבוּת אַחֲרֵי הַהַצָּגָה.","ef":"Le public applaudissait avec enthousiasme après le spectacle.","ex":[["כֻּלָּם עָמְדוּ וּמָחֲאוּ כַּפַּיִם לַזַּמֶּרֶת.","[concert] Tout le monde s'est levé et a applaudi la chanteuse."],["מְחִיאַת הַכַּפַּיִם נִשְׁמְעָה מִחוּץ לָאוּלָם.","[événement] Les applaudissements s'entendaient depuis l'extérieur de la salle."]]},{"h":"מְרַחֶפֶת (רַחְפָן)","t":"merachefet (rachpan)","f":"planante, qui plane / drone (quadricoptère)","c":"adj","r":"ר-ח-פ","m":"מְרַחֶפֶת est le participe féminin présent à la forme פִּעֵל de la racine ר-ח-פ (planer, flotter) ; רַחְפָן est un nom d'agent masculin désignant un drone.","fs":[["מְרַחֵף","planant (masc.)"],["רִחוּף","planage, vol stationnaire (nom)"],["רַחְפָנִית","drone (fém. / variante)"]],"eh":"הָעֲנָנִים הַמְּרַחֲפִים בַּשָּׁמַיִם יָפִים מְאוֹד.","ef":"Les nuages qui planent dans le ciel sont très beaux.","ex":[["הָרַחְפָן מְרַחֵף מֵעַל הַשָּׂדֶה וְצִלֵּם אֶת הַשֶּׁטַח.","[technologie] Le drone plane au-dessus du champ et filme le terrain."],["הִיא הִרְגִּישָׁה מְרַחֶפֶת מֵעַל הָאָרֶץ מֵרֹב שִׂמְחָה.","[émotion] Elle se sentait flotter au-dessus du sol tellement elle était heureuse."]]},{"h":"גּוֹעֵשׁ (הַר גַּעַשׁ)","t":"go'esh (har ga'ash)","f":"en éruption, bouillonnant / volcan","c":"adj","r":"ג-ע-שׁ","m":"גּוֹעֵשׁ est le participe présent actif à la forme קַל de la racine ג-ע-שׁ (être en ébullition, faire éruption) ; הַר גַּעַשׁ est le mot composé signifiant « volcan » (montagne en éruption).","fs":[["גָּעַשׁ","il a fait éruption (passé)"],["הַר גַּעַשׁ","volcan (nom composé)"],["גַּעַשׁ","éruption, bouillonnement (nom)"],["הִתְגָּעֵשׁ","s'emballer, s'enflammer (v. hithpaël)"]],"eh":"הַר הַגַּעַשׁ הַגּוֹעֵשׁ הִשְׁלִיךְ אֵפֶר לָאֲוִיר.","ef":"Le volcan en éruption a projeté des cendres dans l'air.","ex":[["הַיָּם הָיָה גּוֹעֵשׁ בְּסַעַר גָּדוֹל.","[nature] La mer était agitée lors d'une grande tempête."],["הוּא הִתְגָּעֵשׁ מִכַּעַס כְּשֶׁשָּׁמַע אֶת הַחֲדָשׁוֹת.","[émotion] Il bouillonnait de colère quand il a entendu la nouvelle."]]},{"h":"אַכְזָר","t":"akhzar","f":"cruel, brutal","c":"adj","r":"א-כ-ז","m":"Adjectif au schème אַקְטָל, d'étymologie incertaine (possiblement lié à כָּזָב, mensonge ou à une racine d'abandon) ; exprime la cruauté ou la brutalité.","fs":[["אַכְזָרִית","cruelle (fém.)"],["אַכְזָרִיּוּת","cruauté (nom)"],["אַכְזָרִיִּים","cruels (pl. masc.)"]],"eh":"הַשַּׁלִּיט הָאַכְזָר גָּרַם לְסֵבֶל רַב לְעַמּוֹ.","ef":"Le dirigeant cruel a causé beaucoup de souffrance à son peuple.","ex":[["הַחֹרֶף הָיָה אַכְזָר בְּמִיוּחָד הַשָּׁנָה.","[météo] L'hiver était particulièrement brutal cette année."],["אַכְזָרִיּוּת כְּלַפֵּי בְּעָלֵי חַיִּים אֲסוּרָה בַּחֹק.","[droit] La cruauté envers les animaux est interdite par la loi."]]},{"h":"חוֹמֵק / לַחְמוֹק","t":"khomek / lakhmok","f":"qui s'échappe, qui se dérobe / s'esquiver, se faufiler","c":"v","r":"ח-מ-ק","m":"Verbe à la forme קַל de la racine ח-מ-ק (glisser, s'esquiver) ; חוֹמֵק est le participe présent, לַחְמוֹק l'infinitif.","fs":[["חָמַק","il s'est esquivé (passé)"],["יַחְמוֹק","il s'esquivera (futur)"],["הִתְחַמְּקוּת","esquive, fuite (nom)"],["מִתְחַמֵּק","qui se dérobe (hithpaël)"]],"eh":"הַגַּנָּב חָמַק מִיָּדֵי הַמִּשְׁטָרָה בַּחֲשֵׁכָה.","ef":"Le voleur a échappé à la police dans l'obscurité.","ex":[["הוּא תָּמִיד מִתְחַמֵּק מֵאַחְרָיוּת.","[comportement] Il se dérobe toujours à ses responsabilités."],["הִיא חָמְקָה מִן הַחֶדֶר בְּשֶׁקֶט כְּדֵי לֹא לְהָעִיר אֶת הַיֶּלֶד.","[maison] Elle s'est glissée hors de la pièce silencieusement pour ne pas réveiller l'enfant."]]},{"h":"פַּרְפַּר","t":"parfar","f":"papillon","c":"n","r":"פ-ר-פ-ר","m":"Nom masculin singulier à racine quadrilitère redoublée, au pluriel פַּרְפָּרִים (parparim).","fs":[["פַּרְפָּרִים","pluriel"],["פַּרְפָּרִית","féminin"]],"eh":"הַפַּרְפַּר עָף מִפֶּרַח לְפֶרַח.","ef":"Le papillon vole de fleur en fleur.","ex":[["רָאִיתִי פַּרְפַּר צָהֹב בַּגִּנָּה.","[nature] J'ai vu un papillon jaune dans le jardin."],["הַיֶּלֶד רָדַף אַחֲרֵי הַפַּרְפַּר.","[enfant] L'enfant a couru après le papillon."]]},{"h":"צָעִיף","t":"tsa'if","f":"foulard / voile / écharpe","c":"n","r":"צ-ע-פ","m":"Nom masculin singulier de la forme קָטִיל, au pluriel צְעִיפִים (tse'ifim).","fs":[["צְעִיפִים","pluriel"],["צְעִיפָהּ","son foulard (fém.)"]],"eh":"הִיא עָטְפָה צָעִיף צָבְעוֹנִי סְבִיב צַוָּארָהּ.","ef":"Elle a enroulé un foulard coloré autour de son cou.","ex":[["הַצָּעִיף שֶׁלָּהּ הָיָה עָשׂוּי מִמֶּשִׁי.","[mode] Son foulard était en soie."],["בַּחֹרֶף הִיא לוֹבֶשֶׁת צָעִיף חַם.","[saison] En hiver elle porte une écharpe chaude."]]},{"h":"לוֹהֵט","t":"lohet","f":"brûlant / ardent / incandescent","c":"adj","r":"ל-ה-ט","m":"Participe présent actif (בינוני) du verbe לָהַט (lahat) à la forme קַל, masculin singulier.","fs":[["לוֹהֶטֶת","fém. sing."],["לוֹהֲטִים","masc. plur."],["לוֹהֲטוֹת","fém. plur."],["לָהַט","verbe inf."]],"eh":"הַשֶּׁמֶשׁ לוֹהֶטֶת בַּקַּיִץ הַיִּשְׂרְאֵלִי.","ef":"Le soleil est brûlant durant l'été israélien.","ex":[["הוּא אָחַז בַּסִּיר הַלּוֹהֵט וְנִכְוָה.","[danger] Il a saisi la casserole brûlante et s'est brûlé."],["דִּבְרֵי הַנּוֹאֵם הָיוּ לוֹהֲטִים וּמְלֵאֵי תֶּשׁוּקָה.","[rhétorique] Les paroles de l'orateur étaient ardentes et pleines de passion."]]},{"h":"יוֹקֵד","t":"yoked","f":"qui brûle / embrasé / ardent","c":"adj","r":"י-ק-ד","m":"Participe présent actif (בינוני) du verbe יָקַד (yakad) à la forme קַל, masculin singulier.","fs":[["יוֹקֶדֶת","fém. sing."],["יוֹקְדִים","masc. plur."],["יוֹקְדוֹת","fém. plur."],["יָקַד","verbe inf."]],"eh":"הַמְּדוּרָה יוֹקֶדֶת בְּלֵב הַיַּעַר.","ef":"Le feu de camp brûle au cœur de la forêt.","ex":[["עֵינָיו הָיוּ יוֹקְדוֹת מִקֶּצֶף.","[émotion] Ses yeux étaient embrasés de colère."],["הַגֶּחָלִים הַיּוֹקְדוֹת הֵאִירוּ אֶת הַחֶדֶר.","[atmosphère] Les braises ardentes illuminaient la pièce."]]},{"h":"מַעְגָּל","t":"ma'agal","f":"cercle / cycle / circuit","c":"n","r":"ע-ג-ל","m":"Nom masculin singulier de la forme מַקְטָל, indiquant un lieu ou un instrument, au pluriel מַעְגָּלִים (ma'agalim).","fs":[["מַעְגָּלִים","pluriel"],["מַעְגָּלִי","adjectif: circulaire"],["מַעְגָּלִית","fém. circulaire"]],"eh":"הַיְּלָדִים עָמְדוּ בְּמַעְגָּל וְשָׁרוּ.","ef":"Les enfants se sont mis en cercle et ont chanté.","ex":[["מַעְגַּל הַחַיִּים מַתְחִיל בְּלֵידָה וּמְסַתְּיֵם בְּמָוֶת.","[philosophie] Le cycle de la vie commence à la naissance et se termine à la mort."],["הַמַּעְגָּל הַחַשְׁמַלִּי נִשְׁבַּר.","[électricité] Le circuit électrique est cassé."]]},{"h":"תַּרְגּוּם","t":"targum","f":"traduction","c":"n","r":"ת-ר-ג","m":"Nom masculin singulier de la forme תַּקְטוּל (nom d'action), dérivé du verbe תִּרְגֵּם (tirgem), au pluriel תַּרְגּוּמִים (targumim).","fs":[["תַּרְגּוּמִים","pluriel"],["תִּרְגֵּם","verbe: traduire"],["מְתַרְגֵּם","traducteur"],["מְתַרְגֶּמֶת","traductrice"]],"eh":"הַתַּרְגּוּם שֶׁל הַסֵּפֶר לְצָרְפָתִית הָיָה מְצֻיָּן.","ef":"La traduction du livre en français était excellente.","ex":[["הוּא עוֹסֵק בְּתַרְגּוּם טֶקְסְטִים מִשִּׂיחִית לְעִבְרִית.","[linguistique] Il se consacre à la traduction de textes du chinois en hébreu."],["תַּרְגּוּם מִלָּה בְּמִלָּה אֵינוֹ תָּמִיד מְדֻיָּק.","[méthode] La traduction mot à mot n'est pas toujours précise."]]},{"h":"אֶחָד לְאֶחָד","t":"echad le-echad","f":"un à un / individuellement / en tête-à-tête","c":"expr","r":"א-ח-ד","m":"Expression figée formée par la répétition du numéral אֶחָד (un) reliée par la préposition לְ, indiquant la réciprocité ou la progression unitaire.","fs":[["אחד על אחד","variante: face à face"],["אחת אחת","fém.: une par une"]],"eh":"הַמּוֹרָה בָּדְקָה אֶת הַתַּלְמִידִים אֶחָד לְאֶחָד.","ef":"La professeure a vérifié les élèves un par un.","ex":[["הֵם נִכְנְסוּ לַחֶדֶר אֶחָד לְאֶחָד.","[ordre] Ils sont entrés dans la pièce un par un."],["דִּבַּרְתִּי אִתָּם אֶחָד לְאֶחָד כְּדֵי לְהָבִין אֶת הַבְּעָיָה.","[communication] Je leur ai parlé individuellement pour comprendre le problème."]]},{"h":"לְמַעַן / בִּשְׁבִיל / עֲבוּר (לְמַעַנְךָ / בִּשְׁבִילִי / עֲבוּרֵנוּ)","t":"lema'an / bishvil / avur (lema'ankha / bishvili / avurenu)","f":"pour / pour le bien de / au profit de","c":"prep","r":"ע-ב-ר","m":"Trois prépositions de but et de bénéfice, chacune se conjugue avec des suffixes pronominaux personnels: לְמַעַן (but élevé/formel), בִּשְׁבִיל (usage courant), עֲבוּר (bénéfice ou échange).","fs":[["לְמַעַנְךָ","pour toi (masc.)"],["בִּשְׁבִילִי","pour moi"],["עֲבוּרֵנוּ","pour nous"],["לְמַעַנָהּ","pour elle"],["בִּשְׁבִילְךָ","pour toi (courant)"]],"eh":"עָשִׂיתִי זֹאת בִּשְׁבִילְךָ מִכָּל הַלֵּב.","ef":"J'ai fait cela pour toi de tout mon cœur.","ex":[["לְמַעַן הַשָּׁלוֹם עָלֵינוּ לְוַתֵּר.","[formel] Pour le bien de la paix, nous devons faire des concessions."],["קָנִיתִי עֲבוּרֵנוּ כַּרְטִיסִים לַהַצָּגָה.","[quotidien] J'ai acheté des billets pour nous pour le spectacle."]]},{"h":"לְפֶתַע (הַפְתָּעָה / פִּתְאֹם)","t":"lefeta (hafta'a / pit'om)","f":"soudainement / tout à coup (surprise / soudain)","c":"adv","r":"פ-ת-ע","m":"Adverbe de soudaineté formé de לְ + פֶתַע; הַפְתָּעָה est le nom féminin (surprise) et פִּתְאֹם est le synonyme adverbial le plus courant, tous dérivés de la même racine פ-ת-ע.","fs":[["פִּתְאֹם","synonyme adverbial courant"],["הַפְתָּעָה","nom: surprise"],["מַפְתִּיעַ","adj: surprenant"],["הִפְתִּיעַ","verbe: surprendre"]],"eh":"לְפֶתַע שָׁמַעְנוּ קוֹל רַעַם חָזָק.","ef":"Soudainement nous avons entendu un fort coup de tonnerre.","ex":[["פִּתְאֹם הִיא הֵבִינָה אֶת הַאֱמֶת.","[révélation] Tout à coup elle a compris la vérité."],["מָה הַהַפְתָּעָה שֶׁהֵכַנְתָּ לִי?","[curiosité] Quelle surprise as-tu préparée pour moi?"]]},{"h":"בְּרִיחָה (בּוֹרֵחַ)","t":"bericha (boreach)","f":"fuite / évasion (qui fuit / fugitif)","c":"n","r":"ב-ר-ח","m":"בְּרִיחָה est un nom féminin d'action (forme בְּקִיטָה) dérivé du verbe בָּרַח (fuir); בּוֹרֵחַ est le participe présent actif (בינוני) masculin singulier du même verbe à la forme קַל.","fs":[["בְּרִיחוֹת","pluriel du nom"],["בּוֹרַחַת","participe fém. sing."],["בָּרַח","verbe: fuir"],["מְנוּסָה","synonyme: fuite"]],"eh":"הַבְּרִיחָה שֶׁל הָאַסִּיר הִדְהִימָה אֶת הַשּׁוֹמְרִים.","ef":"La fuite du prisonnier a stupéfié les gardiens.","ex":[["הוּא בּוֹרֵחַ מֵהַמְּצִיאוּת דֶּרֶךְ סְפָרִים.","[psychologie] Il fuit la réalité à travers les livres."],["בְּרִיחָתָם הִצִּילָה אֶת חַיֵּיהֶם.","[survie] Leur fuite a sauvé leur vie."]]},{"h":"רָחוֹק","t":"rachok","f":"loin, éloigné","c":"adj","r":"ר-ח-ק","m":"Adjectif masculin singulier de la racine ר-ח-ק signifiant l'éloignement ou la distance.","fs":[["רְחוֹקָה","f. sg."],["רְחוֹקִים","m. pl."],["רְחוֹקוֹת","f. pl."],["רִחוּק","nom: éloignement"],["לְהִתְרַחֵק","v: s'éloigner"]],"eh":"הַכְּפָר הַזֶּה רָחוֹק מִן הָעִיר.","ef":"Ce village est loin de la ville.","ex":[["הוּא גָּר רָחוֹק מִמֶּנִּי.","[quotidien] Il habite loin de moi."],["הַחֲלוֹמוֹת שֶׁלָּנוּ אֵינָם רְחוֹקִים.","[figuré] Nos rêves ne sont pas loin."]]},{"h":"בַּד / בַּדִּים","t":"bad / badim","f":"tissu, toile / tissus (pluriel)","c":"n","r":"ב-ד-ד","m":"Nom masculin singulier et pluriel désignant un tissu ou une étoffe, souvent de lin ou de coton.","fs":[["בַּד פִּשְׁתָּן","lin"],["בַּד כּוֹתֶנֶת","coton"],["בַּד גֶּזֶר","toile grossière"]],"eh":"הַשְּׂמָלָה עֲשׂוּיָה בַּד רָךְ וְנָעִים.","ef":"La robe est faite d'un tissu doux et agréable.","ex":[["הִיא קָנְתָה בַּדִּים צִבְעוֹנִיִּים בַּשּׁוּק.","[marché] Elle a acheté des tissus colorés au marché."],["הַחַיָּט בָּחַר בַּד אֵיכוּתִי לַחֲלִיפָה.","[couture] Le tailleur a choisi un tissu de qualité pour le costume."]]},{"h":"מְכַסֶּה / לְכַסּוֹת","t":"mekhase / lekhassot","f":"couvrant / couvrir","c":"v","r":"כ-ס-י","m":"Verbe au binyan Pi'el, participe présent masculin singulier et infinitif, signifiant couvrir ou recouvrir quelque chose.","fs":[["כִּסָּה","passé 3m. sg."],["יְכַסֶּה","futur 3m. sg."],["כִּסּוּי","nom: couverture, couvercle"],["מְכֻסֶּה","adj: couvert"]],"eh":"הוּא מְכַסֶּה אֶת הַסִּיר בְּמַכְסֶה.","ef":"Il couvre la casserole avec un couvercle.","ex":[["הָאֵם כִּסְּתָה אֶת הַיֶּלֶד בְּשְׂמִיכָה חַמָּה.","[famille] La mère a couvert l'enfant d'une couverture chaude."],["עָנָן כִּסָּה אֶת הַשֶּׁמֶשׁ.","[météo] Un nuage a couvert le soleil."]]},{"h":"לִזְלוֹג","t":"lizlog","f":"couler, dégouliner, se répandre","c":"v","r":"ז-ל-ג","m":"Verbe à l'infinitif au binyan Pa'al signifiant couler lentement ou dégouliner, souvent pour un liquide.","fs":[["זָלַג","passé 3m. sg."],["זוֹלֵג","participe: coulant"],["יִזְלוֹג","futur 3m. sg."],["זְלִיגָה","nom: écoulement"]],"eh":"הַדְּמָעוֹת זָלְגוּ עַל לְחָיֶיהָ.","ef":"Les larmes ont coulé sur ses joues.","ex":[["הַגֶּלִידָה הִתְחִילָה לִזְלוֹג בַּשֶּׁמֶשׁ.","[été] La glace a commencé à dégouliner au soleil."],["זֵיעָה זָלְגָה עַל מִצְחוֹ בְּמֶהֲלַךְ הָרִיצָה.","[sport] La sueur a coulé sur son front pendant la course."]]},{"h":"בּוּסֵר","t":"bouser","f":"fruit non mûr, fruit vert; (figuré) immature, prématuré","c":"n","r":"ב-ס-ר","m":"Nom masculin singulier désignant un fruit encore vert et non mûr, utilisé aussi au figuré pour qualifier quelque chose de prématuré ou d'immature.","fs":[["בּוּסְרִי","adj: immature, prématuré"],["בּוּסְרִית","f. adj."]],"eh":"הַתַּפּוּחִים עֲדַיִן בּוּסֵר, אַל תֹּאכַל אוֹתָם.","ef":"Les pommes sont encore vertes, ne les mange pas.","ex":[["הַהַחְלָטָה הָיְתָה בּוּסְרִית וְלֹא מְחוּשֶׁבֶת.","[figuré] La décision était prématurée et peu réfléchie."],["הוּא קָטַף אֶת הַפֵּרוֹת כְּשֶׁעֲדַיִן הָיוּ בּוּסֵר.","[agriculture] Il a cueilli les fruits alors qu'ils étaient encore verts."]]},{"h":"גּוּמָה (גּוּמַת חֵן)","t":"guma (gumat chen)","f":"fossette (fossette charmante)","c":"n","r":"ג-ו-מ","m":"Nom féminin singulier désignant une petite cavité ou fossette, notamment sur le visage; l'expression גּוּמַת חֵן signifie une fossette charmante.","fs":[["גּוּמוֹת","pl. fossettes"],["גּוּמַת לֶחִי","fossette de joue"]],"eh":"כְּשֶׁהִיא מְחַיֶּכֶת, נִרְאוֹת גּוּמוֹת חֵן עַל לְחָיֶיהָ.","ef":"Quand elle sourit, des fossettes charmantes apparaissent sur ses joues.","ex":[["הַתִּינוֹק הַחָמוּד הָיָה לוֹ גּוּמַת חֵן מְתוּקָה.","[famille] Le bébé adorable avait une fossette toute mignonne."],["הַגּוּמוֹת עַל לְחָיָיו גָּרְמוּ לָהּ לְהִתְאַהֵב בּוֹ.","[romantique] Les fossettes sur ses joues l'ont fait tomber amoureuse de lui."]]},{"h":"מְלַטֵּף / לְלַטֵּף","t":"melatef / lelatef","f":"caressant / caresser","c":"v","r":"ל-ט-פ","m":"Verbe au binyan Pi'el, participe présent masculin singulier et infinitif, signifiant caresser ou câliner doucement.","fs":[["לִיטֵּף","passé 3m. sg."],["יְלַטֵּף","futur 3m. sg."],["לִיטּוּף","nom: caresse"],["מְלֻטָּף","adj: caressé, doux"]],"eh":"הִיא מְלַטֶּפֶת אֶת הַחֲתוּל בְּעֲדִינוּת.","ef":"Elle caresse le chat avec douceur.","ex":[["הָאָב לִיטֵּף אֶת רֹאשׁ בִּתּוֹ לִפְנֵי הַשֵּׁנָה.","[famille] Le père a caressé la tête de sa fille avant le coucher."],["הִיא לִיטְּפָה אֶת הַכֶּלֶב וְהוּא רָגַע.","[animaux] Elle a caressé le chien et il s'est calmé."]]},{"h":"מִתְבַּיֵּשׁ / לְהִתְבַּיֵּשׁ","t":"mitbayesh / lehitbayesh","f":"ayant honte / avoir honte","c":"v","r":"ב-ו-ש","m":"Verbe au binyan Hitpa'el, participe présent masculin singulier et infinitif, exprimant le sentiment de honte ou de gêne.","fs":[["הִתְבַּיֵּשׁ","passé 3m. sg."],["יִתְבַּיֵּשׁ","futur 3m. sg."],["בּוּשָׁה","nom: honte"],["בַּיְשָׁן","adj: timide, honteux"]],"eh":"הוּא מִתְבַּיֵּשׁ לְדַבֵּר בִּפְנֵי הַכִּיתָּה.","ef":"Il a honte de parler devant la classe.","ex":[["הִיא הִתְבַּיְּשָׁה כְּשֶׁנָּפְלָה בְּפַּרְהֶסְיָה.","[social] Elle a eu honte quand elle est tombée en public."],["אַל תִּתְבַּיֵּשׁ לְבַקֵּשׁ עֶזְרָה.","[encouragement] N'aie pas honte de demander de l'aide."]]},{"h":"בְּנוֹסָף","t":"benosaf","f":"en plus, de plus, en outre","c":"adv","r":"י-ס-פ","m":"Adverbe de liaison formé de la préposition בְּ et du nom נוֹסָף (ajouté), utilisé pour introduire un élément supplémentaire dans un discours.","fs":[["נוֹסָף","adj: supplémentaire, additionnel"],["לְהוֹסִיף","v: ajouter"],["תּוֹסֶפֶת","nom: addition, supplément"]],"eh":"בְּנוֹסָף לְכָךְ, עָלֵינוּ לִשְׁקוֹל אֶת הָעֲלוּיוֹת.","ef":"De plus, nous devons prendre en compte les coûts.","ex":[["הוּא מְדַבֵּר עִבְרִית וּבְנוֹסָף לוֹמֵד עֲרָבִית.","[éducation] Il parle hébreu et en plus il apprend l'arabe."],["הַמְּלוֹן מְצוּיָן; בְּנוֹסָף, הַמְּחִיר מַתְאִים לַתַּקְצִיב.","[voyage] L'hôtel est excellent; de plus, le prix correspond au budget."]]},{"h":"צָרוֹת","t":"tsarot","f":"ennuis, problèmes, malheurs, épreuves","c":"n","r":"צ-ר-ר","m":"Nom féminin pluriel issu de la racine צ-ר-ר, désignant des troubles, des malheurs ou des difficultés souvent graves.","fs":[["צָרָה","sg: ennui, malheur"],["צַר","adj: étroit; ennemi"],["לְהַצֵּר","v: causer des difficultés"],["צוּקָה","synonyme: détresse"]],"eh":"הוּא מָלֵא צָרוֹת וְאֵין לוֹ מִי שֶׁיַּעֲזֹר לוֹ.","ef":"Il est plein de problèmes et n'a personne pour l'aider.","ex":[["אַל תַּגְדִּיל צָרוֹת, נְסֵה לִמְצֹא פִּתְרוֹן.","[conseil] Ne grossis pas les problèmes, essaie de trouver une solution."],["בְּעֵת צָרוֹת, חֲבֵרִים אֲמִתִּיִּים נִרְאִים.","[proverbe] Dans les moments difficiles, les vrais amis se révèlent."]]},{"h":"מַזִּיקִים","t":"mazzikim","f":"nuisibles / démons (au pluriel)","c":"n","r":"נ-ז-ק","m":"Forme plurielle masculine du nom מַזִּיק (nuisible / démon), du binyan hif'il, racine נ-ז-ק signifiant 'causer du tort'.","fs":[["מַזִּיק","singulier m."],["מַזִּיקָה","singulier f."],["מַזִּיקוֹת","pluriel f."]],"eh":"הַחַקְלַאִים מִתְמוֹדְדִים עִם מַזִּיקִים רַבִּים בַּשָּׂדֶה.","ef":"Les agriculteurs luttent contre de nombreux nuisibles dans le champ.","ex":[["צָרִיךְ לְהַדְבִּיר אֶת הַמַּזִּיקִים בַּגָּן.","[jardinage] Il faut éliminer les nuisibles dans le jardin."],["בְּסִיפּוּרֵי עַם, הַמַּזִּיקִים הֵם יְצוּרִים רוּחָנִיִּים מְסוּכָּנִים.","[folklore] Dans les contes populaires, les mazzikim sont des créatures spirituelles dangereuses."]]},{"h":"נֶאֱלָץ / לְהֵיאָלֵץ","t":"ne'elats / lehei'aletz","f":"être contraint / être forcé","c":"v","r":"א-ל-צ","m":"Verbe au binyan nif'al exprimant la contrainte subie par le sujet ; נֶאֱלָץ est la forme passée (il a été contraint) et לְהֵיאָלֵץ l'infinitif.","fs":[["נֶאֱלַצְתִּי","passé 1ère pers. sg."],["נֵאָלֵץ","futur 1ère pers. sg."],["הֵאָלְצוּת","nom verbal"]],"eh":"הוּא נֶאֱלָץ לַעֲזֹב אֶת הָעִיר בִּגְלַל הַמִּלְחָמָה.","ef":"Il a été contraint de quitter la ville à cause de la guerre.","ex":[["אֲנַחְנוּ נֵאָלֵץ לְדַחּוֹת אֶת הַפְּגִישָׁה.","[professionnel] Nous serons contraints de reporter la réunion."],["הִיא נֶאֶלְצָה לְהוֹדוֹת בְּטָעוּתָהּ.","[quotidien] Elle a été forcée d'admettre son erreur."]]},{"h":"פָּנִים אֶל פָּנִים","t":"panim el panim","f":"face à face / en personne","c":"expr","r":"פ-נ-ה","m":"Expression figée composée du mot פָּנִים (visage/face) répété deux fois, relié par la préposition אֶל (vers), signifiant une rencontre directe entre deux personnes.","fs":[["פָּנִים","visage (toujours au pluriel en hébreu)"]],"eh":"הֵם נִפְגְּשׁוּ פָּנִים אֶל פָּנִים לְאַחַר שָׁנִים רַבּוֹת.","ef":"Ils se sont rencontrés face à face après de nombreuses années.","ex":[["עָדִיף לְדַבֵּר פָּנִים אֶל פָּנִים מֵאֲשֶׁר בְּהוֹדָעוֹת.","[communication] Il vaut mieux parler face à face que par messages."],["הַפְּגִישָׁה פָּנִים אֶל פָּנִים הֳיְתָה חֲשׁוּבָה מְאוֹד.","[diplomatie] La rencontre en personne était très importante."]]},{"h":"כַּוָּנָה","t":"kavvaná","f":"intention / but","c":"n","r":"כ-ו-נ","m":"Nom féminin de la racine כ-ו-נ (diriger, viser), désignant l'intention ou le dessein d'une personne ; au pluriel כַּוָּנוֹת.","fs":[["כַּוָּנוֹת","pluriel"],["מְכֻוָּן","adj. intentionnel"],["לְכַוֵּן","v. viser/diriger"]],"eh":"הָיְתָה לוֹ כַּוָּנָה טוֹבָה כְּשֶׁעָזַר לָהֶם.","ef":"Il avait une bonne intention quand il les a aidés.","ex":[["לֹא הָיְתָה לִי כַּוָּנָה לִפְגֹּעַ בְּךָ.","[excuse] Je n'avais pas l'intention de te blesser."],["הַכַּוָּנָה שֶׁלּוֹ הָיְתָה בְּרוּרָה מֵהַתְּחִלָּה.","[analyse] Son intention était claire dès le début."]]},{"h":"מוּצְדָּק","t":"mutsdaq","f":"justifié / légitime","c":"adj","r":"צ-ד-ק","m":"Adjectif au binyan pu'al (passif intensif) de la racine צ-ד-ק (justice), signifiant 'ce qui a été justifié ou légitimé' ; s'accorde en genre et nombre.","fs":[["מוּצְדֶּקֶת","f. sg."],["מוּצְדָּקִים","m. pl."],["מוּצְדָּקוֹת","f. pl."],["לְהַצְדִּיק","v. justifier"]],"eh":"הַכַּעַס שֶׁלּוֹ הָיָה מוּצְדָּק לְחַלּוּטִין.","ef":"Sa colère était tout à fait justifiée.","ex":[["הַהַחְלָטָה לֹא הָיְתָה מוּצְדֶּקֶת בְּעֵינֵי הָעוֹבְדִים.","[travail] La décision n'était pas justifiée aux yeux des employés."],["הַאִם הָעֳנָשׁ מוּצְדָּק בְּמִקְרֶה זֶה?","[droit] La punition est-elle justifiée dans ce cas ?"]]},{"h":"תְּבִיעָה","t":"tevi'á","f":"plainte / réclamation / poursuite judiciaire","c":"n","r":"ב-ע-ה","m":"Nom féminin dérivé du verbe לִתְבֹּעַ (exiger, poursuivre en justice), de la racine ב-ע-ה, désignant une demande formelle ou une action en justice.","fs":[["תְּבִיעוֹת","pluriel"],["לִתְבֹּעַ","v. poursuivre/réclamer"],["תּוֹבֵעַ","n. demandeur/plaignant"]],"eh":"הִיא הֵגִישָׁה תְּבִיעָה נֶגֶד הַחֶבְרָה.","ef":"Elle a déposé une plainte contre l'entreprise.","ex":[["תְּבִיעַת הַפִּיצוּיִים הִגִּיעָה לְמִיּלְיוֹן שֶׁקֶל.","[juridique] La demande d'indemnisation a atteint un million de shekels."],["הוּא זָכָה בַּתְּבִיעָה בְּבֵית הַמִּשְׁפָּט.","[tribunal] Il a gagné le procès au tribunal."]]},{"h":"עַמּוּד (עַמּוּד בְּעִיתוֹן)","t":"ammud (ammud be'iton)","f":"colonne / page (page de journal)","c":"n","r":"ע-מ-ד","m":"Nom masculin de la racine ע-מ-ד (se tenir debout), désignant au sens concret une colonne ou un pilier, et au sens journalistique une page ou une colonne de texte.","fs":[["עַמּוּדִים","pluriel"],["עַמּוּד שִׁדְרָה","colonne vertébrale"],["לַעֲמֹד","v. se tenir debout"]],"eh":"הַכְּתָבָה מוֹפִיעָה בָּעַמּוּד הַשְּׁלִישִׁי שֶׁל הָעִיתוֹן.","ef":"L'article apparaît en page trois du journal.","ex":[["הַפְּרָסוּמֶת תּוֹפֶסֶת עַמּוּד שָׁלֵם בַּמָּגָזִין.","[presse] La publicité occupe une page entière dans le magazine."],["קָרָאתִי אֶת הַטּוּר שֶׁלּוֹ בָּעַמּוּד הָאַחֲרוֹן.","[quotidien] J'ai lu sa chronique en dernière page."]]},{"h":"חָשׁוּךְ","t":"chashukh","f":"sombre / obscur / ténébreux","c":"adj","r":"ח-ש-כ","m":"Adjectif de la racine ח-ש-כ (obscurité, ténèbres), s'accordant en genre et nombre, décrivant un lieu ou une atmosphère sans lumière ou figurément difficile.","fs":[["חֲשׁוּכָה","f. sg."],["חֲשׁוּכִים","m. pl."],["חֲשׁוּכוֹת","f. pl."],["חֹשֶׁךְ","n. obscurité"]],"eh":"הַמִּסְדְּרוֹן הָיָה חָשׁוּךְ וּמְפַחִיד.","ef":"Le couloir était sombre et effrayant.","ex":[["אַל תֵּלְכִי בָּרְחוֹב הַחָשׁוּךְ לְבַד.","[sécurité] Ne marche pas seule dans la rue sombre."],["הָיָה לוֹ עָבָר חָשׁוּךְ שֶׁלֹּא סִיפֵּר לְאִישׁ.","[figuré] Il avait un passé sombre qu'il n'avait raconté à personne."]]},{"h":"תַּהֲלִיךְ","t":"tahalikH","f":"processus / procédure","c":"n","r":"ה-ל-כ","m":"Nom masculin de la racine ה-ל-כ (marcher, aller), formé avec le préfixe ת- de la structure תַּפְעִיל, désignant un déroulement progressif d'étapes.","fs":[["תַּהֲלִיכִים","pluriel"],["לְהַתְהַלֵּךְ","v. se promener"],["הֲלִיכָה","n. marche"]],"eh":"תַּהֲלִיךְ הַשָּׁלוֹם דּוֹרֵשׁ זְמַן וְסַבְלָנוּת.","ef":"Le processus de paix demande du temps et de la patience.","ex":[["הִיא עוֹבֶרֶת תַּהֲלִיךְ שֶׁל הַחְלָמָה אַחֲרֵי הַנִּיתּוּחַ.","[médical] Elle suit un processus de guérison après l'opération."],["תַּהֲלִיךְ קַבָּלַת הַהַחְלָטוֹת בַּחֶבְרָה אָרֹךְ מְאוֹד.","[entreprise] Le processus de prise de décision dans l'entreprise est très long."]]},{"h":"פָּנָס","t":"panás","f":"lanterne / lampe de poche / lampadaire","c":"n","r":"פ-נ-ס","m":"Nom masculin désignant une source de lumière portable ou fixe, de racine sémitique פ-נ-ס ; au pluriel פָּנָסִים.","fs":[["פָּנָסִים","pluriel"],["פָּנַס רְחוֹב","lampadaire de rue"],["פָּנַס יָד","lampe de poche"]],"eh":"הוּא הִדְלִיק אֶת הַפָּנָס כְּשֶׁכָּבְתָה הַחַשְׁמַל.","ef":"Il a allumé la lampe de poche quand l'électricité est tombée en panne.","ex":[["פָּנְסֵי הָרְחוֹב הֵאִירוּ אֶת הַדֶּרֶךְ בַּלַּיְלָה.","[ville] Les lampadaires ont éclairé le chemin dans la nuit."],["קָחִי פָּנָס לְטִיּוּל בַּחֹשֶׁךְ.","[camping] Prends une lampe de poche pour la randonnée dans l'obscurité."]]}];
+
+// =====================================================
+// TTS
+// =====================================================
+let heV=null, frV=[];
+function loadV(){
+  const vs=speechSynthesis.getVoices();
+  heV=vs.find(v=>v.lang==='he-IL')||vs.find(v=>v.lang.startsWith('he'))||null;
+  frV=vs.filter(v=>v.lang.startsWith('fr'));
+}
+if('speechSynthesis' in window){loadV(); speechSynthesis.onvoiceschanged=loadV;}
+function speak(txt,rate){
+  return new Promise(r=>{
+    speechSynthesis.cancel();
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(txt);
+      u.lang='he-IL'; u.rate=rate||parseFloat(document.getElementById('spd')?.value||0.75);
+      if(heV) u.voice=heV;
+      u.onend=u.onerror=r; speechSynthesis.speak(u);
+    },80);
+  });
+}
+function speakFr(txt){
+  return new Promise(r=>{
+    speechSynthesis.cancel();
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(txt);
+      u.lang='fr-FR'; u.rate=0.85;
+      if(frV.length) u.voice=frV[0];
+      u.onend=u.onerror=r; speechSynthesis.speak(u);
+    },80);
+  });
+}
+function stopTTS(){ speechSynthesis.cancel(); }
+function shuffle(a){ return a.slice().sort(()=>Math.random()-.5); }
+
+// =====================================================
+// NAVIGATION
+// =====================================================
+function showPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('tab-'+p).classList.add('active');
+  if(p==='liste') buildListe('');
+  if(p==='listen') buildListen();
+  if(p==='flash'){ fcList=MOTY.slice(); fcIdx=0; renderFC(); }
+}
+// =====================================================
+// QUIZ — LOGIQUE PÉDAGOGIQUE ADAPTATIVE
+// =====================================================
+/*
+  SESSION :
+  - validated  : Set des n (ids) des mots définitivement réussis
+  - pile        : tableau des mots restants à passer (mélangés)
+  - errQueue    : file des mots ratés (re-injectés en fin de pile)
+  - totalAttempts / totalOk : stats globales
+  - round       : numéro du round courant (1 = première passe, 2+ = révision des erreurs)
+*/
+let qMode='he-fr', qCatFilter='';
+let validated=new Set(), pile=[], errQueue=[];
+let totalAttempts=0, totalOk=0, roundNum=1;
+let qLock=false, mixSeq=['he-fr','fr-he','forms'], mixIdx=0;
+let _opts=[], _correctF='', _correctH='', _curM=null;
+
+function selMode(m){
+  qMode=m;
+  document.querySelectorAll('.mode-card').forEach(el=>el.classList.remove('sel'));
+  const map={'he-fr':'mc-hf','fr-he':'mc-fh','forms':'mc-forms','mix':'mc-mix'};
+  document.getElementById(map[m])?.classList.add('sel');
+}
+
+function getBaseList(){
+  const cat=document.getElementById('catFilter').value;
+  if(!cat) return MOTY.slice();
+  if(cat==='other') return MOTY.filter(m=>m.c==='adv'||m.c==='expr'||m.c==='prep'||m.c==='conj');
+  return MOTY.filter(m=>m.c===cat);
+}
+
+// ── Démarrage session ──
+function startQuiz(){
+  const base=getBaseList();
+  validated=new Set(); pile=shuffle(base); errQueue=[];
+  totalAttempts=0; totalOk=0; roundNum=1; qLock=false; mixIdx=0;
+  document.getElementById('config-screen').style.display='none';
+  document.getElementById('quiz-zone').style.display='block';
+  buildWordStatusGrid(base);
+  updateHUD();
+  nextQuestion();
+}
+
+// ── Restart ──
+function restartSession(){
+  document.getElementById('config-screen').style.display='block';
+  document.getElementById('quiz-zone').style.display='none';
+}
+
+// ── Fin de round : tous les mots de ce round passés ──
+function startNewRound(){
+  // Les mots de errQueue deviennent la nouvelle pile
+  roundNum++;
+  pile=shuffle(errQueue.slice()); errQueue=[];
+  qLock=false; mixIdx=0;
+  buildWordStatusGrid(getBaseList());
+  updateHUD();
+  nextQuestion();
+}
+
+// ── Question suivante ──
+function nextQuestion(){
+  // Si la pile est vide
+  if(pile.length===0){
+    if(errQueue.length===0){
+      // Tout validé !
+      showFinalEnd();
+    } else {
+      // Il reste des erreurs à retravailler
+      showRoundEnd();
+    }
+    return;
+  }
+  const m=pile[0];
+  _curM=m;
+  updateHUD();
+  updateWordStatus(m.n, 'cur');
+  renderQuestion(m);
+}
+
+// ── Rendre une question ──
+function getCurMode(){
+  if(qMode==='mix'){ const m=mixSeq[mixIdx%3]; mixIdx++; return m; }
+  return qMode;
+}
+
+function renderQuestion(m){
+  const cm=getCurMode();
+  if(cm==='he-fr') renderHeFr(m);
+  else if(cm==='fr-he') renderFrHe(m);
+  else renderForms(m);
+}
+
+// ── Vérification réponse ──
+function onAnswer(correct){
+  if(qLock) return;
+  qLock=true; totalAttempts++;
+  const m=pile.shift(); // retire de la pile
+
+  if(correct){
+    totalOk++;
+    validated.add(m.n);
+    updateWordStatus(m.n,'ok');
+  } else {
+    errQueue.push(m); // remet en file d'erreurs
+    updateWordStatus(m.n,'err');
+  }
+  updateHUD();
+
+  setTimeout(()=>{
+    qLock=false;
+    nextQuestion();
+  },20000);
+}
+
+// ── Passer (compte comme erreur) ──
+function skipQuestion(){
+  if(qLock||pile.length===0) return;
+  const m=pile.shift();
+  errQueue.push(m);
+  updateWordStatus(m.n,'err');
+  updateHUD();
+  nextQuestion();
+}
+
+// ── HUD ──
+function updateHUD(){
+  const base=getBaseList();
+  const tot=base.length;
+  const okCount=validated.size;
+  const errCount=errQueue.length;
+  const leftCount=pile.length;
+  const rcls=['r1','r2','r3'];
+  const rn=Math.min(roundNum,3)-1;
+  const labels=['1re passe','Révision','Maîtrise'];
+  document.getElementById('sb-round').innerHTML='<span class="round-badge '+rcls[rn]+'">'+labels[rn]+'</span>';
+  document.getElementById('sb-ok').textContent=okCount;
+  document.getElementById('sb-err').textContent=errCount;
+  document.getElementById('sb-left').textContent=leftCount;
+  document.getElementById('sb-score').textContent=totalOk+' / '+totalAttempts;
+  const okPct=tot>0?Math.round(okCount/tot*100):0;
+  const errPct=tot>0?Math.round(errCount/tot*100):0;
+  document.getElementById('progOk').style.width=okPct+'%';
+  document.getElementById('progErr').style.width=errPct+'%';
+  document.getElementById('pl-ok').textContent=okCount+' validés';
+  document.getElementById('pl-tot').textContent='sur '+tot;
+  document.getElementById('pl-err').textContent=errCount+' en révision';
+}
+
+// ── Grille statut ──
+function buildWordStatusGrid(base){
+  const g=document.getElementById('wordStatusGrid');
+  g.innerHTML='';
+  base.forEach(m=>{
+    const chip=document.createElement('div');
+    chip.className='ws-chip ws-todo';
+    chip.id='ws-'+m.n;
+    chip.textContent=m.h.split('/')[0].trim().split(' ')[0]; // premier mot hébreu
+    chip.title=m.f;
+    chip.addEventListener('click',()=>speak(m.h.split('/')[0].trim()));
+    g.appendChild(chip);
+  });
+}
+function updateWordStatus(num,status){
+  const chip=document.getElementById('ws-'+num);
+  if(!chip) return;
+  chip.className='ws-chip ws-'+status;
+}
+
+// ── Rendu question Hébreu→Français ──
+function renderHeFr(m){
+  const wrongs=shuffle(MOTY.filter(x=>x.n!==m.n)).slice(0,3).map(x=>x.f);
+  _opts=shuffle([m.f,...wrongs]); _correctF=m.f;
+  const h0=m.h.split('/')[0].trim();
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+
+  const lbl=mk('div','qmode-lbl'); lbl.textContent='Hébreu → Français · '+pile.length+' restants'; card.appendChild(lbl);
+  const qw=mk('div','qword'); qw.textContent=m.h+' ▶'; card.appendChild(qw);
+  qw.addEventListener('click',()=>speak(h0));
+  const qt=mk('div','qtrans'); qt.textContent=m.t; card.appendChild(qt);
+  const optsEl=mk('div','opts'); optsEl.id='qOpts'; card.appendChild(optsEl);
+  const fb=buildFeedback(m); card.appendChild(fb);
+  buildOpts(optsEl, _opts, (d,i)=>{
+    const ok=_opts[i]===_correctF;
+    resolveAnswer(d, optsEl, ok, _correctF, m, h0, fb);
+  });
+}
+
+// ── Rendu question Français→Hébreu ──
+function renderFrHe(m){
+  const wrongs=shuffle(MOTY.filter(x=>x.n!==m.n)).slice(0,3).map(x=>x.h);
+  _opts=shuffle([m.h,...wrongs]); _correctH=m.h;
+  const h0=m.h.split('/')[0].trim();
+  const catL={n:'Nom',v:'Verbe',adj:'Adjectif',adv:'Adverbe',prep:'Prep.',expr:'Expression',conj:'Conj.'};
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+
+  const lbl=mk('div','qmode-lbl'); lbl.textContent='Français → Hébreu · '+pile.length+' restants'; card.appendChild(lbl);
+  const qw=mk('div','qword'); qw.style.cssText='font-size:1.2rem;font-family:DM Sans,sans-serif;color:var(--txt);direction:ltr'; qw.textContent=m.f; card.appendChild(qw);
+  const qt=mk('div','qtrans'); qt.style.marginTop='4px'; qt.textContent='Catégorie : '+(catL[m.c]||m.c); card.appendChild(qt);
+  const optsEl=mk('div','opts'); optsEl.id='qOpts'; card.appendChild(optsEl);
+  const fb=buildFeedback(m); card.appendChild(fb);
+  buildOpts(optsEl, _opts, (d,i)=>{
+    const ok=_opts[i]===_correctH;
+    resolveAnswer(d, optsEl, ok, _correctH, m, h0, fb);
+  });
+}
+
+// ── Rendu question Formes → Sens (audio d'abord, labels masqués) ──
+function renderForms(m){
+  const wrongs=shuffle(MOTY.filter(x=>x.n!==m.n)).slice(0,3).map(x=>x.f);
+  _opts=shuffle([m.f,...wrongs]); _correctF=m.f;
+  const h0=m.h.split('/')[0].trim();
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+
+  // Label mode
+  const lbl=mk('div','qmode-lbl');
+  lbl.textContent='Écouter · trouver le sens · '+pile.length+' restants';
+  card.appendChild(lbl);
+
+  // Instruction
+  const hint=mk('div','');
+  hint.style.cssText='text-align:center;font-size:0.78rem;color:var(--muted);margin-bottom:10px;font-style:italic';
+  hint.textContent='Écoutez les formes hébraïques — puis choisissez le sens';
+  card.appendChild(hint);
+
+  // Zone formes : hébreu SEUL (sans labels entre parenthèses)
+  const fr=mk('div','qforms-row'); fr.style.lineHeight='2.8'; card.appendChild(fr);
+  const labelEls=[];
+  m.fs.forEach((pair,i)=>{
+    if(i>0){ fr.appendChild(document.createTextNode(' · ')); }
+    const sp=mk('span',''); sp.style.cursor='pointer';
+    const hpart=mk('span','');
+    hpart.style.cssText='font-family:"Frank Ruhl Libre",serif;font-size:1.2rem;direction:rtl;color:var(--gold-l)';
+    hpart.textContent=pair[0];
+    const lpart=mk('small','');
+    lpart.style.cssText='color:var(--muted);display:none';
+    lpart.textContent=' ('+pair[1]+')';
+    labelEls.push(lpart);
+    sp.appendChild(hpart); sp.appendChild(lpart);
+    sp.addEventListener('click',()=>speak(pair[0].split('/')[0].trim()));
+    fr.appendChild(sp);
+  });
+
+  // Racine visible, transcription masquée (révélée après réponse)
+  const qt=mk('div','qtrans'); qt.textContent='Racine : '+m.r; card.appendChild(qt);
+
+  // Boutons écoute
+  const listenRow=mk('div','');
+  listenRow.style.cssText='display:flex;gap:8px;justify-content:center;margin:10px 0 14px;flex-wrap:wrap';
+
+  const btnOne=mk('button','btn btn-g btn-sm');
+  btnOne.innerHTML='&#9654; Forme principale';
+  btnOne.addEventListener('click',()=>speak(h0,0.7));
+
+  const btnAll=mk('button','btn btn-o btn-sm');
+  btnAll.innerHTML='&#9654; Toutes les formes';
+  btnAll.addEventListener('click',async()=>{
+    btnAll.disabled=true; btnOne.disabled=true;
+    for(const pair of m.fs){
+      await speak(pair[0].split('/')[0].trim(),0.75);
+      await new Promise(r=>setTimeout(r,420));
+    }
+    btnAll.disabled=false; btnOne.disabled=false;
+  });
+
+  listenRow.appendChild(btnOne); listenRow.appendChild(btnAll);
+  card.appendChild(listenRow);
+
+  // Options de réponse
+  const optsEl=mk('div','opts'); optsEl.id='qOpts'; card.appendChild(optsEl);
+
+  // Feedback morpho (masqué)
+  const fb=buildFeedback(m); card.appendChild(fb);
+
+  buildOpts(optsEl, _opts, (d,i)=>{
+    const ok=_opts[i]===_correctF;
+    // Révéler labels ET transcription après la réponse
+    labelEls.forEach(lp=>{ lp.style.display='inline'; });
+    qt.textContent='Racine : '+m.r+' · '+m.t;
+    resolveAnswer(d, optsEl, ok, _correctF, m, h0, fb);
+  });
+
+  // Lecture automatique au chargement (délai court)
+  setTimeout(()=>speak(h0,0.7), 350);
+}
+
+// ── Logique commune de résolution ──
+function resolveAnswer(clickedEl, optsEl, ok, correctVal, m, h0, fb){
+  if(qLock) return;
+  clickedEl.classList.add(ok?'ok':'err');
+  if(!ok){
+    optsEl.querySelectorAll('.opt').forEach(o=>{
+      if(o.textContent===correctVal) o.classList.add('reveal');
+    });
+  }
+  // Bloquer tous les opts
+  optsEl.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+  // Afficher feedback morpho
+  fb.style.display='block';
+  // Audio : mot principal puis lecture auto des 3 phrases exemples
+  speak(h0, 0.7).then(()=>{
+    if(m.ex && m.ex.length){
+      (async()=>{
+        await new Promise(r=>setTimeout(r,900));
+        for(const pair of m.ex){
+          await speak(pair[0].trim(), 0.8);
+          await new Promise(r=>setTimeout(r,700));
+        }
+      })();
+    }
+  });
+  // Feedback visuel sur la grille
+  const chip=document.getElementById('ws-'+m.n);
+  if(chip){
+    chip.classList.remove('ws-cur','ws-todo','ws-ok','ws-err');
+    chip.classList.add(ok?'ws-ok':'ws-err');
+  }
+  // Appel à la logique pédagogique
+  onAnswer(ok);
+}
+
+function buildFeedback(m){
+  const fb=mk('div','morph-fb');
+  const heb=mk('div','morph-fb-heb'); heb.textContent=m.h; fb.appendChild(heb);
+  const mo=mk('div',''); mo.textContent=m.m; fb.appendChild(mo);
+  if(m.eh){
+    const ex=mk('div','morph-fb-ex');
+    ex.textContent=m.eh+' — '+m.ef;
+    fb.appendChild(ex);
+  }
+  if(m.ex && m.ex.length){
+    const sep=mk('div','');
+    sep.style.cssText='border-top:1px solid rgba(201,168,76,0.15);margin-top:8px;padding-top:8px;font-size:0.72rem;color:var(--gold);font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:8px';
+    sep.textContent='Exemples par theme';
+    fb.appendChild(sep);
+    m.ex.forEach((pair,idx)=>{
+      const row=mk('div','');
+      row.style.cssText='margin-top:7px;display:flex;align-items:flex-start;gap:8px';
+      // Bouton ▶
+      const btn=mk('button','ab');
+      btn.textContent='\u25B6';
+      btn.title='Ecouter';
+      btn.style.cssText='flex-shrink:0;margin-top:3px;font-size:0.7rem;padding:2px 7px';
+      btn.addEventListener('click',ev=>{ ev.stopPropagation(); speak(pair[0].trim(),0.8); });
+      // Texte
+      const txtwrap=mk('div',''); txtwrap.style.cssText='flex:1;cursor:pointer';
+      txtwrap.addEventListener('click',()=>speak(pair[0].trim(),0.8));
+      const hpart=mk('div','');
+      hpart.style.cssText='font-family:"Frank Ruhl Libre",serif;font-size:1rem;direction:rtl;text-align:right;color:var(--gold-l);line-height:1.4';
+      hpart.textContent=pair[0];
+      const fpart=mk('div','');
+      fpart.style.cssText='font-size:0.75rem;color:var(--muted);font-style:italic;margin-top:1px';
+      fpart.textContent=pair[1];
+      txtwrap.appendChild(hpart); txtwrap.appendChild(fpart);
+      row.appendChild(btn); row.appendChild(txtwrap);
+      fb.appendChild(row);
+    });
+  }
+  return fb;
+}
+
+function buildOpts(container, labels, fn){
+  container.innerHTML='';
+  labels.forEach((lbl,i)=>{
+    const d=mk('div','opt'); d.textContent=lbl;
+    d.addEventListener('click',()=>fn(d,i));
+    container.appendChild(d);
+  });
+}
+
+function mk(tag,cls){
+  const el=document.createElement(tag);
+  if(cls) el.className=cls;
+  return el;
+}
+
+// ── Fin de round (erreurs restantes) ──
+function showRoundEnd(){
+  const errN=errQueue.length;
+  const okN=validated.size;
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+  const box=mk('div','round-end');
+  const rcls=['r1','r2','r3'];
+  const rn=Math.min(roundNum,3)-1;
+
+  box.innerHTML=
+    '<div class="re-icon">'+(roundNum===1?'🔄':'💪')+'</div>'+
+    '<div class="re-title" style="color:var(--gold)">Fin de la '+(roundNum===1?'1re':''+roundNum+'e')+' passe</div>'+
+    '<div class="re-msg">'+
+      '<span style="color:#6ecf99">✓ '+okN+' mot'+(okN>1?'s':'')+' validé'+(okN>1?'s':'')+'</span> — ils ne reviendront plus.<br>'+
+      '<span style="color:#d47070">✗ '+errN+' mot'+(errN>1?'s':'')+' à retravailler</span> — nouvelle passe de révision.'+
+    '</div>'+
+    '<div class="re-stats">'+
+      '<div class="re-stat"><div class="re-stat-n" style="color:#6ecf99">'+okN+'</div><div class="re-stat-l">Validés ✓</div></div>'+
+      '<div class="re-stat"><div class="re-stat-n" style="color:#d47070">'+errN+'</div><div class="re-stat-l">À retravailler</div></div>'+
+      '<div class="re-stat"><div class="re-stat-n" style="color:var(--gold)">'+Math.round(totalOk/Math.max(totalAttempts,1)*100)+'%</div><div class="re-stat-l">Précision</div></div>'+
+    '</div>';
+  const btnRow=mk('div',''); btnRow.style.cssText='display:flex;gap:10px;justify-content:center;flex-wrap:wrap';
+  const b1=mk('button','btn btn-g'); b1.innerHTML='▶ Réviser les '+errN+' mot'+(errN>1?'s':'');
+  b1.addEventListener('click',startNewRound);
+  const b2=mk('button','btn btn-o'); b2.textContent='↺ Tout recommencer';
+  b2.addEventListener('click',startQuiz);
+  btnRow.appendChild(b1); btnRow.appendChild(b2); box.appendChild(btnRow);
+  card.appendChild(box);
+}
+
+// ── Fin totale (tout validé) ──
+function showFinalEnd(){
+  const tot=getBaseList().length;
+  const pct=Math.round(totalOk/Math.max(totalAttempts,1)*100);
+  const stars=pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':pct>=50?'⭐':'—';
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+  const box=mk('div','end-box');
+  box.innerHTML=
+    '<div style="font-size:3rem;margin-bottom:8px">🎓</div>'+
+    '<div class="end-stars">'+stars+'</div>'+
+    '<div class="end-sc">'+tot+' / '+tot+' mots validés !</div>'+
+    '<div class="end-pct">Précision : '+pct+'% · '+totalAttempts+' tentatives · '+roundNum+' passe'+(roundNum>1?'s':'')+'</div>'+
+    '<div style="font-size:0.85rem;color:var(--sub);margin-bottom:20px;line-height:1.7">'+
+      (roundNum===1?'Parfait du premier coup ! Maîtrise exemplaire.':
+       roundNum===2?'Excellent ! Tous les mots validés en 2 passes.':
+       'Bravo ! La persévérance paie — tous les mots sont maîtrisés.')+
+    '</div>';
+  const btnRow=mk('div',''); btnRow.style.cssText='display:flex;gap:10px;justify-content:center;flex-wrap:wrap';
+  const b1=mk('button','btn btn-g'); b1.textContent='↺ Nouvelle session';
+  b1.addEventListener('click',startQuiz);
+  const b2=mk('button','btn btn-o'); b2.textContent='⚙ Changer de mode';
+  b2.addEventListener('click',()=>{
+    document.getElementById('config-screen').style.display='block';
+    document.getElementById('quiz-zone').style.display='none';
+  });
+  btnRow.appendChild(b1); btnRow.appendChild(b2); box.appendChild(btnRow);
+  card.appendChild(box);
+}
+
+// ── Boutons ──
+document.getElementById('startBtn').addEventListener('click', startQuiz);
+document.getElementById('restartBtn').addEventListener('click', startQuiz);
+document.getElementById('skipBtn').addEventListener('click', skipQuestion);
+document.getElementById('modesBtn').addEventListener('click', ()=>{
+  document.getElementById('config-screen').style.display='block';
+  document.getElementById('quiz-zone').style.display='none';
+});
+
+// =====================================================
+// FLASHCARDS
+// =====================================================
+let fcList=MOTY.slice(), fcIdx=0, fcFlipped=false;
+function renderFC(){
+  const m=fcList[fcIdx];
+  document.getElementById('fcHeb').textContent=m.h;
+  document.getElementById('fcForms').textContent=m.fs.map(p=>p[0]).join(' · ');
+  document.getElementById('fcFr').textContent=m.f;
+  document.getElementById('fcMorph').textContent=m.m;
+  document.getElementById('fcProg').textContent=(fcIdx+1)+' / '+fcList.length;
+  document.getElementById('fcCard').classList.remove('flip');
+  fcFlipped=false;
+}
+document.getElementById('fcCard').addEventListener('click',()=>{
+  fcFlipped=!fcFlipped;
+  document.getElementById('fcCard').classList.toggle('flip',fcFlipped);
+  if(fcFlipped) speak(fcList[fcIdx].h.split('/')[0].trim(),0.7);
+});
+document.getElementById('fcPrev').addEventListener('click',()=>{ fcIdx=(fcIdx-1+fcList.length)%fcList.length; renderFC(); });
+document.getElementById('fcNext').addEventListener('click',()=>{ fcIdx=(fcIdx+1)%fcList.length; renderFC(); });
+document.getElementById('fcSpeak').addEventListener('click',()=>speak(fcList[fcIdx].h.split('/')[0].trim()));
+document.getElementById('fcShuf').addEventListener('click',()=>{ fcList=shuffle(MOTY.slice()); fcIdx=0; renderFC(); });
+function fcFilter(cat){
+  if(!cat) fcList=MOTY.slice();
+  else if(cat==='other') fcList=MOTY.filter(m=>m.c==='adv'||m.c==='expr'||m.c==='prep');
+  else fcList=MOTY.filter(m=>m.c===cat);
+  fcIdx=0; renderFC();
+}
+
+// =====================================================
+// ÉCOUTE
+// =====================================================
+let liPlayed=new Set();
+function buildListen(){
+  const cont=document.getElementById('liList'); cont.innerHTML='';
+  MOTY.forEach((m,i)=>{
+    const row=mk('div','li'); row.id='li-'+i;
+    const n=mk('span','li-n'); n.textContent=m.n;
+    const heb=mk('span','li-heb'); heb.textContent=m.h.split('/')[0].trim();
+    const fr=mk('span','li-fr'); fr.textContent=m.f;
+    const btn=mk('button','ab'); btn.textContent='▶';
+    btn.addEventListener('click',ev=>{ ev.stopPropagation(); liOne(i); });
+    row.addEventListener('click',()=>liOne(i));
+    row.appendChild(n); row.appendChild(heb); row.appendChild(fr); row.appendChild(btn);
+    cont.appendChild(row);
+  });
+  updLiPb();
+}
+async function liOne(i){
+  const el=document.getElementById('li-'+i); if(!el) return;
+  el.classList.add('playing');
+  const rate=parseFloat(document.getElementById('spd')?.value||0.75);
+  await speak(MOTY[i].h.split('/')[0].trim(), rate);
+  el.classList.remove('playing'); el.classList.add('played');
+  liPlayed.add(i); updLiPb();
+}
+async function listenAll(mode){
+  stopTTS();
+  for(let i=0;i<MOTY.length;i++){
+    await liOne(i);
+    if(mode==='both'){ await new Promise(r=>setTimeout(r,150)); await speakFr(MOTY[i].f); }
+    await new Promise(r=>setTimeout(r,350));
+  }
+}
+function updLiPb(){ document.getElementById('liPb').textContent=liPlayed.size+' / 160 écoutés'; }
+document.getElementById('listenHeb').addEventListener('click',()=>listenAll('heb'));
+document.getElementById('listenBoth').addEventListener('click',()=>listenAll('both'));
+document.getElementById('stopBtn').addEventListener('click',stopTTS);
+
+// =====================================================
+// LISTE
+// =====================================================
+const catNames={n:'Nom',v:'Verbe',adj:'Adjectif',adv:'Adverbe',prep:'Prep.',expr:'Expression',conj:'Conj.'};
+const catCls={n:'bn',v:'bv',adj:'badj',adv:'badv',prep:'bprep',expr:'bexpr',conj:'bprep'};
+function buildListe(q){
+  q=(q||'').toLowerCase();
+  const filtered=MOTY.filter(m=>!q||m.h.includes(q)||m.f.toLowerCase().includes(q)||m.t.toLowerCase().includes(q)||m.r.includes(q));
+  const grid=document.getElementById('lexG'); grid.innerHTML='';
+  filtered.forEach(m=>{
+    const card=mk('div','lc');
+    card.addEventListener('click',()=>speak(m.h.split('/')[0].trim()));
+    const heb=mk('div','lc-heb'); heb.textContent=m.h; card.appendChild(heb);
+    const tr=mk('div','lc-tr'); tr.textContent=m.t; card.appendChild(tr);
+    const fr=mk('div','lc-fr'); fr.textContent=m.f; card.appendChild(fr);
+    const foot=mk('div','lc-foot');
+    const badge=mk('span','badge '+(catCls[m.c]||'bprep')); badge.textContent=catNames[m.c]||m.c; foot.appendChild(badge);
+    const rac=mk('span','rac'); rac.textContent=m.r; foot.appendChild(rac);
+    const btn=mk('button','ab'); btn.textContent='▶';
+    btn.addEventListener('click',ev=>{ ev.stopPropagation(); speak(m.h.split('/')[0].trim()); });
+    foot.appendChild(btn); card.appendChild(foot);
+    grid.appendChild(card);
+  });
+}
+document.getElementById('lsearch').addEventListener('input',function(){ buildListe(this.value); });
+
+// ── INIT ──
+buildListe('');
+renderFC();
+</script>
+
+<div style="text-align:center;padding:18px;font-size:0.69rem;color:#444;border-top:1px solid #1a1a1a;margin-top:28px">
+  &#1512;&#1513;&#1497;&#1502;&#1514; &#1502;&#1493;&#1496;&#1497; &middot; 160 mots &middot; Apprentissage adaptatif &middot; Claude (Anthropic)
+</div>
+</body>
+</html>
