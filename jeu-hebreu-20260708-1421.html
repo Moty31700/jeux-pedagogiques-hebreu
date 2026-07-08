@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>רשימת מוטי — Quiz pédagogique · 30 mots</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700&family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0d0d;--card:#181818;--card2:#1e1e1e;--border:#252525;
+  --gold:#c9a84c;--gold-l:#e8c96a;--gold-dim:rgba(201,168,76,0.12);
+  --txt:#e8e4dc;--muted:#777;--sub:#aaa;
+  --ok:#3d9b60;--ok-bg:#0f2018;--err:#b04040;--err-bg:#250e0e;
+  --warn:#b87d20;--warn-bg:#1e1505;
+  --purple:#7c5cbf;--purple-l:#c5b0f5;--teal:#2a9d8f;
+  --round1:#c9a84c;--round2:#4ea8de;--round3:#c084fc;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;min-height:100vh}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:#080808;border-bottom:1px solid var(--border);
+  display:flex;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.tab{padding:13px 15px;cursor:pointer;white-space:nowrap;color:var(--muted);font-size:0.8rem;
+  font-weight:500;border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0}
+.tab:hover{color:var(--txt);background:rgba(255,255,255,0.03)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab.t-flash.active{color:#7ed6c8;border-bottom-color:var(--teal)}
+.tab.t-liste.active{color:var(--purple-l);border-bottom-color:var(--purple)}
+.tab.t-textes.active{color:#f0b87d;border-bottom-color:#d68940}
+
+/* TEXTES — CHANSONS */
+.song-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:22px 20px;margin-bottom:22px;position:relative}
+.song-title{font-family:"Frank Ruhl Libre",serif;font-size:1.6rem;color:#f0b87d;text-align:right;direction:rtl;margin-bottom:4px;line-height:1.2}
+.song-fr{font-family:"Playfair Display",serif;font-size:0.95rem;color:var(--sub);font-style:italic;margin-bottom:6px}
+.song-credit{font-size:0.72rem;color:var(--muted);margin-bottom:12px}
+.song-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.song-text{font-family:"Frank Ruhl Libre",serif;font-size:1.15rem;color:var(--txt);direction:rtl;text-align:right;line-height:1.85;padding:14px 16px;background:rgba(0,0,0,0.25);border-radius:8px;border-right:3px solid #d68940}
+.song-stanza{margin-bottom:14px}
+.song-stanza:last-child{margin-bottom:0}
+.song-line{display:block}
+.song-chorus{color:#e8c96a;font-style:italic;padding-right:8px;border-right:2px solid var(--gold-dim);margin-right:-10px}
+.song-word{color:#7ed6c8;background:rgba(126,214,200,0.08);padding:0 4px;border-radius:3px;cursor:pointer;border-bottom:1px dashed rgba(126,214,200,0.5);transition:all .15s}
+.song-word:hover{background:rgba(126,214,200,0.2);color:#a8e8db}
+.song-word.active{background:rgba(126,214,200,0.3)}
+.song-tip{font-size:0.78rem;color:var(--muted);margin-top:12px;padding:8px 12px;background:rgba(126,214,200,0.05);border-left:2px solid var(--teal);border-radius:4px}
+.song-tip b{color:#7ed6c8}
+.song-tooltip{position:fixed;background:#080808;border:1px solid var(--gold);border-radius:8px;padding:10px 14px;max-width:280px;z-index:1000;box-shadow:0 6px 20px rgba(0,0,0,0.6);font-size:0.85rem;pointer-events:none;display:none}
+.song-tooltip .tt-heb{font-family:"Frank Ruhl Libre",serif;font-size:1.15rem;color:var(--gold);direction:rtl;text-align:right;margin-bottom:3px}
+.song-tooltip .tt-fr{color:var(--txt);font-size:0.82rem;line-height:1.4}
+.song-tooltip .tt-n{color:var(--muted);font-size:0.7rem;margin-top:4px}
+
+/* PAGES */
+.page{display:none;max-width:820px;margin:0 auto;padding:22px 14px 70px}
+.page.active{display:block}
+.ph{text-align:center;padding:24px 0 18px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.ph-heb{font-family:"Frank Ruhl Libre",serif;font-size:2rem;color:var(--gold);line-height:1.3}
+.ph h2{font-family:"Playfair Display",serif;font-size:1.05rem;color:var(--sub);margin-top:5px;font-weight:400}
+.ph .sub{font-size:0.76rem;color:var(--muted);margin-top:3px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:none;border-radius:7px;
+  cursor:pointer;font-size:0.83rem;font-weight:500;transition:all .15s;font-family:"DM Sans",sans-serif}
+.btn-g{background:var(--gold);color:#000}.btn-g:hover{filter:brightness(1.1)}
+.btn-o{background:rgba(255,255,255,0.07);color:var(--txt);border:1px solid var(--border)}
+.btn-o:hover{background:rgba(255,255,255,0.12)}
+.btn-sm{padding:6px 12px;font-size:0.76rem}
+.btn-err{background:rgba(176,64,64,0.2);color:#d47070;border:1px solid var(--err)}
+.btn-err:hover{background:rgba(176,64,64,0.35)}
+.ab{background:none;border:1px solid var(--border);color:var(--gold);border-radius:5px;
+  padding:3px 9px;cursor:pointer;font-size:0.78rem;transition:all .15s}
+.ab:hover{background:var(--gold-dim);border-color:var(--gold)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* QUIZ — SÉLECTEUR DE MODE */
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:9px;margin-bottom:16px}
+.mode-card{background:var(--card);border:2px solid var(--border);border-radius:9px;padding:15px 12px;
+  cursor:pointer;transition:all .2s;text-align:center}
+.mode-card:hover,.mode-card.sel{border-color:var(--gold);background:var(--gold-dim)}
+.mode-card .mi{font-size:1.6rem;margin-bottom:5px}
+.mode-card .mt{font-size:0.82rem;font-weight:600;color:var(--txt);margin-bottom:2px}
+.mode-card .ms{font-size:0.71rem;color:var(--muted)}
+
+/* QUIZ — BANDEAU DE SESSION */
+.session-bar{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:10px 14px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sbar-item{display:flex;align-items:center;gap:5px;font-size:0.78rem}
+.sbar-label{color:var(--muted)}
+.sbar-val{font-weight:700;color:var(--gold)}
+.sbar-val.ok{color:#6ecf99}
+.sbar-val.err{color:#d47070}
+.sbar-val.warn{color:#d4a44c}
+.round-badge{font-size:0.7rem;font-weight:700;padding:3px 9px;border-radius:12px;letter-spacing:.05em}
+.r1{background:rgba(201,168,76,0.2);color:var(--round1);border:1px solid rgba(201,168,76,0.35)}
+.r2{background:rgba(78,168,222,0.18);color:var(--round2);border:1px solid rgba(78,168,222,0.3)}
+.r3{background:rgba(192,132,252,0.18);color:var(--round3);border:1px solid rgba(192,132,252,0.3)}
+
+/* QUIZ — CARTE */
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:18px 16px;margin-bottom:12px}
+.qmode-lbl{font-size:0.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;font-weight:700}
+.qword{font-size:2.7rem;text-align:center;color:var(--gold-l);padding:12px 0 2px;
+  font-family:"Frank Ruhl Libre",serif;direction:rtl;cursor:pointer;line-height:1.2}
+.qword:hover{color:var(--gold)}
+.qtrans{text-align:center;font-size:0.82rem;color:var(--muted);margin-bottom:4px}
+.qforms-row{text-align:center;font-size:0.85rem;color:var(--sub);margin-bottom:12px;
+  font-family:"Frank Ruhl Libre",serif;direction:rtl;line-height:2.2;padding:6px 0}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.opt{padding:12px 10px;border:1px solid var(--border);border-radius:8px;cursor:pointer;
+  text-align:center;transition:all .15s;font-size:0.87rem;line-height:1.4;user-select:none}
+.opt:hover{border-color:var(--gold);background:var(--gold-dim)}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg);color:#7ecf9f;pointer-events:none;
+  animation:popOk .3s ease}
+.opt.err{border-color:var(--err);background:var(--err-bg);color:#d47070;pointer-events:none}
+.opt.reveal{border-color:var(--ok);background:var(--ok-bg);color:#7ecf9f}
+.opt.locked{pointer-events:none;opacity:.55}
+@keyframes popOk{0%{transform:scale(.96)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+
+/* FEEDBACK MORPHO */
+.morph-fb{display:none;margin-top:12px;background:rgba(201,168,76,0.07);
+  border:1px solid rgba(201,168,76,0.2);border-radius:7px;padding:11px 13px;
+  font-size:0.82rem;color:var(--sub);line-height:1.65}
+.morph-fb-heb{font-family:"Frank Ruhl Libre",serif;font-size:1.05rem;color:var(--gold-l);direction:rtl;margin-bottom:3px}
+.morph-fb-ex{margin-top:6px;font-style:italic;color:var(--muted);font-size:0.78rem;direction:rtl;text-align:right;
+  border-top:1px solid rgba(201,168,76,0.15);padding-top:6px}
+
+/* BARRE DE PROGRESSION DUALE */
+.prog-wrap{margin-bottom:12px}
+.prog-labels{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:4px}
+.prog{height:6px;background:var(--border);border-radius:3px;overflow:hidden;display:flex}
+.prog-ok{height:100%;background:var(--ok);transition:width .4s ease}
+.prog-err{height:100%;background:var(--err);transition:width .4s ease;opacity:.7}
+
+/* STATUS LISTE DES MOTS */
+.word-status-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:5px;margin-top:10px}
+.ws-chip{width:42px;height:34px;border-radius:5px;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Frank Ruhl Libre",serif;font-size:0.8rem;direction:rtl;cursor:pointer;transition:all .15s}
+.ws-chip:hover{border-color:var(--gold)}
+.ws-chip.ws-ok{background:var(--ok-bg);border-color:rgba(61,155,96,.4);color:#6ecf99}
+.ws-chip.ws-err{background:var(--err-bg);border-color:rgba(176,64,64,.4);color:#d47070}
+.ws-chip.ws-cur{border-color:var(--gold);background:var(--gold-dim)}
+.ws-chip.ws-todo{color:var(--muted)}
+
+/* ÉCRAN DE FIN DE ROUND */
+.round-end{text-align:center;padding:28px 16px}
+.re-icon{font-size:3rem;margin-bottom:10px}
+.re-title{font-family:"Playfair Display",serif;font-size:1.4rem;margin-bottom:6px}
+.re-msg{font-size:0.88rem;color:var(--sub);margin-bottom:18px;line-height:1.6}
+.re-stats{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.re-stat{text-align:center}
+.re-stat-n{font-size:1.8rem;font-weight:700}
+.re-stat-l{font-size:0.72rem;color:var(--muted);margin-top:2px}
+
+/* ÉCRAN FIN TOTALE */
+.end-box{text-align:center;padding:30px 16px}
+.end-stars{font-size:2.2rem;margin-bottom:8px}
+.end-sc{font-size:2rem;color:var(--gold);font-family:"Playfair Display",serif;margin-bottom:6px}
+.end-pct{font-size:0.88rem;color:var(--sub);margin-bottom:18px}
+
+/* FLASHCARDS */
+.fc-wrap{perspective:1100px;max-width:420px;margin:0 auto 14px;height:210px}
+.fc{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s;cursor:pointer}
+.fc.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:20px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--border)}
+.face-f{background:var(--card)}
+.face-b{background:rgba(124,92,191,0.1);border-color:var(--purple);transform:rotateY(180deg)}
+.fc-heb{font-family:"Frank Ruhl Libre",serif;font-size:2.3rem;direction:rtl;color:var(--gold-l);text-align:center}
+.fc-forms{font-family:"Frank Ruhl Libre",serif;font-size:0.88rem;direction:rtl;color:var(--muted);text-align:center;margin-top:4px}
+.fc-fr{font-size:1rem;color:var(--txt);text-align:center;margin-bottom:6px;font-weight:600}
+.fc-morph{font-size:0.71rem;color:var(--muted);text-align:center;font-style:italic;max-width:300px;line-height:1.5}
+.fc-prog{text-align:center;font-size:0.75rem;color:var(--muted);margin-bottom:5px}
+.fc-hint{text-align:center;font-size:0.71rem;color:var(--muted);margin-bottom:9px}
+.fc-ctrl{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:9px}
+.fc-filter-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+
+/* ÉCOUTE */
+.li{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--border);
+  border-radius:7px;margin-bottom:6px;cursor:pointer;transition:border-color .15s}
+.li:hover,.li.playing{border-color:var(--gold);background:var(--gold-dim)}
+.li.played{border-color:var(--ok)}
+.li-n{font-size:0.7rem;color:var(--muted);width:20px;flex-shrink:0;text-align:right}
+.li-heb{font-family:"Frank Ruhl Libre",serif;font-size:1.15rem;direction:rtl;color:var(--gold-l);flex:1;text-align:right}
+.li-fr{font-size:0.79rem;color:var(--sub);flex:1}
+
+/* LISTE LEXIQUE */
+.lex-search{width:100%;background:var(--card);border:1px solid var(--border);color:var(--txt);
+  padding:10px 14px;border-radius:7px;font-size:0.87rem;margin-bottom:12px;outline:none;transition:border-color .15s}
+.lex-search:focus{border-color:var(--gold)}
+.lex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:9px}
+.lc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 11px;cursor:pointer;transition:all .15s}
+.lc:hover{border-color:var(--gold);background:var(--card2);transform:translateY(-1px)}
+.lc-heb{font-family:"Frank Ruhl Libre",serif;font-size:1.25rem;direction:rtl;text-align:right;color:var(--gold-l);margin-bottom:3px}
+.lc-tr{font-size:0.7rem;color:var(--muted);margin-bottom:4px}
+.lc-fr{font-size:0.81rem;color:var(--sub);margin-bottom:8px}
+.lc-foot{display:flex;justify-content:space-between;align-items:center}
+.badge{font-size:0.62rem;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:3px;text-transform:uppercase}
+.bn{background:rgba(58,107,201,.3);color:#8ab4f8}
+.bv{background:rgba(42,153,96,.3);color:#7fcfa0}
+.badj{background:rgba(201,122,32,.3);color:#f5b870}
+.badv{background:rgba(136,85,204,.3);color:#d4b0f5}
+.bprep{background:rgba(100,100,100,.3);color:#ccc}
+.bexpr{background:rgba(176,64,64,.3);color:#f09090}
+.bsong{background:rgba(240,184,125,.18);color:#f0b87d;border:1px solid rgba(240,184,125,.4)}
+.rac{font-size:0.67rem;color:var(--muted)}
+
+/* SELECT */
+select.sel-ui{background:var(--card);border:1px solid var(--border);color:var(--txt);
+  padding:7px 10px;border-radius:6px;font-size:0.78rem;outline:none}
+.spd-row{display:flex;align-items:center;gap:6px;font-size:0.76rem;color:var(--muted)}
+.spd-row select{background:var(--card);border:1px solid var(--border);color:var(--txt);
+  padding:4px 6px;border-radius:4px;font-size:0.76rem}
+
+@media(max-width:480px){
+  .qword{font-size:2rem}.opts{grid-template-columns:1fr}
+  .fc-heb{font-size:1.9rem}.fc-wrap{height:185px}
+  .lex-grid{grid-template-columns:1fr 1fr}
+  .mode-grid{grid-template-columns:1fr 1fr}
+  .re-stats{gap:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="tab active" onclick="showPage('quiz')" id="tab-quiz">&#127919; Quiz</div>
+  <div class="tab t-flash" onclick="showPage('flash')" id="tab-flash">&#127183; Flashcards</div>
+  <div class="tab" onclick="showPage('listen')" id="tab-listen">&#128266; &#1513;&#1502;&#1506;</div>
+  <div class="tab t-liste" onclick="showPage('liste')" id="tab-liste">&#128214; Liste</div>
+  <div class="tab t-textes" onclick="showPage('textes')" id="tab-textes">&#128220; Textes</div>
+</div>
+
+<!-- ═══ PAGE QUIZ ═══ -->
+<div id="page-quiz" class="page active">
+  <div class="ph">
+    <div class="ph-heb">&#1512;&#1513;&#1497;&#1502;&#1514; &#1502;&#1493;&#1496;&#1497;</div>
+    <h2>Quiz p&eacute;dagogique &middot; Apprentissage adaptatif</h2>
+    <div class="sub">Les mots r&eacute;ussis sont valid&eacute;s &bull; Les erreurs reviennent jusqu&rsquo;&agrave; ma&icirc;trise</div>
+  </div>
+
+  <!-- Écran de configuration -->
+  <div id="config-screen">
+    <div style="font-size:0.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:700">Mode de quiz</div>
+    <div class="mode-grid">
+      <div class="mode-card sel" id="mc-hf" onclick="selMode('he-fr')">
+        <div class="mi">&#127470;&#127473;&rarr;&#127467;&#127479;</div>
+        <div class="mt">H&eacute;breu &rarr; Fran&ccedil;ais</div>
+        <div class="ms">Voir le mot, choisir le sens</div>
+      </div>
+      <div class="mode-card" id="mc-fh" onclick="selMode('fr-he')">
+        <div class="mi">&#127467;&#127479;&rarr;&#127470;&#127473;</div>
+        <div class="mt">Fran&ccedil;ais &rarr; H&eacute;breu</div>
+        <div class="ms">Voir la d&eacute;finition, choisir le mot</div>
+      </div>
+      <div class="mode-card" id="mc-forms" onclick="selMode('forms')">
+        <div class="mi">&#127807;</div>
+        <div class="mt">Formes &rarr; Sens</div>
+        <div class="ms">Voir les d&eacute;riv&eacute;s, trouver le sens</div>
+      </div>
+      <div class="mode-card" id="mc-mix" onclick="selMode('mix')">
+        <div class="mi">&#128256;</div>
+        <div class="mt">Mode mixte</div>
+        <div class="ms">3 modes en alternance</div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:6px;margin-bottom:18px">
+      <select id="catFilter" class="sel-ui">
+        <option value="">Tous les mots (30)</option>
+        <option value="n">Noms</option>
+        <option value="v">Verbes</option>
+        <option value="adj">Adjectifs</option>
+        <option value="other">Adv. / Expr. / Pr&eacute;p.</option>
+        <option value="songs">🎵 Mots des chants (20)</option>
+      </select>
+    </div>
+    <div style="background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:14px;margin-bottom:18px;font-size:0.83rem;color:var(--sub);line-height:1.7">
+      <strong style="color:var(--gold)">&#127891; Principe p&eacute;dagogique :</strong><br>
+      <b style="color:#6ecf99">&#10003; R&eacute;ponse juste</b> &rarr; mot valid&eacute;, il ne revient plus dans cette session.<br>
+      <b style="color:#d47070">&#10007; R&eacute;ponse fausse</b> &rarr; mot remis dans la pile, il reviendra jusqu&rsquo;&agrave; ma&icirc;trise.<br>
+      La session se termine quand <em>tous</em> les mots sont valid&eacute;s.
+    </div>
+    <button class="btn btn-g" id="startBtn" style="width:100%;justify-content:center;padding:12px">&#9654; Commencer la session</button>
+  </div>
+
+  <!-- Zone de jeu -->
+  <div id="quiz-zone" style="display:none">
+    <!-- Bandeau session -->
+    <div class="session-bar">
+      <div class="sbar-item"><span class="sbar-label">Session :</span><span class="sbar-val" id="sb-round"></span></div>
+      <div class="sbar-item"><span class="sbar-label">Valid&eacute;s :</span><span class="sbar-val ok" id="sb-ok">0</span></div>
+      <div class="sbar-item"><span class="sbar-label">&Agrave; retravailler :</span><span class="sbar-val err" id="sb-err">0</span></div>
+      <div class="sbar-item"><span class="sbar-label">Restants :</span><span class="sbar-val warn" id="sb-left">0</span></div>
+      <div class="sbar-item"><span class="sbar-label">Score :</span><span class="sbar-val" id="sb-score">0</span></div>
+    </div>
+    <!-- Barre de progression duale -->
+    <div class="prog-wrap">
+      <div class="prog-labels">
+        <span id="pl-ok" style="color:#6ecf99">0 valid&eacute;s</span>
+        <span id="pl-tot" style="color:var(--muted)">sur 0</span>
+        <span id="pl-err" style="color:#d47070">0 erreurs</span>
+      </div>
+      <div class="prog" id="mainProg">
+        <div class="prog-ok" id="progOk" style="width:0%"></div>
+        <div class="prog-err" id="progErr" style="width:0%"></div>
+      </div>
+    </div>
+    <!-- Grille statut mots -->
+    <div id="wordStatusGrid" class="word-status-grid" style="margin-bottom:12px"></div>
+    <!-- Carte question -->
+    <div class="card" id="qCard"></div>
+    <!-- Boutons session -->
+    <div class="row" style="margin-top:10px">
+      <button class="btn btn-o btn-sm" id="restartBtn">&#8634; Recommencer</button>
+      <button class="btn btn-o btn-sm" id="skipBtn">&#9197; Passer</button>
+      <button class="btn btn-o btn-sm" id="modesBtn">&#9881; Modes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE FLASHCARDS ═══ -->
+<div id="page-flash" class="page">
+  <div class="ph">
+    <div class="ph-heb" style="color:#7ed6c8">&#1499;&#1512;&#1496;&#1497;&#1505;&#1497;&#1493;&#1468;&#1514;</div>
+    <h2>Flashcards recto / verso</h2>
+    <div class="sub">Cliquez pour retourner &middot; 30 mots</div>
+  </div>
+  <div class="fc-prog" id="fcProg">1 / 30</div>
+  <div class="fc-hint">Cliquez sur la carte pour r&eacute;v&eacute;ler la traduction et l&rsquo;analyse</div>
+  <div class="fc-wrap">
+    <div class="fc" id="fcCard">
+      <div class="face face-f">
+        <div class="fc-heb" id="fcHeb"></div>
+        <div class="fc-forms" id="fcForms"></div>
+      </div>
+      <div class="face face-b">
+        <div class="fc-fr" id="fcFr"></div>
+        <div class="fc-morph" id="fcMorph"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-ctrl">
+    <button class="btn btn-o btn-sm" id="fcPrev">&#8592; Pr&eacute;c.</button>
+    <button class="btn btn-o btn-sm" id="fcSpeak">&#9654; &Eacute;couter</button>
+    <button class="btn btn-o btn-sm" id="fcNext">Suiv. &rarr;</button>
+    <button class="btn btn-o btn-sm" id="fcShuf">&#8644; M&eacute;langer</button>
+  </div>
+  <div class="fc-filter-row">
+    <button class="btn btn-o btn-sm" onclick="fcFilter('')">Tous</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('n')">Noms</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('v')">Verbes</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('adj')">Adj.</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('other')">Adv./Expr.</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('songs')" style="color:#f0b87d;border-color:rgba(240,184,125,0.4)">🎵 Chants</button>
+  </div>
+</div>
+
+<!-- ═══ PAGE ÉCOUTE ═══ -->
+<div id="page-listen" class="page">
+  <div class="ph">
+    <div class="ph-heb">&#1492;&#1511;&#1513;&#1461;&#1489;</div>
+    <h2>&Eacute;coute mot par mot</h2>
+    <div class="sub">Cliquez sur un mot &middot; ou lisez toute la liste</div>
+  </div>
+  <div class="row" style="margin-bottom:12px">
+    <button class="btn btn-g btn-sm" id="listenHeb">&#9654; H&eacute;breu seul</button>
+    <button class="btn btn-o btn-sm" id="listenBoth">&#9654; H&eacute;breu + FR</button>
+    <button class="btn btn-o btn-sm" id="stopBtn">&#9632; Stop</button>
+    <div class="spd-row"><label>Vitesse :</label>
+      <select id="spd"><option value="0.5">Lente</option><option value="0.75" selected>Normale</option><option value="1">Rapide</option></select>
+    </div>
+    <span id="liPb" style="font-size:0.74rem;color:var(--muted)">0 / 30 &eacute;cout&eacute;s</span>
+  </div>
+  <div id="liList"></div>
+</div>
+
+<!-- ═══ PAGE LISTE ═══ -->
+<div id="page-liste" class="page">
+  <div class="ph">
+    <div class="ph-heb" style="color:var(--purple-l)">&#1502;&#1460;&#1500;&#1468;&#1493;&#1465;&#1503;</div>
+    <h2>Liste compl&egrave;te &middot; 30 mots</h2>
+    <div class="sub">Cliquez pour &eacute;couter</div>
+  </div>
+  <input class="lex-search" id="lsearch" type="text" placeholder="Rechercher — h&eacute;breu, fran&ccedil;ais, racine...">
+  <div id="lexG" class="lex-grid"></div>
+</div>
+
+<!-- ═══ PAGE TEXTES ═══ -->
+<div id="page-textes" class="page">
+  <div class="ph">
+    <div class="ph-heb" style="color:#f0b87d">&#1496;&#1456;&#1511;&#1456;&#1505;&#1456;&#1496;&#1460;&#1497;&#1501;</div>
+    <h2>Textes &middot; Chansons sources du vocabulaire</h2>
+    <div class="sub">Survolez les mots colorés pour voir leur fiche</div>
+  </div>
+
+  <div class="song-card" id="song-1">
+    <div class="song-title">תֵּל אָבִיב לִפְנֵי חֲצוֹת</div>
+    <div class="song-fr">Tel Aviv avant minuit</div>
+    <div class="song-credit">Paroles populaires israéliennes contemporaines</div>
+    <div class="song-btns">
+      <button class="btn btn-o btn-sm" onclick="playSong(1)">🔊 Écouter</button>
+      <button class="btn btn-o btn-sm" onclick="stopTTS()">⏹ Stop</button>
+    </div>
+    <div class="song-text" id="song-text-1"></div>
+    <div class="song-tip">💡 <b>14 mots du jeu</b> apparaissent dans cette chanson : חֲצוֹת, לַחוּת, מַרְפֶּה, חוֹנֶקֶת, כִּיבּוּ, לָגֶשֶׁת, לִסְגֹּת, מַשְׁלִיכָה, מַבָּט, מַזְמִינָה, שְׂכוּרָה, כּוּרְסָאוֹת, מוֹזֶגֶת. Touchez chaque mot coloré pour ouvrir sa fiche.</div>
+  </div>
+
+  <div class="song-card" id="song-2">
+    <div class="song-title">לְלֹא כּוֹכָב</div>
+    <div class="song-fr">Sans étoile</div>
+    <div class="song-credit">Jo Amar &middot; paroles : Daphna Eber Hadani &middot; mélodie populaire</div>
+    <div class="song-btns">
+      <button class="btn btn-o btn-sm" onclick="playSong(2)">🔊 Écouter</button>
+      <button class="btn btn-o btn-sm" onclick="stopTTS()">⏹ Stop</button>
+    </div>
+    <div class="song-text" id="song-text-2"></div>
+    <div class="song-tip">💡 <b>5 mots du jeu</b> apparaissent dans cette chanson : הַסְּתָיו, גִּבְעוֹל, נָשַׁר, הֵיכָן, יָבוֹל.</div>
+  </div>
+
+  <div id="song-tooltip" class="song-tooltip">
+    <div class="tt-heb" id="tt-heb"></div>
+    <div class="tt-fr" id="tt-fr"></div>
+    <div class="tt-n" id="tt-n"></div>
+  </div>
+</div>
+
+<script>
+// =====================================================
+// DONNÉES (syntaxe propre — pas d'apostrophes dans les clés de template)
+// =====================================================
+const MOTY = [{"h":"רַכֶּבֶת","t":"rakévet","f":"train","c":"n","r":"ר-כ-ב","m":"Forme nominale féminine de schème qatélet, dérivée de la racine signifiant 'monter/chevaucher'.","fs":[["רַכֶּבֶת מְהִירָה","train rapide"],["רַכָּבוֹת","trains (pl.)"],["רַכַּבָּן","cheminot"]],"eh":"הָרַכֶּבֶת יוֹצֵאת מִתַּחֲנַת מֶרְכָּז בְּשָׁעָה שֶׁבַע בַּבֹּקֶר.","ef":"Le train part de la gare centrale à sept heures du matin.","ex":[["נָסַעְתִּי בָּרַכֶּבֶת מִתֵּל אָבִיב לִירוּשָׁלַיִם.","[voyageur] J'ai pris le train de Tel Aviv à Jérusalem."],["הָרַכֶּבֶת הִתְאַחֲרָה בְּעֶשְׂרִים דַּקּוֹת.","[retard] Le train a eu vingt minutes de retard."],["כַּרְטִיס הָרַכֶּבֶת עוֹלֶה עֲשָׂרָה שְׁקָלִים.","[billet] Le billet de train coûte dix shekels."]]},{"h":"רָצִיף","t":"ratsif","f":"quai (de gare)","c":"n","r":"ר-צ-פ","m":"Nom masculin singulier de schème qatil, désignant une surface pavée continue ; par extension, le quai d'une gare.","fs":[["רְצִיפִים","quais (pl.)"],["רָצִיף שְׁלֹשָׁה","quai numéro trois"],["רְצִיף הַנְּמָל","quai du port"]],"eh":"אֲנַחְנוּ צְרִיכִים לִהְיוֹת עַל הָרָצִיף חָמֵשׁ לִפְנֵי יְצִיאַת הָרַכֶּבֶת.","ef":"Nous devons être sur le quai cinq avant le départ du train.","ex":[["הָרַכֶּבֶת לְחֵיפָה יוֹצֵאת מֵרָצִיף שְׁתַּיִם.","[annonce] Le train pour Haïfa part du quai deux."],["אָנוּ מְחַכִּים עַל הָרָצִיף בַּקֹּר.","[attente] Nous attendons sur le quai dans le froid."],["הִיא רָצְתָה לָרָצִיף כְּדֵי לֹא לְהַחְמִיץ אֶת הָרַכֶּבֶת.","[urgence] Elle a couru vers le quai pour ne pas rater le train."]]},{"h":"לְהַחְמִיץ","t":"lehaḥmits","f":"rater, manquer (un train)","c":"v","r":"ח-מ-צ","m":"Verbe à la forme infinitive du binyan hif'il, exprimant l'idée de laisser passer une occasion ou de manquer quelque chose.","fs":[["הֶחְמַצְתִּי","j'ai raté (passé)"],["מַחְמִיץ","rate (présent masc. sg.)"],["יַחְמִיץ","ratera (futur masc. sg.)"]],"eh":"אִם לֹא נָרוּץ עַכְשָׁו, נַחְמִיץ אֶת הָרַכֶּבֶת הָאַחֲרוֹנָה.","ef":"Si nous ne courons pas maintenant, nous raterons le dernier train.","ex":[["הֶחְמַצְתִּי אֶת הָרַכֶּבֶת בִּגְלַל הַפְּקָק.","[circulation] J'ai raté le train à cause des embouteillages."],["אַל תַּחְמִיץ אֶת הַהִזְדַּמְּנוּת לִנְסֹעַ בְּרַכֶּבֶת הַמָּהִיר.","[conseil] Ne rate pas l'occasion de voyager en train rapide."],["הִיא הֶחְמִיצָה אֶת הָרַכֶּבֶת וְנֶאֶלְצָה לִנְסֹעַ בְּאוֹטוֹבּוּס.","[conséquence] Elle a raté le train et a dû prendre le bus."]]},{"h":"תַּחֲנָה","t":"taḥana","f":"gare, arrêt, station","c":"n","r":"ח-נ-ה","m":"Nom féminin singulier de schème taqtala, dérivé de la racine signifiant 'camper/s'arrêter', désignant un lieu d'arrêt.","fs":[["תַּחֲנוֹת","gares/arrêts (pl.)"],["תַּחֲנַת רַכֶּבֶת","gare ferroviaire"],["תַּחֲנָה מֶרְכָּזִית","gare centrale"]],"eh":"תַּחֲנַת הָרַכֶּבֶת בִּירוּשָׁלַיִם נִמְצֵאת בְּמֶרְכַּז הָעִיר.","ef":"La gare de Jérusalem se trouve au centre-ville.","ex":[["כַּמָּה תַּחֲנוֹת יֵשׁ בֵּין תֵּל אָבִיב לְחֵיפָה?","[itinéraire] Combien d'arrêts y a-t-il entre Tel Aviv et Haïfa ?"],["הַתַּחֲנָה הַבָּאָה הִיא בֵּית יַם.","[annonce] Le prochain arrêt est Bat Yam."],["פָּגַשְׁנוּ אוֹתוֹ בַּתַּחֲנָה לִפְנֵי הַנְּסִיעָה.","[rendez-vous] Nous l'avons rencontré à la gare avant le voyage."]]},{"h":"לְהַזְמִין","t":"lehazmin","f":"réserver, commander","c":"v","r":"ז-מ-נ","m":"Verbe à la forme infinitive du binyan hif'il, signifiant 'réserver à l'avance' ou 'inviter', très courant pour les réservations de billets.","fs":[["הִזְמַנְתִּי","j'ai réservé (passé)"],["מַזְמִין","réserve (présent masc. sg.)"],["הַזְמָנָה","réservation (nom fém.)"]],"eh":"הִזְמַנְתִּי כַּרְטִיס רַכֶּבֶת לְאֵילַת שְׁבוּעַיִם מֵרֹאשׁ.","ef":"J'ai réservé un billet de train pour Eilat deux semaines à l'avance.","ex":[["אֶפְשָׁר לְהַזְמִין כַּרְטִיסִים בְּאַתַּר הָאִינְטֶרְנֶט שֶׁל רַכֶּבֶת יִשְׂרָאֵל.","[conseil pratique] On peut réserver des billets sur le site de la compagnie ferroviaire israélienne."],["הוּא שָׁכַח לְהַזְמִין מָקוֹם וְהָרַכֶּבֶת הָיְתָה מְלֵאָה.","[erreur] Il a oublié de réserver une place et le train était complet."],["אֲנַחְנוּ מַזְמִינִים כַּרְטִיסִים בְּעֶרֶב הַנְּסִיעָה.","[habitude] Nous réservons les billets la veille du voyage."]]},{"h":"לְהַחְלִיף","t":"lehaḥlif","f":"changer (de train), correspondre","c":"v","r":"ח-ל-פ","m":"Verbe à la forme hif'il exprimant l'action de substituer ou de changer de moyen de transport.","fs":[["הַחְלָפָה","nom fém."],["מַחְלִיף","participe masc."],["הוּחְלַף","passif"]],"eh":"צָרִיךְ לְהַחְלִיף רַכֶּבֶת בְּחֵיפָה כְּדֵי לְהַגִּיעַ לָעִיר.","ef":"Il faut changer de train à Haïfa pour arriver en ville.","ex":[["הוּא הֶחְלִיף קַו בִּתְחָנָה הַמֶּרְכָּזִית.","[récit] Il a changé de ligne à la gare centrale."],["אֵין צֹרֶךְ לְהַחְלִיף — הָרַכֶּבֶת נוֹסַעַת יָשָׁר.","[info] Pas besoin de correspondance — le train va directement."],["הַהַחְלָפָה לוֹקַחַת עֶשֶׂר דַּקּוֹת בְּלַבָד.","[pratique] La correspondance ne prend que dix minutes."]]},{"h":"כַּרְטִיסִיָּה","t":"kartisiya","f":"carnet de tickets, abonnement","c":"n","r":"כ-ר-ט","m":"Nom féminin dérivé de כַּרְטִיס (billet) avec le suffixe ־ִיָּה indiquant un ensemble ou un carnet.","fs":[["כַּרְטִיסִיּוֹת","plur. fém."],["כַּרְטִיס","billet simple"],["כַּרְטִיסָן","contrôleur"]],"eh":"קָנִיתִי כַּרְטִיסִיָּה חוֹדְשִׁית כְּדֵי לְחַסֵּךְ כֶּסֶף בִּנְסִיעוֹת הַיּוֹמִיּוֹת.","ef":"J'ai acheté un abonnement mensuel pour économiser de l'argent sur les trajets quotidiens.","ex":[["הַכַּרְטִיסִיָּה תְּקֵפָה לְעֶשֶׂר נְסִיעוֹת.","[info] Le carnet est valable pour dix voyages."],["שָׁכַחְתִּי אֶת הַכַּרְטִיסִיָּה בַּבַּיִת וְנֶאֱלַצְתִּי לִקְנוֹת כַּרְטִיס.","[récit] J'ai oublié mon carnet à la maison et j'ai dû acheter un billet."],["אֶפְשָׁר לִטְעוֹן כַּרְטִיסִיָּה דִּיגִיטָלִית בָּאַפְּלִיקַצְיָה.","[pratique] On peut recharger un abonnement numérique sur l'application."]]},{"h":"עִיכּוּב","t":"'ikuv","f":"retard, délai","c":"n","r":"ע-כ-ב","m":"Nom masculin de structure CiCCuC (mishkal pif'ul) dérivé du verbe לְעַכֵּב, exprimant un ralentissement ou un arrêt.","fs":[["עִיכּוּבִים","plur. masc."],["לְעַכֵּב","verbe associé"],["מְעוּכָּב","retardé (adj.)"]],"eh":"בִּגְלַל עִיכּוּב שֶׁל שְׁלוֹשִׁים דַּקּוֹת, פָּסַפְסְנוּ אֶת הַפְּגִישָׁה.","ef":"À cause d'un retard de trente minutes, nous avons raté la réunion.","ex":[["הוּכְרַז עִיכּוּב בִּקַּו הַצָּפוֹן עֶרֶב הַחַג.","[annonce] Un retard a été annoncé sur la ligne nord à la veille de la fête."],["הָעִיכּוּב נָבַע מִתַּקָּלָה טֶכְנִית.","[explication] Le retard était dû à une panne technique."],["הַנּוֹסְעִים חִיכּוּ בְּסַבְלָנוּת לְמַרְאֵה הָעִיכּוּב הַגָּדוֹל.","[scène] Les voyageurs ont attendu patiemment malgré le long retard."]]},{"h":"תָּא / תָּאִים","t":"ta / ta'im","f":"compartiment, cabine","c":"n","r":"ת-א-א","m":"Nom masculin court (structure monosyllabique), désignant un espace délimité dans un véhicule ou un bâtiment.","fs":[["תָּאִים","plur. masc."],["תָּא שֵׁנָה","couchette / wagon-lit"],["תָּא בַּגָּאז׳","compartiment à bagages"]],"eh":"הִזְמַנּוּ תָּא שֵׁנָה לְנֶסִיעַת הַלַּיְלָה לְאֵילַת.","ef":"Nous avons réservé un compartiment couchette pour le voyage de nuit vers Eilat.","ex":[["הַתָּא מְיֻעָד לְשִׁשָּׁה נוֹסְעִים בִּלְבַד.","[règlement] Le compartiment est prévu pour six voyageurs seulement."],["הִיא הִסְתַּגְּרָה בְּתָאָהּ וְקָרְאָה סֵפֶר כָּל הַנְּסִיעָה.","[récit] Elle s'est enfermée dans son compartiment et a lu tout le voyage."],["תָּא הַשֵּׁרוּתִים נִמְצָא בְּסוֹף הַקָּרוֹן.","[indication] Les toilettes se trouvent au bout du wagon."]]},{"h":"לְהִתְנַיֵּד","t":"lehitnaied","f":"se déplacer, circuler","c":"v","r":"נ-י-ד","m":"Verbe à la forme hitpa'el exprimant un mouvement réflexif ou autonome, souvent dans un contexte de mobilité urbaine ou de transport.","fs":[["תְּנוּעָה","nom fém. — circulation"],["נַיָּד","mobile (adj.)"],["נִיּוּד","mobilité (nom masc.)"]],"eh":"קַל יוֹתֵר לְהִתְנַיֵּד בָּעִיר בָּרַכֶּבֶת מֵאֲשֶׁר בָּאוּטוֹבּוּס.","ef":"Il est plus facile de se déplacer en ville en train qu'en bus.","ex":[["הוּא מִתְנַיֵּד בֵּין תֵּל אָבִיב לִירוּשָׁלַיִם כָּל יוֹם.","[habitude] Il circule entre Tel Aviv et Jérusalem tous les jours."],["קָשֶׁה לְהִתְנַיֵּד בְּלִי רֶכֶב פְּרָטִי בַּפֶּרִיפֶרְיָה.","[constat] Il est difficile de se déplacer sans voiture en zone périphérique."],["הָעִירִיָּה מְעוֹדֶדֶת לְהִתְנַיֵּד בְּתַחְבּוּרָה צִיבּוּרִית.","[politique] La municipalité encourage à utiliser les transports en commun."]]},{"h":"מְסָלָה / מְסִלּוֹת","t":"mesalá / mesilót","f":"voie ferrée, rail","c":"n","r":"ס-ל-ל","m":"Nom féminin de la forme מְפָעָלָה, issu de la racine ס-ל-ל (tracer un chemin, remblaquer).","fs":[["מְסִלַּת בַּרְזֶל","chemin de fer"],["סוֹלֵל","celui qui trace"],["סְלִילָה","terrassement"]],"eh":"הָרַכֶּבֶת יָצְאָה מֵהַמְּסִלָּה בְּגְלַל תַּקָּלָה טְכְנִית.","ef":"Le train a déraillé à cause d'une panne technique.","ex":[["הֵם בָּנוּ מְסִלָּה חֲדָשָׁה בֵּין שְׁתֵּי הֶעָרִים.","[infrastructure] Ils ont construit une nouvelle voie ferrée entre les deux villes."],["הַמְּסִלָּה הַזֹּאת בְּנוּיָה מֵהַמֵּאָה הַתֵּשַׁע-עֶשְׂרֵה.","[historique] Cette voie ferrée est construite depuis le XIXe siècle."],["הַיֶּלֶד הִסְתַּכֵּל עַל הַמְּסִלּוֹת בְּסַקְרָנוּת.","[quotidien] L'enfant regardait les rails avec curiosité."]]},{"h":"קְרוֹן / קְרוֹנוֹת","t":"kerón / keronót","f":"wagon, voiture (de train)","c":"n","r":"ק-ר-נ","m":"Nom masculin emprunté à l'araméen קָרוֹן, désignant une remorque ou un véhicule tiré ; au pluriel קְרוֹנוֹת.","fs":[["קְרוֹן שֵׁנָה","wagon-lit"],["קְרוֹן אֹכֶל","wagon-restaurant"],["קְרוֹנִית","petit wagon, tramway"]],"eh":"אָנוּ יוֹשְׁבִים בַּקְּרוֹן הָרִאשׁוֹן שֶׁל הָרַכֶּבֶת.","ef":"Nous sommes assis dans le premier wagon du train.","ex":[["הַקְּרוֹן הָיָה מָלֵא נוֹסְעִים בְּשָׁעַת הַפִּיק.","[heure de pointe] Le wagon était plein de passagers aux heures de pointe."],["הִזְמַנּוּ מָקוֹם בְּקְרוֹן שֵׁנָה לַנְּסִיעָה הָאֲרֻכָּה.","[voyage de nuit] Nous avons réservé une place dans un wagon-lit pour le long trajet."],["הַקְּרוֹן הָאַחֲרוֹן מְיֻעָד לְאֹפַנַּיִם.","[pratique] Le dernier wagon est réservé aux vélos."]]},{"h":"לְהַגִּיעַ","t":"lehaguía","f":"arriver, parvenir","c":"v","r":"נ-ג-ע","m":"Verbe en binyan הִפְעִיל (hif'il) de la racine נ-ג-ע, avec chute du נ à l'infinitif ; exprime l'idée d'atteindre un lieu.","fs":[["הִגִּיעַ","il est arrivé (passé)"],["יַגִּיעַ","il arrivera (futur)"],["הַגָּעָה","arrivée (nom)"]],"eh":"הָרַכֶּבֶת הִגִּיעָה לַתַּחֲנָה בְּדִיּוּק בַּזְּמַן.","ef":"Le train est arrivé à la gare exactement à l'heure.","ex":[["מָתַי אַתָּה מַגִּיעַ לְתֵל אָבִיב?","[question pratique] Quand arrives-tu à Tel Aviv ?"],["הֵם הִגִּיעוּ עִם עִיכּוּב שֶׁל עֶשְׂרִים דַּקּוֹת.","[retard] Ils sont arrivés avec vingt minutes de retard."],["אֲנִי אַגִּיעַ לִפְנֵי שַׁבָּת אִם לֹא יִהְיֶה פְּקַּק.","[planification] J'arriverai avant shabbat s'il n'y a pas d'embouteillages."]]},{"h":"נוֹסֵעַ / נוֹסְעִים","t":"nosséa / nos'ím","f":"passager, voyageur","c":"n","r":"נ-ס-ע","m":"Participe actif (בינוני) du binyan קַל de la racine נ-ס-ע (voyager, partir), utilisé comme nom.","fs":[["לִנְסֹעַ","voyager (infinitif)"],["נְסִיעָה","trajet, voyage (nom)"],["נָסַע","il a voyagé (passé)"]],"eh":"הַנּוֹסְעִים הִתְבַּקְּשׁוּ לְהַצִּיג אֶת כַּרְטִיסֵיהֶם לַבַּקָּר.","ef":"Les passagers ont été invités à présenter leurs billets au contrôleur.","ex":[["אֶחָד הַנּוֹסְעִים שָׁכַח אֶת מִזְוַדְתּוֹ בַּקְּרוֹן.","[incident] Un des passagers a oublié sa valise dans le wagon."],["הַנּוֹסֵעַ שָׁאַל אֶת הַנַּהַג עַל זְמַן הַהַגָּעָה.","[information] Le passager a demandé au conducteur l'heure d'arrivée."],["מְסַפַּר הַנּוֹסְעִים גָּדַל בְּחָגִים.","[statistiques] Le nombre de voyageurs augmente pendant les fêtes."]]},{"h":"לוּחַ זְמַנִּים","t":"lúakh zemanním","f":"horaire, tableau des horaires","c":"expr","r":"ז-מ-נ","m":"Expression nominale composée de לוּחַ (tableau) et du pluriel de זְמַן (temps, heure), issue de la racine ז-מ-נ.","fs":[["זְמַן","temps, heure"],["לוּחַ שָׁנָה","calendrier"],["מְזַמֵּן","qui convoque, qui programme"]],"eh":"בָּדַקְתִּי אֶת לוּחַ הַזְּמַנִּים וְגִלִּיתִי שֶׁאֵין רַכֶּבֶת אַחֲרֵי עֶשַׂר בַּלַּיְלָה.","ef":"J'ai consulté l'horaire et j'ai découvert qu'il n'y a pas de train après dix heures du soir.","ex":[["לוּחַ הַזְּמַנִּים הִשְׁתַּנָּה בְּגְלַל עֲבוֹדוֹת תַּחְזוּקָה.","[annonce] L'horaire a changé en raison de travaux de maintenance."],["אֶפְשָׁר לִמְצֹא אֶת לוּחַ הַזְּמַנִּים הַמְּעֻדְכָּן בָּאַתָּר שֶׁל רַכֶּבֶת יִשְׂרָאֵל.","[pratique] On peut trouver l'horaire mis à jour sur le site d'Israel Railways."],["הוּא תָּמִיד בּוֹדֵק אֶת לוּחַ הַזְּמַנִּים לִפְנֵי כָּל נְסִיעָה.","[habitude] Il consulte toujours l'horaire avant chaque voyage."]]},{"h":"מִסְעָד / מִסְעָדִים","t":"mis'ad / mis'adim","f":"wagon-restaurant","c":"n","r":"ס-ע-ד","m":"Nom masculin dérivé du verbe לִסְעוֹד (manger un repas), formé avec le préfixe מ- sur le schème מִפְעָל.","fs":[["לִסְעוֹד","v. manger"],["סְעוּדָה","repas"],["סוֹעֵד","convive"]],"eh":"אֲנַחְנוּ הוֹלְכִים לֶאֱכוֹל בַּמִּסְעָד שֶׁל הָרַכֶּבֶת.","ef":"Nous allons manger au wagon-restaurant du train.","ex":[["הַמִּסְעָד פָּתוּחַ עַד תֵּשַׁע בָּעֶרֶב.","[train longue distance] Le wagon-restaurant est ouvert jusqu'à neuf heures du soir."],["הִזְמַנְתִּי מָקוֹם בַּמִּסְעָד מֵרֹאשׁ.","[réservation] J'ai réservé une place au wagon-restaurant à l'avance."],["הַמִּסְעָד מָלֵא בְּשָׁעַת הַצָּהֳרַיִם.","[affluence] Le wagon-restaurant est plein à l'heure du déjeuner."]]},{"h":"כַּרְטִיס עוֹנָה / כַּרְטִיסֵי עוֹנָה","t":"kartis ona / kartisei ona","f":"abonnement de saison / carte de saison","c":"expr","r":"ע-ו-נ","m":"Expression nominale composée de כַּרְטִיס (ticket) et עוֹנָה (saison), désignant un titre de transport saisonnier.","fs":[["עוֹנָתִי","adj. saisonnier"],["עוֹנָה","saison"],["כַּרְטִיסִיָּה","carnet de tickets"]],"eh":"כַּרְטִיס הָעוֹנָה מְאַפְשֵׁר לִי לִנְסוֹעַ כָּל יוֹם בַּרַכֶּבֶת.","ef":"L'abonnement de saison me permet de voyager en train tous les jours.","ex":[["קָנִיתִי כַּרְטִיס עוֹנָה לְחֹדֶשׁ שָׁלֵם.","[achat] J'ai acheté un abonnement de saison pour un mois entier."],["כַּרְטִיס הָעוֹנָה זוֹל יוֹתֵר מִקְּנִיַּת כַּרְטִיסִים נְפְרָדִים.","[économie] L'abonnement de saison coûte moins cher que d'acheter des tickets séparés."],["הֶחְלַטְתִּי לְחַדֵּשׁ אֶת כַּרְטִיס הָעוֹנָה שֶׁלִּי.","[renouvellement] J'ai décidé de renouveler mon abonnement de saison."]]},{"h":"לְהִישָּׁעֵן","t":"lehisha'en","f":"s'appuyer / se pencher","c":"v","r":"ש-ע-נ","m":"Verbe à la forme hitpa'el (réflexive), exprimant l'action de s'appuyer soi-même contre quelque chose.","fs":[["נִשְׁעָן","part. appuyé"],["מִשְׁעֶנֶת","accoudoir/appui"],["שְׁעִינָה","fait de s'appuyer"]],"eh":"אַל תִּישָּׁעֵן עַל הַדֶּלֶת בִּזְמַן נְסִיעַת הָרַכֶּבֶת.","ef":"Ne t'appuie pas contre la porte pendant que le train roule.","ex":[["הוּא נִשְׁעַן עַל הַחַלּוֹן וְהִסְתַּכֵּל בַּנוֹף.","[contemplation] Il s'est appuyé contre la fenêtre et a regardé le paysage."],["הִיא נִשְׁעֲנָה לַאֲחוֹר בַּכִּסֵּא וְנִרְדְּמָה.","[repos] Elle s'est penchée en arrière sur le siège et s'est endormie."],["אָסוּר לְהִישָּׁעֵן עַל הַגֶּדֶר בָּרָצִיף.","[sécurité] Il est interdit de s'appuyer sur la barrière du quai."]]},{"h":"הַקְדָּמָה / הַקְדָּמוֹת","t":"hakdama / hakdamot","f":"avance / arrivée en avance","c":"n","r":"ק-ד-מ","m":"Nom féminin sur le schème הַפְעָלָה, déverbal de הִקְדִּים (avancer, arriver tôt), appartenant au binyan hif'il.","fs":[["לְהַקְדִּים","v. avancer/devancer"],["מֻקְדָּם","adj. précoce"],["קֶדֶם","avant/antériorité"]],"eh":"הָרַכֶּבֶת הִגִּיעָה בְּהַקְדָּמָה שֶׁל עֶשֶׂר דַּקּוֹת.","ef":"Le train est arrivé avec dix minutes d'avance.","ex":[["בִּזְכוּת הַהַקְדָּמָה, הִסְפַּקְתִּי לְהַחְלִיף רַכֶּבֶת.","[correspondance] Grâce à l'avance, j'ai eu le temps de prendre la correspondance."],["לִפְעָמִים עֲדִיף לִנְסוֹעַ בְּהַקְדָּמָה כְּדֵי לְהִמָּנַע מִלַּחַץ.","[conseil] Il vaut parfois mieux partir en avance pour éviter le stress."],["הַהַקְדָּמָה הִפְתִּיעָה אֶת הַנּוֹסְעִים שֶׁעוֹד לֹא הָיוּ בָּרָצִיף.","[surprise] L'avance a surpris les voyageurs qui n'étaient pas encore sur le quai."]]},{"h":"מַדְרִיךְ נְסִיעָה / מַדְרִיכֵי נְסִיעָה","t":"madrich nesi'a / madrichei nesi'a","f":"guide de voyage / contrôleur de bord","c":"n","r":"ד-ר-כ","m":"Expression nominale composée de מַדְרִיךְ (guide, schème מַפְעִיל du hif'il nominal) et נְסִיעָה (trajet, voyage), désignant celui qui oriente les voyageurs.","fs":[["לְהַדְרִיךְ","v. guider"],["הַדְרָכָה","orientation/guidage"],["דֶּרֶךְ","chemin/voie"]],"eh":"מַדְרִיךְ הַנְּסִיעָה עָזַר לִי לִמְצוֹא אֶת הַקְּרוֹן הַנָּכוֹן.","ef":"Le guide de voyage m'a aidé à trouver le bon wagon.","ex":[["שָׁאַלְתִּי אֶת מַדְרִיךְ הַנְּסִיעָה אֵיפֹה לְהַחְלִיף רַכֶּבֶת.","[information] J'ai demandé au guide de voyage où changer de train."],["מַדְרִיךְ הַנְּסִיעָה חִלֵּק מַפּוֹת לַנּוֹסְעִים הַחֲדָשִׁים.","[accueil] Le guide de voyage a distribué des cartes aux nouveaux voyageurs."],["יֵשׁ מַדְרִיךְ נְסִיעָה זָמִין בְּכָל תַּחֲנָה גְּדוֹלָה.","[service] Il y a un guide de voyage disponible dans chaque grande gare."]]},{"h":"מִסְלוּל / מִסְלוּלִים","t":"mishlul / mishlulim","f":"itinéraire, trajet","c":"n","r":"ס-ל-ל","m":"Nom masculin de schème מִפְעוּל dérivé de la racine ס-ל-ל (tracer une voie), désignant un parcours planifié.","fs":[["מְסֻלָּל","balisé (adj)"],["סָלַל","tracer (v)"],["מִסְלוּלִים","pl."]],"eh":"הַמִּסְלוּל הַיָּשִׁיר מִתֵּל אָבִיב לְחֵיפָה אוֹרֵךְ כִּשְׁעָה.","ef":"L'itinéraire direct de Tel Aviv à Haïfa dure environ une heure.","ex":[["שִׁנִּינוּ אֶת הַמִּסְלוּל בִּגְלַל עֲבוֹדוֹת בַּתַּשְׁתִּית.","[voyage] Nous avons changé l'itinéraire à cause de travaux d'infrastructure."],["הַמִּסְלוּל הַזֶּה עוֹבֵר דֶּרֶךְ עָרִים רַבּוֹת.","[géographie] Cet itinéraire passe par de nombreuses villes."],["הַמִּסְלוּל הַמָּהִיר יוֹצֵא מִתַּחֲנָה מֶרְכָּזִית.","[transport] L'itinéraire rapide part de la gare centrale."]]},{"h":"לְהַאִיץ","t":"le-ha'itz","f":"accélérer, presser","c":"v","r":"א-ו-צ","m":"Verbe à la forme הִפְעִיל de la racine א-ו-צ, exprimant l'action de hâter ou d'accélérer un mouvement ou un processus.","fs":[["הֵאִיץ","passé 3ms"],["מֵאִיץ","présent ms"],["יָאִיץ","futur 3ms"]],"eh":"הָרַכֶּבֶת הֵאִיצָה אֶת מְהִירוּתָהּ עֵת יָצְאָה מִן הַתַּחֲנָה.","ef":"Le train a accéléré sa vitesse en quittant la gare.","ex":[["הַנּוֹסֵעַ הֵאִיץ אֶת צְעָדָיו כְּדֵי לֹא לְהַחְמִיץ אֶת הָרַכֶּבֶת.","[urgence] Le voyageur a accéléré le pas pour ne pas rater le train."],["הַמַּנְהֵל הֵאִיץ בַּצֶּוֶות לְסַיֵּם אֶת הַבְּדִיקוֹת.","[professionnel] Le directeur a pressé l'équipe de terminer les vérifications."],["אֵין טַעַם לְהַאִיץ — הָרַכֶּבֶת כְּבָר יָצְאָה.","[résignation] Inutile de se presser — le train est déjà parti."]]},{"h":"תָּפוּס / תְּפוּסָה","t":"tafus / tefusa","f":"occupé, réservé (place)","c":"adj","r":"ת-פ-ס","m":"Adjectif au schème פָּעוּל, participe passif de la racine ת-פ-ס (saisir, occuper), indiquant qu'une place est prise.","fs":[["תְּפוּסִים","pl. m."],["תְּפוּסוֹת","pl. f."],["לִתְפֹּס","infinitif (prendre)"]],"eh":"כׇּל הַמּוֹשָׁבִים בַּקָּרוֹן הָיוּ תְּפוּסִים וְנֶאֱלַצְנוּ לַעֲמֹד.","ef":"Tous les sièges du wagon étaient occupés et nous avons dû rester debout.","ex":[["הַמָּקוֹם הַזֶּה תָּפוּס — יֵשׁ לִי כַּרְטִיס שָׁמוּר.","[revendication] Cette place est réservée — j'ai un billet réservé."],["בִּשְׁעַת הַשִּׂיא כָּל הַקְּרוֹנוֹת תְּפוּסִים לְגַמְרֵי.","[affluence] Aux heures de pointe, tous les wagons sont complètement occupés."],["בָּדַקְתִּי בָּאַפְלִיקַצְיָה וְלֹא נִמְצְאוּ מוֹשָׁבִים תְּפוּסִים בַּקָּרוֹן.","[numérique] J'ai vérifié sur l'appli et aucun siège occupé n'a été trouvé dans le wagon."]]},{"h":"פְּרוֹזְדוֹר / פְּרוֹזְדוֹרִים","t":"prozedor / prozedorim","f":"couloir (du train)","c":"n","r":"פ-ר-ז","m":"Nom masculin emprunté à l'araméen/grec, désignant le passage étroit entre les rangées de sièges ou les compartiments d'un train.","fs":[["פְּרוֹזְדוֹרִי","de couloir (adj)"],["פְּרוֹזְדוֹרִים","pl."],["בַּפְּרוֹזְדוֹר","dans le couloir"]],"eh":"הִתְהַלַּכְתִּי בַּפְּרוֹזְדוֹר כְּדֵי לְמַתֵּחַ אֶת הָרַגְלַיִם בַּמַּסָּע הָאָרֹךְ.","ef":"J'ai marché dans le couloir pour me dégourdir les jambes lors du long trajet.","ex":[["הַמִּזְוָדוֹת הַגְּדוֹלוֹת חָסְמוּ אֶת הַפְּרוֹזְדוֹר וְהִקְשׁוּ עַל הַמַּעֲבָר.","[encombrement] Les grandes valises bloquaient le couloir et gênaient le passage."],["יֶלֶד קָטָן רָץ בַּפְּרוֹזְדוֹר עַד שֶׁאִמּוֹ עֲצָרָה אוֹתוֹ.","[anecdote] Un petit enfant courait dans le couloir jusqu'à ce que sa mère l'arrête."],["מוֹשָׁב בַּפְּרוֹזְדוֹר נוֹחַ יוֹתֵר לְאֵלֶּה שֶׁרוֹצִים לָקוּם לְעִתִּים קְרוֹבוֹת.","[confort] Un siège côté couloir est plus pratique pour ceux qui veulent se lever souvent."]]},{"h":"שְׁהִיָּה / שְׁהִיּוֹת","t":"shehiya / shehiyot","f":"séjour, halte, temps d'arrêt","c":"n","r":"ש-ה-ה","m":"Nom féminin de schème פְּעִילָה dérivé de la racine ש-ה-ה (demeurer, s'attarder), désignant une durée passée en un lieu ou un arrêt intermédiaire.","fs":[["לִשְׁהוֹת","séjourner (v)"],["שׁוֹהֶה","qui séjourne (part.)"],["שְׁהִיּוֹת","pl."]],"eh":"הָיְתָה לָנוּ שְׁהִיָּה קְצָרָה בְּתַחֲנַת יְרוּשָׁלַיִם לִפְנֵי הַמִּסְלוּל הַסּוֹפִי.","ef":"Nous avons eu une courte halte à la gare de Jérusalem avant le trajet final.","ex":[["תֵּכְנְנוּ שְׁהִיָּה שֶׁל יוֹמַיִם בְּחֵיפָה בֵּין שְׁתֵּי נְסִיעוֹת הָרַכֶּבֶת.","[planification] Nous avons prévu un séjour de deux jours à Haïfa entre deux trajets en train."],["הַשְּׁהִיָּה בַּתַּחֲנָה הָיְתָה אֲרֻכָּה מִדַּי בִּגְלַל עִיכּוּב טֶכְנִי.","[retard] L'arrêt en gare a été trop long à cause d'un problème technique."],["הִזְמַנְתִּי מָלוֹן לִשְׁהִיָּה קְצָרָה לִפְנֵי שֶׁהִמְשַׁכְתִּי לַדָּרוֹם.","[logistique] J'ai réservé un hôtel pour un bref séjour avant de continuer vers le sud."]]},{"h":"לְהִשְׁתַּלֵּב","t":"lehishtallév","f":"s'intégrer / correspondre (à une correspondance)","c":"v","r":"ש-ל-ב","m":"Verbe à la forme hitpa'el de la racine ש-ל-ב, exprimant une action réflexive d'insertion ou d'emboîtement.","fs":[["מִשְׁתַּלֵּב","participe ms"],["הִשְׁתַּלְּבוּ","passé 3pl"],["יִשְׁתַּלֵּב","futur 3ms"]],"eh":"הָרַכֶּבֶת הַמַּהִירָה מִשְׁתַּלֶּבֶת יָפֶה בְּלוּחַ הַזְּמַנִּים שֶׁל הַנְּסִיעָה.","ef":"Le train rapide s'intègre bien dans le planning du voyage.","ex":[["צָרִיךְ לִרְאוֹת אִם הַקַּו הַזֶּה מִשְׁתַּלֵּב עִם הַחִבּוּר שֶׁלָּנוּ.","[planification] Il faut voir si cette ligne correspond à notre correspondance."],["הַשִּׁרוּת הֶחָדָשׁ הִשְׁתַּלֵּב בְּמַעֲרֶכֶת הָרַכֶּבוֹת הָאֵירוֹפִּית.","[actualité] Le nouveau service s'est intégré au réseau ferroviaire européen."],["קָשֶׁה לְהִשְׁתַּלֵּב בִּזְמַן כְּשֶׁיֵּשׁ עִיכּוּבִים.","[voyage] Il est difficile de s'insérer dans les horaires quand il y a des retards."]]},{"h":"חִבּוּר / חִבּוּרִים","t":"hibbour / hibbourim","f":"correspondance (transport) / connexion","c":"n","r":"ח-ב-ר","m":"Nom masculin au binyan pa'ul nominal, dérivé de la racine ח-ב-ר signifiant relier ; le pluriel prend le suffixe ים-.","fs":[["חִבּוּרִים","pluriel"],["מְחֻבָּר","adjectif ms"],["לְחַבֵּר","verbe inf"]],"eh":"פָּסַפְנוּ אֶת הַחִבּוּר בְּגְלַל עִיכּוּב שֶׁל עֶשְׂרִים דַּקּוֹת.","ef":"Nous avons raté la correspondance à cause d'un retard de vingt minutes.","ex":[["יֵשׁ חִבּוּר נוֹחַ בֵּין הָרַכֶּבֶת לָאוֹטוֹבּוּס בַּתַּחֲנָה הַמֶּרְכָּזִית.","[infos pratiques] Il y a une correspondance pratique entre le train et le bus à la gare centrale."],["הַחִבּוּר לְפָרִיז יוֹצֵא בְּעוֹד שְׁלוֹשִׁים דַּקּוֹת.","[annonce] La correspondance pour Paris part dans trente minutes."],["בָּדַקְנוּ אֶת כָּל הַחִבּוּרִים הָאֶפְשָׁרִיִּים לְלוֹנְדּוֹן.","[recherche] Nous avons vérifié toutes les correspondances possibles pour Londres."]]},{"h":"כַּרְטִיס הַלּוּךְ וָשׁוֹב","t":"kartis halloukh vashow","f":"billet aller-retour","c":"expr","r":"ה-ל-כ","m":"Expression nominale composée de כַּרְטִיס (billet), הַלּוּךְ (aller, nom déverbal) et וָשׁוֹב (et retour, de la racine ש-ו-ב).","fs":[["כַּרְטִיס הַלּוּךְ בִּלְבַד","billet aller simple"],["כַּרְטִיסֵי הַלּוּךְ וָשׁוֹב","pluriel"],["מְחִיר הַהַלּוּךְ וָשׁוֹב","prix AR"]],"eh":"קָנִיתִי כַּרְטִיס הַלּוּךְ וָשׁוֹב לְתֵל אָבִיב בְּמֶחִיר מוּזָל.","ef":"J'ai acheté un billet aller-retour pour Tel Aviv à prix réduit.","ex":[["כַּרְטִיס הַלּוּךְ וָשׁוֹב זוֹל יוֹתֵר מִשְּׁנֵי כַּרְטִיסִים נְפְרָדִים.","[conseil] Un billet aller-retour est moins cher que deux billets séparés."],["אֶפְשָׁר לְהַחְזִיר כַּרְטִיס הַלּוּךְ וָשׁוֹב עַד יוֹם לִפְנֵי הַנְּסִיעָה.","[conditions] On peut rembourser un billet aller-retour jusqu'à la veille du voyage."],["הִזְמַנְתִּי כַּרְטִיס הַלּוּךְ וָשׁוֹב דֶּרֶךְ הָאֲפְלִיקַצְיָה שֶׁל רַכֶּבֶת יִשְׂרָאֵל.","[numérique] J'ai réservé un billet aller-retour via l'application de Israel Railways."]]},{"h":"מַגָּבִיל / מַגְבִּילָה","t":"maggavil / magbilah","f":"restrictif / limité (ex. billet à validité limitée)","c":"adj","r":"ג-ב-ל","m":"Adjectif participial actif au binyan hif'il, dérivé de la racine ג-ב-ל signifiant limiter ou délimiter ; s'accorde en genre.","fs":[["מַגְבִּילִים","pluriel ms"],["מַגְבִּילוֹת","pluriel fs"],["הַגְבָּלָה","nom fs – limitation"]],"eh":"הַכַּרְטִיס הַמַּגָּבִיל אֵינוֹ תָּקֵף בִּשְׁעוֹת הַשִּׂיא.","ef":"Le billet restrictif n'est pas valable aux heures de pointe.","ex":[["קָנִינוּ כַּרְטִיסִים מַגְבִּילִים כְּדֵי לַחְסֹךְ כֶּסֶף.","[économie] Nous avons acheté des billets restrictifs pour économiser de l'argent."],["יֵשׁ תְּנָאִים מַגְבִּילִים לְשִׁימוּשׁ בְּכַרְטִיס הֶחֳדָשִׁי.","[conditions] Il y a des conditions restrictives pour utiliser l'abonnement mensuel."],["הָאִשָּׁה לֹא יָדְעָה שֶׁהַכַּרְטִיס שֶׁלָּהּ מַגָּבִיל.","[guichet] La femme ne savait pas que son billet était restrictif."]]},{"h":"לִנְסֹעַ בְּכִוּוּן הַפּוּךְ","t":"linso'a bekhivoun happoukh","f":"voyager en sens inverse / dans la mauvaise direction","c":"expr","r":"נ-ס-ע","m":"Expression verbale composée de l'infinitif לִנְסֹעַ (voyager, racine נ-ס-ע) et du syntagme prépositionnel בְּכִוּוּן הַפּוּךְ (dans la direction inverse).","fs":[["נָסַע בְּכִוּוּן הַפּוּךְ","passé 3ms"],["לִנְסֹעַ בַּכִּוּוּן הַנָּכוֹן","expression antonyme"],["כִּוּוּן נְסִיעָה","sens de voyage"]],"eh":"בִּטְעוּת נָסַעְנוּ בְּכִוּוּן הַפּוּךְ וְהִגַּעְנוּ לְעִיר אַחֶרֶת לְגַמְרֵי.","ef":"Par erreur, nous avons voyagé en sens inverse et sommes arrivés dans une ville complètement différente.","ex":[["הַנּוֹסֵעַ הֵבִין שֶׁהוּא נוֹסֵעַ בְּכִוּוּן הַפּוּךְ רַק אַחֲרֵי שָׁלוֹשׁ תַּחֲנוֹת.","[mésaventure] Le voyageur a compris qu'il voyageait en sens inverse seulement après trois arrêts."],["בִּדְקִי אֶת הָרָצִיף הַנָּכוֹן כְּדֵי שֶׁלֹּא תִּנְסְעִי בְּכִוּוּן הַפּוּךְ.","[conseil] Vérifie le bon quai pour ne pas voyager dans la mauvaise direction."],["אֵיךְ אֶפְשָׁר לִנְסֹעַ בְּכִוּוּן הַפּוּךְ בְּלִי לָדַעַת?","[rhétorique] Comment peut-on voyager en sens inverse sans le savoir ?"]]}];
+
+// =====================================================
+// TTS
+// =====================================================
+let heV=null, frV=[];
+function loadV(){
+  const vs=speechSynthesis.getVoices();
+  heV=vs.find(v=>v.lang==='he-IL')||vs.find(v=>v.lang.startsWith('he'))||null;
+  frV=vs.filter(v=>v.lang.startsWith('fr'));
+}
+if('speechSynthesis' in window){loadV(); speechSynthesis.onvoiceschanged=loadV;}
+function speak(txt,rate){
+  return new Promise(r=>{
+    speechSynthesis.cancel();
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(txt);
+      u.lang='he-IL'; u.rate=rate||parseFloat(document.getElementById('spd')?.value||0.75);
+      if(heV) u.voice=heV;
+      u.onend=u.onerror=r; speechSynthesis.speak(u);
+    },80);
+  });
+}
+function speakFr(txt){
+  return new Promise(r=>{
+    speechSynthesis.cancel();
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(txt);
+      u.lang='fr-FR'; u.rate=0.85;
+      if(frV.length) u.voice=frV[0];
+      u.onend=u.onerror=r; speechSynthesis.speak(u);
+    },80);
+  });
+}
+function stopTTS(){ speechSynthesis.cancel(); }
+function shuffle(a){ return a.slice().sort(()=>Math.random()-.5); }
+
+// =====================================================
+// NAVIGATION
+// =====================================================
+function showPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('tab-'+p).classList.add('active');
+  if(p==='liste') buildListe('');
+  if(p==='listen') buildListen();
+  if(p==='flash'){ fcList=MOTY.slice(); fcIdx=0; renderFC(); }
+  if(p==='textes') buildSongs();
+}
+
+// =====================================================
+// TEXTES — CHANSONS
+// =====================================================
+const SONG1_STANZAS = [
+  {chorus:false, lines:["תֵּל אָבִיב לִפְנֵי {חֲצוֹת:89}","הָרוּחַ לֹא רוֹצָה לִנְשׁוֹב","וְהַ{לַּחוּת:92} לֹא {מַרְפָּה:91} אוֹתִי, {חוֹנֶקֶת:90}"]},
+  {chorus:false, lines:["בְּבֵית קָפֶה בֵּין הַשְּׁכוּנוֹת","עוֹד לֹא {כִּיבּוּ:93} אֶת הָאוֹרוֹת","עַל כִּסֵּא יָשָׁן לְבַדָּהּ יוֹשֶׁבֶת"]},
+  {chorus:false, lines:["אֲנִי לֹא בָּטוּחַ מָה לוֹמַר","אִם כְּדַאי בִּכְלָל {לָגֶשֶׁת:94}, {לִסְגֹּת:95}","וְרוּחַ בָּאָה מִן הַיָּם","הִיא {מַשְׁלִיכָה:96} {מַבָּט:97} קָטָן","אוֹתִי הִיא מַזְמִינָה לָשֶׁבֶת"]},
+  {chorus:true, lines:["הִיא מַזְמִינָה הָפוּךְ לִשְׁנֵינוּ","וְרַק מִתְלוֹנֶנֶת עַל הַחֹם","אֵיזֶה חֹם","אוּלַי נָזוּז שׁוֹאֶלֶת","גָּרָה בְּדִירָה {שְׂכוּרָה:98} מַמָּשׁ","קָרוֹב לְדֶרֶךְ הַשָּׁלוֹם","נַזְמִין חֶשְׁבּוֹן","הַלַּיְלָה לֹא הוֹלְכִים לִישׁוֹן"]},
+  {chorus:false, lines:["בְּתֵל אָבִיב אַחֲרֵי {חֲצוֹת:89}","עוֹלִים בַּחֲדַר מַדְרֵגוֹת","מוֹצִיאָה מַפְתְּחוֹת פּוֹתַחַת דֶּלֶת","שֻׁלְחָן קָטָן שְׁתֵּי {כּוּרְסָאוֹת:99}","שׁוֹאֶלֶת מָה תִּרְצֶה לִשְׁתּוֹת","אֲנִי מַרְגִּישׁ מַמָּשׁ כְּמוֹ דְּמוּת מִסֶּרֶט"]},
+  {chorus:false, lines:["שְׁתֵּי כּוֹסוֹת עַל הַשֻּׁלְחָן","וְהִיא {מוֹזֶגֶת:100} וּ{מוֹזֶגֶת:100}, אוֹתִי גּוֹמֶרֶת","פּוֹתַחַת עוֹד יַיִן לָבָן","זוֹרֶקֶת לִי חִיּוּךְ קָטָן","לְאַט לַלֵּב שֶׁלִּי נִכְנֶסֶת"]},
+  {chorus:false, lines:["בֵּין כָּל מָה שֶׁקּוֹרֶה בֵּינֵינוּ","מַדְלִיקָה מַזְגָּן בִּגְלַל הַחֹם","אֵיזֶה חֹם","אוּלַי נֵלֵךְ לַחֶדֶר","אִם אַתָּה רוֹצֶה אַתָּה יָכוֹל לְהִישָׁאֵר פֹּה גַּם לִישׁוֹן","אֵיזֶה לִישׁוֹן","הַלַּיְלָה לֹא עוֹשִׂים חֶשְׁבּוֹן"]}
+];
+
+const SONG2_STANZAS = [
+  {chorus:false, lines:["כּוֹכָבִי שָׁקַע","בְּלִבִּי הַ{סְּתָיו:56}","וּפִרְחֵי לִימוֹן","פַּג רֵיחָם עַכְשָׁיו"]},
+  {chorus:false, lines:["הוֹי, שָׁמַי קוֹדְרִים","וַאֲנִי כָּאן זָר","בִּנְתִיבֵי הָרִים","בִּשְׁבִילִי בֹּקֶר"]},
+  {chorus:false, lines:["פֶּרַח הַלִּימוֹן","מִ{גִּבְעוֹל:57} {נָשַׁר:58}","יַלְדָּתִי הָלְכָה","וַאֲנִי נִשְׁאַר"]},
+  {chorus:true, lines:["הוֹי, {הֵיכָן:59} אֶמְצָא לִי אֶרֶץ","שָׁם יָשׁוּב לִי אֲבִיבִי","שָׁם אֶמְצָא יַלְדָּה אוֹהֶבֶת","וְעִמָּהּ אֶת כּוֹכָבִי"]},
+  {chorus:false, lines:["פֶּרַח הַלִּימוֹן בַּדֶּרֶךְ","לֹא יָבוֹל לָעַד, לָעַד","בֵּין פִּרְחֵי לִימוֹן יִקְרוֹץ לִי","כּוֹכָבִי אֲשֶׁר אָבַד"]}
+];
+
+// Plein texte sans nikoud pour la lecture TTS
+const SONG1_PLAIN = "תל אביב לפני חצות. הרוח לא רוצה לנשוב. והלחות לא מרפה אותי חונקת. בבית קפה בין השכונות. עוד לא כיבו את האורות. על כיסא ישן לבדה יושבת. אני לא בטוח מה לומר. אם כדאי בכלל לגשת לסגת. ורוח באה מן הים. היא משליכה מבט קטן. אותי היא מזמינה לשבת. היא מזמינה הפוך לשנינו. ורק מתלוננת על החום. איזה חום. אולי נזוז שואלת. גרה בדירה שכורה ממש. קרוב לדרך השלום. נזמין חשבון. הלילה לא הולכים לישון.";
+const SONG2_PLAIN = "כוכבי שקע. בליבי הסתיו. ופרחי לימון. פג ריחם עכשיו. הוי שמי קודרים. ואני כאן זר. בנתיבי הרים. בשבילי בקר. פרח הלימון. מגבעול נשר. ילדתי הלכה. ואני נשאר. הוי היכן אמצא לי ארץ. שם ישוב לי אביבי. שם אמצא ילדה אוהבת. ועימה את כוכבי. פרח הלימון בדרך. לא יבול לעד לעד. בין פרחי לימון יקרוץ לי. כוכבי אשר אבד.";
+
+function buildSongs(){
+  renderSong(1, SONG1_STANZAS);
+  renderSong(2, SONG2_STANZAS);
+}
+
+function renderSong(num, stanzas){
+  const el = document.getElementById('song-text-'+num);
+  let html = '';
+  stanzas.forEach(stz=>{
+    const cls = stz.chorus ? 'song-stanza song-chorus' : 'song-stanza';
+    html += '<div class="'+cls+'">';
+    stz.lines.forEach(line=>{
+      html += '<span class="song-line">' + processLine(line) + '</span>';
+    });
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function processLine(line){
+  // Remplace {mot:N} par un span cliquable lié à MOTY[N-1]
+  return line.replace(/\{([^:}]+):(\d+)\}/g, function(match, word, num){
+    return '<span class="song-word" data-n="'+num+'" onclick="showWordTip(this,'+num+')" onmouseenter="showWordTip(this,'+num+')" onmouseleave="hideWordTip()">'+word+'</span>';
+  });
+}
+
+function showWordTip(elem, n){
+  const m = MOTY.find(x=>x.n==n);
+  if(!m) return;
+  const tip = document.getElementById('song-tooltip');
+  document.getElementById('tt-heb').textContent = m.h;
+  document.getElementById('tt-fr').textContent = m.f;
+  document.getElementById('tt-n').textContent = '#' + m.n + ' · ' + (m.t || '');
+  const r = elem.getBoundingClientRect();
+  let top = r.bottom + 8;
+  let left = r.left;
+  // Évite débordement à droite
+  if(left + 280 > window.innerWidth) left = window.innerWidth - 290;
+  if(left < 10) left = 10;
+  // Si pas de place en bas, mettre en haut
+  if(top + 100 > window.innerHeight) top = r.top - 100;
+  tip.style.top = top + 'px';
+  tip.style.left = left + 'px';
+  tip.style.display = 'block';
+  // Audio
+  if('speechSynthesis' in window){
+    const h0 = m.h.split('/')[0].trim();
+    setTimeout(()=>speak(h0, 0.7), 100);
+  }
+  document.querySelectorAll('.song-word').forEach(e=>e.classList.remove('active'));
+  elem.classList.add('active');
+}
+
+function hideWordTip(){
+  setTimeout(()=>{
+    const tip = document.getElementById('song-tooltip');
+    if(tip) tip.style.display = 'none';
+    document.querySelectorAll('.song-word').forEach(e=>e.classList.remove('active'));
+  }, 200);
+}
+
+async function playSong(num){
+  stopTTS();
+  const text = num === 1 ? SONG1_PLAIN : SONG2_PLAIN;
+  const parts = text.split('. ').filter(x=>x.trim());
+  for(const p of parts){
+    await speak(p.trim(), 0.78);
+    await new Promise(r=>setTimeout(r, 120));
+  }
+}
+
+// Cache le tooltip si on clique ailleurs
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.song-word') && !e.target.closest('.song-tooltip')){
+    const tip = document.getElementById('song-tooltip');
+    if(tip) tip.style.display = 'none';
+    document.querySelectorAll('.song-word').forEach(el=>el.classList.remove('active'));
+  }
+});
+
+// =====================================================
+// QUIZ — LOGIQUE PÉDAGOGIQUE ADAPTATIVE
+// =====================================================
+/*
+  SESSION :
+  - validated  : Set des n (ids) des mots définitivement réussis
+  - pile        : tableau des mots restants à passer (mélangés)
+  - errQueue    : file des mots ratés (re-injectés en fin de pile)
+  - totalAttempts / totalOk : stats globales
+  - round       : numéro du round courant (1 = première passe, 2+ = révision des erreurs)
+*/
+let qMode='he-fr', qCatFilter='';
+let validated=new Set(), pile=[], errQueue=[];
+let totalAttempts=0, totalOk=0, roundNum=1;
+let qLock=false, mixSeq=['he-fr','fr-he','forms'], mixIdx=0;
+let _opts=[], _correctF='', _correctH='', _curM=null;
+
+function selMode(m){
+  qMode=m;
+  document.querySelectorAll('.mode-card').forEach(el=>el.classList.remove('sel'));
+  const map={'he-fr':'mc-hf','fr-he':'mc-fh','forms':'mc-forms','mix':'mc-mix'};
+  document.getElementById(map[m])?.classList.add('sel');
+}
+
+function getBaseList(){
+  const cat=document.getElementById('catFilter').value;
+  if(!cat) return MOTY.slice();
+  if(cat==='songs') return MOTY.filter(m=>m.g==='songs');
+  if(cat==='other') return MOTY.filter(m=>m.c==='adv'||m.c==='expr'||m.c==='prep'||m.c==='conj');
+  return MOTY.filter(m=>m.c===cat);
+}
+
+// ── Démarrage session ──
+function startQuiz(){
+  const base=getBaseList();
+  validated=new Set(); pile=shuffle(base); errQueue=[];
+  totalAttempts=0; totalOk=0; roundNum=1; qLock=false; mixIdx=0;
+  document.getElementById('config-screen').style.display='none';
+  document.getElementById('quiz-zone').style.display='block';
+  buildWordStatusGrid(base);
+  updateHUD();
+  nextQuestion();
+}
+
+// ── Restart ──
+function restartSession(){
+  document.getElementById('config-screen').style.display='block';
+  document.getElementById('quiz-zone').style.display='none';
+}
+
+// ── Fin de round : tous les mots de ce round passés ──
+function startNewRound(){
+  // Les mots de errQueue deviennent la nouvelle pile
+  roundNum++;
+  pile=shuffle(errQueue.slice()); errQueue=[];
+  qLock=false; mixIdx=0;
+  buildWordStatusGrid(getBaseList());
+  updateHUD();
+  nextQuestion();
+}
+
+// ── Question suivante ──
+function nextQuestion(){
+  // Si la pile est vide
+  if(pile.length===0){
+    if(errQueue.length===0){
+      // Tout validé !
+      showFinalEnd();
+    } else {
+      // Il reste des erreurs à retravailler
+      showRoundEnd();
+    }
+    return;
+  }
+  const m=pile[0];
+  _curM=m;
+  updateHUD();
+  updateWordStatus(m.n, 'cur');
+  renderQuestion(m);
+}
+
+// ── Rendre une question ──
+function getCurMode(){
+  if(qMode==='mix'){ const m=mixSeq[mixIdx%3]; mixIdx++; return m; }
+  return qMode;
+}
+
+function renderQuestion(m){
+  const cm=getCurMode();
+  if(cm==='he-fr') renderHeFr(m);
+  else if(cm==='fr-he') renderFrHe(m);
+  else renderForms(m);
+}
+
+// ── Vérification réponse ──
+function onAnswer(correct){
+  if(qLock) return;
+  qLock=true; totalAttempts++;
+  const m=pile.shift(); // retire de la pile
+
+  if(correct){
+    totalOk++;
+    validated.add(m.n);
+    updateWordStatus(m.n,'ok');
+  } else {
+    errQueue.push(m); // remet en file d'erreurs
+    updateWordStatus(m.n,'err');
+  }
+  updateHUD();
+
+  setTimeout(()=>{
+    qLock=false;
+    nextQuestion();
+  },20000);
+}
+
+// ── Passer (compte comme erreur) ──
+function skipQuestion(){
+  if(qLock||pile.length===0) return;
+  const m=pile.shift();
+  errQueue.push(m);
+  updateWordStatus(m.n,'err');
+  updateHUD();
+  nextQuestion();
+}
+
+// ── HUD ──
+function updateHUD(){
+  const base=getBaseList();
+  const tot=base.length;
+  const okCount=validated.size;
+  const errCount=errQueue.length;
+  const leftCount=pile.length;
+  const rcls=['r1','r2','r3'];
+  const rn=Math.min(roundNum,3)-1;
+  const labels=['1re passe','Révision','Maîtrise'];
+  document.getElementById('sb-round').innerHTML='<span class="round-badge '+rcls[rn]+'">'+labels[rn]+'</span>';
+  document.getElementById('sb-ok').textContent=okCount;
+  document.getElementById('sb-err').textContent=errCount;
+  document.getElementById('sb-left').textContent=leftCount;
+  document.getElementById('sb-score').textContent=totalOk+' / '+totalAttempts;
+  const okPct=tot>0?Math.round(okCount/tot*100):0;
+  const errPct=tot>0?Math.round(errCount/tot*100):0;
+  document.getElementById('progOk').style.width=okPct+'%';
+  document.getElementById('progErr').style.width=errPct+'%';
+  document.getElementById('pl-ok').textContent=okCount+' validés';
+  document.getElementById('pl-tot').textContent='sur '+tot;
+  document.getElementById('pl-err').textContent=errCount+' en révision';
+}
+
+// ── Grille statut ──
+function buildWordStatusGrid(base){
+  const g=document.getElementById('wordStatusGrid');
+  g.innerHTML='';
+  base.forEach(m=>{
+    const chip=document.createElement('div');
+    chip.className='ws-chip ws-todo';
+    chip.id='ws-'+m.n;
+    chip.textContent=m.h.split('/')[0].trim().split(' ')[0]; // premier mot hébreu
+    chip.title=m.f;
+    chip.addEventListener('click',()=>speak(m.h.split('/')[0].trim()));
+    g.appendChild(chip);
+  });
+}
+function updateWordStatus(num,status){
+  const chip=document.getElementById('ws-'+num);
+  if(!chip) return;
+  chip.className='ws-chip ws-'+status;
+}
+
+// ── Rendu question Hébreu→Français ──
+function renderHeFr(m){
+  const wrongs=shuffle(MOTY.filter(x=>x.n!==m.n)).slice(0,3).map(x=>x.f);
+  _opts=shuffle([m.f,...wrongs]); _correctF=m.f;
+  const h0=m.h.split('/')[0].trim();
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+
+  const lbl=mk('div','qmode-lbl'); lbl.textContent='Hébreu → Français · '+pile.length+' restants'; card.appendChild(lbl);
+  const qw=mk('div','qword'); qw.textContent=m.h+' ▶'; card.appendChild(qw);
+  qw.addEventListener('click',()=>speak(h0));
+  const qt=mk('div','qtrans'); qt.textContent=m.t; card.appendChild(qt);
+  const optsEl=mk('div','opts'); optsEl.id='qOpts'; card.appendChild(optsEl);
+  const fb=buildFeedback(m); card.appendChild(fb);
+  buildOpts(optsEl, _opts, (d,i)=>{
+    const ok=_opts[i]===_correctF;
+    resolveAnswer(d, optsEl, ok, _correctF, m, h0, fb);
+  });
+}
+
+// ── Rendu question Français→Hébreu ──
+function renderFrHe(m){
+  const wrongs=shuffle(MOTY.filter(x=>x.n!==m.n)).slice(0,3).map(x=>x.h);
+  _opts=shuffle([m.h,...wrongs]); _correctH=m.h;
+  const h0=m.h.split('/')[0].trim();
+  const catL={n:'Nom',v:'Verbe',adj:'Adjectif',adv:'Adverbe',prep:'Prep.',expr:'Expression',conj:'Conj.'};
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+
+  const lbl=mk('div','qmode-lbl'); lbl.textContent='Français → Hébreu · '+pile.length+' restants'; card.appendChild(lbl);
+  const qw=mk('div','qword'); qw.style.cssText='font-size:1.2rem;font-family:DM Sans,sans-serif;color:var(--txt);direction:ltr'; qw.textContent=m.f; card.appendChild(qw);
+  const qt=mk('div','qtrans'); qt.style.marginTop='4px'; qt.textContent='Catégorie : '+(catL[m.c]||m.c); card.appendChild(qt);
+  const optsEl=mk('div','opts'); optsEl.id='qOpts'; card.appendChild(optsEl);
+  const fb=buildFeedback(m); card.appendChild(fb);
+  buildOpts(optsEl, _opts, (d,i)=>{
+    const ok=_opts[i]===_correctH;
+    resolveAnswer(d, optsEl, ok, _correctH, m, h0, fb);
+  });
+}
+
+// ── Rendu question Formes → Sens (audio d'abord, labels masqués) ──
+function renderForms(m){
+  const wrongs=shuffle(MOTY.filter(x=>x.n!==m.n)).slice(0,3).map(x=>x.f);
+  _opts=shuffle([m.f,...wrongs]); _correctF=m.f;
+  const h0=m.h.split('/')[0].trim();
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+
+  // Label mode
+  const lbl=mk('div','qmode-lbl');
+  lbl.textContent='Écouter · trouver le sens · '+pile.length+' restants';
+  card.appendChild(lbl);
+
+  // Instruction
+  const hint=mk('div','');
+  hint.style.cssText='text-align:center;font-size:0.78rem;color:var(--muted);margin-bottom:10px;font-style:italic';
+  hint.textContent='Écoutez les formes hébraïques — puis choisissez le sens';
+  card.appendChild(hint);
+
+  // Zone formes : hébreu SEUL (sans labels entre parenthèses)
+  const fr=mk('div','qforms-row'); fr.style.lineHeight='2.8'; card.appendChild(fr);
+  const labelEls=[];
+  m.fs.forEach((pair,i)=>{
+    if(i>0){ fr.appendChild(document.createTextNode(' · ')); }
+    const sp=mk('span',''); sp.style.cursor='pointer';
+    const hpart=mk('span','');
+    hpart.style.cssText='font-family:"Frank Ruhl Libre",serif;font-size:1.2rem;direction:rtl;color:var(--gold-l)';
+    hpart.textContent=pair[0];
+    const lpart=mk('small','');
+    lpart.style.cssText='color:var(--muted);display:none';
+    lpart.textContent=' ('+pair[1]+')';
+    labelEls.push(lpart);
+    sp.appendChild(hpart); sp.appendChild(lpart);
+    sp.addEventListener('click',()=>speak(pair[0].split('/')[0].trim()));
+    fr.appendChild(sp);
+  });
+
+  // Racine visible, transcription masquée (révélée après réponse)
+  const qt=mk('div','qtrans'); qt.textContent='Racine : '+m.r; card.appendChild(qt);
+
+  // Boutons écoute
+  const listenRow=mk('div','');
+  listenRow.style.cssText='display:flex;gap:8px;justify-content:center;margin:10px 0 14px;flex-wrap:wrap';
+
+  const btnOne=mk('button','btn btn-g btn-sm');
+  btnOne.innerHTML='&#9654; Forme principale';
+  btnOne.addEventListener('click',()=>speak(h0,0.7));
+
+  const btnAll=mk('button','btn btn-o btn-sm');
+  btnAll.innerHTML='&#9654; Toutes les formes';
+  btnAll.addEventListener('click',async()=>{
+    btnAll.disabled=true; btnOne.disabled=true;
+    for(const pair of m.fs){
+      await speak(pair[0].split('/')[0].trim(),0.75);
+      await new Promise(r=>setTimeout(r,420));
+    }
+    btnAll.disabled=false; btnOne.disabled=false;
+  });
+
+  listenRow.appendChild(btnOne); listenRow.appendChild(btnAll);
+  card.appendChild(listenRow);
+
+  // Options de réponse
+  const optsEl=mk('div','opts'); optsEl.id='qOpts'; card.appendChild(optsEl);
+
+  // Feedback morpho (masqué)
+  const fb=buildFeedback(m); card.appendChild(fb);
+
+  buildOpts(optsEl, _opts, (d,i)=>{
+    const ok=_opts[i]===_correctF;
+    // Révéler labels ET transcription après la réponse
+    labelEls.forEach(lp=>{ lp.style.display='inline'; });
+    qt.textContent='Racine : '+m.r+' · '+m.t;
+    resolveAnswer(d, optsEl, ok, _correctF, m, h0, fb);
+  });
+
+  // Lecture automatique au chargement (délai court)
+  setTimeout(()=>speak(h0,0.7), 350);
+}
+
+// ── Logique commune de résolution ──
+function resolveAnswer(clickedEl, optsEl, ok, correctVal, m, h0, fb){
+  if(qLock) return;
+  clickedEl.classList.add(ok?'ok':'err');
+  if(!ok){
+    optsEl.querySelectorAll('.opt').forEach(o=>{
+      if(o.textContent===correctVal) o.classList.add('reveal');
+    });
+  }
+  // Bloquer tous les opts
+  optsEl.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+  // Afficher feedback morpho
+  fb.style.display='block';
+  // Audio : mot principal puis lecture auto des 3 phrases exemples
+  speak(h0, 0.7).then(()=>{
+    if(m.ex && m.ex.length){
+      (async()=>{
+        await new Promise(r=>setTimeout(r,900));
+        for(const pair of m.ex){
+          await speak(pair[0].trim(), 0.8);
+          await new Promise(r=>setTimeout(r,700));
+        }
+      })();
+    }
+  });
+  // Feedback visuel sur la grille
+  const chip=document.getElementById('ws-'+m.n);
+  if(chip){
+    chip.classList.remove('ws-cur','ws-todo','ws-ok','ws-err');
+    chip.classList.add(ok?'ws-ok':'ws-err');
+  }
+  // Appel à la logique pédagogique
+  onAnswer(ok);
+}
+
+function buildFeedback(m){
+  const fb=mk('div','morph-fb');
+  const heb=mk('div','morph-fb-heb'); heb.textContent=m.h; fb.appendChild(heb);
+  const mo=mk('div',''); mo.textContent=m.m; fb.appendChild(mo);
+  if(m.eh){
+    const ex=mk('div','morph-fb-ex');
+    ex.textContent=m.eh+' — '+m.ef;
+    fb.appendChild(ex);
+  }
+  if(m.ex && m.ex.length){
+    const sep=mk('div','');
+    sep.style.cssText='border-top:1px solid rgba(201,168,76,0.15);margin-top:8px;padding-top:8px;font-size:0.72rem;color:var(--gold);font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:8px';
+    sep.textContent='Exemples par theme';
+    fb.appendChild(sep);
+    m.ex.forEach((pair,idx)=>{
+      const row=mk('div','');
+      row.style.cssText='margin-top:7px;display:flex;align-items:flex-start;gap:8px';
+      // Bouton ▶
+      const btn=mk('button','ab');
+      btn.textContent='\u25B6';
+      btn.title='Ecouter';
+      btn.style.cssText='flex-shrink:0;margin-top:3px;font-size:0.7rem;padding:2px 7px';
+      btn.addEventListener('click',ev=>{ ev.stopPropagation(); speak(pair[0].trim(),0.8); });
+      // Texte
+      const txtwrap=mk('div',''); txtwrap.style.cssText='flex:1;cursor:pointer';
+      txtwrap.addEventListener('click',()=>speak(pair[0].trim(),0.8));
+      const hpart=mk('div','');
+      hpart.style.cssText='font-family:"Frank Ruhl Libre",serif;font-size:1rem;direction:rtl;text-align:right;color:var(--gold-l);line-height:1.4';
+      hpart.textContent=pair[0];
+      const fpart=mk('div','');
+      fpart.style.cssText='font-size:0.75rem;color:var(--muted);font-style:italic;margin-top:1px';
+      fpart.textContent=pair[1];
+      txtwrap.appendChild(hpart); txtwrap.appendChild(fpart);
+      row.appendChild(btn); row.appendChild(txtwrap);
+      fb.appendChild(row);
+    });
+  }
+  return fb;
+}
+
+function buildOpts(container, labels, fn){
+  container.innerHTML='';
+  labels.forEach((lbl,i)=>{
+    const d=mk('div','opt'); d.textContent=lbl;
+    d.addEventListener('click',()=>fn(d,i));
+    container.appendChild(d);
+  });
+}
+
+function mk(tag,cls){
+  const el=document.createElement(tag);
+  if(cls) el.className=cls;
+  return el;
+}
+
+// ── Fin de round (erreurs restantes) ──
+function showRoundEnd(){
+  const errN=errQueue.length;
+  const okN=validated.size;
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+  const box=mk('div','round-end');
+  const rcls=['r1','r2','r3'];
+  const rn=Math.min(roundNum,3)-1;
+
+  box.innerHTML=
+    '<div class="re-icon">'+(roundNum===1?'🔄':'💪')+'</div>'+
+    '<div class="re-title" style="color:var(--gold)">Fin de la '+(roundNum===1?'1re':''+roundNum+'e')+' passe</div>'+
+    '<div class="re-msg">'+
+      '<span style="color:#6ecf99">✓ '+okN+' mot'+(okN>1?'s':'')+' validé'+(okN>1?'s':'')+'</span> — ils ne reviendront plus.<br>'+
+      '<span style="color:#d47070">✗ '+errN+' mot'+(errN>1?'s':'')+' à retravailler</span> — nouvelle passe de révision.'+
+    '</div>'+
+    '<div class="re-stats">'+
+      '<div class="re-stat"><div class="re-stat-n" style="color:#6ecf99">'+okN+'</div><div class="re-stat-l">Validés ✓</div></div>'+
+      '<div class="re-stat"><div class="re-stat-n" style="color:#d47070">'+errN+'</div><div class="re-stat-l">À retravailler</div></div>'+
+      '<div class="re-stat"><div class="re-stat-n" style="color:var(--gold)">'+Math.round(totalOk/Math.max(totalAttempts,1)*100)+'%</div><div class="re-stat-l">Précision</div></div>'+
+    '</div>';
+  const btnRow=mk('div',''); btnRow.style.cssText='display:flex;gap:10px;justify-content:center;flex-wrap:wrap';
+  const b1=mk('button','btn btn-g'); b1.innerHTML='▶ Réviser les '+errN+' mot'+(errN>1?'s':'');
+  b1.addEventListener('click',startNewRound);
+  const b2=mk('button','btn btn-o'); b2.textContent='↺ Tout recommencer';
+  b2.addEventListener('click',startQuiz);
+  btnRow.appendChild(b1); btnRow.appendChild(b2); box.appendChild(btnRow);
+  card.appendChild(box);
+}
+
+// ── Fin totale (tout validé) ──
+function showFinalEnd(){
+  const tot=getBaseList().length;
+  const pct=Math.round(totalOk/Math.max(totalAttempts,1)*100);
+  const stars=pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':pct>=50?'⭐':'—';
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+  const box=mk('div','end-box');
+  box.innerHTML=
+    '<div style="font-size:3rem;margin-bottom:8px">🎓</div>'+
+    '<div class="end-stars">'+stars+'</div>'+
+    '<div class="end-sc">'+tot+' / '+tot+' mots validés !</div>'+
+    '<div class="end-pct">Précision : '+pct+'% · '+totalAttempts+' tentatives · '+roundNum+' passe'+(roundNum>1?'s':'')+'</div>'+
+    '<div style="font-size:0.85rem;color:var(--sub);margin-bottom:20px;line-height:1.7">'+
+      (roundNum===1?'Parfait du premier coup ! Maîtrise exemplaire.':
+       roundNum===2?'Excellent ! Tous les mots validés en 2 passes.':
+       'Bravo ! La persévérance paie — tous les mots sont maîtrisés.')+
+    '</div>';
+  const btnRow=mk('div',''); btnRow.style.cssText='display:flex;gap:10px;justify-content:center;flex-wrap:wrap';
+  const b1=mk('button','btn btn-g'); b1.textContent='↺ Nouvelle session';
+  b1.addEventListener('click',startQuiz);
+  const b2=mk('button','btn btn-o'); b2.textContent='⚙ Changer de mode';
+  b2.addEventListener('click',()=>{
+    document.getElementById('config-screen').style.display='block';
+    document.getElementById('quiz-zone').style.display='none';
+  });
+  btnRow.appendChild(b1); btnRow.appendChild(b2); box.appendChild(btnRow);
+  card.appendChild(box);
+}
+
+// ── Boutons ──
+document.getElementById('startBtn').addEventListener('click', startQuiz);
+document.getElementById('restartBtn').addEventListener('click', startQuiz);
+document.getElementById('skipBtn').addEventListener('click', skipQuestion);
+document.getElementById('modesBtn').addEventListener('click', ()=>{
+  document.getElementById('config-screen').style.display='block';
+  document.getElementById('quiz-zone').style.display='none';
+});
+
+// =====================================================
+// FLASHCARDS
+// =====================================================
+let fcList=MOTY.slice(), fcIdx=0, fcFlipped=false;
+function renderFC(){
+  const m=fcList[fcIdx];
+  document.getElementById('fcHeb').textContent=m.h;
+  document.getElementById('fcForms').textContent=m.fs.map(p=>p[0]).join(' · ');
+  document.getElementById('fcFr').textContent=m.f;
+  document.getElementById('fcMorph').textContent=m.m;
+  document.getElementById('fcProg').textContent=(fcIdx+1)+' / '+fcList.length;
+  document.getElementById('fcCard').classList.remove('flip');
+  fcFlipped=false;
+}
+document.getElementById('fcCard').addEventListener('click',()=>{
+  fcFlipped=!fcFlipped;
+  document.getElementById('fcCard').classList.toggle('flip',fcFlipped);
+  if(fcFlipped) speak(fcList[fcIdx].h.split('/')[0].trim(),0.7);
+});
+document.getElementById('fcPrev').addEventListener('click',()=>{ fcIdx=(fcIdx-1+fcList.length)%fcList.length; renderFC(); });
+document.getElementById('fcNext').addEventListener('click',()=>{ fcIdx=(fcIdx+1)%fcList.length; renderFC(); });
+document.getElementById('fcSpeak').addEventListener('click',()=>speak(fcList[fcIdx].h.split('/')[0].trim()));
+document.getElementById('fcShuf').addEventListener('click',()=>{ fcList=shuffle(MOTY.slice()); fcIdx=0; renderFC(); });
+function fcFilter(cat){
+  if(!cat) fcList=MOTY.slice();
+  else if(cat==='songs') fcList=MOTY.filter(m=>m.g==='songs');
+  else if(cat==='other') fcList=MOTY.filter(m=>m.c==='adv'||m.c==='expr'||m.c==='prep');
+  else fcList=MOTY.filter(m=>m.c===cat);
+  fcIdx=0; renderFC();
+}
+
+// =====================================================
+// ÉCOUTE
+// =====================================================
+let liPlayed=new Set();
+function buildListen(){
+  const cont=document.getElementById('liList'); cont.innerHTML='';
+  MOTY.forEach((m,i)=>{
+    const row=mk('div','li'); row.id='li-'+i;
+    const n=mk('span','li-n'); n.textContent=m.n;
+    const heb=mk('span','li-heb'); heb.textContent=m.h.split('/')[0].trim();
+    const fr=mk('span','li-fr'); fr.textContent=m.f;
+    const btn=mk('button','ab'); btn.textContent='▶';
+    btn.addEventListener('click',ev=>{ ev.stopPropagation(); liOne(i); });
+    row.addEventListener('click',()=>liOne(i));
+    row.appendChild(n); row.appendChild(heb); row.appendChild(fr); row.appendChild(btn);
+    cont.appendChild(row);
+  });
+  updLiPb();
+}
+async function liOne(i){
+  const el=document.getElementById('li-'+i); if(!el) return;
+  el.classList.add('playing');
+  const rate=parseFloat(document.getElementById('spd')?.value||0.75);
+  await speak(MOTY[i].h.split('/')[0].trim(), rate);
+  el.classList.remove('playing'); el.classList.add('played');
+  liPlayed.add(i); updLiPb();
+}
+async function listenAll(mode){
+  stopTTS();
+  for(let i=0;i<MOTY.length;i++){
+    await liOne(i);
+    if(mode==='both'){ await new Promise(r=>setTimeout(r,150)); await speakFr(MOTY[i].f); }
+    await new Promise(r=>setTimeout(r,350));
+  }
+}
+function updLiPb(){ document.getElementById('liPb').textContent=liPlayed.size+' / 30 écoutés'; }
+document.getElementById('listenHeb').addEventListener('click',()=>listenAll('heb'));
+document.getElementById('listenBoth').addEventListener('click',()=>listenAll('both'));
+document.getElementById('stopBtn').addEventListener('click',stopTTS);
+
+// =====================================================
+// LISTE
+// =====================================================
+const catNames={n:'Nom',v:'Verbe',adj:'Adjectif',adv:'Adverbe',prep:'Prep.',expr:'Expression',conj:'Conj.'};
+const catCls={n:'bn',v:'bv',adj:'badj',adv:'badv',prep:'bprep',expr:'bexpr',conj:'bprep'};
+function buildListe(q){
+  q=(q||'').toLowerCase();
+  const filtered=MOTY.filter(m=>!q||m.h.includes(q)||m.f.toLowerCase().includes(q)||m.t.toLowerCase().includes(q)||m.r.includes(q));
+  const grid=document.getElementById('lexG'); grid.innerHTML='';
+  filtered.forEach(m=>{
+    const card=mk('div','lc');
+    card.addEventListener('click',()=>speak(m.h.split('/')[0].trim()));
+    const heb=mk('div','lc-heb'); heb.textContent=m.h; card.appendChild(heb);
+    const tr=mk('div','lc-tr'); tr.textContent=m.t; card.appendChild(tr);
+    const fr=mk('div','lc-fr'); fr.textContent=m.f; card.appendChild(fr);
+    const foot=mk('div','lc-foot');
+    const badge=mk('span','badge '+(catCls[m.c]||'bprep')); badge.textContent=catNames[m.c]||m.c; foot.appendChild(badge);
+    if(m.g==='songs'){
+      const sbadge=mk('span','badge bsong'); sbadge.textContent='🎵 Chant'; foot.appendChild(sbadge);
+    }
+    const rac=mk('span','rac'); rac.textContent=m.r; foot.appendChild(rac);
+    const btn=mk('button','ab'); btn.textContent='▶';
+    btn.addEventListener('click',ev=>{ ev.stopPropagation(); speak(m.h.split('/')[0].trim()); });
+    foot.appendChild(btn); card.appendChild(foot);
+    grid.appendChild(card);
+  });
+}
+document.getElementById('lsearch').addEventListener('input',function(){ buildListe(this.value); });
+
+// ── INIT ──
+buildListe('');
+renderFC();
+</script>
+
+<div style="text-align:center;padding:18px;font-size:0.69rem;color:#444;border-top:1px solid #1a1a1a;margin-top:28px">
+  &#1512;&#1513;&#1497;&#1502;&#1514; &#1502;&#1493;&#1496;&#1497; &middot; 30 mots &middot; Apprentissage adaptatif &middot; Claude (Anthropic)
+</div>
+</body>
+</html>
