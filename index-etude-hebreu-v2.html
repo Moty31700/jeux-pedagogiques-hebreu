@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Étude de l'hébreu</title>
+<style>
+  :root {
+    --encre:    #101F38;
+    --tekhelet: #2C5F8D;
+    --papier:   #FBFAF7;
+    --or:       #A8813C;
+    --alerte:   #9E3B2C;
+    --gris:     #6B7280;
+    --trait:    #DDD8CC;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--papier);
+    color: var(--encre);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 12pt;
+    line-height: 1.55;
+  }
+
+  .cadre { max-width: 30rem; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+
+  .titre {
+    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+    font-size: 22pt;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .sous-titre { color: var(--gris); font-size: 11pt; margin: .3rem 0 2.5rem; }
+
+  .etapes {
+    display: flex; gap: .5rem; align-items: center;
+    margin-bottom: 2rem; border-bottom: 1px solid var(--trait); padding-bottom: 1rem;
+  }
+  .etape {
+    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+    font-size: 15pt; color: var(--trait);
+    width: 1.6rem; text-align: center; transition: color .25s;
+  }
+  .etape.active { color: var(--or); }
+  .etape.faite  { color: var(--tekhelet); }
+  .etapes .filet { flex: 1; height: 1px; background: var(--trait); }
+
+  .ecran { display: none; }
+  .ecran.visible { display: block; }
+
+  h2 {
+    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+    font-size: 16pt; font-weight: 600; margin: 0 0 .4rem;
+  }
+  .intro { color: var(--gris); font-size: 11pt; margin: 0 0 1.8rem; }
+
+  label { display: block; margin-bottom: 1rem; }
+  .libelle { display: block; font-size: 10pt; color: var(--gris); margin-bottom: .25rem; }
+
+  input, select {
+    width: 100%; padding: .6rem .7rem;
+    font-size: 12pt; font-family: inherit; color: var(--encre);
+    background: #fff; border: 1px solid var(--trait); border-radius: 2px;
+  }
+  input:focus, select:focus {
+    outline: 2px solid var(--tekhelet); outline-offset: 1px; border-color: transparent;
+  }
+  #code {
+    font-family: ui-monospace, "SF Mono", monospace;
+    font-size: 16pt; letter-spacing: .25em;
+    text-transform: uppercase; text-align: center;
+  }
+
+  button {
+    width: 100%; padding: .75rem; margin-top: .6rem;
+    font-family: inherit; font-size: 12pt;
+    color: #fff; background: var(--encre);
+    border: none; border-radius: 2px; cursor: pointer;
+  }
+  button:hover { background: var(--tekhelet); }
+  button:disabled { background: var(--gris); cursor: wait; }
+
+  .lien {
+    display: block; width: 100%; margin-top: .9rem; padding: .5rem;
+    background: none; border: none; color: var(--tekhelet);
+    font-size: 10pt; text-decoration: underline; cursor: pointer;
+  }
+  .lien:hover { background: none; color: var(--encre); }
+
+  .message {
+    margin-top: 1.2rem; padding: .7rem .9rem; font-size: 10.5pt;
+    border-left: 3px solid var(--gris); background: #fff; display: none;
+  }
+  .message.visible { display: block; }
+  .message.ok     { border-left-color: var(--tekhelet); }
+  .message.erreur { border-left-color: var(--alerte); color: var(--alerte); }
+
+  .note {
+    margin-top: 2rem; padding-top: 1rem;
+    border-top: 1px solid var(--trait);
+    font-size: 9.5pt; color: var(--gris);
+  }
+
+  .accueil-nom {
+    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+    font-size: 20pt; margin: 0 0 .3rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="cadre">
+
+  <h1 class="titre">לימוד עברית</h1>
+  <p class="sous-titre">Étude de l'hébreu — espace personnel</p>
+
+  <div class="etapes" id="etapes">
+    <span class="etape" data-etape="1">א</span>
+    <span class="filet"></span>
+    <span class="etape" data-etape="2">ב</span>
+    <span class="filet"></span>
+    <span class="etape" data-etape="3">ג</span>
+  </div>
+
+  <!-- ÉCRAN 0 — accueil -->
+  <div class="ecran visible" id="ecran-accueil">
+    <h2>Bienvenue</h2>
+    <p class="intro">Ce site est réservé aux personnes majeures. Votre code d'accès vous est envoyé par WhatsApp.</p>
+    <button id="vers-inscription">Première visite — créer mon accès</button>
+    <button id="vers-connexion" style="background: none; color: var(--encre); border: 1px solid var(--trait);">J'ai déjà un accès</button>
+  </div>
+
+  <!-- ÉCRAN 1 — inscription -->
+  <div class="ecran" id="ecran-inscription">
+    <h2>Créer mon accès</h2>
+    <p class="intro">Votre code vous sera envoyé sur le numéro indiqué.</p>
+
+    <label><span class="libelle">Identifiant (celui que vous saisirez à chaque visite)</span>
+      <input id="i-identifiant" autocomplete="username"></label>
+    <label><span class="libelle">Prénom</span>
+      <input id="i-prenom" autocomplete="given-name"></label>
+    <label><span class="libelle">Téléphone WhatsApp (format +33…)</span>
+      <input id="i-telephone" inputmode="tel" placeholder="+33612345678"></label>
+    <label><span class="libelle">Date de naissance</span>
+      <input id="i-naissance" type="date"></label>
+
+    <button id="btn-inscrire">Créer mon accès</button>
+    <button class="lien" data-retour="accueil">Retour</button>
+    <div class="message" id="msg-inscription"></div>
+  </div>
+
+  <!-- ÉCRAN 2 — connexion -->
+  <div class="ecran" id="ecran-connexion">
+    <h2>Entrer</h2>
+    <p class="intro">Saisissez votre identifiant et le code reçu par WhatsApp.</p>
+
+    <label><span class="libelle">Identifiant</span>
+      <input id="c-identifiant" autocomplete="username"></label>
+    <label><span class="libelle">Code d'accès</span>
+      <input id="code" maxlength="6" autocomplete="one-time-code"></label>
+
+    <button id="btn-connecter">Entrer</button>
+    <button class="lien" id="btn-demander">Code perdu ou expiré — m'en envoyer un</button>
+    <button class="lien" data-retour="accueil">Retour</button>
+    <div class="message" id="msg-connexion"></div>
+  </div>
+
+  <!-- ÉCRAN 3 — demander une leçon -->
+  <div class="ecran" id="ecran-menu">
+    <p class="accueil-nom" id="menu-nom">Shalom</p>
+    <p class="intro">Choisissez ce que vous voulez travailler. Votre leçon vous arrivera par WhatsApp.</p>
+
+    <label><span class="libelle">Thème</span>
+      <input id="l-theme" placeholder="cuisine, voyage, famille…"></label>
+
+    <label><span class="libelle">Niveau</span>
+      <select id="l-niveau">
+        <option>A1</option>
+        <option>A2</option>
+        <option selected>B1</option>
+        <option>B2</option>
+        <option>C1</option>
+      </select></label>
+
+    <label><span class="libelle">Nombre de mots</span>
+      <select id="l-n">
+        <option>5</option>
+        <option selected>10</option>
+        <option>15</option>
+        <option>20</option>
+        <option>30</option>
+      </select></label>
+
+    <button id="btn-lecon">Demander ma leçon</button>
+
+    <div class="message" id="msg-lecon"></div>
+
+    <div class="note">
+      La préparation prend une à deux minutes. Le lien de votre leçon arrive ensuite par WhatsApp.
+      Votre code d'accès reste valable 24 h.
+    </div>
+    <button class="lien" id="btn-sortir">Sortir</button>
+  </div>
+
+</div>
+
+<script>
+var BASE = "https://n8n.srv1704612.hstgr.cloud/webhook";
+
+var ECRANS = {
+  accueil:     { el: "ecran-accueil",     etape: 0 },
+  inscription: { el: "ecran-inscription", etape: 1 },
+  connexion:   { el: "ecran-connexion",   etape: 2 },
+  menu:        { el: "ecran-menu",        etape: 3 }
+};
+
+var identifiantCourant = "";
+
+function montrer(nom) {
+  for (var cle in ECRANS) {
+    document.getElementById(ECRANS[cle].el).classList.remove("visible");
+  }
+  document.getElementById(ECRANS[nom].el).classList.add("visible");
+
+  var courante = ECRANS[nom].etape;
+  var puces = document.querySelectorAll(".etape");
+  for (var i = 0; i < puces.length; i++) {
+    var n = parseInt(puces[i].getAttribute("data-etape"), 10);
+    puces[i].className = "etape" + (n < courante ? " faite" : (n === courante ? " active" : ""));
+  }
+  window.scrollTo(0, 0);
+}
+
+function dire(id, texte, type) {
+  var el = document.getElementById(id);
+  el.textContent = texte;
+  el.className = "message visible " + (type || "");
+}
+function taire(id) { document.getElementById(id).className = "message"; }
+
+function appeler(chemin, donnees, bouton, idMsg, onSucces) {
+  var libelle = bouton.textContent;
+  bouton.disabled = true;
+  bouton.textContent = "…";
+  taire(idMsg);
+
+  fetch(BASE + chemin, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(donnees)
+  })
+  .then(function (r) { return r.json().catch(function () { return {}; }); })
+  .then(function (reponse) { onSucces(reponse); })
+  .catch(function () {
+    dire(idMsg, "Le serveur ne répond pas. Réessayez dans un instant.", "erreur");
+  })
+  .then(function () {
+    bouton.disabled = false;
+    bouton.textContent = libelle;
+  });
+}
+
+document.getElementById("vers-inscription").addEventListener("click", function () { montrer("inscription"); });
+document.getElementById("vers-connexion").addEventListener("click", function () { montrer("connexion"); });
+
+var retours = document.querySelectorAll("[data-retour]");
+for (var i = 0; i < retours.length; i++) {
+  retours[i].addEventListener("click", function () { montrer(this.getAttribute("data-retour")); });
+}
+
+/* --- inscription --- */
+document.getElementById("btn-inscrire").addEventListener("click", function () {
+  var donnees = {
+    identifiant:    document.getElementById("i-identifiant").value.trim(),
+    prenom:         document.getElementById("i-prenom").value.trim(),
+    telephone:      document.getElementById("i-telephone").value.trim(),
+    date_naissance: document.getElementById("i-naissance").value
+  };
+
+  if (!donnees.identifiant || !donnees.prenom || !donnees.telephone || !donnees.date_naissance) {
+    dire("msg-inscription", "Tous les champs sont nécessaires.", "erreur");
+    return;
+  }
+  if (donnees.telephone.charAt(0) !== "+") {
+    dire("msg-inscription", "Le téléphone doit commencer par + et l'indicatif du pays.", "erreur");
+    return;
+  }
+
+  appeler("/inscription", donnees, this, "msg-inscription", function (r) {
+    if (r.statut === "inscrit") {
+      document.getElementById("c-identifiant").value = donnees.identifiant;
+      montrer("connexion");
+      dire("msg-connexion", "Accès créé. Votre code arrive par WhatsApp.", "ok");
+    } else if (r.statut === "refuse") {
+      dire("msg-inscription", r.message || "Accès refusé.", "erreur");
+    } else {
+      dire("msg-inscription", "Cet identifiant est peut-être déjà pris. Essayez-en un autre.", "erreur");
+    }
+  });
+});
+
+/* --- connexion --- */
+document.getElementById("btn-connecter").addEventListener("click", function () {
+  var donnees = {
+    identifiant: document.getElementById("c-identifiant").value.trim(),
+    code:        document.getElementById("code").value.trim().toUpperCase()
+  };
+
+  if (!donnees.identifiant || !donnees.code) {
+    dire("msg-connexion", "Identifiant et code sont nécessaires.", "erreur");
+    return;
+  }
+
+  appeler("/connexion", donnees, this, "msg-connexion", function (r) {
+    if (r.acces === "autorise") {
+      identifiantCourant = donnees.identifiant;
+      document.getElementById("menu-nom").textContent = "Shalom " + (r.prenom || "");
+      montrer("menu");
+    } else {
+      dire("msg-connexion", r.message || "Identifiant ou code incorrect, ou code expiré.", "erreur");
+    }
+  });
+});
+
+/* --- demande de code --- */
+document.getElementById("btn-demander").addEventListener("click", function () {
+  var identifiant = document.getElementById("c-identifiant").value.trim();
+  if (!identifiant) {
+    dire("msg-connexion", "Saisissez d'abord votre identifiant.", "erreur");
+    return;
+  }
+  appeler("/demande-code", { identifiant: identifiant }, this, "msg-connexion", function (r) {
+    dire("msg-connexion", r.message || "Votre code vous a été envoyé par WhatsApp.", "ok");
+  });
+});
+
+/* --- demande de leçon --- */
+document.getElementById("btn-lecon").addEventListener("click", function () {
+  var theme = document.getElementById("l-theme").value.trim();
+  if (!theme) {
+    dire("msg-lecon", "Indiquez un thème.", "erreur");
+    return;
+  }
+
+  var donnees = {
+    identifiant: identifiantCourant,
+    theme:       theme,
+    niveau:      document.getElementById("l-niveau").value,
+    n:           parseInt(document.getElementById("l-n").value, 10)
+  };
+
+  appeler("/lecon", donnees, this, "msg-lecon", function () {
+    dire("msg-lecon",
+      "Votre leçon sur « " + theme + " » est en préparation. Le lien arrive par WhatsApp dans une à deux minutes.",
+      "ok");
+  });
+});
+
+/* --- sortir --- */
+document.getElementById("btn-sortir").addEventListener("click", function () {
+  document.getElementById("code").value = "";
+  identifiantCourant = "";
+  montrer("accueil");
+});
+
+montrer("accueil");
+</script>
+
+</body>
+</html>
