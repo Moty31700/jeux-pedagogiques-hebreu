@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>רשימת מוטי — Quiz pédagogique · 15 mots</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700&family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0d0d;--card:#181818;--card2:#1e1e1e;--border:#252525;
+  --gold:#c9a84c;--gold-l:#e8c96a;--gold-dim:rgba(201,168,76,0.12);
+  --txt:#e8e4dc;--muted:#777;--sub:#aaa;
+  --ok:#3d9b60;--ok-bg:#0f2018;--err:#b04040;--err-bg:#250e0e;
+  --warn:#b87d20;--warn-bg:#1e1505;
+  --purple:#7c5cbf;--purple-l:#c5b0f5;--teal:#2a9d8f;
+  --round1:#c9a84c;--round2:#4ea8de;--round3:#c084fc;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;min-height:100vh}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:#080808;border-bottom:1px solid var(--border);
+  display:flex;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.tab{padding:13px 15px;cursor:pointer;white-space:nowrap;color:var(--muted);font-size:0.8rem;
+  font-weight:500;border-bottom:2px solid transparent;transition:all .2s;flex-shrink:0}
+.tab:hover{color:var(--txt);background:rgba(255,255,255,0.03)}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab.t-flash.active{color:#7ed6c8;border-bottom-color:var(--teal)}
+.tab.t-liste.active{color:var(--purple-l);border-bottom-color:var(--purple)}
+
+/* PAGES */
+.page{display:none;max-width:820px;margin:0 auto;padding:22px 14px 70px}
+.page.active{display:block}
+.ph{text-align:center;padding:24px 0 18px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.ph-heb{font-family:"Frank Ruhl Libre",serif;font-size:2rem;color:var(--gold);line-height:1.3}
+.ph h2{font-family:"Playfair Display",serif;font-size:1.05rem;color:var(--sub);margin-top:5px;font-weight:400}
+.ph .sub{font-size:0.76rem;color:var(--muted);margin-top:3px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:none;border-radius:7px;
+  cursor:pointer;font-size:0.83rem;font-weight:500;transition:all .15s;font-family:"DM Sans",sans-serif}
+.btn-g{background:var(--gold);color:#000}.btn-g:hover{filter:brightness(1.1)}
+.btn-o{background:rgba(255,255,255,0.07);color:var(--txt);border:1px solid var(--border)}
+.btn-o:hover{background:rgba(255,255,255,0.12)}
+.btn-sm{padding:6px 12px;font-size:0.76rem}
+.btn-err{background:rgba(176,64,64,0.2);color:#d47070;border:1px solid var(--err)}
+.btn-err:hover{background:rgba(176,64,64,0.35)}
+.ab{background:none;border:1px solid var(--border);color:var(--gold);border-radius:5px;
+  padding:3px 9px;cursor:pointer;font-size:0.78rem;transition:all .15s}
+.ab:hover{background:var(--gold-dim);border-color:var(--gold)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* QUIZ — SÉLECTEUR DE MODE */
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:9px;margin-bottom:16px}
+.mode-card{background:var(--card);border:2px solid var(--border);border-radius:9px;padding:15px 12px;
+  cursor:pointer;transition:all .2s;text-align:center}
+.mode-card:hover,.mode-card.sel{border-color:var(--gold);background:var(--gold-dim)}
+.mode-card .mi{font-size:1.6rem;margin-bottom:5px}
+.mode-card .mt{font-size:0.82rem;font-weight:600;color:var(--txt);margin-bottom:2px}
+.mode-card .ms{font-size:0.71rem;color:var(--muted)}
+
+/* QUIZ — BANDEAU DE SESSION */
+.session-bar{background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:10px 14px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sbar-item{display:flex;align-items:center;gap:5px;font-size:0.78rem}
+.sbar-label{color:var(--muted)}
+.sbar-val{font-weight:700;color:var(--gold)}
+.sbar-val.ok{color:#6ecf99}
+.sbar-val.err{color:#d47070}
+.sbar-val.warn{color:#d4a44c}
+.round-badge{font-size:0.7rem;font-weight:700;padding:3px 9px;border-radius:12px;letter-spacing:.05em}
+.r1{background:rgba(201,168,76,0.2);color:var(--round1);border:1px solid rgba(201,168,76,0.35)}
+.r2{background:rgba(78,168,222,0.18);color:var(--round2);border:1px solid rgba(78,168,222,0.3)}
+.r3{background:rgba(192,132,252,0.18);color:var(--round3);border:1px solid rgba(192,132,252,0.3)}
+
+/* QUIZ — CARTE */
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:18px 16px;margin-bottom:12px}
+.qmode-lbl{font-size:0.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;font-weight:700}
+.qword{font-size:2.7rem;text-align:center;color:var(--gold-l);padding:12px 0 2px;
+  font-family:"Frank Ruhl Libre",serif;direction:rtl;cursor:pointer;line-height:1.2}
+.qword:hover{color:var(--gold)}
+.qtrans{text-align:center;font-size:0.82rem;color:var(--muted);margin-bottom:4px}
+.qforms-row{text-align:center;font-size:0.85rem;color:var(--sub);margin-bottom:12px;
+  font-family:"Frank Ruhl Libre",serif;direction:rtl;line-height:2.2;padding:6px 0}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.opt{padding:12px 10px;border:1px solid var(--border);border-radius:8px;cursor:pointer;
+  text-align:center;transition:all .15s;font-size:0.87rem;line-height:1.4;user-select:none}
+.opt:hover{border-color:var(--gold);background:var(--gold-dim)}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg);color:#7ecf9f;pointer-events:none;
+  animation:popOk .3s ease}
+.opt.err{border-color:var(--err);background:var(--err-bg);color:#d47070;pointer-events:none}
+.opt.reveal{border-color:var(--ok);background:var(--ok-bg);color:#7ecf9f}
+.opt.locked{pointer-events:none;opacity:.55}
+@keyframes popOk{0%{transform:scale(.96)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+
+/* FEEDBACK MORPHO */
+.morph-fb{display:none;margin-top:12px;background:rgba(201,168,76,0.07);
+  border:1px solid rgba(201,168,76,0.2);border-radius:7px;padding:11px 13px;
+  font-size:0.82rem;color:var(--sub);line-height:1.65}
+.morph-fb-heb{font-family:"Frank Ruhl Libre",serif;font-size:1.05rem;color:var(--gold-l);direction:rtl;margin-bottom:3px}
+.morph-fb-ex{margin-top:6px;font-style:italic;color:var(--muted);font-size:0.78rem;direction:rtl;text-align:right;
+  border-top:1px solid rgba(201,168,76,0.15);padding-top:6px}
+
+/* BARRE DE PROGRESSION DUALE */
+.prog-wrap{margin-bottom:12px}
+.prog-labels{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:4px}
+.prog{height:6px;background:var(--border);border-radius:3px;overflow:hidden;display:flex}
+.prog-ok{height:100%;background:var(--ok);transition:width .4s ease}
+.prog-err{height:100%;background:var(--err);transition:width .4s ease;opacity:.7}
+
+/* STATUS LISTE DES MOTS */
+.word-status-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:5px;margin-top:10px}
+.ws-chip{width:42px;height:34px;border-radius:5px;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:"Frank Ruhl Libre",serif;font-size:0.8rem;direction:rtl;cursor:pointer;transition:all .15s}
+.ws-chip:hover{border-color:var(--gold)}
+.ws-chip.ws-ok{background:var(--ok-bg);border-color:rgba(61,155,96,.4);color:#6ecf99}
+.ws-chip.ws-err{background:var(--err-bg);border-color:rgba(176,64,64,.4);color:#d47070}
+.ws-chip.ws-cur{border-color:var(--gold);background:var(--gold-dim)}
+.ws-chip.ws-todo{color:var(--muted)}
+
+/* ÉCRAN DE FIN DE ROUND */
+.round-end{text-align:center;padding:28px 16px}
+.re-icon{font-size:3rem;margin-bottom:10px}
+.re-title{font-family:"Playfair Display",serif;font-size:1.4rem;margin-bottom:6px}
+.re-msg{font-size:0.88rem;color:var(--sub);margin-bottom:18px;line-height:1.6}
+.re-stats{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.re-stat{text-align:center}
+.re-stat-n{font-size:1.8rem;font-weight:700}
+.re-stat-l{font-size:0.72rem;color:var(--muted);margin-top:2px}
+
+/* ÉCRAN FIN TOTALE */
+.end-box{text-align:center;padding:30px 16px}
+.end-stars{font-size:2.2rem;margin-bottom:8px}
+.end-sc{font-size:2rem;color:var(--gold);font-family:"Playfair Display",serif;margin-bottom:6px}
+.end-pct{font-size:0.88rem;color:var(--sub);margin-bottom:18px}
+
+/* FLASHCARDS */
+.fc-wrap{perspective:1100px;max-width:420px;margin:0 auto 14px;height:210px}
+.fc{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s;cursor:pointer}
+.fc.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:20px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--border)}
+.face-f{background:var(--card)}
+.face-b{background:rgba(124,92,191,0.1);border-color:var(--purple);transform:rotateY(180deg)}
+.fc-heb{font-family:"Frank Ruhl Libre",serif;font-size:2.3rem;direction:rtl;color:var(--gold-l);text-align:center}
+.fc-forms{font-family:"Frank Ruhl Libre",serif;font-size:0.88rem;direction:rtl;color:var(--muted);text-align:center;margin-top:4px}
+.fc-fr{font-size:1rem;color:var(--txt);text-align:center;margin-bottom:6px;font-weight:600}
+.fc-morph{font-size:0.71rem;color:var(--muted);text-align:center;font-style:italic;max-width:300px;line-height:1.5}
+.fc-prog{text-align:center;font-size:0.75rem;color:var(--muted);margin-bottom:5px}
+.fc-hint{text-align:center;font-size:0.71rem;color:var(--muted);margin-bottom:9px}
+.fc-ctrl{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:9px}
+.fc-filter-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+
+/* ÉCOUTE */
+.li{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--border);
+  border-radius:7px;margin-bottom:6px;cursor:pointer;transition:border-color .15s}
+.li:hover,.li.playing{border-color:var(--gold);background:var(--gold-dim)}
+.li.played{border-color:var(--ok)}
+.li-n{font-size:0.7rem;color:var(--muted);width:20px;flex-shrink:0;text-align:right}
+.li-heb{font-family:"Frank Ruhl Libre",serif;font-size:1.15rem;direction:rtl;color:var(--gold-l);flex:1;text-align:right}
+.li-fr{font-size:0.79rem;color:var(--sub);flex:1}
+
+/* LISTE LEXIQUE */
+.lex-search{width:100%;background:var(--card);border:1px solid var(--border);color:var(--txt);
+  padding:10px 14px;border-radius:7px;font-size:0.87rem;margin-bottom:12px;outline:none;transition:border-color .15s}
+.lex-search:focus{border-color:var(--gold)}
+.lex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:9px}
+.lc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 11px;cursor:pointer;transition:all .15s}
+.lc:hover{border-color:var(--gold);background:var(--card2);transform:translateY(-1px)}
+.lc-heb{font-family:"Frank Ruhl Libre",serif;font-size:1.25rem;direction:rtl;text-align:right;color:var(--gold-l);margin-bottom:3px}
+.lc-tr{font-size:0.7rem;color:var(--muted);margin-bottom:4px}
+.lc-fr{font-size:0.81rem;color:var(--sub);margin-bottom:8px}
+.lc-foot{display:flex;justify-content:space-between;align-items:center}
+.badge{font-size:0.62rem;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:3px;text-transform:uppercase}
+.bn{background:rgba(58,107,201,.3);color:#8ab4f8}
+.bv{background:rgba(42,153,96,.3);color:#7fcfa0}
+.badj{background:rgba(201,122,32,.3);color:#f5b870}
+.badv{background:rgba(136,85,204,.3);color:#d4b0f5}
+.bprep{background:rgba(100,100,100,.3);color:#ccc}
+.bexpr{background:rgba(176,64,64,.3);color:#f09090}
+.rac{font-size:0.67rem;color:var(--muted)}
+
+/* SELECT */
+select.sel-ui{background:var(--card);border:1px solid var(--border);color:var(--txt);
+  padding:7px 10px;border-radius:6px;font-size:0.78rem;outline:none}
+.spd-row{display:flex;align-items:center;gap:6px;font-size:0.76rem;color:var(--muted)}
+.spd-row select{background:var(--card);border:1px solid var(--border);color:var(--txt);
+  padding:4px 6px;border-radius:4px;font-size:0.76rem}
+
+@media(max-width:480px){
+  .qword{font-size:2rem}.opts{grid-template-columns:1fr}
+  .fc-heb{font-size:1.9rem}.fc-wrap{height:185px}
+  .lex-grid{grid-template-columns:1fr 1fr}
+  .mode-grid{grid-template-columns:1fr 1fr}
+  .re-stats{gap:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="tab active" onclick="showPage('quiz')" id="tab-quiz">&#127919; Quiz</div>
+  <div class="tab t-flash" onclick="showPage('flash')" id="tab-flash">&#127183; Flashcards</div>
+  <div class="tab" onclick="showPage('listen')" id="tab-listen">&#128266; &#1513;&#1502;&#1506;</div>
+  <div class="tab t-liste" onclick="showPage('liste')" id="tab-liste">&#128214; Liste</div>
+</div>
+
+<!-- ═══ PAGE QUIZ ═══ -->
+<div id="page-quiz" class="page active">
+  <div class="ph">
+    <div class="ph-heb">&#1512;&#1513;&#1497;&#1502;&#1514; &#1502;&#1493;&#1496;&#1497;</div>
+    <h2>Quiz p&eacute;dagogique &middot; Apprentissage adaptatif</h2>
+    <div class="sub">Les mots r&eacute;ussis sont valid&eacute;s &bull; Les erreurs reviennent jusqu&rsquo;&agrave; ma&icirc;trise</div>
+  </div>
+
+  <!-- Écran de configuration -->
+  <div id="config-screen">
+    <div style="font-size:0.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:700">Mode de quiz</div>
+    <div class="mode-grid">
+      <div class="mode-card sel" id="mc-hf" onclick="selMode('he-fr')">
+        <div class="mi">&#127470;&#127473;&rarr;&#127467;&#127479;</div>
+        <div class="mt">H&eacute;breu &rarr; Fran&ccedil;ais</div>
+        <div class="ms">Voir le mot, choisir le sens</div>
+      </div>
+      <div class="mode-card" id="mc-fh" onclick="selMode('fr-he')">
+        <div class="mi">&#127467;&#127479;&rarr;&#127470;&#127473;</div>
+        <div class="ms">Voir la d&eacute;finition, choisir le mot</div>
+      </div>
+      <div class="mode-card" id="mc-forms" onclick="selMode('forms')">
+        <div class="mi">&#127807;</div>
+        <div class="mt">Formes &rarr; Sens</div>
+        <div class="ms">Voir les d&eacute;riv&eacute;s, trouver le sens</div>
+      </div>
+      <div class="mode-card" id="mc-mix" onclick="selMode('mix')">
+        <div class="mi">&#128256;</div>
+        <div class="mt">Mode mixte</div>
+        <div class="ms">3 modes en alternance</div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:6px;margin-bottom:18px">
+      <select id="catFilter" class="sel-ui">
+        <option value="">Tous les mots (15)</option>
+        <option value="n">Noms</option>
+        <option value="v">Verbes</option>
+        <option value="adj">Adjectifs</option>
+        <option value="other">Adv. / Expr. / Pr&eacute;p.</option>
+      </select>
+    </div>
+    <div style="background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:14px;margin-bottom:18px;font-size:0.83rem;color:var(--sub);line-height:1.7">
+      <strong style="color:var(--gold)">&#127891; Principe p&eacute;dagogique :</strong><br>
+      <b style="color:#6ecf99">&#10003; R&eacute;ponse juste</b> &rarr; mot valid&eacute;, il ne revient plus dans cette session.<br>
+      <b style="color:#d47070">&#10007; R&eacute;ponse fausse</b> &rarr; mot remis dans la pile, il reviendra jusqu&rsquo;&agrave; ma&icirc;trise.<br>
+      La session se termine quand <em>tous</em> les mots sont valid&eacute;s.
+    </div>
+    <button class="btn btn-g" id="startBtn" style="width:100%;justify-content:center;padding:12px">&#9654; Commencer la session</button>
+  </div>
+
+  <!-- Zone de jeu -->
+  <div id="quiz-zone" style="display:none">
+    <!-- Bandeau session -->
+    <div class="session-bar">
+      <div class="sbar-item"><span class="sbar-label">Session :</span><span class="sbar-val" id="sb-round"></span></div>
+      <div class="sbar-item"><span class="sbar-label">Valid&eacute;s :</span><span class="sbar-val ok" id="sb-ok">0</span></div>
+      <div class="sbar-item"><span class="sbar-label">&Agrave; retravailler :</span><span class="sbar-val err" id="sb-err">0</span></div>
+      <div class="sbar-item"><span class="sbar-label">Restants :</span><span class="sbar-val warn" id="sb-left">0</span></div>
+      <div class="sbar-item"><span class="sbar-label">Score :</span><span class="sbar-val" id="sb-score">0</span></div>
+    </div>
+    <!-- Barre de progression duale -->
+    <div class="prog-wrap">
+      <div class="prog-labels">
+        <span id="pl-ok" style="color:#6ecf99">0 valid&eacute;s</span>
+        <span id="pl-tot" style="color:var(--muted)">sur 0</span>
+        <span id="pl-err" style="color:#d47070">0 erreurs</span>
+      </div>
+      <div class="prog" id="mainProg">
+        <div class="prog-ok" id="progOk" style="width:0%"></div>
+        <div class="prog-err" id="progErr" style="width:0%"></div>
+      </div>
+    </div>
+    <!-- Grille statut mots -->
+    <div id="wordStatusGrid" class="word-status-grid" style="margin-bottom:12px"></div>
+    <!-- Carte question -->
+    <div class="card" id="qCard"></div>
+    <!-- Boutons session -->
+    <div class="row" style="margin-top:10px">
+      <button class="btn btn-o btn-sm" id="restartBtn">&#8634; Recommencer</button>
+      <button class="btn btn-o btn-sm" id="skipBtn">&#9197; Passer</button>
+      <button class="btn btn-o btn-sm" id="modesBtn">&#9881; Modes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAGE FLASHCARDS ═══ -->
+<div id="page-flash" class="page">
+  <div class="ph">
+    <div class="ph-heb" style="color:#7ed6c8">&#1499;&#1512;&#1496;&#1497;&#1505;&#1497;&#1493;&#1468;&#1514;</div>
+    <h2>Flashcards recto / verso</h2>
+    <div class="sub">Cliquez pour retourner &middot; 15 mots</div>
+  </div>
+  <div class="fc-prog" id="fcProg">1 / 15</div>
+  <div class="fc-hint">Cliquez sur la carte pour r&eacute;v&eacute;ler la traduction et l&rsquo;analyse</div>
+  <div class="fc-wrap">
+    <div class="fc" id="fcCard">
+      <div class="face face-f">
+        <div class="fc-heb" id="fcHeb"></div>
+        <div class="fc-forms" id="fcForms"></div>
+      </div>
+      <div class="face face-b">
+        <div class="fc-fr" id="fcFr"></div>
+        <div class="fc-morph" id="fcMorph"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-ctrl">
+    <button class="btn btn-o btn-sm" id="fcPrev">&#8592; Pr&eacute;c.</button>
+    <button class="btn btn-o btn-sm" id="fcSpeak">&#9654; &Eacute;couter</button>
+    <button class="btn btn-o btn-sm" id="fcNext">Suiv. &rarr;</button>
+    <button class="btn btn-o btn-sm" id="fcShuf">&#8644; M&eacute;langer</button>
+  </div>
+  <div class="fc-filter-row">
+    <button class="btn btn-o btn-sm" onclick="fcFilter('')">Tous</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('n')">Noms</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('v')">Verbes</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('adj')">Adj.</button>
+    <button class="btn btn-o btn-sm" onclick="fcFilter('other')">Adv./Expr.</button>
+  </div>
+</div>
+
+<!-- ═══ PAGE ÉCOUTE ═══ -->
+<div id="page-listen" class="page">
+  <div class="ph">
+    <div class="ph-heb">&#1492;&#1511;&#1513;&#1461;&#1489;</div>
+    <h2>&Eacute;coute mot par mot</h2>
+    <div class="sub">Cliquez sur un mot &middot; ou lisez toute la liste</div>
+  </div>
+  <div class="row" style="margin-bottom:12px">
+    <button class="btn btn-g btn-sm" id="listenHeb">&#9654; H&eacute;breu seul</button>
+    <button class="btn btn-o btn-sm" id="listenBoth">&#9654; H&eacute;breu + FR</button>
+    <button class="btn btn-o btn-sm" id="stopBtn">&#9632; Stop</button>
+    <div class="spd-row"><label>Vitesse :</label>
+      <select id="spd"><option value="0.5">Lente</option><option value="0.75" selected>Normale</option><option value="1">Rapide</option></select>
+    </div>
+    <span id="liPb" style="font-size:0.74rem;color:var(--muted)">0 / 15 &eacute;cout&eacute;s</span>
+  </div>
+  <div id="liList"></div>
+</div>
+
+<!-- ═══ PAGE LISTE ═══ -->
+<div id="page-liste" class="page">
+  <div class="ph">
+    <div class="ph-heb" style="color:var(--purple-l)">&#1502;&#1460;&#1500;&#1468;&#1493;&#1465;&#1503;</div>
+    <h2>Liste compl&egrave;te &middot; 15 mots</h2>
+    <div class="sub">Cliquez pour &eacute;couter</div>
+  </div>
+  <input class="lex-search" id="lsearch" type="text" placeholder="Rechercher — h&eacute;breu, fran&ccedil;ais, racine...">
+  <div id="lexG" class="lex-grid"></div>
+</div>
+
+<script>
+// =====================================================
+// DONNÉES (syntaxe propre — pas d'apostrophes dans les clés de template)
+// =====================================================
+const MOTY = [{"h":"אִינְטֶרְטֶקְסְטוּאָלִיּוּת","t":"intertekstu'aliut","f":"intertextualité","c":"n","r":"כ-ת-ב","m":"Nom féminin abstrait emprunté du grec via l'anglais, désignant la relation entre les textes littéraires.","fs":[["אִינְטֶרְטֶקְסְטוּאָלִי","adj. masc."],["טֶקְסְט","texte (base)"],["בֵּין-טֶקְסְטִי","variante hébraïque"]],"eh":"הָאִינְטֶרְטֶקְסְטוּאָלִיּוּת בְּרוֹמָן זֶה עֲשִׁירָה וּמְכֻוֶּנֶת.","ef":"L'intertextualité dans ce roman est riche et intentionnelle.","ex":[["חוֹקֵר הַסִּפְרוּת נִתֵּחַ אֶת הָאִינְטֶרְטֶקְסְטוּאָלִיּוּת בִּיצִירָה.","[académique] Le chercheur en littérature a analysé l'intertextualité dans l'œuvre."],["הָאִינְטֶרְטֶקְסְטוּאָלִיּוּת מַעֲשִׁירָה אֶת קְרִיאַת הַטֶּקְסְט.","[critique] L'intertextualité enrichit la lecture du texte."],["סְטוּדֶנְטִים רַבִּים מִתְקַשִּׁים לְזַהוֹת אִינְטֶרְטֶקְסְטוּאָלִיּוּת.","[pédagogique] De nombreux étudiants ont du mal à identifier l'intertextualité."]]},{"h":"רָטוֹרִיקָה","t":"ratorika","f":"rhétorique","c":"n","r":"ר-ט-ר","m":"Nom féminin emprunté du grec, désignant l'art du discours persuasif et les figures stylistiques.","fs":[["רָטוֹרִי","adj. masc."],["רָטוֹרִית","adj. fém."],["בַּעַל רָטוֹרִיקָה","orateur"]],"eh":"הָרָטוֹרִיקָה שֶׁל הַסּוֹפֵר מְשַׁכְנַעַת אֶת הַקּוֹרֵא בְּאֹפֶן עָמֹק.","ef":"La rhétorique de l'auteur convainc le lecteur en profondeur.","ex":[["הִיא לָמְדָה רָטוֹרִיקָה כְּדֵי לְשַׁפֵּר אֶת כְּתִיבָתָהּ הָעִיּוּנִית.","[académique] Elle a étudié la rhétorique pour améliorer son écriture théorique."],["הָרָטוֹרִיקָה הַפּוֹלִיטִית נוֹכַחַת גַּם בְּסִפְרוּת.","[critique] La rhétorique politique est présente aussi dans la littérature."],["שְׁאֵלָה רֵטוֹרִית אֵינָהּ מְצַפָּה לְתַשׁוּבָה.","[stylistique] Une question rhétorique n'attend pas de réponse."]]},{"h":"אֶלֶגְיָה","t":"elegya","f":"élégie","c":"n","r":"א-ל-ג","m":"Nom féminin emprunté du grec, désignant un poème lyrique exprimant la lamentation et la mélancolie.","fs":[["אֶלֶגִי","adj. masc."],["אֶלֶגִית","adj. fém."],["אֶלֶגִיּוֹת","pluriel"]],"eh":"הָאֶלֶגְיָה שֶׁכָּתַב הַמְּשׁוֹרֵר לְאַחַר מוֹת חֲבֵרוֹ נוֹגַעַת עַד לֵב.","ef":"L'élégie que le poète a écrite après la mort de son ami est profondément touchante.","ex":[["הָאֶלֶגְיָה הִיא אַחַד הַז׳אנְרִים הָעַתִּיקִים בְּסִפְרוּת.","[historique] L'élégie est l'un des genres les plus anciens en littérature."],["שִׁירְתוֹ הָאֶלֶגִית שֶׁל רָחֵל הַמְּשׁוֹרֶרֶת עֲדַיִן נֶאֱהֶבֶת.","[littéraire] La poésie élégiaque de Rachel la poétesse est encore aimée."],["הוּא חִיבֵּר אֶלֶגְיָה לְזֵכֶר הַנִּפְטָרִים בַּמִּלְחָמָה.","[mémoriel] Il a composé une élégie en mémoire des disparus à la guerre."]]},{"h":"פָּרָפְרָזָה","t":"parafraza","f":"paraphrase","c":"n","r":"פ-ר-פ","m":"Nom féminin emprunté du grec, désignant la reformulation d'un texte en d'autres mots tout en conservant le sens.","fs":[["לְפָרֵף","v. paraphraser"],["מְפֹרָף","adj. paraphrasé"],["פָּרָפְרָזוֹת","pluriel"]],"eh":"הַפָּרָפְרָזָה שֶׁל הַשִּׁיר אִפְשְׁרָה לַתַּלְמִידִים לְהָבִין אֶת מַשְׁמָעוּתוֹ.","ef":"La paraphrase du poème a permis aux élèves d'en comprendre le sens.","ex":[["כְּתֹב פָּרָפְרָזָה שֶׁל הַקֶּטַע הַזֶּה בְּמִלִּים פְּשׁוּטוֹת.","[pédagogique] Écris une paraphrase de ce passage en mots simples."],["הַפָּרָפְרָזָה אֵינָהּ תַּרְגּוּם אֶלָּא פֵּרוּשׁ מְנֻסָּח מֵחָדָשׁ.","[théorique] La paraphrase n'est pas une traduction mais une reformulation interprétative."],["הַמְּבַקֵּר הִשְׁתַּמֵּשׁ בְּפָרָפְרָזָה כְּדֵי לְהַסְבִּיר אֶת הַיְּצִירָה.","[critique] Le critique a utilisé la paraphrase pour expliquer l'œuvre."]]},{"h":"אֶפִּיגְרָף","t":"epigraf","f":"épigraphe","c":"n","r":"א-פ-ג","m":"Nom masculin emprunté du grec, désignant une citation placée en tête d'un livre ou d'un chapitre pour en éclairer le sens.","fs":[["אֶפִּיגְרָפִי","adj. masc."],["אֶפִּיגְרָמָה","épigramme (forme proche)"],["אֶפִּיגְרָפִים","pluriel"]],"eh":"הָאֶפִּיגְרָף שֶׁבָּחַר הַסּוֹפֵר מַרְמֵז עַל הַנּוֹשֵׂא הַמֶּרְכָּזִי שֶׁל הָרוֹמָן.","ef":"L'épigraphe que l'auteur a choisie suggère le thème central du roman.","ex":[["הָאֶפִּיגְרָף לְקוּחַ מִשִּׁיר שֶׁל בְּיָאלִיק.","[littéraire] L'épigraphe est tirée d'un poème de Bialik."],["חֲקִירַת הָאֶפִּיגְרָף חוֹשֶׂפֶת אֶת כַּוָּנַת הַמְּחַבֵּר.","[analytique] L'étude de l'épigraphe révèle l'intention de l'auteur."],["לֹא כָּל הַסּוֹפְרִים מַשְׁתַּמְּשִׁים בְּאֶפִּיגְרָף בְּיִצְירוֹתֵיהֶם.","[général] Tous les auteurs n'utilisent pas d'épigraphe dans leurs œuvres."]]},{"h":"אַלֵּגוֹרְיָה","t":"allegorya","f":"allégorie","c":"n","r":"א-ל-ג","m":"Emprunt du grec via le latin, nominalisé au féminin avec terminaison /-ya/, désignant un récit symbolique à double sens.","fs":[["אַלֵּגוֹרִי","adj. allégorique"],["אַלֵּגוֹרִית","adj. f."],["הַאַלֵּגוֹרְיָה","forme définie"]],"eh":"הָאַלֵּגוֹרְיָה בְּסִפְרוּת יְמֵי הַבֵּינַיִם שִׁמְּשָׁה כְּאֶמְצָעִי לְהַעֲבִיר תְּכָנִים דָּתִיִּים.","ef":"L'allégorie dans la littérature médiévale servait de moyen pour transmettre des contenus religieux.","ex":[["הַסִּפּוּר הוּא אַלֵּגוֹרְיָה פּוֹלִיטִית מוּבְהֶקֶת.","[critique] L'histoire est une allégorie politique manifeste."],["הַמְּחַבֵּר נִקֵּט אַלֵּגוֹרְיָה כְּדֵי לְהִתְחַמֵּק מִן הַצֶּנְזוּרָה.","[histoire littéraire] L'auteur a recouru à l'allégorie pour échapper à la censure."],["קְרִיאָה אַלֵּגוֹרִית שֶׁל הַטֶּקְסְט מְגַלָּה רָבָדִים נוֹסָפִים.","[analyse] Une lecture allégorique du texte révèle des couches supplémentaires."]]},{"h":"פּוֹאֵטִיקָה","t":"poetika","f":"poétique (théorie littéraire)","c":"n","r":"פ-א-ט","m":"Emprunt du grec poiētikē, utilisé en hébreu moderne comme substantif féminin désignant la théorie ou l'art de la composition littéraire.","fs":[["פּוֹאֵטִי","adj. poétique"],["פּוֹאֵטִית","adj. f."],["הַפּוֹאֵטִיקָה","forme définie"]],"eh":"אַרִיסְטוֹ הִנִּיחַ אֶת הַיְּסוֹדוֹת לַפּוֹאֵטִיקָה הַמַּעֲרָבִית בְּחִבּוּרוֹ הַמְּפֻרְסָם.","ef":"Aristote a posé les fondements de la poétique occidentale dans son célèbre traité.","ex":[["הַפּוֹאֵטִיקָה שֶׁל אַלְתֶּרְמַן מְשַׁלֶּבֶת סִמְבּוֹלִיזְם עִם לָשׁוֹן מְקֻרְאֶקֶת.","[poésie hébraïque] La poétique d'Alterman combine symbolisme et langue classique."],["חוֹקְרֵי הַסִּפְרוּת עוֹסְקִים בְּפּוֹאֵטִיקָה הִשּׁוּאָתִית.","[académique] Les chercheurs en littérature s'occupent de poétique comparative."],["הַפּוֹאֵטִיקָה שֶׁל הַיָּצִיר מִשְׁתַּקֶּפֶת בְּבַחִירַת הַמִּילִּים.","[stylistique] La poétique de l'auteur se reflète dans le choix des mots."]]},{"h":"מֵימֵזִיס","t":"mimezis","f":"mimésis (imitation du réel)","c":"n","r":"מ-מ-ז","m":"Terme philosophico-littéraire emprunté du grec mimēsis, utilisé sans déclinaison hébraïque propre, désignant le principe d'imitation de la réalité dans l'art.","fs":[["מִימֵטִי","adj. mimétique"],["מִימֵטִית","adj. f."],["הַמֵּימֵזִיס","forme définie"]],"eh":"מְחַבְּרֵי הַרֵּאָלִיזְם שָׁאֲפוּ לְמֵימֵזִיס מֻשְׁלֶמֶת שֶׁל הַחַיִּים הַחֶבְרָתִיִּים.","ef":"Les auteurs réalistes aspiraient à une mimésis parfaite de la vie sociale.","ex":[["הַמֵּימֵזִיס הִיא מוֹשָׂג מֶרְכָּזִי בְּתוֹרַת הַסִּפְרוּת מֵאָז אַרִיסְטוֹ.","[théorie] La mimésis est un concept central en théorie littéraire depuis Aristote."],["הַיָּצִיר מַעֲדִיף סֶגְנוֹן אַנְטִי-מִימֵטִי הַמְּדַגִּישׁ אֶת הַמִּלָּאכוּתִיּוּת.","[modernisme] L'auteur préfère un style anti-mimétique qui souligne l'artificialité."],["הַדֵּיוּן בְּמֵימֵזִיס מַמְשִׁיךְ לְהַעֲסִיק פִּילוֹסוֹפִים שֶׁל הַאָמָּנוּת.","[philosophie] Le débat sur la mimésis continue d'occuper les philosophes de l'art."]]},{"h":"לֵייטְמוֹטִיב","t":"leitmotiv","f":"leitmotiv (motif récurrent)","c":"n","r":"ל-ט-מ","m":"Emprunt de l'allemand Leitmotiv, intégré en hébreu moderne comme nom masculin invariable désignant un thème ou motif récurrent structurant une œuvre.","fs":[["הַלֵּייטְמוֹטִיב","forme définie"],["לֵייטְמוֹטִיבִים","pluriel"],["לֵייטְמוֹטִיבִי","adj. relatif"]],"eh":"הַבְּדִידוּת מְשַׁמֶּשֶׁת כְּלֵייטְמוֹטִיב מֶרְכָּזִי בְּיֶצִירַת הַסּוֹפֵר.","ef":"La solitude sert de leitmotiv central dans l'œuvre de l'écrivain.","ex":[["הַלֵּייטְמוֹטִיב שֶׁל הַגָּלוּת חוֹזֵר בְּרוֹב יְצִירוֹת הַסִּפְרוּת הָעִבְרִית הַמּוֹדֶרְנִית.","[littérature hébraïque] Le leitmotiv de l'exil revient dans la plupart des œuvres de la littérature hébraïque moderne."],["זִהּוּי הַלֵּייטְמוֹטִיבִים בַּטֶּקְסְט מַסִּיעַ לְהָבִין אֶת כַּוָּנַת הַמְּחַבֵּר.","[pédagogie] Identifier les leitmotivs dans le texte aide à comprendre l'intention de l'auteur."],["הַמּוּסִיקָה וְהַסִּפְרוּת חוֹלְקִים אֶת מוֹשַׂג הַלֵּייטְמוֹטִיב.","[interdisciplinaire] La musique et la littérature partagent le concept de leitmotiv."]]},{"h":"אֶקְפְרָזִיס","t":"ekfrasis","f":"ekphrasis (description d'une œuvre d'art)","c":"n","r":"א-פ-ר","m":"Terme rhétorico-littéraire emprunté du grec ekphrasis, désignant la description verbale détaillée d'une œuvre visuelle au sein d'un texte littéraire.","fs":[["אֶקְפְרָסְטִי","adj. ekphrastique"],["הָאֶקְפְרָזִיס","forme définie"],["אֶקְפְרָזִיס פּוֹאֵטִית","expr. ekphrasis poétique"]],"eh":"הַשִּׁיר שֶׁל קִיטְס עַל כַּד הַיְּוָנִי נֶחְשָׁב לְדֻגְמָה מֻפְתִּית שֶׁל אֶקְפְרָזִיס בַּסִּפְרוּת הָאַנְגְּלִית.","ef":"Le poème de Keats sur l'urne grecque est considéré comme un exemple parfait d'ekphrasis dans la littérature anglaise.","ex":[["הָאֶקְפְרָזִיס מְאַפְשֶׁרֶת דִּיאָלוֹג עֵשִׁיר בֵּין הַסִּפְרוּת לְאָמָּנוּת הַחֲזוּתִית.","[intermédialité] L'ekphrasis permet un dialogue riche entre la littérature et l'art visuel."],["חֶקֶר הָאֶקְפְרָזִיס צָבַר תְּאוּצָה בְּמִסְגֶּרֶת לִימּוּדֵי הַתַּרְבּוּת הַחֲזוּתִית.","[académique] L'étude de l'ekphrasis a pris de l'ampleur dans le cadre des études visuelles culturelles."],["בְּרוֹמָן זֶה, הַתֵּאוּר הַמְּפֹרָט שֶׁל הַצִּיּוּר מְהַוֶּה אֶקְפְרָזִיס מְרַשִּׁימָה.","[analyse textuelle] Dans ce roman, la description détaillée du tableau constitue une ekphrasis impressionnante."]]},{"h":"אֶפִּיסוֹדֶה","t":"episodeh","f":"épisode, digression narrative","c":"n","r":"א-פ-ס","m":"Emprunt du grec via le latin, désigne une unité narrative secondaire insérée dans le récit principal.","fs":[["אֶפִּיסוֹדִי","adj. épisodique"],["אֶפִּיסוֹדוֹת","pl. épisodes"],["מִבְנֶה אֶפִּיסוֹדִי","structure épisodique"]],"eh":"הָאֶפִּיסוֹדֶה הַזֶּה בָּרוֹמָן מְשַׁמֵּשׁ כְּהַסָּחַת דַּעַת מֵהָעֲלִילָה הָרָאשִׁית.","ef":"Cet épisode dans le roman sert de digression par rapport à l'intrigue principale.","ex":[["הָאֶפִּיסוֹדוֹת הַמִּשְׁנִיִּים מַעֲשִׁירִים אֶת הַמֶּרְקָם הַסִּפְרוּתִי.","[littérature] Les épisodes secondaires enrichissent la texture littéraire."],["הַמְּחַבֵּר שׁוֹזֵר אֶפִּיסוֹדוֹת קוֹמִיּוֹת לְתוֹךְ הַטְּרָגֶדְיָה.","[poétique] L'auteur tisse des épisodes comiques dans la tragédie."],["כָּל אֶפִּיסוֹדֶה בַּסֵּפֶר חוֹשֵׂף פֶּן נוֹסָף שֶׁל הַדְּמוּת הָרָאשִׁית.","[analyse] Chaque épisode du livre révèle un aspect supplémentaire du personnage principal."]]},{"h":"פָּרוֹדְיָה","t":"parodya","f":"parodie","c":"n","r":"פ-ר-ד","m":"Emprunt du grec parodia, désigne l'imitation comique ou critique d'une œuvre ou d'un style littéraire.","fs":[["פָּרוֹדִי","adj. parodique"],["לְפַרְדֵּד","v. parodier"],["פַּרְדָּן","n. parodiste"]],"eh":"הַפָּרוֹדְיָה שֶׁכָּתַב הַסּוֹפֵר לוֹקַחַת אֶת הַז׳ָאנֶר הָרוֹמַנְטִי לִקְצֵה הָאַבְּסוּרְד.","ef":"La parodie écrite par l'auteur pousse le genre romantique jusqu'à l'absurde.","ex":[["פָּרוֹדְיָה מוּצְלַחַת דּוֹרֶשֶׁת הֲבָנָה עֲמֻקָּה שֶׁל הַטֶּקְסְט הַמְּקוֹרִי.","[critique] Une parodie réussie exige une compréhension profonde du texte original."],["הַפָּרוֹדְיָה הַסִּפְרוּתִית מְשַׁמֶּשֶׁת לְעִתִּים כְּאֶמְצָעִי בִּיקּוֹרֶת חֶבְרָתִית.","[rhétorique] La parodie littéraire sert parfois de moyen de critique sociale."],["בְּאֶמְצָעוּת הַפָּרוֹדְיָה חוֹשֵׂף הַמְּחַבֵּר אֶת הַמּוּסְכָּמוֹת שֶׁל הַז׳ָאנֶר.","[poétique] Par la parodie, l'auteur expose les conventions du genre."]]},{"h":"אֶנִיגְמָה","t":"enigma","f":"énigme, mystère narratif","c":"n","r":"א-נ-ג","m":"Emprunt du grec ainigma, utilisé en théorie littéraire pour désigner une opacité intentionnelle du texte ou du personnage.","fs":[["אֶנִיגְמָטִי","adj. énigmatique"],["אֶנִיגְמָטִיּוּת","n. caractère énigmatique"],["קוֹד אֶנִיגְמָטִי","code énigmatique"]],"eh":"הָאֶנִיגְמָה שֶׁמַּקִּיפָה אֶת הַדְּמוּת הָרָאשִׁית מוֹשֶׁכֶת אֶת הַקּוֹרֵא עַד הַשּׁוּרָה הָאַחֲרוֹנָה.","ef":"L'énigme qui entoure le personnage principal attire le lecteur jusqu'à la dernière ligne.","ex":[["הָאֶנִיגְמָה הַמֶּרְכָּזִית שֶׁל הָרוֹמָן נִפְתֶּרֶת רַק בַּפֶּרֶק הָאַחֲרוֹן.","[structure] L'énigme centrale du roman ne se résout qu'au dernier chapitre."],["כּוֹתְבִים פוֹסְטְמוֹדֶרְנִיִּים מְשַׁמְּרִים לְעִתִּים אֶת הָאֶנִיגְמָה מִבְּלִי לְפוֹרְרָהּ.","[postmodernisme] Les écrivains postmodernes préservent parfois l'énigme sans la résoudre."],["הָאֶנִיגְמָה הַפּוֹאֵטִית שֶׁל הַשִּׁיר מַזְמִינָה פֵּרוּשִׁים מְרֻבִּים.","[poésie] L'énigme poétique du poème invite des interprétations multiples."]]},{"h":"אֵקְזֶגֵּזָה","t":"egzegeza","f":"exégèse, interprétation approfondie d'un texte","c":"n","r":"פ-ר-ש","m":"Emprunt du grec exegesis, désigne l'interprétation savante et systématique d'un texte littéraire ou sacré.","fs":[["אֵקְזֶגֵּטִי","adj. exégétique"],["אֵקְזֶגֵּט","n. exégète"],["אֵקְזֶגֵּזָה סִפְרוּתִית","exégèse littéraire"]],"eh":"הָאֵקְזֶגֵּזָה שֶׁל הַטֶּקְסְט הַקַּלָּסִי חוֹשֶׂפֶת שִׁכְבוֹת מַשְׁמָעוּת נֶעְלָמוֹת.","ef":"L'exégèse du texte classique révèle des couches de sens cachées.","ex":[["הָאֵקְזֶגֵּזָה הַמּוֹדֶרְנִית מְשַׁלֶּבֶת כְּלֵי פְּסִיכוֹאָנָלִיזָה עִם קְרִיאָה קְלָסִית.","[critique] L'exégèse moderne combine des outils psychanalytiques avec une lecture classique."],["בֵּית הַמִּדְרָשׁ הָאַקָדֵמִי מְפַתֵּחַ שִׁיטוֹת אֵקְזֶגֵּטִיּוֹת מְגֻוָּנוֹת.","[académique] Le milieu académique développe des méthodes exégétiques variées."],["הָאֵקְזֶגֵּזָה הַסִּפְרוּתִית שֶׁל יְצִירוֹת שֵׁיקְסְפִּיר מַמְשִׁיכָה לְהִתְחַדֵּשׁ.","[histoire littéraire] L'exégèse littéraire des œuvres de Shakespeare continue de se renouveler."]]},{"h":"הִיפֶּרְבּוֹלָה","t":"hiperbola","f":"hyperbole","c":"n","r":"ג-ד-ל","m":"Emprunt du grec hyperbole, figure de style consistant en une exagération délibérée à des fins expressives ou rhétoriques.","fs":[["הִיפֶּרְבּוֹלִי","adj. hyperbolique"],["בְּצוּרָה הִיפֶּרְבּוֹלִית","adv. de façon hyperbolique"],["שִׁימּוּשׁ בְּהִיפֶּרְבּוֹלָה","emploi de l'hyperbole"]],"eh":"הַהִיפֶּרְבּוֹלָה בִּשְׁירַת הַבָּרוֹק מְשַׁקֶּפֶת אֶת הָרָגֶשׁ הֶעָצוּם שֶׁל הַמְּשׁוֹרֵר.","ef":"L'hyperbole dans la poésie baroque reflète l'émotion intense du poète.","ex":[["הַשִׁימּוּשׁ בְּהִיפֶּרְבּוֹלָה מְאַפְיֵן אֶת סִגְנוֹן הַכְּתִיבָה שֶׁל רָבֵּלֵה.","[style] L'usage de l'hyperbole caractérise le style d'écriture de Rabelais."],["הִיפֶּרְבּוֹלָה מְכֻוֶּנֶת יְכוֹלָה לְשַׁמֵּשׁ כְּאֶמְצָעִי אִירוֹנִי בַּטֶּקְסְט.","[rhétorique] Une hyperbole délibérée peut servir de procédé ironique dans le texte."],["הַמְּבַקֵּר בָּחַן אֶת תַּפְקִיד הַהִיפֶּרְבּוֹלָה בְּעִצּוּב הַקּוֹל הַלִּירִי.","[analyse] Le critique a examiné le rôle de l'hyperbole dans la construction de la voix lyrique."]]}];
+
+// =====================================================
+// TTS
+// =====================================================
+let heV=null, frV=[];
+function loadV(){
+  const vs=speechSynthesis.getVoices();
+  heV=vs.find(v=>v.lang==='he-IL')||vs.find(v=>v.lang.startsWith('he'))||null;
+  frV=vs.filter(v=>v.lang.startsWith('fr'));
+}
+if('speechSynthesis' in window){loadV(); speechSynthesis.onvoiceschanged=loadV;}
+function speak(txt,rate){
+  return new Promise(r=>{
+    speechSynthesis.cancel();
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(txt);
+      u.lang='he-IL'; u.rate=rate||parseFloat(document.getElementById('spd')?.value||0.75);
+      if(heV) u.voice=heV;
+      u.onend=u.onerror=r; speechSynthesis.speak(u);
+    },80);
+  });
+}
+function speakFr(txt){
+  return new Promise(r=>{
+    speechSynthesis.cancel();
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(txt);
+      u.lang='fr-FR'; u.rate=0.85;
+      if(frV.length) u.voice=frV[0];
+      u.onend=u.onerror=r; speechSynthesis.speak(u);
+    },80);
+  });
+}
+function stopTTS(){ speechSynthesis.cancel(); }
+function shuffle(a){ return a.slice().sort(()=>Math.random()-.5); }
+
+// =====================================================
+// NAVIGATION
+// =====================================================
+function showPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('tab-'+p).classList.add('active');
+  if(p==='liste') buildListe('');
+  if(p==='listen') buildListen();
+  if(p==='flash'){ fcList=MOTY.slice(); fcIdx=0; renderFC(); }
+}
+// =====================================================
+// QUIZ — LOGIQUE PÉDAGOGIQUE ADAPTATIVE
+// =====================================================
+/*
+  SESSION :
+  - validated  : Set des n (ids) des mots définitivement réussis
+  - pile        : tableau des mots restants à passer (mélangés)
+  - errQueue    : file des mots ratés (re-injectés en fin de pile)
+  - totalAttempts / totalOk : stats globales
+  - round       : numéro du round courant (1 = première passe, 2+ = révision des erreurs)
+*/
+let qMode='he-fr', qCatFilter='';
+let validated=new Set(), pile=[], errQueue=[];
+let totalAttempts=0, totalOk=0, roundNum=1;
+let qLock=false, mixSeq=['he-fr','fr-he','forms'], mixIdx=0;
+let _opts=[], _correctF='', _correctH='', _curM=null;
+
+function selMode(m){
+  qMode=m;
+  document.querySelectorAll('.mode-card').forEach(el=>el.classList.remove('sel'));
+  const map={'he-fr':'mc-hf','fr-he':'mc-fh','forms':'mc-forms','mix':'mc-mix'};
+  document.getElementById(map[m])?.classList.add('sel');
+}
+
+function getBaseList(){
+  const cat=document.getElementById('catFilter').value;
+  if(!cat) return MOTY.slice();
+  if(cat==='other') return MOTY.filter(m=>m.c==='adv'||m.c==='expr'||m.c==='prep'||m.c==='conj');
+  return MOTY.filter(m=>m.c===cat);
+}
+
+// ── Démarrage session ──
+function startQuiz(){
+  const base=getBaseList();
+  validated=new Set(); pile=shuffle(base); errQueue=[];
+  totalAttempts=0; totalOk=0; roundNum=1; qLock=false; mixIdx=0;
+  document.getElementById('config-screen').style.display='none';
+  document.getElementById('quiz-zone').style.display='block';
+  buildWordStatusGrid(base);
+  updateHUD();
+  nextQuestion();
+}
+
+// ── Restart ──
+function restartSession(){
+  document.getElementById('config-screen').style.display='block';
+  document.getElementById('quiz-zone').style.display='none';
+}
+
+// ── Fin de round : tous les mots de ce round passés ──
+function startNewRound(){
+  // Les mots de errQueue deviennent la nouvelle pile
+  roundNum++;
+  pile=shuffle(errQueue.slice()); errQueue=[];
+  qLock=false; mixIdx=0;
+  buildWordStatusGrid(getBaseList());
+  updateHUD();
+  nextQuestion();
+}
+
+// ── Question suivante ──
+function nextQuestion(){
+  // Si la pile est vide
+  if(pile.length===0){
+    if(errQueue.length===0){
+      // Tout validé !
+      showFinalEnd();
+    } else {
+      // Il reste des erreurs à retravailler
+      showRoundEnd();
+    }
+    return;
+  }
+  const m=pile[0];
+  _curM=m;
+  updateHUD();
+  updateWordStatus(m.n, 'cur');
+  renderQuestion(m);
+}
+
+// ── Rendre une question ──
+function getCurMode(){
+  if(qMode==='mix'){ const m=mixSeq[mixIdx%3]; mixIdx++; return m; }
+  return qMode;
+}
+
+function renderQuestion(m){
+  const cm=getCurMode();
+  if(cm==='he-fr') renderHeFr(m);
+  else if(cm==='fr-he') renderFrHe(m);
+  else renderForms(m);
+}
+
+// ── Vérification réponse ──
+function onAnswer(correct){
+  if(qLock) return;
+  qLock=true; totalAttempts++;
+  const m=pile.shift(); // retire de la pile
+
+  if(correct){
+    totalOk++;
+    validated.add(m.n);
+    updateWordStatus(m.n,'ok');
+  } else {
+    errQueue.push(m); // remet en file d'erreurs
+    updateWordStatus(m.n,'err');
+  }
+  updateHUD();
+
+  setTimeout(()=>{
+    qLock=false;
+    nextQuestion();
+  },20000);
+}
+
+// ── Passer (compte comme erreur) ──
+function skipQuestion(){
+  if(qLock||pile.length===0) return;
+  const m=pile.shift();
+  errQueue.push(m);
+  updateWordStatus(m.n,'err');
+  updateHUD();
+  nextQuestion();
+}
+
+// ── HUD ──
+function updateHUD(){
+  const base=getBaseList();
+  const tot=base.length;
+  const okCount=validated.size;
+  const errCount=errQueue.length;
+  const leftCount=pile.length;
+  const rcls=['r1','r2','r3'];
+  const rn=Math.min(roundNum,3)-1;
+  const labels=['1re passe','Révision','Maîtrise'];
+  document.getElementById('sb-round').innerHTML='<span class="round-badge '+rcls[rn]+'">'+labels[rn]+'</span>';
+  document.getElementById('sb-ok').textContent=okCount;
+  document.getElementById('sb-err').textContent=errCount;
+  document.getElementById('sb-left').textContent=leftCount;
+  document.getElementById('sb-score').textContent=totalOk+' / '+totalAttempts;
+  const okPct=tot>0?Math.round(okCount/tot*100):0;
+  const errPct=tot>0?Math.round(errCount/tot*100):0;
+  document.getElementById('progOk').style.width=okPct+'%';
+  document.getElementById('progErr').style.width=errPct+'%';
+  document.getElementById('pl-ok').textContent=okCount+' validés';
+  document.getElementById('pl-tot').textContent='sur '+tot;
+  document.getElementById('pl-err').textContent=errCount+' en révision';
+}
+
+// ── Grille statut ──
+function buildWordStatusGrid(base){
+  const g=document.getElementById('wordStatusGrid');
+  g.innerHTML='';
+  base.forEach(m=>{
+    const chip=document.createElement('div');
+    chip.className='ws-chip ws-todo';
+    chip.id='ws-'+m.n;
+    chip.textContent=m.h.split('/')[0].trim().split(' ')[0]; // premier mot hébreu
+    chip.title=m.f;
+    chip.addEventListener('click',()=>speak(m.h.split('/')[0].trim()));
+    g.appendChild(chip);
+  });
+}
+function updateWordStatus(num,status){
+  const chip=document.getElementById('ws-'+num);
+  if(!chip) return;
+  chip.className='ws-chip ws-'+status;
+}
+
+// ── Rendu question Hébreu→Français ──
+function renderHeFr(m){
+  const wrongs=shuffle(MOTY.filter(x=>x.n!==m.n)).slice(0,3).map(x=>x.f);
+  _opts=shuffle([m.f,...wrongs]); _correctF=m.f;
+  const h0=m.h.split('/')[0].trim();
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+
+  const lbl=mk('div','qmode-lbl'); lbl.textContent='Hébreu → Français · '+pile.length+' restants'; card.appendChild(lbl);
+  const qw=mk('div','qword'); qw.textContent=m.h+' ▶'; card.appendChild(qw);
+  qw.addEventListener('click',()=>speak(h0));
+  const qt=mk('div','qtrans'); qt.textContent=m.t; card.appendChild(qt);
+  const optsEl=mk('div','opts'); optsEl.id='qOpts'; card.appendChild(optsEl);
+  const fb=buildFeedback(m); card.appendChild(fb);
+  buildOpts(optsEl, _opts, (d,i)=>{
+    const ok=_opts[i]===_correctF;
+    resolveAnswer(d, optsEl, ok, _correctF, m, h0, fb);
+  });
+}
+
+// ── Rendu question Français→Hébreu ──
+function renderFrHe(m){
+  const wrongs=shuffle(MOTY.filter(x=>x.n!==m.n)).slice(0,3).map(x=>x.h);
+  _opts=shuffle([m.h,...wrongs]); _correctH=m.h;
+  const h0=m.h.split('/')[0].trim();
+  const catL={n:'Nom',v:'Verbe',adj:'Adjectif',adv:'Adverbe',prep:'Prep.',expr:'Expression',conj:'Conj.'};
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+
+  const lbl=mk('div','qmode-lbl'); lbl.textContent='Français → Hébreu · '+pile.length+' restants'; card.appendChild(lbl);
+  const qw=mk('div','qword'); qw.style.cssText='font-size:1.2rem;font-family:DM Sans,sans-serif;color:var(--txt);direction:ltr'; qw.textContent=m.f; card.appendChild(qw);
+  const qt=mk('div','qtrans'); qt.style.marginTop='4px'; qt.textContent='Catégorie : '+(catL[m.c]||m.c); card.appendChild(qt);
+  const optsEl=mk('div','opts'); optsEl.id='qOpts'; card.appendChild(optsEl);
+  const fb=buildFeedback(m); card.appendChild(fb);
+  buildOpts(optsEl, _opts, (d,i)=>{
+    const ok=_opts[i]===_correctH;
+    resolveAnswer(d, optsEl, ok, _correctH, m, h0, fb);
+  });
+}
+
+// ── Rendu question Formes → Sens (audio d'abord, labels masqués) ──
+function renderForms(m){
+  const wrongs=shuffle(MOTY.filter(x=>x.n!==m.n)).slice(0,3).map(x=>x.f);
+  _opts=shuffle([m.f,...wrongs]); _correctF=m.f;
+  const h0=m.h.split('/')[0].trim();
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+
+  // Label mode
+  const lbl=mk('div','qmode-lbl');
+  lbl.textContent='Écouter · trouver le sens · '+pile.length+' restants';
+  card.appendChild(lbl);
+
+  // Instruction
+  const hint=mk('div','');
+  hint.style.cssText='text-align:center;font-size:0.78rem;color:var(--muted);margin-bottom:10px;font-style:italic';
+  hint.textContent='Écoutez les formes hébraïques — puis choisissez le sens';
+  card.appendChild(hint);
+
+  // Zone formes : hébreu SEUL (sans labels entre parenthèses)
+  const fr=mk('div','qforms-row'); fr.style.lineHeight='2.8'; card.appendChild(fr);
+  const labelEls=[];
+  m.fs.forEach((pair,i)=>{
+    if(i>0){ fr.appendChild(document.createTextNode(' · ')); }
+    const sp=mk('span',''); sp.style.cursor='pointer';
+    const hpart=mk('span','');
+    hpart.style.cssText='font-family:"Frank Ruhl Libre",serif;font-size:1.2rem;direction:rtl;color:var(--gold-l)';
+    hpart.textContent=pair[0];
+    const lpart=mk('small','');
+    lpart.style.cssText='color:var(--muted);display:none';
+    lpart.textContent=' ('+pair[1]+')';
+    labelEls.push(lpart);
+    sp.appendChild(hpart); sp.appendChild(lpart);
+    sp.addEventListener('click',()=>speak(pair[0].split('/')[0].trim()));
+    fr.appendChild(sp);
+  });
+
+  // Racine visible, transcription masquée (révélée après réponse)
+  const qt=mk('div','qtrans'); qt.textContent='Racine : '+m.r; card.appendChild(qt);
+
+  // Boutons écoute
+  const listenRow=mk('div','');
+  listenRow.style.cssText='display:flex;gap:8px;justify-content:center;margin:10px 0 14px;flex-wrap:wrap';
+
+  const btnOne=mk('button','btn btn-g btn-sm');
+  btnOne.innerHTML='&#9654; Forme principale';
+  btnOne.addEventListener('click',()=>speak(h0,0.7));
+
+  const btnAll=mk('button','btn btn-o btn-sm');
+  btnAll.innerHTML='&#9654; Toutes les formes';
+  btnAll.addEventListener('click',async()=>{
+    btnAll.disabled=true; btnOne.disabled=true;
+    for(const pair of m.fs){
+      await speak(pair[0].split('/')[0].trim(),0.75);
+      await new Promise(r=>setTimeout(r,420));
+    }
+    btnAll.disabled=false; btnOne.disabled=false;
+  });
+
+  listenRow.appendChild(btnOne); listenRow.appendChild(btnAll);
+  card.appendChild(listenRow);
+
+  // Options de réponse
+  const optsEl=mk('div','opts'); optsEl.id='qOpts'; card.appendChild(optsEl);
+
+  // Feedback morpho (masqué)
+  const fb=buildFeedback(m); card.appendChild(fb);
+
+  buildOpts(optsEl, _opts, (d,i)=>{
+    const ok=_opts[i]===_correctF;
+    // Révéler labels ET transcription après la réponse
+    labelEls.forEach(lp=>{ lp.style.display='inline'; });
+    qt.textContent='Racine : '+m.r+' · '+m.t;
+    resolveAnswer(d, optsEl, ok, _correctF, m, h0, fb);
+  });
+
+  // Lecture automatique au chargement (délai court)
+  setTimeout(()=>speak(h0,0.7), 350);
+}
+
+// ── Logique commune de résolution ──
+function resolveAnswer(clickedEl, optsEl, ok, correctVal, m, h0, fb){
+  if(qLock) return;
+  clickedEl.classList.add(ok?'ok':'err');
+  if(!ok){
+    optsEl.querySelectorAll('.opt').forEach(o=>{
+      if(o.textContent===correctVal) o.classList.add('reveal');
+    });
+  }
+  // Bloquer tous les opts
+  optsEl.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+  // Afficher feedback morpho
+  fb.style.display='block';
+  // Audio : mot principal puis lecture auto des 3 phrases exemples
+  speak(h0, 0.7).then(()=>{
+    if(m.ex && m.ex.length){
+      (async()=>{
+        await new Promise(r=>setTimeout(r,900));
+        for(const pair of m.ex){
+          await speak(pair[0].trim(), 0.8);
+          await new Promise(r=>setTimeout(r,700));
+        }
+      })();
+    }
+  });
+  // Feedback visuel sur la grille
+  const chip=document.getElementById('ws-'+m.n);
+  if(chip){
+    chip.classList.remove('ws-cur','ws-todo','ws-ok','ws-err');
+    chip.classList.add(ok?'ws-ok':'ws-err');
+  }
+  // Appel à la logique pédagogique
+  onAnswer(ok);
+}
+
+function buildFeedback(m){
+  const fb=mk('div','morph-fb');
+  const heb=mk('div','morph-fb-heb'); heb.textContent=m.h; fb.appendChild(heb);
+  const mo=mk('div',''); mo.textContent=m.m; fb.appendChild(mo);
+  if(m.eh){
+    const ex=mk('div','morph-fb-ex');
+    ex.textContent=m.eh+' — '+m.ef;
+    fb.appendChild(ex);
+  }
+  if(m.ex && m.ex.length){
+    const sep=mk('div','');
+    sep.style.cssText='border-top:1px solid rgba(201,168,76,0.15);margin-top:8px;padding-top:8px;font-size:0.72rem;color:var(--gold);font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:8px';
+    sep.textContent='Exemples par theme';
+    fb.appendChild(sep);
+    m.ex.forEach((pair,idx)=>{
+      const row=mk('div','');
+      row.style.cssText='margin-top:7px;display:flex;align-items:flex-start;gap:8px';
+      // Bouton ▶
+      const btn=mk('button','ab');
+      btn.textContent='\u25B6';
+      btn.title='Ecouter';
+      btn.style.cssText='flex-shrink:0;margin-top:3px;font-size:0.7rem;padding:2px 7px';
+      btn.addEventListener('click',ev=>{ ev.stopPropagation(); speak(pair[0].trim(),0.8); });
+      // Texte
+      const txtwrap=mk('div',''); txtwrap.style.cssText='flex:1;cursor:pointer';
+      txtwrap.addEventListener('click',()=>speak(pair[0].trim(),0.8));
+      const hpart=mk('div','');
+      hpart.style.cssText='font-family:"Frank Ruhl Libre",serif;font-size:1rem;direction:rtl;text-align:right;color:var(--gold-l);line-height:1.4';
+      hpart.textContent=pair[0];
+      const fpart=mk('div','');
+      fpart.style.cssText='font-size:0.75rem;color:var(--muted);font-style:italic;margin-top:1px';
+      fpart.textContent=pair[1];
+      txtwrap.appendChild(hpart); txtwrap.appendChild(fpart);
+      row.appendChild(btn); row.appendChild(txtwrap);
+      fb.appendChild(row);
+    });
+  }
+  return fb;
+}
+
+function buildOpts(container, labels, fn){
+  container.innerHTML='';
+  labels.forEach((lbl,i)=>{
+    const d=mk('div','opt'); d.textContent=lbl;
+    d.addEventListener('click',()=>fn(d,i));
+    container.appendChild(d);
+  });
+}
+
+function mk(tag,cls){
+  const el=document.createElement(tag);
+  if(cls) el.className=cls;
+  return el;
+}
+
+// ── Fin de round (erreurs restantes) ──
+function showRoundEnd(){
+  const errN=errQueue.length;
+  const okN=validated.size;
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+  const box=mk('div','round-end');
+  const rcls=['r1','r2','r3'];
+  const rn=Math.min(roundNum,3)-1;
+
+  box.innerHTML=
+    '<div class="re-icon">'+(roundNum===1?'🔄':'💪')+'</div>'+
+    '<div class="re-title" style="color:var(--gold)">Fin de la '+(roundNum===1?'1re':''+roundNum+'e')+' passe</div>'+
+    '<div class="re-msg">'+
+      '<span style="color:#6ecf99">✓ '+okN+' mot'+(okN>1?'s':'')+' validé'+(okN>1?'s':'')+'</span> — ils ne reviendront plus.<br>'+
+      '<span style="color:#d47070">✗ '+errN+' mot'+(errN>1?'s':'')+' à retravailler</span> — nouvelle passe de révision.'+
+    '</div>'+
+    '<div class="re-stats">'+
+      '<div class="re-stat"><div class="re-stat-n" style="color:#6ecf99">'+okN+'</div><div class="re-stat-l">Validés ✓</div></div>'+
+      '<div class="re-stat"><div class="re-stat-n" style="color:#d47070">'+errN+'</div><div class="re-stat-l">À retravailler</div></div>'+
+      '<div class="re-stat"><div class="re-stat-n" style="color:var(--gold)">'+Math.round(totalOk/Math.max(totalAttempts,1)*100)+'%</div><div class="re-stat-l">Précision</div></div>'+
+    '</div>';
+  const btnRow=mk('div',''); btnRow.style.cssText='display:flex;gap:10px;justify-content:center;flex-wrap:wrap';
+  const b1=mk('button','btn btn-g'); b1.innerHTML='▶ Réviser les '+errN+' mot'+(errN>1?'s':'');
+  b1.addEventListener('click',startNewRound);
+  const b2=mk('button','btn btn-o'); b2.textContent='↺ Tout recommencer';
+  b2.addEventListener('click',startQuiz);
+  btnRow.appendChild(b1); btnRow.appendChild(b2); box.appendChild(btnRow);
+  card.appendChild(box);
+}
+
+// ── Fin totale (tout validé) ──
+function showFinalEnd(){
+  const tot=getBaseList().length;
+  const pct=Math.round(totalOk/Math.max(totalAttempts,1)*100);
+  const stars=pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':pct>=50?'⭐':'—';
+  const card=document.getElementById('qCard');
+  card.innerHTML='';
+  const box=mk('div','end-box');
+  box.innerHTML=
+    '<div style="font-size:3rem;margin-bottom:8px">🎓</div>'+
+    '<div class="end-stars">'+stars+'</div>'+
+    '<div class="end-sc">'+tot+' / '+tot+' mots validés !</div>'+
+    '<div class="end-pct">Précision : '+pct+'% · '+totalAttempts+' tentatives · '+roundNum+' passe'+(roundNum>1?'s':'')+'</div>'+
+    '<div style="font-size:0.85rem;color:var(--sub);margin-bottom:20px;line-height:1.7">'+
+      (roundNum===1?'Parfait du premier coup ! Maîtrise exemplaire.':
+       roundNum===2?'Excellent ! Tous les mots validés en 2 passes.':
+       'Bravo ! La persévérance paie — tous les mots sont maîtrisés.')+
+    '</div>';
+  const btnRow=mk('div',''); btnRow.style.cssText='display:flex;gap:10px;justify-content:center;flex-wrap:wrap';
+  const b1=mk('button','btn btn-g'); b1.textContent='↺ Nouvelle session';
+  b1.addEventListener('click',startQuiz);
+  const b2=mk('button','btn btn-o'); b2.textContent='⚙ Changer de mode';
+  b2.addEventListener('click',()=>{
+    document.getElementById('config-screen').style.display='block';
+    document.getElementById('quiz-zone').style.display='none';
+  });
+  btnRow.appendChild(b1); btnRow.appendChild(b2); box.appendChild(btnRow);
+  card.appendChild(box);
+}
+
+// ── Boutons ──
+document.getElementById('startBtn').addEventListener('click', startQuiz);
+document.getElementById('restartBtn').addEventListener('click', startQuiz);
+document.getElementById('skipBtn').addEventListener('click', skipQuestion);
+document.getElementById('modesBtn').addEventListener('click', ()=>{
+  document.getElementById('config-screen').style.display='block';
+  document.getElementById('quiz-zone').style.display='none';
+});
+
+// =====================================================
+// FLASHCARDS
+// =====================================================
+let fcList=MOTY.slice(), fcIdx=0, fcFlipped=false;
+function renderFC(){
+  const m=fcList[fcIdx];
+  document.getElementById('fcHeb').textContent=m.h;
+  document.getElementById('fcForms').textContent=m.fs.map(p=>p[0]).join(' · ');
+  document.getElementById('fcFr').textContent=m.f;
+  document.getElementById('fcMorph').textContent=m.m;
+  document.getElementById('fcProg').textContent=(fcIdx+1)+' / '+fcList.length;
+  document.getElementById('fcCard').classList.remove('flip');
+  fcFlipped=false;
+}
+document.getElementById('fcCard').addEventListener('click',()=>{
+  fcFlipped=!fcFlipped;
+  document.getElementById('fcCard').classList.toggle('flip',fcFlipped);
+  if(fcFlipped) speak(fcList[fcIdx].h.split('/')[0].trim(),0.7);
+});
+document.getElementById('fcPrev').addEventListener('click',()=>{ fcIdx=(fcIdx-1+fcList.length)%fcList.length; renderFC(); });
+document.getElementById('fcNext').addEventListener('click',()=>{ fcIdx=(fcIdx+1)%fcList.length; renderFC(); });
+document.getElementById('fcSpeak').addEventListener('click',()=>speak(fcList[fcIdx].h.split('/')[0].trim()));
+document.getElementById('fcShuf').addEventListener('click',()=>{ fcList=shuffle(MOTY.slice()); fcIdx=0; renderFC(); });
+function fcFilter(cat){
+  if(!cat) fcList=MOTY.slice();
+  else if(cat==='other') fcList=MOTY.filter(m=>m.c==='adv'||m.c==='expr'||m.c==='prep');
+  else fcList=MOTY.filter(m=>m.c===cat);
+  fcIdx=0; renderFC();
+}
+
+// =====================================================
+// ÉCOUTE
+// =====================================================
+let liPlayed=new Set();
+function buildListen(){
+  const cont=document.getElementById('liList'); cont.innerHTML='';
+  MOTY.forEach((m,i)=>{
+    const row=mk('div','li'); row.id='li-'+i;
+    const n=mk('span','li-n'); n.textContent=m.n;
+    const heb=mk('span','li-heb'); heb.textContent=m.h.split('/')[0].trim();
+    const fr=mk('span','li-fr'); fr.textContent=m.f;
+    const btn=mk('button','ab'); btn.textContent='▶';
+    btn.addEventListener('click',ev=>{ ev.stopPropagation(); liOne(i); });
+    row.addEventListener('click',()=>liOne(i));
+    row.appendChild(n); row.appendChild(heb); row.appendChild(fr); row.appendChild(btn);
+    cont.appendChild(row);
+  });
+  updLiPb();
+}
+async function liOne(i){
+  const el=document.getElementById('li-'+i); if(!el) return;
+  el.classList.add('playing');
+  const rate=parseFloat(document.getElementById('spd')?.value||0.75);
+  await speak(MOTY[i].h.split('/')[0].trim(), rate);
+  el.classList.remove('playing'); el.classList.add('played');
+  liPlayed.add(i); updLiPb();
+}
+async function listenAll(mode){
+  stopTTS();
+  for(let i=0;i<MOTY.length;i++){
+    await liOne(i);
+    if(mode==='both'){ await new Promise(r=>setTimeout(r,150)); await speakFr(MOTY[i].f); }
+    await new Promise(r=>setTimeout(r,350));
+  }
+}
+function updLiPb(){ document.getElementById('liPb').textContent=liPlayed.size+' / 15 écoutés'; }
+document.getElementById('listenHeb').addEventListener('click',()=>listenAll('heb'));
+document.getElementById('listenBoth').addEventListener('click',()=>listenAll('both'));
+document.getElementById('stopBtn').addEventListener('click',stopTTS);
+
+// =====================================================
+// LISTE
+// =====================================================
+const catNames={n:'Nom',v:'Verbe',adj:'Adjectif',adv:'Adverbe',prep:'Prep.',expr:'Expression',conj:'Conj.'};
+const catCls={n:'bn',v:'bv',adj:'badj',adv:'badv',prep:'bprep',expr:'bexpr',conj:'bprep'};
+function buildListe(q){
+  q=(q||'').toLowerCase();
+  const filtered=MOTY.filter(m=>!q||m.h.includes(q)||m.f.toLowerCase().includes(q)||m.t.toLowerCase().includes(q)||m.r.includes(q));
+  const grid=document.getElementById('lexG'); grid.innerHTML='';
+  filtered.forEach(m=>{
+    const card=mk('div','lc');
+    card.addEventListener('click',()=>speak(m.h.split('/')[0].trim()));
+    const heb=mk('div','lc-heb'); heb.textContent=m.h; card.appendChild(heb);
+    const tr=mk('div','lc-tr'); tr.textContent=m.t; card.appendChild(tr);
+    const fr=mk('div','lc-fr'); fr.textContent=m.f; card.appendChild(fr);
+    const foot=mk('div','lc-foot');
+    const badge=mk('span','badge '+(catCls[m.c]||'bprep')); badge.textContent=catNames[m.c]||m.c; foot.appendChild(badge);
+    const rac=mk('span','rac'); rac.textContent=m.r; foot.appendChild(rac);
+    const btn=mk('button','ab'); btn.textContent='▶';
+    btn.addEventListener('click',ev=>{ ev.stopPropagation(); speak(m.h.split('/')[0].trim()); });
+    foot.appendChild(btn); card.appendChild(foot);
+    grid.appendChild(card);
+  });
+}
+document.getElementById('lsearch').addEventListener('input',function(){ buildListe(this.value); });
+
+// ── INIT ──
+buildListe('');
+renderFC();
+</script>
+
+<div style="text-align:center;padding:18px;font-size:0.69rem;color:#444;border-top:1px solid #1a1a1a;margin-top:28px">
+  &#1512;&#1513;&#1497;&#1502;&#1514; &#1502;&#1493;&#1496;&#1497; &middot; 15 mots &middot; Apprentissage adaptatif &middot; Claude (Anthropic)
+</div>
+</body>
+</html>
