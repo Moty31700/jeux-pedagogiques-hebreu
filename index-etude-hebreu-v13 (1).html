@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Étude de l'hébreu</title>
+<style>
+  :root {
+    --encre:    #101F38;
+    --tekhelet: #2C5F8D;
+    --papier:   #FBFAF7;
+    --or:       #A8813C;
+    --alerte:   #9E3B2C;
+    --gris:     #6B7280;
+    --trait:    #DDD8CC;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--papier);
+    color: var(--encre);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 12pt;
+    line-height: 1.55;
+  }
+
+  .cadre { max-width: 30rem; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+
+  .titre {
+    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+    font-size: 22pt;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .sous-titre { color: var(--gris); font-size: 11pt; margin: .3rem 0 2.5rem; }
+
+  .etapes {
+    display: flex; gap: .5rem; align-items: center;
+    margin-bottom: 2rem; border-bottom: 1px solid var(--trait); padding-bottom: 1rem;
+  }
+  .etape {
+    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+    font-size: 15pt; color: var(--trait);
+    width: 1.6rem; text-align: center; transition: color .25s;
+  }
+  .etape.active { color: var(--or); }
+  .etape.faite  { color: var(--tekhelet); }
+  .etapes .filet { flex: 1; height: 1px; background: var(--trait); }
+
+  .ecran { display: none; }
+  .ecran.visible { display: block; }
+
+  h2 {
+    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+    font-size: 16pt; font-weight: 600; margin: 0 0 .4rem;
+  }
+  .intro { color: var(--gris); font-size: 11pt; margin: 0 0 1.8rem; }
+
+  label { display: block; margin-bottom: 1rem; }
+  .libelle { display: block; font-size: 10pt; color: var(--gris); margin-bottom: .25rem; }
+
+  input, select, textarea {
+    width: 100%; padding: .6rem .7rem;
+    font-size: 12pt; font-family: inherit; color: var(--encre);
+    background: #fff; border: 1px solid var(--trait); border-radius: 2px;
+  }
+  textarea { min-height: 9rem; resize: vertical; line-height: 1.5; }
+  input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--tekhelet); outline-offset: 1px; border-color: transparent;
+  }
+  #code {
+    font-family: ui-monospace, "SF Mono", monospace;
+    font-size: 16pt; letter-spacing: .25em;
+    text-transform: uppercase; text-align: center;
+  }
+
+  button {
+    width: 100%; padding: .75rem; margin-top: .6rem;
+    font-family: inherit; font-size: 12pt;
+    color: #fff; background: var(--encre);
+    border: none; border-radius: 2px; cursor: pointer;
+  }
+  button:hover { background: var(--tekhelet); }
+  button:disabled { background: var(--gris); cursor: wait; }
+
+  .lien {
+    display: block; width: 100%; margin-top: .9rem; padding: .5rem;
+    background: none; border: none; color: var(--tekhelet);
+    font-size: 10pt; text-decoration: underline; cursor: pointer;
+  }
+  .lien:hover { background: none; color: var(--encre); }
+
+  .message {
+    margin-top: 1.2rem; padding: .7rem .9rem; font-size: 10.5pt;
+    border-left: 3px solid var(--gris); background: #fff; display: none;
+  }
+  .message.visible { display: block; }
+  .message.ok     { border-left-color: var(--tekhelet); }
+  .message.erreur { border-left-color: var(--alerte); color: var(--alerte); }
+
+  .note {
+    margin-top: 2rem; padding-top: 1rem;
+    border-top: 1px solid var(--trait);
+    font-size: 9.5pt; color: var(--gris);
+  }
+
+  .accueil-nom {
+    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+    font-size: 20pt; margin: 0 0 .3rem;
+  }
+
+  /* --- choix segmenté --- */
+  .choix {
+    display: flex; gap: 0; margin-bottom: 1.4rem;
+    border: 1px solid var(--trait); border-radius: 2px; background: #fff;
+    overflow: hidden;
+  }
+  .choix button {
+    flex: 1; margin: 0; padding: .55rem .4rem;
+    background: none; color: var(--gris);
+    font-size: 11pt; border: none; border-radius: 0;
+    transition: background .15s, color .15s;
+  }
+  .choix button + button { border-left: 1px solid var(--trait); }
+  .choix button:hover { background: #F4F2ED; color: var(--encre); }
+  .choix button.actif { background: var(--encre); color: #fff; }
+  .choix button.actif:hover { background: var(--encre); }
+
+  /* --- familles non choisies : estompées, mais cliquables pour switcher --- */
+  #choix-entree button:not(.actif) { opacity: .4; }
+  #choix-entree button:not(.actif):hover { opacity: 1; }
+
+  /* --- interrupteurs --- */
+  .bascules {
+    border: 1px solid var(--trait); border-radius: 2px; background: #fff;
+    padding: .2rem .8rem; margin-bottom: 1.4rem;
+  }
+  .bascule {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .55rem 0; margin: 0; cursor: pointer;
+  }
+  .bascule + .bascule { border-top: 1px solid var(--trait); }
+  .bascule span { font-size: 11pt; }
+  .bascule small { display: block; font-size: 9.5pt; color: var(--gris); }
+  .bascule input { width: auto; margin: 0 0 0 1rem; flex: none; transform: scale(1.3); }
+
+  .bloc { display: none; }
+  .bloc.visible { display: block; }
+
+  .famille { border: 1px solid var(--trait); border-radius: 6px;
+             padding: .8rem 1rem; margin: 1rem 0; }
+  .famille > .titre-famille { display: block; font-weight: 600;
+             font-size: .95rem; margin-bottom: .5rem; }
+  .cases { display: flex; flex-wrap: wrap; gap: .4rem .9rem; }
+  .cases label { display: flex; align-items: center; gap: .4rem;
+             font-size: .95rem; font-weight: 400; margin: 0; cursor: pointer; }
+  .cases input { width: auto; margin: 0; }
+  .choix button:disabled { opacity: .35; cursor: not-allowed; }
+
+  /* --- compteur de mots (Paroles) --- */
+  .compte-mots { display: block; font-size: 9.5pt; color: var(--gris);
+             text-align: left; margin-top: .3rem; }
+  .compte-mots.trop { color: var(--alerte); font-weight: 600; }
+
+  /* --- date de naissance : trois listes --- */
+  .trio { display: flex; gap: .5rem; }
+  .trio select { padding: .6rem .3rem; }
+  .trio .jour  { flex: 1; }
+  .trio .mois  { flex: 1.7; }
+  .trio .annee { flex: 1.2; }
+
+  /* --- bloc déroulant « Comment ça marche » --- */
+  .guide {
+    margin-top: 1.8rem;
+    border-top: 1px solid var(--trait);
+    border-bottom: 1px solid var(--trait);
+  }
+  .guide summary {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .8rem .1rem;
+    font-size: 11pt; color: var(--tekhelet);
+    cursor: pointer; list-style: none;
+  }
+  .guide summary::-webkit-details-marker { display: none; }
+  .guide summary::after {
+    content: "+"; color: var(--or);
+    font-size: 15pt; line-height: 1; margin-left: 1rem;
+  }
+  .guide[open] summary::after { content: "–"; }
+  .guide summary:hover { color: var(--encre); }
+
+  .guide-corps { padding: .2rem .1rem 1.4rem; font-size: 10.5pt; line-height: 1.6; }
+  .guide-corps h3 {
+    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+    font-size: 12pt; font-weight: 600; color: var(--encre);
+    margin: 1.5rem 0 .35rem;
+  }
+  .guide-corps h3:first-child { margin-top: 0; }
+  .guide-corps h3 .rang {
+    color: var(--or); font-size: 10.5pt;
+    margin-right: .4rem;
+  }
+  .guide-corps p  { margin: 0 0 .6rem; }
+  .guide-corps ul { margin: .2rem 0 .6rem; padding-left: 1.1rem; }
+  .guide-corps li { margin-bottom: .35rem; }
+  .guide-corps strong { font-weight: 600; }
+  .guide-corps .filet-guide {
+    height: 1px; background: var(--trait);
+    border: none; margin: 1.5rem 0 1.2rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="cadre">
+
+  <h1 class="titre">לימוד עברית</h1>
+  <p class="sous-titre">Étude de l'hébreu — espace personnel</p>
+
+  <div class="etapes" id="etapes">
+    <span class="etape" data-etape="1">א</span>
+    <span class="filet"></span>
+    <span class="etape" data-etape="2">ב</span>
+    <span class="filet"></span>
+    <span class="etape" data-etape="3">ג</span>
+  </div>
+
+  <!-- ÉCRAN 0 — accueil -->
+  <div class="ecran visible" id="ecran-accueil">
+    <h2>Bienvenue</h2>
+    <p class="intro">Ce site est réservé aux personnes majeures. Ton code d'accès t'est envoyé par e-mail.</p>
+    <button id="vers-inscription">Première visite — créer mon accès</button>
+    <button id="vers-connexion" style="background: none; color: var(--encre); border: 1px solid var(--trait);">J'ai déjà un accès</button>
+
+    <details class="guide">
+      <summary>Comment ça marche</summary>
+      <div class="guide-corps">
+
+        <h3>À quoi sert ce site</h3>
+        <p>Ce site s'adresse à un élève ou à un étudiant adulte qui cherche du matériel pédagogique pour son étude de l'hébreu.</p>
+        <p>Il ne te dispense pas de la présence d'un professeur dans ton apprentissage : il fabrique pour toi, à la demande, du matériel complémentaire — une leçon d'hébreu sur le thème de ton choix, à partir d'une chanson, ou sur les mots précis que tu lui donnes. Chaque leçon est unique : elle est écrite au moment où tu la demandes.</p>
+
+        <hr class="filet-guide">
+
+        <h3><span class="rang">1</span>S'inscrire (une seule fois)</h3>
+        <p>Tu choisis un identifiant et tu donnes ton prénom, ta date de naissance, ton <strong>adresse e-mail</strong> et ton <strong>numéro de téléphone</strong>. Tous ces champs sont obligatoires. C'est par e-mail que tout arrive : ton code d'accès comme tes leçons.</p>
+        <p>Le site est réservé aux personnes majeures.</p>
+
+        <h3><span class="rang">2</span>Recevoir ton code d'accès</h3>
+        <p>Juste après l'inscription, un code de 6 caractères t'est envoyé par e-mail. Il est <strong>valable 24 heures</strong>. Pense à regarder tes courriers indésirables la première fois. Passé ce délai, tu en demandes un nouveau depuis la page de connexion : il arrive de la même façon.</p>
+
+        <h3><span class="rang">3</span>Se connecter</h3>
+        <p>À chaque visite, tu donnes ton identifiant et ton code. Il n'y a pas de connexion automatique, c'est voulu.</p>
+
+        <h3><span class="rang">4</span>Demander une leçon</h3>
+        <p>Tu choisis :</p>
+        <ul>
+          <li>ce sur quoi travailler :
+            <ul>
+              <li><strong>Un thème</strong> — ce que tu veux : la cuisine, l'aviation, le cinéma…</li>
+              <li><strong>Une chanson</strong> — tu donnes le titre, l'artiste, les liens, et tu copies l'extrait des paroles de ton choix.</li>
+              <li><strong>Mes choix personnels</strong> — tu donnes toi-même de un à cinq mots, et tu coches ce que tu veux qu'on t'en dise : morphologie, racine, synonymes, registre, phrases d'exemple, texte de situation. Peu de mots, mais traités en profondeur, et seulement sur ce que tu as coché.</li>
+            </ul>
+          </li>
+          <li><strong>Un jeu interactif</strong> ou <strong>une fiche rédigée</strong> — sauf pour tes choix personnels, qui donnent toujours une fiche ;</li>
+          <li>avec ou sans <strong>voyelles</strong> (nikoud), avec ou sans <strong>translittération</strong>.</li>
+        </ul>
+
+        <h3><span class="rang">5</span>Recevoir ta leçon</h3>
+        <p>Ferme la page, tu n'as rien à attendre à l'écran. <strong>Le lien arrive dans ta boîte e-mail au bout de plusieurs minutes</strong> — le temps que la leçon soit écrite. Pense à regarder tes courriers indésirables la première fois.</p>
+        <p>Pour un <strong>jeu</strong>, laisse-lui encore une minute ou deux après réception du message : le jeu doit d'abord être mis en ligne. Si le lien affiche une page d'erreur, attends un instant et recharge — il finira par s'ouvrir.</p>
+
+        <hr class="filet-guide">
+
+        <h3>Bon à savoir</h3>
+        <ul>
+          <li>Les mots que tu as déjà rencontrés ne reviennent pas : chaque leçon tient compte des précédentes.</li>
+          <li>Les paroles de chanson que tu copies ne sont pas conservées.</li>
+          <li>Une seule demande à la fois : ne clique qu'une fois sur le bouton.</li>
+        </ul>
+
+      </div>
+    </details>
+  </div>
+
+  <!-- ÉCRAN 1 — inscription -->
+  <div class="ecran" id="ecran-inscription">
+    <h2>Créer mon accès</h2>
+    <p class="intro">Ton code te sera envoyé à l'adresse e-mail indiquée.</p>
+
+    <label><span class="libelle">Identifiant (celui que tu saisiras à chaque visite)</span>
+      <input id="i-identifiant" autocomplete="username"></label>
+    <label><span class="libelle">Prénom</span>
+      <input id="i-prenom" autocomplete="given-name"></label>
+    <label><span class="libelle">Adresse e-mail (ta leçon y sera envoyée)</span>
+      <input id="i-email" type="email" inputmode="email" autocomplete="email" placeholder="prenom@exemple.com"></label>
+    <label><span class="libelle">Téléphone (format +33…)</span>
+      <input id="i-telephone" inputmode="tel" placeholder="+33612345678"></label>
+    <label><span class="libelle">Date de naissance</span>
+      <div class="trio">
+        <select id="i-jour"  class="jour"><option value="">Jour</option></select>
+        <select id="i-mois"  class="mois"><option value="">Mois</option></select>
+        <select id="i-annee" class="annee"><option value="">Année</option></select>
+      </div></label>
+
+    <button id="btn-inscrire">Créer mon accès</button>
+    <button class="lien" data-retour="accueil">Retour</button>
+    <div class="message" id="msg-inscription"></div>
+  </div>
+
+  <!-- ÉCRAN 2 — connexion -->
+  <div class="ecran" id="ecran-connexion">
+    <h2>Entrer</h2>
+    <p class="intro">Saisis ton identifiant et le code reçu par e-mail.</p>
+
+    <label><span class="libelle">Identifiant</span>
+      <input id="c-identifiant" autocomplete="username"></label>
+    <label><span class="libelle">Code d'accès</span>
+      <input id="code" maxlength="6" autocomplete="one-time-code"></label>
+
+    <button id="btn-connecter">Entrer</button>
+    <button class="lien" id="btn-demander">Code perdu ou expiré — m'en envoyer un</button>
+    <button class="lien" data-retour="accueil">Retour</button>
+    <div class="message" id="msg-connexion"></div>
+  </div>
+
+  <!-- ÉCRAN 3 — demander une leçon -->
+  <div class="ecran" id="ecran-menu">
+    <p class="accueil-nom" id="menu-nom">Shalom</p>
+    <p class="intro">Choisis sur quoi travailler et sous quelle forme. Le lien t'arrivera par e-mail.</p>
+
+    <span class="libelle">Sur quoi travailler</span>
+    <div class="choix" id="choix-entree">
+      <button data-entree="theme" class="actif">Un thème</button>
+      <button data-entree="chanson">Une chanson</button>
+      <button data-entree="perso">Mes choix personnels</button>
+    </div>
+
+    <span class="libelle">Sous quelle forme</span>
+    <div class="choix" id="choix-sortie">
+      <button data-sortie="jeu" class="actif">Un jeu interactif</button>
+      <button data-sortie="doc">Une fiche rédigée</button>
+    </div>
+
+    <div class="bascules">
+      <label class="bascule">
+        <span>Nikoud
+          <small>Les voyelles sous les lettres</small></span>
+        <input type="checkbox" id="o-nikoud" checked>
+      </label>
+      <label class="bascule">
+        <span>Translittération
+          <small>L'hébreu écrit en lettres latines</small></span>
+        <input type="checkbox" id="o-translitteration" checked>
+      </label>
+    </div>
+
+    <!-- entrée : thème -->
+    <div class="bloc visible" id="bloc-theme">
+      <label><span class="libelle">Thème</span>
+        <input id="l-theme" placeholder="cuisine, voyage, famille…"></label>
+
+      <label><span class="libelle">Niveau</span>
+        <select id="l-niveau">
+          <option>A1</option>
+          <option>A2</option>
+          <option selected>B1</option>
+          <option>B2</option>
+          <option>C1</option>
+        </select></label>
+
+      <label><span class="libelle">Nombre de mots</span>
+        <select id="l-n">
+          <option>5</option>
+          <option selected>10</option>
+          <option>15</option>
+          <option>20</option>
+          <option>30</option>
+        </select></label>
+    </div>
+
+    <!-- entrée : chanson -->
+    <div class="bloc" id="bloc-chanson">
+      <label><span class="libelle">Titre de la chanson</span>
+        <input id="ch-titre" dir="rtl" placeholder="לו הייתי רוטשילד"></label>
+
+      <label><span class="libelle">Artiste</span>
+        <input id="ch-artiste" dir="rtl"></label>
+
+      <label><span class="libelle">Lien YouTube ou Spotify</span>
+        <input id="ch-youtube" inputmode="url" placeholder="https://…"></label>
+
+      <label><span class="libelle">Lien Shironet</span>
+        <input id="ch-shironet" inputmode="url" placeholder="https://shironet.mako.co.il/…"></label>
+
+      <label><span class="libelle">Paroles — à copier toi-même, elles ne sont pas conservées</span>
+        <textarea id="ch-paroles" dir="rtl"></textarea>
+        <span class="compte-mots" id="ch-compte">0 / 400 mots</span></label>
+    </div>
+
+    <!-- entrée : mes choix personnels -->
+    <div class="bloc" id="bloc-perso">
+      <label><span class="libelle">Mes mots — de 1 à 5, un par ligne</span>
+        <textarea id="p-mots" dir="rtl" rows="5"
+          placeholder="&#1513;&#1493;&#1511;&#10;&#1497;&#1512;&#1511;"></textarea></label>
+
+      <div class="famille">
+        <span class="titre-famille">Analyse</span>
+        <div class="cases">
+          <label><input type="checkbox" class="p-opt" value="morphologie" checked> Morphologie</label>
+          <label><input type="checkbox" class="p-opt" value="racine"> Racine et sens général</label>
+          <label><input type="checkbox" class="p-opt" value="synonymes"> Synonymes et homonymes</label>
+        </div>
+      </div>
+
+      <div class="famille">
+        <span class="titre-famille">Registre</span>
+        <div class="cases">
+          <label><input type="checkbox" class="p-opt" value="biblique"> Biblique</label>
+          <label><input type="checkbox" class="p-opt" value="rabbinique"> Rabbinique</label>
+          <label><input type="checkbox" class="p-opt" value="moderne" checked> Moderne</label>
+          <label><input type="checkbox" class="p-opt" value="argot"> Argot</label>
+        </div>
+      </div>
+
+      <div class="famille">
+        <span class="titre-famille">Création</span>
+        <div class="cases">
+          <label><input type="checkbox" class="p-opt" value="phrases" checked> Phrases d'exemple</label>
+          <label><input type="checkbox" class="p-opt" value="situation"> Texte de situation</label>
+        </div>
+      </div>
+    </div>
+
+    <button id="btn-envoyer">Demander ma leçon</button>
+
+    <div class="message" id="msg-lecon"></div>
+
+    <div class="note">
+      La préparation prend plusieurs minutes. Le lien de ta leçon arrive ensuite par e-mail.
+      Ton code d'accès reste valable 24 h.
+    </div>
+    <button class="lien" id="btn-sortir">Sortir</button>
+  </div>
+
+</div>
+
+<script>
+var BASE = "https://n8n.hebreu-zen.cloud/webhook";
+
+var ECRANS = {
+  accueil:     { el: "ecran-accueil",     etape: 0 },
+  inscription: { el: "ecran-inscription", etape: 1 },
+  connexion:   { el: "ecran-connexion",   etape: 2 },
+  menu:        { el: "ecran-menu",        etape: 3 }
+};
+
+/* la grille : entrée × sortie -> chemin du webhook */
+var CHEMINS = {
+  "theme|jeu":     "/lecon",
+  "theme|doc":     "/lecon-doc",
+  "chanson|jeu":   "/chanson-jeu",
+  "chanson|doc":   "/chanson-doc",
+  "perso|doc":     "/perso-doc"
+};
+
+var MAX_PAROLES = 400;
+
+var identifiantCourant = "";
+var entreeCourante = "theme";
+var sortieCourante = "jeu";
+
+function montrer(nom) {
+  for (var cle in ECRANS) {
+    document.getElementById(ECRANS[cle].el).classList.remove("visible");
+  }
+  document.getElementById(ECRANS[nom].el).classList.add("visible");
+
+  var courante = ECRANS[nom].etape;
+  var puces = document.querySelectorAll(".etape");
+  for (var i = 0; i < puces.length; i++) {
+    var n = parseInt(puces[i].getAttribute("data-etape"), 10);
+    puces[i].className = "etape" + (n < courante ? " faite" : (n === courante ? " active" : ""));
+  }
+  window.scrollTo(0, 0);
+}
+
+function dire(id, texte, type) {
+  var el = document.getElementById(id);
+  el.textContent = texte;
+  el.className = "message visible " + (type || "");
+}
+function taire(id) { document.getElementById(id).className = "message"; }
+
+function appeler(chemin, donnees, bouton, idMsg, onSucces) {
+  var libelle = bouton.textContent;
+  bouton.disabled = true;
+  bouton.textContent = "…";
+  taire(idMsg);
+
+  fetch(BASE + chemin, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(donnees)
+  })
+  .then(function (r) { return r.json().catch(function () { return {}; }); })
+  .then(function (reponse) { onSucces(reponse); })
+  .catch(function () {
+    dire(idMsg, "Le serveur ne répond pas. Réessaie dans un instant.", "erreur");
+  })
+  .then(function () {
+    bouton.disabled = false;
+    bouton.textContent = libelle;
+  });
+}
+
+document.getElementById("vers-inscription").addEventListener("click", function () { montrer("inscription"); });
+document.getElementById("vers-connexion").addEventListener("click", function () { montrer("connexion"); });
+
+var retours = document.querySelectorAll("[data-retour]");
+for (var i = 0; i < retours.length; i++) {
+  retours[i].addEventListener("click", function () { montrer(this.getAttribute("data-retour")); });
+}
+
+/* --- inscription --- */
+function deuxChiffres(n) { return (String(n).length === 1 ? "0" : "") + n; }
+
+function dateExiste(a, m, j) {
+  var d = new Date(Number(a), Number(m) - 1, Number(j));
+  return d.getFullYear() === Number(a)
+      && d.getMonth() === Number(m) - 1
+      && d.getDate() === Number(j);
+}
+
+document.getElementById("btn-inscrire").addEventListener("click", function () {
+  var j = document.getElementById("i-jour").value;
+  var m = document.getElementById("i-mois").value;
+  var a = document.getElementById("i-annee").value;
+
+  var donnees = {
+    identifiant:    document.getElementById("i-identifiant").value.trim(),
+    prenom:         document.getElementById("i-prenom").value.trim(),
+    email:          document.getElementById("i-email").value.trim(),
+    telephone:      document.getElementById("i-telephone").value.trim(),
+    date_naissance: (j && m && a) ? a + "-" + deuxChiffres(m) + "-" + deuxChiffres(j) : ""
+  };
+
+  if (!donnees.identifiant || !donnees.prenom || !donnees.email || !donnees.telephone || !donnees.date_naissance) {
+    dire("msg-inscription", "Tous les champs sont nécessaires.", "erreur");
+    return;
+  }
+  if (donnees.email.indexOf("@") === -1 || donnees.email.indexOf(".") === -1) {
+    dire("msg-inscription", "L'adresse e-mail ne semble pas valide.", "erreur");
+    return;
+  }
+  if (!dateExiste(a, m, j)) {
+    dire("msg-inscription", "Cette date n'existe pas.", "erreur");
+    return;
+  }
+  if (donnees.telephone.charAt(0) !== "+") {
+    dire("msg-inscription", "Le téléphone doit commencer par + et l'indicatif du pays.", "erreur");
+    return;
+  }
+
+  appeler("/inscription", donnees, this, "msg-inscription", function (r) {
+    if (r.statut === "inscrit") {
+      document.getElementById("c-identifiant").value = donnees.identifiant;
+      montrer("connexion");
+      dire("msg-connexion", "Accès créé. Ton code arrive par e-mail.", "ok");
+    } else if (r.statut === "refuse") {
+      dire("msg-inscription", r.message || "Accès refusé.", "erreur");
+    } else {
+      dire("msg-inscription", "Cet identifiant est peut-être déjà pris. Essaies-en un autre.", "erreur");
+    }
+  });
+});
+
+/* --- connexion --- */
+document.getElementById("btn-connecter").addEventListener("click", function () {
+  var donnees = {
+    identifiant: document.getElementById("c-identifiant").value.trim(),
+    code:        document.getElementById("code").value.trim().toUpperCase()
+  };
+
+  if (!donnees.identifiant || !donnees.code) {
+    dire("msg-connexion", "Identifiant et code sont nécessaires.", "erreur");
+    return;
+  }
+
+  appeler("/connexion", donnees, this, "msg-connexion", function (r) {
+    if (r.acces === "autorise") {
+      identifiantCourant = donnees.identifiant;
+      document.getElementById("menu-nom").textContent = "Shalom " + (r.prenom || "");
+      montrer("menu");
+    } else {
+      dire("msg-connexion", r.message || "Identifiant ou code incorrect, ou code expiré.", "erreur");
+    }
+  });
+});
+
+/* --- demande de code --- */
+document.getElementById("btn-demander").addEventListener("click", function () {
+  var identifiant = document.getElementById("c-identifiant").value.trim();
+  if (!identifiant) {
+    dire("msg-connexion", "Saisis d'abord ton identifiant.", "erreur");
+    return;
+  }
+  appeler("/demande-code", { identifiant: identifiant }, this, "msg-connexion", function (r) {
+    dire("msg-connexion", r.message || "Ton code t'a été envoyé par e-mail.", "ok");
+  });
+});
+
+/* --- les deux choix segmentés --- */
+function brancherChoix(idGroupe, attribut, onChange) {
+  var groupe = document.getElementById(idGroupe);
+  var boutons = groupe.querySelectorAll("button");
+  for (var i = 0; i < boutons.length; i++) {
+    boutons[i].addEventListener("click", function () {
+      for (var j = 0; j < boutons.length; j++) { boutons[j].classList.remove("actif"); }
+      this.classList.add("actif");
+      taire("msg-lecon");
+      onChange(this.getAttribute(attribut));
+    });
+  }
+}
+
+brancherChoix("choix-entree", "data-entree", function (valeur) {
+  entreeCourante = valeur;
+  document.getElementById("bloc-theme").className   = "bloc" + (valeur === "theme"   ? " visible" : "");
+  document.getElementById("bloc-chanson").className = "bloc" + (valeur === "chanson" ? " visible" : "");
+  document.getElementById("bloc-perso").className   = "bloc" + (valeur === "perso"   ? " visible" : "");
+
+  /* Mes choix personnels ne donne qu'une fiche */
+  var btnJeu   = document.querySelector("[data-sortie='jeu']");
+  var btnFiche = document.querySelector("[data-sortie='doc']");
+  if (valeur === "perso") {
+    btnJeu.disabled = true;
+    btnJeu.classList.remove("actif");
+    btnFiche.classList.add("actif");
+    sortieCourante = "doc";
+  } else {
+    btnJeu.disabled = false;
+  }
+});
+
+brancherChoix("choix-sortie", "data-sortie", function (valeur) {
+  sortieCourante = valeur;
+});
+
+/* --- compteur de mots de la zone Paroles --- */
+function compterMots(t) {
+  var m = t.trim();
+  return m ? m.split(/\s+/).length : 0;
+}
+
+(function brancherCompteur() {
+  var champ  = document.getElementById("ch-paroles");
+  var compte = document.getElementById("ch-compte");
+  champ.addEventListener("input", function () {
+    var n = compterMots(champ.value);
+    compte.textContent = n + " / " + MAX_PAROLES + " mots";
+    compte.className = "compte-mots" + (n > MAX_PAROLES ? " trop" : "");
+  });
+})();
+
+/* --- demande de leçon --- */
+document.getElementById("btn-envoyer").addEventListener("click", function () {
+  var nikoud          = document.getElementById("o-nikoud").checked ? "oui" : "non";
+  var translitteration = document.getElementById("o-translitteration").checked ? "oui" : "non";
+
+  var donnees = {
+    identifiant:      identifiantCourant,
+    nikoud:           nikoud,
+    translitteration: translitteration
+  };
+  var quoi;
+
+  if (entreeCourante === "theme") {
+    var theme = document.getElementById("l-theme").value.trim();
+    if (!theme) {
+      dire("msg-lecon", "Indique un thème.", "erreur");
+      return;
+    }
+    donnees.theme  = theme;
+    donnees.niveau = document.getElementById("l-niveau").value;
+    donnees.n      = parseInt(document.getElementById("l-n").value, 10);
+    quoi = "« " + theme + " »";
+
+  } else if (entreeCourante === "perso") {
+    var mots = document.getElementById("p-mots").value
+                 .split(/[\n,;]+/)
+                 .map(function (m) { return m.trim(); })
+                 .filter(function (m) { return m.length; });
+    if (mots.length < 1 || mots.length > 5) {
+      dire("msg-lecon", "Donne entre 1 et 5 mots, un par ligne.", "erreur");
+      return;
+    }
+    var options = [];
+    var cases = document.querySelectorAll(".p-opt");
+    for (var c = 0; c < cases.length; c++) {
+      if (cases[c].checked) { options.push(cases[c].value); }
+    }
+    if (!options.length) {
+      dire("msg-lecon", "Coche au moins une case.", "erreur");
+      return;
+    }
+    donnees.mots    = mots;
+    donnees.options = options;
+    quoi = (mots.length === 1) ? "\u00ab " + mots[0] + " \u00bb"
+                               : "mes " + mots.length + " mots";
+
+  } else {
+    var titre   = document.getElementById("ch-titre").value.trim();
+    var paroles = document.getElementById("ch-paroles").value.trim();
+    if (!titre || !paroles) {
+      dire("msg-lecon", "Le titre et les paroles sont nécessaires.", "erreur");
+      return;
+    }
+    if (compterMots(paroles) > MAX_PAROLES) {
+      dire("msg-lecon", "Les paroles dépassent " + MAX_PAROLES + " mots. Raccourcis l'extrait.", "erreur");
+      return;
+    }
+    donnees.titre    = titre;
+    donnees.artiste  = document.getElementById("ch-artiste").value.trim();
+    donnees.youtube  = document.getElementById("ch-youtube").value.trim();
+    donnees.shironet = document.getElementById("ch-shironet").value.trim();
+    donnees.paroles  = paroles;
+    quoi = "« " + titre + " »";
+  }
+
+  var chemin = CHEMINS[entreeCourante + "|" + sortieCourante];
+  var forme  = (sortieCourante === "jeu") ? "Ton jeu sur " : "Ta fiche sur ";
+
+  appeler(chemin, donnees, this, "msg-lecon", function () {
+    dire("msg-lecon",
+      forme + quoi + " est en préparation. Le lien arrive par e-mail dans plusieurs minutes.",
+      "ok");
+  });
+});
+
+/* --- sortir --- */
+document.getElementById("btn-sortir").addEventListener("click", function () {
+  document.getElementById("code").value = "";
+  document.getElementById("ch-paroles").value = "";
+  document.getElementById("ch-compte").textContent = "0 / " + MAX_PAROLES + " mots";
+  document.getElementById("ch-compte").className = "compte-mots";
+  document.getElementById("p-mots").value = "";
+  identifiantCourant = "";
+  montrer("accueil");
+});
+
+/* --- remplissage des trois listes de date --- */
+(function remplirDate() {
+  var jour = document.getElementById("i-jour");
+  for (var j = 1; j <= 31; j++) { jour.appendChild(new Option(j, j)); }
+
+  var noms = ["janvier", "février", "mars", "avril", "mai", "juin",
+              "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+  var mois = document.getElementById("i-mois");
+  for (var m = 0; m < 12; m++) { mois.appendChild(new Option(noms[m], m + 1)); }
+
+  var annee = document.getElementById("i-annee");
+  var actuelle = new Date().getFullYear();
+  for (var a = actuelle - 18; a >= 1925; a--) { annee.appendChild(new Option(a, a)); }
+})();
+
+montrer("accueil");
+</script>
+
+</body>
+</html>
