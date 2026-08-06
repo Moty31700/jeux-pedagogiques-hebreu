@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Thème</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#fdf8f0;--parch:#ede8d8;--ink:#1a1408;--ink2:#4a3f28;--ink3:#7a6a50;
+  --gold:#c9952a;--gold2:#e8b84b;--blue:#1e5fa8;--blue2:#4a90d9;
+  --green:#2e7d32;--red:#c62828;--orange:#e65100;--purple:#6a1b9a;
+  --shadow:rgba(0,0,0,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 12% 8%,rgba(201,149,42,.09) 0%,transparent 52%),
+             radial-gradient(ellipse at 88% 92%,rgba(30,95,168,.07) 0%,transparent 52%);
+  pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(180,160,100,.06) 28px,rgba(180,160,100,.06) 29px);
+  pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:26px 16px 90px}
+
+.app-header{text-align:center;margin-bottom:18px}
+.app-heb{font-family:'Noto Serif Hebrew',serif;font-size:40px;font-weight:900;color:var(--ink);line-height:1.2;text-shadow:2px 2px 0 rgba(201,149,42,.13)}
+.app-fr{font-size:16px;font-style:italic;color:var(--ink2);margin-top:2px}
+.ornament{display:flex;align-items:center;justify-content:center;gap:14px;color:var(--gold);opacity:.45;margin:10px auto;width:220px}
+.ornament::before,.ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+.reglages{background:rgba(255,251,240,.95);border:1px solid rgba(201,149,42,.2);border-radius:14px;padding:12px 14px;margin-bottom:14px;box-shadow:0 2px 8px var(--shadow)}
+.reglages .titre-mini{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink3);margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid rgba(201,149,42,.3);background:rgba(201,149,42,.06);color:var(--ink2);border-radius:20px;padding:5px 13px;font-family:'Crimson Pro',serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
+.chip.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.chip.tous{border-style:dashed}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink2)}
+.switch .box{width:44px;height:24px;border-radius:14px;background:rgba(0,0,0,.15);position:relative;transition:.2s}
+.switch .box::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.switch.on .box{background:var(--green)}
+.switch.on .box::after{left:22px}
+
+.tabs{display:flex;flex-wrap:wrap;gap:5px;background:rgba(237,232,216,.6);border-radius:16px;padding:5px;margin-bottom:20px;border:1px solid rgba(201,149,42,.15)}
+.tab{flex:1 0 auto;padding:9px 10px;border:none;border-radius:11px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:12.5px;font-weight:700;color:var(--ink3);background:transparent;transition:.2s}
+.tab.active{background:rgba(255,251,240,.98);color:var(--ink);box-shadow:0 2px 12px var(--shadow);border:1px solid rgba(201,149,42,.22)}
+.tab:hover:not(.active){background:rgba(255,251,240,.6)}
+
+.card{background:rgba(255,251,240,.97);border-radius:18px;padding:20px 20px;box-shadow:0 2px 0 rgba(201,149,42,.18),0 8px 28px var(--shadow);border:1px solid rgba(201,149,42,.18);margin-bottom:14px}
+.heb{font-family:'Noto Serif Hebrew',serif;direction:rtl;color:var(--ink)}
+.heb-xl{font-size:40px;font-weight:900;text-align:center;line-height:1.3}
+.heb-lg{font-size:26px;font-weight:700;line-height:1.6}
+.heb-md{font-size:20px;line-height:1.9}
+.fr{font-style:italic}
+.sens{color:var(--ink3);font-size:15px;margin-top:6px}
+.audio-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(201,149,42,.1);border:1.5px solid rgba(201,149,42,.3);color:var(--gold);border-radius:20px;padding:4px 12px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:13px;font-weight:600;transition:.2s}
+.audio-btn:hover{background:rgba(201,149,42,.2)}
+.fr-hidden{filter:blur(7px);opacity:.4;cursor:pointer;user-select:none}
+.reveal{background:rgba(201,149,42,.08);border:1.5px solid rgba(201,149,42,.25);color:var(--gold);border-radius:9px;padding:6px 10px;cursor:pointer;font-size:14px}
+.center{text-align:center}
+.badge{display:inline-block;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.b-noms{background:var(--blue)}.b-verbes{background:var(--green)}.b-adjectifs{background:var(--purple)}.b-autre{background:var(--orange)}
+
+table.lex{width:100%;border-collapse:collapse}
+table.lex th,table.lex td{padding:9px 8px;border-bottom:1px solid rgba(201,149,42,.15);text-align:left}
+table.lex th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)}
+table.lex td.he{font-family:'Noto Serif Hebrew',serif;direction:rtl;font-size:20px;text-align:right;font-weight:700}
+.morpho-row{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:15px;margin-top:8px}
+.morpho-row .k{color:var(--ink3);font-weight:600}
+.morpho-he{font-family:'Noto Serif Hebrew',serif;direction:rtl}
+
+.btn{border:none;border-radius:12px;padding:12px 18px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:15px;font-weight:700;transition:.2s}
+.btn-v{background:var(--green);color:#fff}.btn-f{background:var(--red);color:#fff}
+.btn-g{background:var(--gold);color:#fff}
+.btn-o{background:transparent;border:1.5px solid rgba(201,149,42,.35);color:var(--ink2)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.q-card.correct{background:#edf7ee;border-color:#4caf50}
+.q-card.wrong{background:#fdeaea;border-color:#ef5350}
+
+.tiles{display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center;margin:14px 0;min-height:44px}
+.tile{font-family:'Noto Serif Hebrew',serif;font-size:20px;background:rgba(201,149,42,.12);border:1.5px solid rgba(201,149,42,.35);border-radius:10px;padding:6px 12px;cursor:pointer}
+.tile.used{opacity:.3;pointer-events:none}
+.zone{min-height:48px;border:2px dashed rgba(201,149,42,.3);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center}
+
+.bilan-pct{font-size:56px;font-weight:900;text-align:center;color:var(--gold)}
+.bilan-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(201,149,42,.15);font-size:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="app-header">
+    <div class="app-heb">Thème</div>
+    <div class="app-fr">Jeu</div>
+    <div class="ornament">✦</div>
+  </div>
+
+  <div class="reglages">
+    <div class="titre-mini">Réglages</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div class="switch" id="sw-nikoud" onclick="toggleNikoud()"><span class="box"></span><span>Avec nikoud</span></div>
+    </div>
+    <div class="titre-mini" style="margin-top:12px">Catégories</div>
+    <div class="chips" id="cat-chips"></div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="content"></div>
+</div>
+
+<script>
+/* ============================================================
+   STRUCTURE "JEU" = LE CONTRAT que l'IA devra remplir à chaque leçon.
+   ============================================================ */
+const JEU = {
+  titre: "Thème",
+  mots: [
+    {heb:"בַּיִת",     translit:"bayit",     fr:"maison",           sens:"lieu où l'on habite",   racine:"ב-י-ת", nature:"nom",      genre:"m", nombre:"sg", formes:"בָּתִּים (pl.)",          cat:"noms",      emploi:"quotidien"},
+    {heb:"דֶּלֶת",     translit:"delet",     fr:"porte",            sens:"ouverture d'entrée",    racine:"ד-ל-ת", nature:"nom",      genre:"f", nombre:"sg", formes:"דְּלָתוֹת (pl.)",         cat:"noms",      emploi:"quotidien"},
+    {heb:"חַלּוֹן",    translit:"khalon",    fr:"fenêtre",          sens:"ouverture dans un mur", racine:"ח-ל-ן", nature:"nom",      genre:"m", nombre:"sg", formes:"חַלּוֹנוֹת (pl.)",        cat:"noms",      emploi:"quotidien"},
+    {heb:"חֶדֶר",     translit:"kheder",    fr:"chambre / pièce",  sens:"partie d'une maison",   racine:"ח-ד-ר", nature:"nom",      genre:"m", nombre:"sg", formes:"חֲדָרִים (pl.)",          cat:"noms",      emploi:"quotidien"},
+    {heb:"מִשְׁפָּחָה", translit:"mishpakha", fr:"famille",          sens:"ensemble des proches",  racine:"ש-פ-ח", nature:"nom",      genre:"f", nombre:"sg", formes:"מִשְׁפָּחוֹת (pl.)",      cat:"noms",      emploi:"quotidien"},
+    {heb:"לָגוּר",    translit:"lagour",    fr:"habiter",          sens:"résider quelque part",  racine:"ג-ו-ר", nature:"verbe",    genre:"—", nombre:"—",  formes:"גָּר · גָּרָה · גָּרִים", cat:"verbes",    emploi:"quotidien"},
+    {heb:"לִפְתּוֹחַ", translit:"liftoakh",  fr:"ouvrir",           sens:"faire s'ouvrir",        racine:"פ-ת-ח", nature:"verbe",    genre:"—", nombre:"—",  formes:"פּוֹתֵחַ · פָּתַח",       cat:"verbes",    emploi:"quotidien"},
+    {heb:"גָּדוֹל",    translit:"gadol",     fr:"grand",            sens:"de grande taille",      racine:"ג-ד-ל", nature:"adjectif", genre:"m", nombre:"sg", formes:"גְּדוֹלָה · גְּדוֹלִים",  cat:"adjectifs", emploi:"quotidien"},
+    {heb:"נָקִי",     translit:"naki",      fr:"propre",           sens:"sans saleté",           racine:"נ-ק-ה", nature:"adjectif", genre:"m", nombre:"sg", formes:"נְקִיָּה · נְקִיִּים",     cat:"adjectifs", emploi:"quotidien"},
+    {heb:"יָפֶה",     translit:"yafe",      fr:"beau / joli",      sens:"agréable à regarder",   racine:"י-פ-ה", nature:"adjectif", genre:"m", nombre:"sg", formes:"יָפָה · יָפִים",          cat:"adjectifs", emploi:"quotidien"}
+  ],
+  phrases: [
+    {heb:"הַבַּיִת שֶׁלִּי גָּדוֹל וְנָקִי",            fr:"Ma maison est grande et propre."},
+    {heb:"אֲנִי גָּר עִם הַמִּשְׁפָּחָה שֶׁלִּי",        fr:"J'habite avec ma famille."},
+    {heb:"הִיא פּוֹתַחַת אֶת הַדֶּלֶת וְאֶת הַחַלּוֹן",   fr:"Elle ouvre la porte et la fenêtre."},
+    {heb:"הַחֶדֶר הַזֶּה יָפֶה מְאוֹד",               fr:"Cette chambre est très belle."}
+  ],
+  textes: [
+    {titre:"Quotidien",  heb:"אֲנִי גָּר בְּבַיִת גָּדוֹל עִם הַמִּשְׁפָּחָה שֶׁלִּי. כָּל בֹּקֶר אֲנִי פּוֹתֵחַ אֶת הַחַלּוֹן וְאֶת הַדֶּלֶת. הַחֶדֶר שֶׁלִּי נָקִי וְיָפֶה.",
+                         fr:"J'habite dans une grande maison avec ma famille. Chaque matin j'ouvre la fenêtre et la porte. Ma chambre est propre et belle."},
+    {titre:"Familier",   heb:"יֵשׁ לִי בַּיִת מְטֻרָף, מַמָּשׁ גָּדוֹל! פּוֹתֵחַ אֶת הַדֶּלֶת וְכָל הַמִּשְׁפָּחָה כְּבָר שָׁם. הַחֶדֶר שֶׁלִּי? סַבָּבָּה, נָקִי וְיָפֶה.",
+                         fr:"J'ai une maison de dingue, super grande ! J'ouvre la porte et toute la famille est déjà là. Ma chambre ? Nickel, propre et belle."},
+    {titre:"Littéraire", heb:"בְּבַיִת גָּדוֹל וְנָקִי שָׁכְנָה מִשְׁפָּחָה. בְּכָל שַׁחַר נִפְתְּחוּ הַדֶּלֶת וְהַחַלּוֹן אֶל הָאוֹר, וְהַחֶדֶר הַיָּפֶה נִמְלָא שֶׁקֶט.",
+                         fr:"Dans une maison grande et propre demeurait une famille. À chaque aube s'ouvraient la porte et la fenêtre vers la lumière, et la belle chambre s'emplissait de silence."}
+  ]
+};
+
+let sansNikoud = false;
+let selCats = new Set(JEU.mots.map(m=>m.cat));
+let score = {ok:0, ko:0};
+
+const NIKOUD = /[\u0591-\u05C7]/g;
+function strip(s){ return String(s).replace(NIKOUD,''); }
+function H(s){ return sansNikoud ? strip(s) : s; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function motsF(){ return JEU.mots.filter(m=>selCats.has(m.cat)); }
+function badgeClass(c){ return ['noms','verbes','adjectifs'].includes(c) ? 'b-'+c : 'b-autre'; }
+
+function say(txt){
+  try{ speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(strip(txt)); u.lang='he-IL'; u.rate=.9;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function audioBtn(txt){ return '<button class="audio-btn" onclick="say(\''+String(txt).replace(/'/g,"\\'")+'\')">🔊 Écouter</button>'; }
+
+const TABS = [
+  {id:'mots',lbl:'Mots'},{id:'morpho',lbl:'Morphologie'},{id:'lexique',lbl:'Lexique'},
+  {id:'phrases',lbl:'Phrases'},{id:'textes',lbl:'3 Textes'},{id:'vf',lbl:'Vrai/Faux'},
+  {id:'recon',lbl:'Reconstituer'},{id:'bilan',lbl:'Score'}
+];
+let ongletCourant = 'mots';
+function initTabs(){
+  document.getElementById('tabs').innerHTML = TABS.map(t=>
+    '<button class="tab'+(t.id===ongletCourant?' active':'')+'" onclick="showTab(\''+t.id+'\')">'+t.lbl+'</button>').join('');
+}
+function showTab(id){ ongletCourant=id; initTabs(); render(); }
+
+function initReglages(){
+  const cats = [...new Set(JEU.mots.map(m=>m.cat))];
+  let html = '<button class="chip tous'+(selCats.size===cats.length?' on':'')+'" onclick="toutesCats()">Toutes</button>';
+  html += cats.map(c=>'<button class="chip '+(selCats.has(c)?'on':'')+'" onclick="toggleCat(\''+c+'\')">'+c+'</button>').join('');
+  document.getElementById('cat-chips').innerHTML = html;
+  const sw=document.getElementById('sw-nikoud');
+  sw.className = 'switch'+(sansNikoud?'':' on');
+  sw.querySelector('span:last-child').textContent = sansNikoud ? 'Sans nikoud' : 'Avec nikoud';
+}
+function toggleNikoud(){ sansNikoud=!sansNikoud; initReglages(); render(); }
+function toggleCat(c){ if(selCats.has(c)){ if(selCats.size>1) selCats.delete(c);} else selCats.add(c); vfList=[]; initReglages(); render(); }
+function toutesCats(){ selCats = new Set(JEU.mots.map(m=>m.cat)); vfList=[]; initReglages(); render(); }
+
+function render(){
+  const map = {mots:rMots,morpho:rMorpho,lexique:rLexique,phrases:rPhrases,textes:rTextes,vf:rVF,recon:rRecon,bilan:rBilan};
+  document.getElementById('content').innerHTML = (map[ongletCourant]||(()=> ''))();
+}
+
+function rMots(){
+  return motsF().map((m,i)=>
+    '<div class="card center">'
+    + '<span class="badge '+badgeClass(m.cat)+'">'+m.cat+'</span>'
+    + '<div class="heb heb-xl">'+H(m.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(m.heb)+'</div>'
+    + '<div class="fr fr-hidden" id="fr'+i+'" onclick="this.classList.remove(\'fr-hidden\')" style="font-size:20px">'+esc(m.fr)+'</div>'
+    + '<div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(\'fr'+i+'\').classList.remove(\'fr-hidden\')">Révéler la traduction</div>'
+    + '<div class="sens">Sens : '+esc(m.sens)+'</div>'
+    + '</div>').join('');
+}
+function rMorpho(){
+  return motsF().map(m=>
+    '<div class="card">'
+    + '<div class="heb heb-lg center">'+H(m.heb)+'</div>'
+    + '<div class="morpho-row">'
+    +   '<span class="k">Racine</span><span class="morpho-he">'+m.racine+'</span>'
+    +   '<span class="k">Nature</span><span>'+esc(m.nature)+'</span>'
+    +   '<span class="k">Genre / Nombre</span><span>'+esc(m.genre)+' · '+esc(m.nombre)+'</span>'
+    +   '<span class="k">Formes</span><span class="morpho-he">'+H(m.formes)+'</span>'
+    +   '<span class="k">Emploi</span><span>'+esc(m.emploi)+'</span>'
+    + '</div></div>').join('');
+}
+function rLexique(){
+  return '<div class="card"><table class="lex"><tr><th>Hébreu</th><th>Translit.</th><th>Français</th></tr>'
+    + motsF().map(m=>'<tr><td class="he">'+H(m.heb)+'</td><td>'+esc(m.translit)+'</td><td class="fr">'+esc(m.fr)+'</td></tr>').join('')
+    + '</table></div>';
+}
+function rPhrases(){
+  return JEU.phrases.map(p=>
+    '<div class="card">'
+    + '<div class="heb heb-md" style="text-align:right">'+H(p.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(p.heb)+'</div>'
+    + '<div class="fr">'+esc(p.fr)+'</div>'
+    + '</div>').join('');
+}
+function rTextes(){
+  return JEU.textes.map(t=>
+    '<div class="card">'
+    + '<span class="badge b-autre">'+esc(t.titre)+'</span>'
+    + '<div class="heb heb-md" style="text-align:right">'+H(t.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(t.heb)+'</div>'
+    + '<div class="fr">'+esc(t.fr)+'</div>'
+    + '</div>').join('');
+}
+
+let vfList=[], vfIdx=0;
+function rVF(){
+  if(!vfList.length) buildVF();
+  if(vfIdx>=vfList.length){
+    return '<div class="card center"><h3>Quiz terminé</h3><p style="font-size:18px;margin:10px 0">'+score.ok+' justes · '+score.ko+' erreurs</p><button class="btn btn-g" onclick="resetVF()">Recommencer</button></div>';
+  }
+  const q=vfList[vfIdx];
+  return '<div class="card q-card center" id="qc">'
+    + '<div class="heb heb-xl">'+H(q.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(q.heb)+'</div>'
+    + '<div style="font-size:12px;color:#bbb;text-transform:uppercase;letter-spacing:.8px;margin:8px 0 2px">Traduction proposée</div>'
+    + '<div class="fr" style="font-size:22px;margin-bottom:16px">'+esc(q.propose)+'</div>'
+    + '<div class="row" style="justify-content:center">'
+    +   '<button class="btn btn-v" onclick="ansVF(true)">✓ Vrai</button>'
+    +   '<button class="btn btn-f" onclick="ansVF(false)">✗ Faux</button>'
+    + '</div></div>';
+}
+function buildVF(){
+  const mots=motsF(); vfList=[]; vfIdx=0;
+  mots.forEach(m=>{
+    const vrai = Math.random()<0.5;
+    let propose = m.fr;
+    if(!vrai){ const autres=mots.filter(x=>x.fr!==m.fr); propose=(autres[Math.floor(Math.random()*autres.length)]||m).fr; }
+    vfList.push({heb:m.heb, propose, vrai: propose===m.fr});
+  });
+  vfList.sort(()=>Math.random()-0.5);
+}
+function ansVF(rep){
+  const q=vfList[vfIdx]; const bon=(rep===q.vrai);
+  bon?score.ok++:score.ko++;
+  const qc=document.getElementById('qc'); if(qc) qc.classList.add(bon?'correct':'wrong');
+  setTimeout(()=>{ vfIdx++; render(); },650);
+}
+function resetVF(){ vfList=[]; vfIdx=0; render(); }
+
+let reconIdx=0, reconChoix=[], reconBank=null;
+function rRecon(){
+  const p=JEU.phrases[reconIdx];
+  const mots=strip(p.heb).split(/\s+/).filter(Boolean);
+  if(!reconBank){ reconBank = mots.map((w,i)=>({w,i})).slice().sort(()=>Math.random()-0.5); }
+  const zone = reconChoix.map(c=>'<span class="tile" onclick="reconRetire('+c.i+')">'+c.w+'</span>').join('');
+  const tiles = reconBank.map(b=>'<span class="tile'+(reconChoix.find(c=>c.i===b.i)?' used':'')+'" onclick="reconAjoute('+b.i+')">'+b.w+'</span>').join('');
+  const fini = reconChoix.length===mots.length;
+  const ok = fini && reconChoix.map(c=>c.w).join(' ')===mots.join(' ');
+  return '<div class="card">'
+    + '<div class="fr center" style="margin-bottom:6px">'+esc(p.fr)+'</div>'
+    + '<div class="titre-mini center">Remets les mots dans l\'ordre (droite → gauche)</div>'
+    + '<div class="zone">'+ (zone||'<span style="color:#bbb">…</span>') +'</div>'
+    + '<div class="tiles">'+tiles+'</div>'
+    + (fini ? '<div class="center" style="font-size:18px;color:'+(ok?'var(--green)':'var(--red)')+'">'+(ok?'✓ Correct !':'✗ Pas encore')+'</div>' : '')
+    + '<div class="row" style="justify-content:center;margin-top:12px">'
+    +   '<button class="btn btn-o" onclick="reconReset()">Effacer</button>'
+    +   '<button class="btn btn-g" onclick="reconNext()">Phrase suivante</button>'
+    + '</div></div>';
+}
+function reconAjoute(i){ const m=strip(JEU.phrases[reconIdx].heb).split(/\s+/)[i]; if(!reconChoix.find(c=>c.i===i)){ reconChoix.push({w:m,i}); render(); } }
+function reconRetire(i){ reconChoix=reconChoix.filter(c=>c.i!==i); render(); }
+function reconReset(){ reconChoix=[]; reconBank=null; render(); }
+function reconNext(){ reconIdx=(reconIdx+1)%JEU.phrases.length; reconChoix=[]; reconBank=null; render(); }
+
+function rBilan(){
+  const tot=score.ok+score.ko; const pct=tot?Math.round(score.ok/tot*100):0;
+  return '<div class="card">'
+    + '<div class="bilan-pct">'+pct+'%</div>'
+    + '<div class="center titre-mini" style="margin-bottom:14px">taux de réussite</div>'
+    + '<div class="bilan-line"><span>Réponses justes</span><b style="color:var(--green)">'+score.ok+'</b></div>'
+    + '<div class="bilan-line"><span>Erreurs</span><b style="color:var(--red)">'+score.ko+'</b></div>'
+    + '<div class="bilan-line"><span>Total</span><b>'+tot+'</b></div>'
+    + '<div class="row" style="justify-content:center;margin-top:16px"><button class="btn btn-o" onclick="score={ok:0,ko:0};render()">Remettre à zéro</button></div>'
+    + '</div>';
+}
+
+initReglages(); initTabs(); render();
+</script>
+</body>
+</html>
