@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)https://lecons.hebreu-zen.cloud/jeu-hebreu-20260811-0759-vnku.html -->
+<html lang="fr" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Chanson</title>
+<link href="./Chanson_files/css2" rel="stylesheet">
+<style>
+:root{
+  --cream:#0d0d0d;--parch:#161616;--ink:#e8e4dc;--ink2:#b8b2a6;--ink3:#888;
+  --gold:#c9a84c;--gold2:#e8c96a;--blue:#1a6aaa;--blue2:#70b0e0;
+  --green:#3d7a55;--red:#8b3a3a;--orange:#c9852a;--purple:#b49ee8;
+  --shadow:rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 12% 8%,rgba(201,168,76,.09) 0%,transparent 52%),
+             radial-gradient(ellipse at 88% 92%,rgba(30,95,168,.07) 0%,transparent 52%);
+  pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(201,168,76,.03) 28px,rgba(201,168,76,.03) 29px);
+  pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:26px 16px 90px}
+
+.app-header{text-align:center;margin-bottom:18px}.lien-src{display:inline-block;margin:6px 5px 0;padding:7px 14px;border:1px solid var(--gold);border-radius:8px;color:var(--gold);text-decoration:none;font-size:14px}.lien-src:hover{background:var(--gold);color:#1a1a1a}
+.app-heb{font-family:'Frank Ruhl Libre',serif;font-size:40px;font-weight:900;color:var(--ink);line-height:1.2;text-shadow:2px 2px 0 rgba(201,168,76,.13)}
+.app-fr{font-size:16px;font-style:italic;color:var(--ink2);margin-top:2px}
+.ornament{display:flex;align-items:center;justify-content:center;gap:14px;color:var(--gold);opacity:.45;margin:10px auto;width:220px}
+.ornament::before,.ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+.reglages{background:#161616;border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:12px 14px;margin-bottom:14px;box-shadow:0 2px 8px var(--shadow)}
+.reglages .titre-mini{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink3);margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid rgba(201,168,76,.3);background:rgba(201,168,76,.06);color:var(--ink2);border-radius:20px;padding:5px 13px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
+.chip.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.chip.tous{border-style:dashed}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink2)}
+.switch .box{width:44px;height:24px;border-radius:14px;background:rgba(0,0,0,.15);position:relative;transition:.2s}
+.switch .box::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.switch.on .box{background:var(--green)}
+.switch.on .box::after{left:22px}
+
+.tabs{display:flex;flex-wrap:wrap;gap:5px;background:#111;border-radius:16px;padding:5px;margin-bottom:20px;border:1px solid rgba(201,168,76,.15)}
+.tab{flex:1 0 auto;padding:9px 10px;border:none;border-radius:11px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;color:var(--ink3);background:transparent;transition:.2s}
+.tab.active{background:#1e1e1e;color:var(--ink);box-shadow:0 2px 12px var(--shadow);border:1px solid rgba(201,168,76,.22)}
+.tab:hover:not(.active){background:#1a1a1a}
+
+.card{background:#161616;border-radius:18px;padding:20px 20px;box-shadow:0 2px 0 rgba(201,168,76,.18),0 8px 28px var(--shadow);border:1px solid rgba(201,168,76,.18);margin-bottom:14px}
+.heb{font-family:'Frank Ruhl Libre',serif;direction:rtl;color:var(--ink)}
+.heb-xl{font-size:40px;font-weight:900;text-align:center;line-height:1.3}
+.heb-lg{font-size:26px;font-weight:700;line-height:1.6}
+.heb-md{font-size:20px;line-height:1.9}
+.fr{font-style:italic}
+.sens{color:var(--ink3);font-size:15px;margin-top:6px}
+.audio-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,.1);border:1.5px solid rgba(201,168,76,.3);color:var(--gold);border-radius:20px;padding:4px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;transition:.2s}
+.audio-btn:hover{background:rgba(201,168,76,.2)}
+.fr-hidden{filter:blur(7px);opacity:.4;cursor:pointer;user-select:none}
+.reveal{background:rgba(201,168,76,.08);border:1.5px solid rgba(201,168,76,.25);color:var(--gold);border-radius:9px;padding:6px 10px;cursor:pointer;font-size:14px}
+.center{text-align:center}
+.badge{display:inline-block;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.b-noms{background:var(--blue)}.b-verbes{background:var(--green)}.b-adjectifs{background:var(--purple)}.b-autre{background:var(--orange)}
+
+table.lex{width:100%;border-collapse:collapse}
+table.lex th,table.lex td{padding:9px 8px;border-bottom:1px solid rgba(201,168,76,.15);text-align:left}
+table.lex th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-size:20px;text-align:right;font-weight:700}
+.morpho-row{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:15px;margin-top:8px}
+.morpho-row .k{color:var(--ink3);font-weight:600}
+.morpho-he{font-family:'Frank Ruhl Libre',serif;direction:rtl}
+
+.btn{border:none;border-radius:12px;padding:12px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;transition:.2s}
+.btn-v{background:var(--green);color:#fff}.btn-f{background:var(--red);color:#fff}
+.btn-g{background:var(--gold);color:#fff}
+.btn-o{background:transparent;border:1.5px solid rgba(201,168,76,.35);color:var(--ink2)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.q-card.correct{background:#1a2e22;border-color:#3d7a55}
+.q-card.wrong{background:#2a1515;border-color:#8b3a3a}
+
+.tiles{display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center;margin:14px 0;min-height:44px}
+.tile{font-family:'Frank Ruhl Libre',serif;font-size:20px;background:rgba(201,168,76,.12);border:1.5px solid rgba(201,168,76,.35);border-radius:10px;padding:6px 12px;cursor:pointer}
+.tile.used{opacity:.3;pointer-events:none}
+.zone{min-height:48px;border:2px dashed rgba(201,168,76,.3);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center}
+
+.bilan-pct{font-size:56px;font-weight:900;text-align:center;color:var(--gold)}
+.bilan-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(201,168,76,.15);font-size:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="app-header" id="app-header"></div>
+
+  <div class="reglages">
+    <div class="titre-mini">Réglages</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div class="switch on" id="sw-nikoud" onclick="toggleNikoud()"><span class="box"></span><span>Avec nikoud</span></div>
+    </div>
+    <div class="titre-mini" style="margin-top:12px">Catégories</div>
+    <div class="chips" id="cat-chips"><button class="chip tous on" onclick="toutesCats()">Toutes</button><button class="chip on" onclick="toggleCat(&#39;adjectifs&#39;)">adjectifs</button><button class="chip on" onclick="toggleCat(&#39;verbes&#39;)">verbes</button><button class="chip on" onclick="toggleCat(&#39;noms&#39;)">noms</button><button class="chip on" onclick="toggleCat(&#39;autre&#39;)">autre</button></div>
+  </div>
+
+  <div class="tabs" id="tabs"><button class="tab active" onclick="showTab(&#39;mots&#39;)">Mots</button><button class="tab" onclick="showTab(&#39;morpho&#39;)">Morphologie</button><button class="tab" onclick="showTab(&#39;lexique&#39;)">Lexique</button><button class="tab" onclick="showTab(&#39;phrases&#39;)">Phrases</button><button class="tab" onclick="showTab(&#39;analyse&#39;)">Analyse</button><button class="tab" onclick="showTab(&#39;vf&#39;)">Vrai/Faux</button><button class="tab" onclick="showTab(&#39;recon&#39;)">Reconstituer</button><button class="tab" onclick="showTab(&#39;bilan&#39;)">Score</button></div>
+  <div id="content"><div class="card center"><span class="badge b-adjectifs">adjectifs</span><div class="heb heb-xl">עָשִׁיר</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;עָשִׁיר&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr0" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">riche</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr0&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : adjectif masculin singulier</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">בּוֹנֶה</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;בּוֹנֶה&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr1" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">bâtissant / qui bâtit</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr1&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe בנה, binyan Pa'al, participe présent masculin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מַדְרֵגוֹת</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מַדְרֵגוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr2" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">escaliers / marches</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr2&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom féminin pluriel</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">גַּבִּיר</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;גַּבִּיר&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr3" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">notable / homme riche et influent</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr3&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">אַוָּזִים</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;אַוָּזִים&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr4" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">oies</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr4&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin pluriel</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">בַּרְוָזִים</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;בַּרְוָזִים&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr5" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">canards</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr5&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin pluriel</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מִרְפֶּסֶת</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִרְפֶּסֶת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr6" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">balcon / véranda</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr6&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom féminin singulier</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">מִתְנַפַּחַת</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִתְנַפַּחַת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr7" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">se rengorgeant / se gonflant d'orgueil</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr7&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe נפח, binyan Hitpa'el, participe présent féminin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">טַוָּס</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;טַוָּס&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr8" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">paon</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr8&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">עֵצָה</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;עֵצָה&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr9" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">conseil / avis</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr9&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom féminin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מִנְהָג</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִנְהָג&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr10" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">coutume / usage</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr10&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin singulier</div></div><div class="card center"><span class="badge b-autre">autre</span><div class="heb heb-xl">בֵּית הַמִּדְרָשׁ</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;בֵּית הַמִּדְרָשׁ&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr11" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">maison d'étude / maison de prière</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr11&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : expression nominale masculine singulier défini</div></div><div class="card center"><span class="badge b-autre">autre</span><div class="heb heb-xl">כֹּתֶל הַמִּזְרָח</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;כֹּתֶל הַמִּזְרָח&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr12" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">le mur est / place d'honneur orientale dans la synagogue</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr12&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : expression nominale masculine singulier défini</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">מוֹשִׁיעָם</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מוֹשִׁיעָם&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr13" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">leur sauveur / celui qui les sauve</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr13&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe ישע, binyan Hif'il, participe présent ms avec suffixe 3mp</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">נִגְרַע</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;נִגְרַע&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr14" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">serait-il retranché / perdu / manquerait-il</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr14&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe גרע, binyan Nif'al, passé 3ms (ici valeur conditionnelle)</div></div></div>
+</div>
+
+<script>
+/* ============================================================
+   STRUCTURE "JEU" = LE CONTRAT que l'IA devra remplir à chaque leçon.
+   ============================================================ */
+const JEU = {"titre":"אגדת השמש והירח","artiste":"ריטה ואתניקס","youtube":"https://www.youtube.com/watch?v=bISi8YqGbJU","shironet":"https://shironet.mako.co.il/artist?type=lyrics&lang=1&prfid=22668&wrkid=51183","mots":[{"heb":"כּוֹכְבֵי הַלֶּכֶת","translit":"kokhvéi ha-lékhet","fr":"planètes","sens":"nom masculin pluriel construit + nom défini","racine":"כ-ו-כ / ה-ל-כ","nature":"expression","genre":"masculin","nombre":"pluriel","formes":"כּוֹכָב · כּוֹכָבִים · כּוֹכְבֵי","cat":"autre","emploi":"Expression désignant les planètes (littéralement 'étoiles de la marche'), utilisée dans un registre soutenu et scientifique, ici pour camper le décor cosmique de la métaphore amoureuse."},{"heb":"בּוֹעֶרֶת","translit":"bo'éret","fr":"elle brûle / elle flambe","sens":"qal participe féminin singulier (présent)","racine":"ב-ע-ר","nature":"verbe","genre":"féminin","nombre":"singulier","formes":"בָּעַר · בּוֹעֵר · בּוֹעֶרֶת · יִבְעַר","cat":"verbes","emploi":"Verbe au participe présent exprimant une ardeur continue et permanente ; au sens figuré il traduit la passion dévorante du soleil, image de l'amour intense et non partagé dans l'instant."},{"heb":"חִיוָּרוֹן","translit":"ḥivaron","fr":"pâleur","sens":"nom masculin singulier absolu","racine":"ח-ו-ר","nature":"nom","genre":"masculin","nombre":"singulier","formes":"חִיוָּר · חִיוָּרוֹן","cat":"noms","emploi":"Nom poétique et littéraire désignant la pâleur, associé ici au visage de la lune ; il contraste avec la chaleur ardente du soleil, renforçant l'opposition des deux amants célestes."},{"heb":"נִכְסָף","translit":"nikhsaf","fr":"il aspire / il languit","sens":"nifal participe masculin singulier (présent)","racine":"כ-ס-פ","nature":"verbe","genre":"masculin","nombre":"singulier","formes":"נִכְסַף · נִכְסָף · נִכְסֶפֶת","cat":"verbes","emploi":"Verbe au registre poétique et élevé, exprimant le désir ardent et la nostalgie ; en nifal, il suggère un état subi autant que ressenti, soulignant l'impuissance de la lune face à son attraction pour le soleil."},{"heb":"צֵל","translit":"tsel","fr":"ombre","sens":"nom masculin singulier absolu","racine":"צ-ל-ל","nature":"nom","genre":"masculin","nombre":"singulier","formes":"צֵל · צְלָלִים · צִלֵּל","cat":"noms","emploi":"Mot central de la chanson : l'ombre de la lune qui se projette vers le soleil est la seule forme de contact possible entre les deux astres, métaphore d'un amour qui ne peut se vivre qu'en creux."},{"heb":"נִמְשָׁךְ","translit":"nimshakh","fr":"il est attiré / il se prolonge","sens":"nifal participe masculin singulier (présent)","racine":"מ-ש-כ","nature":"verbe","genre":"masculin","nombre":"singulier","formes":"מָשַׁךְ · נִמְשַׁךְ · נִמְשָׁךְ · יִמָּשֵׁךְ","cat":"verbes","emploi":"Verbe en nifal indiquant à la fois l'attraction physique (gravité) et le désir émotionnel ; l'ambiguïté entre sens littéral et figuré est au cœur de la poétique de la chanson."},{"heb":"נוֹגְעִים","translit":"nog'im","fr":"ils se touchent","sens":"qal participe masculin pluriel (présent)","racine":"נ-ג-ע","nature":"verbe","genre":"masculin","nombre":"pluriel","formes":"נָגַע · נוֹגֵעַ · נוֹגְעִים · יִגַּע","cat":"verbes","emploi":"Verbe exprimant le contact fugace entre les deux astres ; placé 'là-haut' (לְמַעְלָה), ce toucher est la seule union accordée aux deux amants, instant précieux et insuffisant à la fois."},{"heb":"שָׁקִיעַת זְרִיחָה","translit":"shqi'at zriḥa","fr":"coucher d'une aurore / crépuscule d'aube","sens":"nom féminin singulier construit + nom féminin singulier","racine":"ש-ק-ע / ז-ר-ח","nature":"expression","genre":"féminin","nombre":"singulier","formes":"שְׁקִיעָה · זְרִיחָה · שָׁקַע · זָרַח","cat":"autre","emploi":"Expression oxymore unissant le coucher (שְׁקִיעָה) et le lever (זְרִיחָה) du soleil, figure de style qui condense la paradoxale rencontre des deux astres : naissance et mort mêlées, comme cet amour qui n'existe qu'à la limite."},{"heb":"אַהֲבָה אֲבוּדָה","translit":"ahava avuda","fr":"amour perdu","sens":"nom féminin singulier + adjectif féminin singulier","racine":"א-ה-ב / א-ב-ד","nature":"expression","genre":"féminin","nombre":"singulier","formes":"אַהֲבָה · אָבוּד · אֲבוּדָה","cat":"autre","emploi":"Expression centrale et titre implicite de la chanson ; elle résume en deux mots la tragédie des deux astres condamnés à ne jamais se rejoindre véritablement, dans un registre à la fois poétique et populaire."},{"heb":"טַבַּעַת","translit":"taba'at","fr":"bague / anneau","sens":"nom féminin singulier construit (ici absolu contextuel)","racine":"ט-ב-ע","nature":"nom","genre":"féminin","nombre":"singulier","formes":"טַבַּעַת · טַבָּעוֹת","cat":"noms","emploi":"Dans le passage rap, la bague renvoie à la demande en mariage, mais aussi aux anneaux de Saturne (שַׁבְתַאי), créant un jeu de mots malicieux entre déclaration amoureuse et astronomie."},{"heb":"מִתְרַחֶקֶת","translit":"mitraḥéket","fr":"elle s'éloigne","sens":"hitpael participe féminin singulier (présent)","racine":"ר-ח-ק","nature":"verbe","genre":"féminin","nombre":"singulier","formes":"רָחַק · הִתְרַחֵק · מִתְרַחֵק · מִתְרַחֶקֶת","cat":"verbes","emploi":"Verbe en hitpael exprimant un éloignement actif et réflexif ; la comparaison avec Pluton (la planète la plus distante) transforme la fuite amoureuse en image astronomique humoristique dans le registre rap."},{"heb":"נַמְרִיא","translit":"namria","fr":"nous volerons / nous prendrons notre envol","sens":"hifil futur 1ère personne pluriel","racine":"מ-ר-א / ר-א-ה","nature":"verbe","genre":"—","nombre":"pluriel","formes":"הִמְרִיא · יַמְרִיא · נַמְרִיא","cat":"verbes","emploi":"Verbe rare et poétique issu de la racine signifiant s'élever dans les airs (comme un aigle) ; il exprime ici une invitation au voyage spatial et amoureux dans un élan lyrique propre au passage rap."},{"heb":"לִיקּוּי","translit":"likui","fr":"éclipse","sens":"nom masculin singulier absolu","racine":"ל-ק-ה","nature":"nom","genre":"masculin","nombre":"singulier","formes":"לִיקּוּי יָרֵחַ · לִיקּוּי חַמָּה · לָקָה","cat":"noms","emploi":"Terme astronomique désignant une éclipse ; dans la chanson il représente les rares instants de contact total entre les deux astres-amants, simultanément moment de ténèbres et de fusion absolue."},{"heb":"מְאִירֵי שָׁמַיִם","translit":"me'iréi shamayim","fr":"illuminateurs des cieux","sens":"participe hifil masculin pluriel construit + nom masculin pluriel","racine":"א-ו-ר / ש-מ-י","nature":"expression","genre":"masculin","nombre":"pluriel","formes":"הֵאִיר · מֵאִיר · מְאִירֵי","cat":"autre","emploi":"Expression poétique et biblique évoquant les deux grandes lumières de la Genèse ; elle élève les deux amants au rang de figures cosmiques et sacrées, leur conférant une grandeur tragique malgré leur impuissance."},{"heb":"שְׁבוּיִים בְּמַסְלוּלָם","translit":"shvuyim bemasluam","fr":"prisonniers de leur orbite","sens":"adjectif masculin pluriel + préposition + nom masculin singulier + suffixe 3pp","racine":"ש-ב-ה / ס-ל-ל","nature":"expression","genre":"masculin","nombre":"pluriel","formes":"שָׁבוּי · שְׁבוּיִים · מַסְלוּל · מַסְלוּלָם","cat":"autre","emploi":"Image clé de la chanson : l'orbite (מַסְלוּל) devient une prison dorée, la loi physique et la loi du cœur se confondent pour condamner les deux amants à tourner l'un autour de l'autre sans jamais se rejoindre vraiment."}],"phrases":[{"heb":"שִׁבְעַת כּוֹכְבֵי הַלֶּכֶת","fr":"les sept planètes"},{"heb":"אַךְ הִיא בּוֹעֶרֶת אֶל","fr":"mais elle flambe vers"},{"heb":"חִיוָּרוֹן פָּנָיו","fr":"la pâleur de son visage"},{"heb":"אֲבָל נִכְסָף אֵלֶיהָ","fr":"mais il languit vers elle"},{"heb":"צֵל הַיָּרֵחַ","fr":"l'ombre de la lune"},{"heb":"אֶל פְּנֵי הַשֶּׁמֶשׁ נִמְשָׁךְ","fr":"il est attiré vers le visage du soleil"},{"heb":"נוֹגְעִים שָׁם לְמַעְלָה","fr":"ils se touchent là-haut"},{"heb":"שְׁקִיעַת זְרִיחָה וְרֻדָּה","fr":"un coucher d'aurore rosé"},{"heb":"אַהֲבָה אֲבוּדָה","fr":"amour perdu"},{"heb":"בָּא לִי לָשִׂים לָךְ טַבַּעַת כְּאִילּוּ אַתְּ שַׁבְתַּאי","fr":"j'ai envie de te passer une bague comme si tu étais Saturne"},{"heb":"אַתְּ מִתְרַחֶקֶת כְּמוֹ פְּלוּטוֹ","fr":"tu t'éloignes comme Pluton"},{"heb":"בּוֹאִי נַמְרִיא בְּיַחַד עִם הַחֲלָלִית","fr":"viens, nous prendrons notre envol ensemble avec la navette spatiale"},{"heb":"לִיקּוּי יָרֵחַ","fr":"éclipse de lune"},{"heb":"הֵם מְאִירֵי שָׁמַיִם","fr":"ils sont les illuminateurs des cieux"},{"heb":"שְׁבוּיִים בְּמַסְלוּלָם","fr":"prisonniers de leur orbite"}],"textes":[{"titre":"קֶטַע מִפְּנִינֵי הַשִּׁיר — Extrait","heb":"צֵל הַיָּרֵחַ אֶל פְּנֵי הַשֶּׁמֶשׁ נִמְשָׁךְ.\nתָּמִיד בֵּין יוֹם וּבֵין לַיְלָה,\nנוֹגְעִים שָׁם לְמַעְלָה,\nוְזֶה לֹא דַּי לוֹ, לֹא דַּי לָהּ —\nרַק לְרֶגַע וְהָלְאָה.","fr":"L'ombre de la lune est attirée vers le visage du soleil. / Toujours entre le jour et la nuit, / ils se touchent là-haut, / et cela ne lui suffit pas, ne lui suffit pas à elle — / juste un instant, et puis plus loin."},{"titre":"נוּסָח פָּשׁוּט — Reformulation","heb":"הַשֶּׁמֶשׁ וְהַיָּרֵחַ אוֹהֲבִים זֶה אֶת זֶה,\nאֲבָל הֵם אַף פַּעַם לֹא יְכוֹלִים לִהְיוֹת יַחְדָּו זְמַן רַב.\nרַק בִּשְׁעַת לִיקּוּי הֵם נוֹגְעִים לְרֶגַע קָצָר.\nאַחַר כָּךְ כָּל אֶחָד מֵהֶם חוֹזֵר לַמַּסְלוּל שֶׁלּוֹ,\nוְהֵם מְאִירִים אֶת הַשָּׁמַיִם לְבַד, בְּלִי נֶחָמָה.","fr":"Le soleil et la lune s'aiment, / mais ils ne peuvent jamais être ensemble longtemps. / Seulement au moment d'une éclipse ils se touchent un bref instant. / Ensuite chacun retourne sur son orbite, / et ils illuminent le ciel seuls, sans consolation."},{"titre":"הַמְשָׁךְ בְּאוֹתוֹ רוּחַ — Prolongement","heb":"וְאַחֲרֵי כָּל לַיְלָה חוֹזֵר הַיָּרֵחַ,\nמְחַפֵּשׂ אֶת עִקְּבוֹתֶיהָ בֵּין הֶעָנָן.\nהִיא כְּבָר הָלְכָה, הִשְׁאִירָה זְהַב עַל הַמַּיִם,\nוְהוּא שׁוֹמֵר אֶת אוֹרָהּ בְּתוֹךְ חִיוָּרוֹנוֹ בְּאַהֲבָה.\nשְׁנֵיהֶם יוֹדְעִים: הַמִּפְגָּשׁ הַבָּא רַק לְרֶגַע יִהְיֶה,\nאֲבָל בִּשְׁבִיל זֶה הֵם שְׁבוּיִים, בִּשְׁבִיל זֶה הֵם חַיִּים.","fr":"Et après chaque nuit la lune revient, / cherchant ses traces entre les nuages. / Elle est déjà partie, a laissé de l'or sur les eaux, / et lui garde sa lumière dans sa pâleur avec amour. / Tous deux savent : la prochaine rencontre ne durera qu'un instant, / mais c'est pour cela qu'ils sont prisonniers, c'est pour cela qu'ils vivent."}],"analyse":"La chanson tisse un double registre poétique : un lyrisme cosmique et mythologique dans les couplets hébraïques classiques, et un registre urbain, ludique, presque rappé dans le passage central (Ethnix). Les images centrales — la poursuite éternelle du soleil et de la lune, l'éclipse comme seul instant de contact — construisent une métaphore de l'amour impossible, condamné à l'alternance et à la privation. Les tournures poétiques jouent sur les oppositions (jour/nuit, lumière/obscurité, proximité/distance) et sur la répétition cyclique ('כל יום, שנים אין ספור') pour figurer la fatalité sentimentale. Le passage rap introduit des images astronomiques concrètes (Saturne, Pluton, Uranus, Neptune, la Voie lactée) sur un ton tendre-ironique, créant un contraste volontaire avec la gravité élégiaque du reste. Le sens caché est celui de deux êtres qui s'aiment sans jamais pouvoir coexister pleinement, chaque rencontre n'étant qu'une éclipse fugace avant la séparation inéluctable."};
+/* ↑ VIDE — l'IA remplit mots/phrases/textes/analyse à chaque leçon. */
+
+let sansNikoud = false;
+let selCats = new Set(JEU.mots.map(m=>m.cat));
+let score = {ok:0, ko:0};
+
+const NIKOUD = /[\u0591-\u05C7]/g;
+function strip(s){ return String(s).replace(NIKOUD,''); }
+function H(s){ return sansNikoud ? strip(s) : s; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function motsF(){ return JEU.mots.filter(m=>selCats.has(m.cat)); }
+function badgeClass(c){ return ['noms','verbes','adjectifs'].includes(c) ? 'b-'+c : 'b-autre'; }
+
+function say(txt){
+  try{ speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(strip(txt)); u.lang='he-IL'; u.rate=.9;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function audioBtn(txt){ return '<button class="audio-btn" onclick="say(\''+String(txt).replace(/'/g,"\\'")+'\')">🔊 Écouter</button>'; }
+
+const TABS = [
+  {id:'mots',lbl:'Mots'},{id:'morpho',lbl:'Morphologie'},{id:'lexique',lbl:'Lexique'},
+  {id:'phrases',lbl:'Phrases'},{id:'analyse',lbl:'Analyse'},{id:'vf',lbl:'Vrai/Faux'},
+  {id:'recon',lbl:'Reconstituer'},{id:'bilan',lbl:'Score'}
+];
+let ongletCourant = 'mots';
+function initTabs(){
+  document.getElementById('tabs').innerHTML = TABS.map(t=>
+    '<button class="tab'+(t.id===ongletCourant?' active':'')+'" onclick="showTab(\''+t.id+'\')">'+t.lbl+'</button>').join('');
+}
+function showTab(id){ ongletCourant=id; initTabs(); render(); }
+
+function initReglages(){
+  const cats = [...new Set(JEU.mots.map(m=>m.cat))];
+  let html = '<button class="chip tous'+(selCats.size===cats.length?' on':'')+'" onclick="toutesCats()">Toutes</button>';
+  html += cats.map(c=>'<button class="chip '+(selCats.has(c)?'on':'')+'" onclick="toggleCat(\''+c+'\')">'+c+'</button>').join('');
+  document.getElementById('cat-chips').innerHTML = html;
+  const sw=document.getElementById('sw-nikoud');
+  sw.className = 'switch'+(sansNikoud?'':' on');
+  sw.querySelector('span:last-child').textContent = sansNikoud ? 'Sans nikoud' : 'Avec nikoud';
+}
+function toggleNikoud(){ sansNikoud=!sansNikoud; initReglages(); render(); }
+function toggleCat(c){ if(selCats.has(c)){ if(selCats.size>1) selCats.delete(c);} else selCats.add(c); vfList=[]; initReglages(); render(); }
+function toutesCats(){ selCats = new Set(JEU.mots.map(m=>m.cat)); vfList=[]; initReglages(); render(); }
+
+function render(){
+  if(!JEU.mots || JEU.mots.length===0){
+    document.getElementById('content').innerHTML = '<div class="card center" style="padding:44px 20px;color:var(--ink3)"><div style="font-size:40px;margin-bottom:12px;color:var(--gold)">✦</div>En attente des mots de la chanson.<br>Le jeu se remplit dès que l\'élève fait sa demande.</div>';
+    return;
+  }
+  const map = {mots:rMots,morpho:rMorpho,lexique:rLexique,phrases:rPhrases,textes:rTextes,analyse:rAnalyse,vf:rVF,recon:rRecon,bilan:rBilan};
+  document.getElementById('content').innerHTML = (map[ongletCourant]||(()=> ''))();
+}
+
+function rMots(){
+  return motsF().map((m,i)=>
+    '<div class="card center">'
+    + '<span class="badge '+badgeClass(m.cat)+'">'+m.cat+'</span>'
+    + '<div class="heb heb-xl">'+H(m.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(m.heb)+'</div>'
+    + '<div class="fr fr-hidden" id="fr'+i+'" onclick="this.classList.remove(\'fr-hidden\')" style="font-size:20px">'+esc(m.fr)+'</div>'
+    + '<div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(\'fr'+i+'\').classList.remove(\'fr-hidden\')">Révéler la traduction</div>'
+    + '<div class="sens">Sens : '+esc(m.sens)+'</div>'
+    + '</div>').join('');
+}
+function rMorpho(){
+  return motsF().map(m=>
+    '<div class="card">'
+    + '<div class="heb heb-lg center">'+H(m.heb)+'</div>'
+    + '<div class="morpho-row">'
+    +   '<span class="k">Racine</span><span class="morpho-he">'+m.racine+'</span>'
+    +   '<span class="k">Nature</span><span>'+esc(m.nature)+'</span>'
+    +   '<span class="k">Genre / Nombre</span><span>'+esc(m.genre)+' · '+esc(m.nombre)+'</span>'
+    +   '<span class="k">Formes</span><span class="morpho-he">'+H(m.formes)+'</span>'
+    +   '<span class="k">Emploi</span><span>'+esc(m.emploi)+'</span>'
+    + '</div></div>').join('');
+}
+function rLexique(){
+  return '<div class="card"><table class="lex"><tr><th>Hébreu</th><th>Translit.</th><th>Français</th><th>Audio</th></tr>'
+    + motsF().map(m=>'<tr><td class="he">'+H(m.heb)+'</td><td>'+esc(m.translit)+'</td><td class="fr">'+esc(m.fr)+'</td><td style="text-align:center"><button class="audio-btn" onclick="say(\''+String(m.heb).replace(/'/g,"\\'")+'\')">🔊</button></td></tr>').join('')
+    + '</table></div>';
+}
+function rPhrases(){
+  return JEU.phrases.map(p=>
+    '<div class="card">'
+    + '<div class="heb heb-md" style="text-align:right">'+H(p.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(p.heb)+'</div>'
+    + '<div class="fr">'+esc(p.fr)+'</div>'
+    + '</div>').join('');
+}
+function rTextes(){
+  return JEU.textes.map(t=>
+    '<div class="card">'
+    + '<span class="badge b-autre">'+esc(t.titre)+'</span>'
+    + '<div class="heb heb-md" style="text-align:right">'+H(t.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(t.heb)+'</div>'
+    + '<div class="fr">'+esc(t.fr)+'</div>'
+    + '</div>').join('');
+}
+
+let vfList=[], vfIdx=0;
+function rVF(){
+  if(!vfList.length) buildVF();
+  if(vfIdx>=vfList.length){
+    return '<div class="card center"><h3>Quiz terminé</h3><p style="font-size:18px;margin:10px 0">'+score.ok+' justes · '+score.ko+' erreurs</p><button class="btn btn-g" onclick="resetVF()">Recommencer</button></div>';
+  }
+  const q=vfList[vfIdx];
+  return '<div class="card q-card center" id="qc">'
+    + '<div class="heb heb-xl">'+H(q.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(q.heb)+'</div>'
+    + '<div style="font-size:12px;color:#bbb;text-transform:uppercase;letter-spacing:.8px;margin:8px 0 2px">Traduction proposée</div>'
+    + '<div class="fr" style="font-size:22px;margin-bottom:16px">'+esc(q.propose)+'</div>'
+    + '<div class="row" style="justify-content:center">'
+    +   '<button class="btn btn-v" onclick="ansVF(true)">✓ Vrai</button>'
+    +   '<button class="btn btn-f" onclick="ansVF(false)">✗ Faux</button>'
+    + '</div>'
+    + '<div id="vf-reveal" style="margin-top:12px;font-size:16px;min-height:22px"></div>'
+    + '</div>';
+}
+function buildVF(){
+  const mots=motsF(); vfList=[]; vfIdx=0;
+  mots.forEach(m=>{
+    const vrai = Math.random()<0.5;
+    let propose = m.fr;
+    if(!vrai){ const autres=mots.filter(x=>x.fr!==m.fr); propose=(autres[Math.floor(Math.random()*autres.length)]||m).fr; }
+    vfList.push({heb:m.heb, propose, vrai: propose===m.fr, bonne:m.fr});
+  });
+  vfList.sort(()=>Math.random()-0.5);
+}
+function ansVF(rep){
+  const q=vfList[vfIdx]; const bon=(rep===q.vrai);
+  bon?score.ok++:score.ko++;
+  const qc=document.getElementById('qc'); if(qc) qc.classList.add(bon?'correct':'wrong');
+  const rv=document.getElementById('vf-reveal');
+  if(rv){ rv.innerHTML = (bon?'✓ Bonne réponse':'✗ Mauvaise réponse') + ' — traduction correcte : <b>'+esc(q.bonne)+'</b>'; }
+  setTimeout(()=>{ vfIdx++; render(); },1600);
+}
+function resetVF(){ vfList=[]; vfIdx=0; render(); }
+
+let reconIdx=0, reconChoix=[], reconBank=null;
+function rRecon(){
+  const p=JEU.phrases[reconIdx];
+  const mots=strip(p.heb).split(/\s+/).filter(Boolean);
+  if(!reconBank){ reconBank = mots.map((w,i)=>({w,i})).slice().sort(()=>Math.random()-0.5); }
+  const zone = reconChoix.map(c=>'<span class="tile" onclick="reconRetire('+c.i+')">'+c.w+'</span>').join('');
+  const tiles = reconBank.map(b=>'<span class="tile'+(reconChoix.find(c=>c.i===b.i)?' used':'')+'" onclick="reconAjoute('+b.i+')">'+b.w+'</span>').join('');
+  const fini = reconChoix.length===mots.length;
+  const ok = fini && reconChoix.map(c=>c.w).join(' ')===mots.join(' ');
+  return '<div class="card">'
+    + '<div class="fr center" style="margin-bottom:6px">'+esc(p.fr)+'</div>'
+    + '<div class="center" style="margin-bottom:8px">'+audioBtn(p.heb)+'</div>'
+    + '<div class="titre-mini center">Remets les mots dans l\'ordre (droite → gauche)</div>'
+    + '<div class="zone">'+ (zone||'<span style="color:#bbb">…</span>') +'</div>'
+    + '<div class="tiles">'+tiles+'</div>'
+    + (fini ? '<div class="center" style="font-size:18px;color:'+(ok?'var(--green)':'var(--red)')+'">'+(ok?'✓ Correct !':'✗ Pas encore')+'</div>' : '')
+    + '<div class="row" style="justify-content:center;margin-top:12px">'
+    +   '<button class="btn btn-o" onclick="reconReset()">Effacer</button>'
+    +   '<button class="btn btn-g" onclick="reconNext()">Phrase suivante</button>'
+    + '</div></div>';
+}
+function reconAjoute(i){ const m=strip(JEU.phrases[reconIdx].heb).split(/\s+/)[i]; if(!reconChoix.find(c=>c.i===i)){ reconChoix.push({w:m,i}); render(); } }
+function reconRetire(i){ reconChoix=reconChoix.filter(c=>c.i!==i); render(); }
+function reconReset(){ reconChoix=[]; reconBank=null; render(); }
+function reconNext(){ reconIdx=(reconIdx+1)%JEU.phrases.length; reconChoix=[]; reconBank=null; render(); }
+
+function rAnalyse(){ return '<div class="card"><span class="badge b-autre">Analyse de langue de la chanson</span><div class="fr" style="font-size:16px;line-height:1.75;margin-top:8px">'+esc(JEU.analyse||'\u2014')+'</div></div>'; }
+function rBilan(){
+  const tot=score.ok+score.ko; const pct=tot?Math.round(score.ok/tot*100):0;
+  return '<div class="card">'
+    + '<div class="bilan-pct">'+pct+'%</div>'
+    + '<div class="center titre-mini" style="margin-bottom:14px">taux de réussite</div>'
+    + '<div class="bilan-line"><span>Réponses justes</span><b style="color:var(--green)">'+score.ok+'</b></div>'
+    + '<div class="bilan-line"><span>Erreurs</span><b style="color:var(--red)">'+score.ko+'</b></div>'
+    + '<div class="bilan-line"><span>Total</span><b>'+tot+'</b></div>'
+    + '<div class="row" style="justify-content:center;margin-top:16px"><button class="btn btn-o" onclick="score={ok:0,ko:0};render()">Remettre à zéro</button></div>'
+    + '</div>';
+}
+
+function renderHeader(){
+  const h=document.getElementById('app-header'); if(!h) return;
+  const t=(JEU.titre||'Chanson'); const a=(JEU.artiste||'');
+  let liens='';
+  if(JEU.youtube) liens+='<a class="lien-src" href="'+JEU.youtube+'" target="_blank" rel="noopener">▶ Écouter (YouTube)</a>';
+  if(JEU.shironet) liens+='<a class="lien-src" href="'+JEU.shironet+'" target="_blank" rel="noopener">📄 Paroles (Shironet)</a>';
+  h.innerHTML='<div class="app-heb" style="font-family:\'Playfair Display\',serif;color:var(--gold)">'+esc(t)+'</div>'
+    +'<div class="app-fr">'+(a?esc(a):'Analyse d\'une chanson')+'</div>'
+    +(liens?'<div style="margin-top:8px">'+liens+'</div>':'')
+    +'<div class="ornament">✦</div>';
+}
+renderHeader(); initReglages(); initTabs(); render();
+</script>
+<style>.copyright-hz{margin:34px auto 10px;padding-top:14px;max-width:900px;border-top:1px solid rgba(201,149,42,.3);text-align:center;font-size:12px;color:var(--ink3);font-family:'Crimson Pro',serif;direction:ltr}</style>
+<div class="copyright-hz">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>
+
+
+</body></html>
