@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modèles de Fiches Hébreu</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fafbfc;
+            color: #1a1a1a;
+        }
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        header h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+        header p {
+            font-size: 1.1em;
+            color: #666;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        .category {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+        .category:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        .category-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .category-1 .category-icon {
+            background: #f0f4ff;
+            color: #5b5bff;
+        }
+        .category-2 .category-icon {
+            background: #fff5f0;
+            color: #ff7a59;
+        }
+        .category-3 .category-icon {
+            background: #f0fff4;
+            color: #10b981;
+        }
+        .category h2 {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+        .category p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            flex-grow: 1;
+        }
+        .btn-container {
+            display: flex;
+            gap: 12px;
+        }
+        .btn {
+            flex: 1;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.3px;
+        }
+        .btn-primary {
+            background: #5b5bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #4747e6;
+            box-shadow: 0 8px 20px rgba(91, 91, 255, 0.3);
+        }
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        .category-1 .btn-primary {
+            background: #5b5bff;
+        }
+        .category-1 .btn-primary:hover {
+            background: #4747e6;
+        }
+        .category-2 .btn-primary {
+            background: #ff7a59;
+        }
+        .category-2 .btn-primary:hover {
+            background: #e65a35;
+        }
+        .category-3 .btn-primary {
+            background: #10b981;
+        }
+        .category-3 .btn-primary:hover {
+            background: #059669;
+        }
+        footer {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid #e5e7eb;
+            color: #999;
+            font-size: 0.85em;
+            letter-spacing: 0.3px;
+        }
+        @media (max-width: 768px) {
+            .wrapper {
+                padding: 40px 20px;
+            }
+            header h1 {
+                font-size: 2em;
+            }
+            .categories {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .category {
+                padding: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <h1>Modèles de Fiches Hébreu</h1>
+            <p>Choisis un type de fiche pour commencer</p>
+        </header>
+
+        <div class="categories">
+            <!-- FICHES INTERACTIVES -->
+            <div class="category category-1">
+                <div class="category-icon">▶️</div>
+                <h2>Fiches Interactives</h2>
+                <p>Vocabulaire, grammaire et conjugaison avec quiz, audio et exercices pratiques.</p>
+                <div class="btn-container">
+                    <a href="lien-fiche-interactive.html" class="btn btn-primary">Ouvrir</a>
+                </div>
+            </div>
+
+            <!-- FICHES RÉDIGÉES -->
+            <div class="category category-2">
+                <div class="category-icon">📖</div>
+                <h2>Fiches Rédigées</h2>
+                <p>Cours détaillés, analyses morphologiques et explications grammaticales complètes.</p>
+                <div class="btn-container">
+                    <a href="lien-fiche-redigee.html" class="btn btn-primary">Ouvrir</a>
+                </div>
+            </div>
+
+            <!-- FICHES CHOIX PERSONNEL -->
+            <div class="category category-3">
+                <div class="category-icon">✨</div>
+                <h2>Fiches Choix Personnel</h2>
+                <p>Crée tes propres fiches personnalisées basées sur tes mots et tes besoins.</p>
+                <div class="btn-container">
+                    <a href="lien-fiche-personnelle.html" class="btn btn-primary">Ouvrir</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>©Copyright hebreu-zen Tous droits réservés</p>
+        </footer>
+    </div>
+</body>
+</html>
