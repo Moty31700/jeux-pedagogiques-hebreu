@@ -459,6 +459,9 @@
       <label><span class="libelle">Mes mots — de 1 à 10, un par ligne</span>
         <textarea id="p-mots" dir="rtl" rows="10"
           placeholder="&#1513;&#1493;&#1511;&#10;&#1497;&#1512;&#1511;"></textarea></label>
+      <div style="font-size: 10pt; color: var(--gris); margin-top: 0.4rem; margin-bottom: 1rem;">
+        <span id="p-compteur">0/10</span> mots
+      </div>
 
       <div class="famille">
         <span class="titre-famille">Analyse</span>
@@ -753,6 +756,34 @@ function compterMots(t) {
     var n = compterMots(champ.value);
     compte.textContent = n + " / " + MAX_PAROLES + " mots";
     compte.className = "compte-mots" + (n > MAX_PAROLES ? " trop" : "");
+  });
+})();
+
+/* --- compteur pour mots personnels --- */
+(function brancherCompteurPerso() {
+  var textarea = document.getElementById("p-mots");
+  var compteur  = document.getElementById("p-compteur");
+  var bouton    = document.getElementById("btn-envoyer");
+  
+  textarea.addEventListener("input", function () {
+    var mots = textarea.value
+      .split(/[\n,;]+/)
+      .map(function (m) { return m.trim(); })
+      .filter(function (m) { return m.length; });
+    var n = mots.length;
+    compteur.textContent = n + "/10";
+    
+    if (n > 10) {
+      compteur.style.color = "var(--alerte)";
+      compteur.style.fontWeight = "600";
+      bouton.disabled = true;
+      bouton.style.opacity = "0.5";
+    } else {
+      compteur.style.color = "var(--gris)";
+      compteur.style.fontWeight = "normal";
+      bouton.disabled = false;
+      bouton.style.opacity = "1";
+    }
   });
 })();
 
