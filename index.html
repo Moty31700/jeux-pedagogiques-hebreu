@@ -456,7 +456,7 @@
 
     <!-- entrée : mes choix personnels -->
     <div class="bloc" id="bloc-perso">
-      <label><span class="libelle">Mes mots — de 1 à 10, un par ligne</span>
+      <label><span class="libelle">Mes mots — de 1 à 10 (séparés par des espaces ou retours à la ligne)</span>
         <textarea id="p-mots" dir="rtl" rows="10"
           placeholder="&#1513;&#1493;&#1511;&#10;&#1497;&#1512;&#1511;"></textarea></label>
       <div style="font-size: 10pt; color: var(--gris); margin-top: 0.4rem; margin-bottom: 1rem;">
@@ -767,8 +767,8 @@ function compterMots(t) {
   
   textarea.addEventListener("input", function () {
     var mots = textarea.value
-      .split(/[\n,;]+/)
-      .map(function (m) { return m.trim(); })
+      .trim()
+      .split(/\s+/)
       .filter(function (m) { return m.length; });
     var n = mots.length;
     compteur.textContent = n + "/10";
@@ -812,11 +812,11 @@ document.getElementById("btn-envoyer").addEventListener("click", function () {
 
   } else if (entreeCourante === "perso") {
     var mots = document.getElementById("p-mots").value
-                 .split(/[\n,;]+/)
-                 .map(function (m) { return m.trim(); })
+                 .trim()
+                 .split(/\s+/)
                  .filter(function (m) { return m.length; });
     if (mots.length < 1 || mots.length > 10) {
-      dire("msg-lecon", "Donne entre 1 et 10 mots, un par ligne.", "erreur");
+      dire("msg-lecon", "Donne entre 1 et 10 mots au maximum.", "erreur");
       return;
     }
     var options = [];
