@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réponses les plus fréquentes — Hebreu-zen</title>
+<style>
+  body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:720px;margin:0 auto;padding:24px;color:#222;background:#faf9f6;}
+  h1{font-size:24px;margin-bottom:4px;}
+  .sous{color:#666;margin-bottom:24px;font-size:14px;}
+  .item{background:#fff;border:1px solid #e6e3dc;border-radius:10px;padding:16px 18px;margin-bottom:14px;}
+  .q{font-weight:600;margin-bottom:8px;}
+  .r{white-space:pre-wrap;line-height:1.5;}
+  .vide,.err{color:#888;text-align:center;padding:40px 0;}
+  .err{color:#b23;}
+</style>
+</head>
+<body>
+  <h1>Réponses les plus fréquentes à vos questions</h1>
+  <div class="sous">Les questions posées par les élèves et mes réponses.</div>
+  <div id="liste"><div class="vide">Chargement…</div></div>
+
+<script>
+var BASE = "https://n8n.hebreu-zen.cloud/webhook";
+
+async function chargerFAQ(){
+  var cible = document.getElementById('liste');
+  try{
+    var r = await fetch(BASE + "/faq-liste");
+    var data = await r.json();
+    if(!Array.isArray(data) || data.length === 0){
+      cible.innerHTML = '<div class="vide">Aucune réponse publiée pour le moment.</div>';
+      return;
+    }
+    cible.innerHTML = "";
+    data.forEach(function(row){
+      var q = (row.question || "").trim();
+      var rep = (row.reponse || "").trim();
+      var div = document.createElement('div');
+      div.className = 'item';
+      var dq = document.createElement('div'); dq.className='q'; dq.textContent = q;
+      var dr = document.createElement('div'); dr.className='r'; dr.textContent = rep;
+      div.appendChild(dq); div.appendChild(dr);
+      cible.appendChild(div);
+    });
+  }catch(e){
+    cible.innerHTML = '<div class="err">Impossible de charger les réponses pour le moment.</div>';
+  }
+}
+chargerFAQ();
+</script>
+</body>
+</html>
