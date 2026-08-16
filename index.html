@@ -521,6 +521,15 @@
       </div>
     </div>
 
+    <div id="bloc-avis" style="margin-top:24px">
+      <h3>Donne ton avis</h3>
+      <textarea id="avis-texte" rows="3" maxlength="300"
+        style="width:100%;max-width:480px;resize:none"
+        placeholder="Ton avis ou ta question (3 lignes max)"></textarea><br>
+      <button id="avis-envoi" onclick="envoyerAvis()">Envoyer</button>
+      <div class="message" id="avis-msg"></div>
+    </div>
+
     <button class="lien" id="btn-sortir">Sortir</button>
   </div>
 
@@ -989,6 +998,24 @@ document.getElementById("btn-sortir").addEventListener("click", function () {
 })();
 
 montrer("accueil");
+
+async function envoyerAvis(){
+  var t = document.getElementById('avis-texte').value.trim();
+  if(!t) return;
+  var b = document.getElementById('avis-envoi'); b.disabled = true;
+  try{
+    await fetch(BASE + "/avis", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ identifiant: identifiantCourant, message: t })
+    });
+    document.getElementById('avis-msg').textContent = "Merci, ton avis a été envoyé.";
+    document.getElementById('avis-texte').value = "";
+  }catch(e){
+    document.getElementById('avis-msg').textContent = "Erreur, réessaie.";
+  }
+  b.disabled = false;
+}
 </script>
 
 </body>
