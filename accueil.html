@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-<!DOCTYPE html>
-<html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -271,7 +269,7 @@
 
 <div class="app">
   <nav class="side">
-    <div class="brand"><img src="logo.png" alt="hébreu-zen" onerror="this.style.display='none'"><span>hébreu-zen</span></div>
+    <div class="brand"><img src="logo-zen-bleu-nuit.png" alt="hébreu-zen" onerror="this.style.display='none'"><span>hébreu-zen</span></div>
 
     <div id="grp-public">
       <button class="navbtn" data-nav="accueil"    onclick="montrer('accueil')">Comment ça marche</button>
@@ -300,9 +298,6 @@
   <div class="ecran visible" id="ecran-accueil">
     <h2>Bienvenue</h2>
     <p class="intro">Ce site est réservé aux personnes majeures. Ton code d'accès t'est envoyé par e-mail après ton paiement.</p>
-    <button id="vers-inscription">Première visite — créer mon accès</button>
-    <button id="vers-connexion" style="background: none; color: var(--encre); border: 1px solid var(--trait);">J'ai déjà un accès</button>
-
     <details class="guide">
       <summary>Comment ça marche</summary>
       <div class="guide-corps">
@@ -374,7 +369,6 @@
         <select id="i-annee" class="annee"><option value="">Année</option></select>
       </div></label>
     <button id="btn-inscrire">Créer mon accès</button>
-    <button class="lien" data-retour="accueil">Retour</button>
     <div class="message" id="msg-inscription"></div>
   </div>
 
@@ -412,7 +406,6 @@
 
     <button id="btn-connecter">Entrer</button>
     <button class="lien" id="btn-demander">Code perdu ou expiré — m'en envoyer un</button>
-    <button class="lien" data-retour="accueil">Retour</button>
     <div class="message" id="msg-connexion"></div>
   </div>
 
@@ -604,6 +597,7 @@ var sortieCourante = "jeu";
 var envoiEnCours = false;   /* verrou anti-double-envoi */
 
 function montrer(nom) {
+  if (nom === "menu" && !identifiantCourant) { nom = "connexion"; }
   for (var cle in ECRANS) {
     document.getElementById(ECRANS[cle].el).classList.remove("visible");
   }
@@ -655,9 +649,6 @@ function appeler(chemin, donnees, bouton, idMsg, onSucces) {
     }, 6000);
   });
 }
-
-document.getElementById("vers-inscription").addEventListener("click", function () { montrer("inscription"); });
-document.getElementById("vers-connexion").addEventListener("click", function () { montrer("connexion"); });
 
 var retours = document.querySelectorAll("[data-retour]");
 for (var i = 0; i < retours.length; i++) {
