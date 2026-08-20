@@ -404,7 +404,7 @@
       <input id="code" maxlength="6" autocomplete="one-time-code"></label>
 
     <button id="btn-connecter">Entrer</button>
-    <button class="lien" id="btn-demander">Code perdu ou expiré — m'en envoyer un</button>
+    <button class="lien" onclick="montrer('paiement')">Pas encore de code ou code perdu — choisir ma formule</button>
     <div class="message" id="msg-connexion"></div>
   </div>
 
@@ -741,17 +741,6 @@ document.getElementById("btn-connecter").addEventListener("click", function () {
 });
 
 /* --- demande de code --- */
-document.getElementById("btn-demander").addEventListener("click", function () {
-  var identifiant = document.getElementById("c-identifiant").value.trim();
-  if (!identifiant) {
-    dire("msg-connexion", "Saisis d'abord ton identifiant.", "erreur");
-    return;
-  }
-  appeler("/demande-code", { identifiant: identifiant }, this, "msg-connexion", function (r) {
-    dire("msg-connexion", r.message || "Ton code t'a été envoyé par e-mail.", "ok");
-  });
-});
-
 /* --- les deux choix segmentés --- */
 function brancherChoix(idGroupe, attribut, onChange) {
   var groupe = document.getElementById(idGroupe);
