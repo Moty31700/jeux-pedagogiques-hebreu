@@ -285,7 +285,7 @@
       <button class="navbtn navsub" data-sub="recharge" onclick="ouvrirEspace('recharge')">Recharger</button>
       <button class="navbtn navsub" data-sub="avis"     onclick="ouvrirEspace('avis')">Ton avis &amp; FAQ</button>
       <div class="navsep"></div>
-      <button class="navbtn" onclick="document.getElementById('btn-sortir').click()">Se déconnecter</button>
+      <button class="navbtn" onclick="seDeconnecter()">Se déconnecter</button>
     </div>
   </nav>
 
@@ -532,7 +532,6 @@
     </div><!-- fin me-fiche -->
 
     <div id="me-lecons">
-    <button id="btn-mes-lecons">Mes leçons</button>
     <div id="compteur-lecons" class="compteur-lecons"></div>
     <div id="liste-lecons"></div>
     </div>
@@ -562,8 +561,6 @@
       <button id="avis-envoi" onclick="envoyerAvis()">Envoyer</button>
       <div class="message" id="avis-msg"></div>
     </div>
-
-    <button class="lien" id="btn-sortir">Sortir</button>
   </div>
   </div>
   </section>
@@ -592,12 +589,14 @@ var CHEMINS = {
 var MAX_PAROLES = 250;
 
 var identifiantCourant = "";
+var connecte = false;       /* vrai UNIQUEMENT après connexion validée (code reçu = payé) */
+var sousCourant = "fiche";  /* sous-onglet courant de l'espace */
 var entreeCourante = "theme";
 var sortieCourante = "jeu";
 var envoiEnCours = false;   /* verrou anti-double-envoi */
 
-function montrer(nom) {
-  if (nom === "menu" && !identifiantCourant) { nom = "connexion"; }
+/* bas niveau : bascule seulement l'écran de droite (jamais de nav, jamais de boucle) */
+function afficherEcran(nom) {
   for (var cle in ECRANS) {
     document.getElementById(ECRANS[cle].el).classList.remove("visible");
   }
@@ -610,6 +609,14 @@ function montrer(nom) {
     puces[i].className = "etape" + (n < courante ? " faite" : (n === courante ? " active" : ""));
   }
   window.scrollTo(0, 0);
+}
+
+/* aiguilleur UNIQUE : écran de droite + colonne de gauche synchronisés */
+function montrer(nom) {
+  if (nom === "menu" && !connecte) { nom = "connexion"; }
+  afficherEcran(nom);
+  majNav(nom);
+  if (nom === "menu") { ouvrirEspace(sousCourant); }
 }
 
 function dire(id, texte, type) {
@@ -697,7 +704,8 @@ document.getElementById("btn-inscrire").addEventListener("click", function () {
 
   appeler("/inscription", donnees, this, "msg-inscription", function (r) {
     if (r.statut === "inscrit") {
-      identifiantCourant = donnees.identifiant;
+      identifiantCourant = donnees.identifiant;  /* pour rattacher le paiement Stripe */
+      connecte = false;                          /* pas de code encore -> espace verrouillé */
       document.getElementById("c-identifiant").value = donnees.identifiant;
       montrer("paiement");
     } else if (r.statut === "refuse") {
@@ -723,6 +731,7 @@ document.getElementById("btn-connecter").addEventListener("click", function () {
   appeler("/connexion", donnees, this, "msg-connexion", function (r) {
     if (r.acces === "autorise") {
       identifiantCourant = donnees.identifiant;
+      connecte = true;                           /* code validé -> espace déverrouillé */
       document.getElementById("menu-nom").textContent = "Shalom " + (r.prenom || "");
       montrer("menu");
       chargerCompteur();
@@ -958,14 +967,10 @@ function chargerCompteur() {
   .catch(function () {});
 }
 
-/* --- mes leçons --- */
-document.getElementById("btn-mes-lecons").addEventListener("click", function () {
-  var bouton = this;
+/* --- mes leçons (chargées quand on ouvre l'onglet de gauche) --- */
+function chargerLecons() {
   var liste = document.getElementById("liste-lecons");
-  var libelle = bouton.textContent;
-  bouton.disabled = true;
-  bouton.textContent = "…";
-  liste.innerHTML = "";
+  liste.innerHTML = '<div class="lecon-vide">Chargement…</div>';
 
   fetch(BASE + "/mes-lecons", {
     method: "POST",
@@ -993,15 +998,11 @@ document.getElementById("btn-mes-lecons").addEventListener("click", function () 
   })
   .catch(function () {
     liste.innerHTML = '<div class="lecon-vide">Le serveur ne répond pas. Réessaie dans un instant.</div>';
-  })
-  .then(function () {
-    bouton.disabled = false;
-    bouton.textContent = libelle;
   });
-});
+}
 
-/* --- sortir --- */
-document.getElementById("btn-sortir").addEventListener("click", function () {
+/* --- se déconnecter (appelé par la colonne de gauche) --- */
+function seDeconnecter() {
   document.getElementById("code").value = "";
   document.getElementById("ch-paroles").value = "";
   document.getElementById("ch-compte").textContent = "0 / " + MAX_PAROLES + " mots";
@@ -1011,8 +1012,10 @@ document.getElementById("btn-sortir").addEventListener("click", function () {
   document.getElementById("compteur-lecons").textContent = "";
   document.getElementById("compteur-lecons").className = "compteur-lecons";
   identifiantCourant = "";
+  connecte = false;
+  sousCourant = "fiche";
   montrer("accueil");
-});
+}
 
 /* --- remplissage des trois listes de date --- */
 (function remplirDate() {
@@ -1028,8 +1031,6 @@ document.getElementById("btn-sortir").addEventListener("click", function () {
   var actuelle = new Date().getFullYear();
   for (var a = actuelle - 18; a >= 1925; a--) { annee.appendChild(new Option(a, a)); }
 })();
-
-montrer("accueil");
 
 async function envoyerAvis(){
   var t = document.getElementById('avis-texte').value.trim();
@@ -1053,25 +1054,26 @@ async function envoyerAvis(){
 <script>
 /* --- contrôleur du nouveau shell (n'altère pas la logique existante) --- */
 var SUBS = { fiche:'me-fiche', lecons:'me-lecons', recharge:'me-recharge', avis:'bloc-avis' };
+
+/* ouvre un sous-onglet de l'espace — appelle afficherEcran, JAMAIS montrer -> pas de boucle */
 function ouvrirEspace(k){
-  if (typeof montrer === 'function') montrer('menu');
+  if (!connecte) { montrer('connexion'); return; }
+  sousCourant = k;
+  afficherEcran('menu');
+  majNav('menu');
   for (var key in SUBS){ var el=document.getElementById(SUBS[key]); if(el) el.style.display = (key===k)?'block':'none'; }
   document.querySelectorAll('.navbtn[data-sub]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-sub')===k); });
-  if (k==='avis') chargerFAQEspace();
+  if (k==='lecons') chargerLecons();
+  if (k==='avis')   chargerFAQEspace();
 }
+
+/* bascule colonne publique <-> espace + surbrillance du bouton actif */
 function majNav(nom){
   var pub=document.getElementById('grp-public'), esp=document.getElementById('grp-espace');
   if(nom==='menu'){ pub.style.display='none'; esp.style.display='flex'; }
   else { pub.style.display='block'; esp.style.display='none'; }
   document.querySelectorAll('.navbtn[data-nav]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-nav')===nom); });
 }
-/* on enveloppe montrer() pour synchroniser le menu de gauche */
-(function(){
-  if (typeof montrer === 'function'){
-    var _m = montrer;
-    montrer = function(nom){ _m(nom); try{ majNav(nom); }catch(e){} if(nom==='menu'){ ouvrirEspace('fiche'); } };
-  }
-})();
 /* FAQ dans Mon espace */
 async function chargerFAQEspace(){
   var c=document.getElementById('faq-liste-espace'); if(!c) return;
@@ -1088,8 +1090,8 @@ async function chargerFAQEspace(){
     });
   }catch(e){ c.innerHTML='<p style="color:#b23">Impossible de charger les réponses.</p>'; }
 }
-/* état initial du menu de gauche */
-majNav('accueil');
+/* état initial : écran d'accueil + colonne publique */
+montrer('accueil');
 </script>
 </body>
 </html>
