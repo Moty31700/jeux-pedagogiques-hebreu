@@ -404,7 +404,8 @@
       <input id="code" maxlength="6" autocomplete="one-time-code"></label>
 
     <button id="btn-connecter">Entrer</button>
-    <button class="lien" onclick="montrer('paiement')">Pas encore de code ou code perdu — choisir ma formule</button>
+    <button class="lien" onclick="renvoyerCode()">Code perdu — me le renvoyer par e-mail</button>
+    <button class="lien" onclick="montrer('paiement')">Pas encore de code — choisir ma formule</button>
     <div class="message" id="msg-connexion"></div>
   </div>
 
@@ -897,10 +898,16 @@ document.getElementById("btn-envoyer").addEventListener("click", function () {
     dire("msg-lecon",
       forme + quoi + " est en préparation. Sa création prend quelques minutes, puis sa mise en ligne encore quelques minutes ; le lien arrive par e-mail dès qu'elle est prête.",
       "ok");
+    /* décompte immédiat côté page : grise la demande quand le quota est atteint */
+    if (dernierCompteur) {
+      dernierCompteur.utilisees = (dernierCompteur.utilisees || 0) + 1;
+      majCompteur(dernierCompteur);
+    }
   });
 });
 
 /* --- compteur « utilisées / quota » --- */
+var dernierCompteur = null;   /* mémorise {utilisees, quota} pour griser après une demande */
 function majCompteur(reponse) {
   var el = document.getElementById("compteur-lecons");
   if (!reponse || typeof reponse.quota === "undefined") {
@@ -910,6 +917,7 @@ function majCompteur(reponse) {
   }
   var u = reponse.utilisees || 0;
   var q = reponse.quota || 0;
+  dernierCompteur = { utilisees: u, quota: q };
   el.textContent = u + " / " + q + " fiches utilisées";
   el.className = "compteur-lecons" + (u >= q ? " plein" : "");
 
@@ -942,6 +950,31 @@ function payerStripe(pack) {
   }
   var url = STRIPE_LINKS[pack] + "?client_reference_id=" + encodeURIComponent(identifiantCourant);
   window.open(url, "_blank");
+}
+
+/* --- renvoi du code pour un élève déjà payé (contrôlé serveur : seulement si quota > 0) --- */
+function renvoyerCode() {
+  var identifiant = document.getElementById("c-identifiant").value.trim();
+  if (!identifiant) {
+    dire("msg-connexion", "Saisis d'abord ton identifiant.", "erreur");
+    return;
+  }
+  fetch(BASE + "/renvoyer-code", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ identifiant: identifiant })
+  })
+  .then(function (r) { return r.json().catch(function () { return {}; }); })
+  .then(function (r) {
+    if (r && r.statut === "envoye") {
+      dire("msg-connexion", "Ton code vient de t'être renvoyé par e-mail.", "ok");
+    } else {
+      dire("msg-connexion", (r && r.message) || "Aucun code actif pour cet identifiant. Choisis une formule.", "erreur");
+    }
+  })
+  .catch(function () {
+    dire("msg-connexion", "Le serveur ne répond pas. Réessaie dans un instant.", "erreur");
+  });
 }
 
 function chargerCompteur() {
