@@ -1,1 +1,115 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exemples de fiches</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:#fafbfc; color:#1a1a1a; }
+  .wrapper { max-width:1000px; margin:0 auto; padding:60px 40px; }
+  header { text-align:center; margin-bottom:56px; }
+  header h1 { font-size:2.4em; font-weight:700; margin-bottom:12px; letter-spacing:-0.5px; }
+  header p { font-size:1.05em; color:#666; }
+  .retour { display:inline-block; margin-bottom:32px; color:#5b5bff; text-decoration:none; font-weight:600; font-size:0.95em; }
+  .retour:hover { text-decoration:underline; }
+  .liste { display:flex; flex-direction:column; gap:16px; }
+  .item {
+    background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:22px 26px;
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+    transition:all .25s ease;
+  }
+  .item:hover { border-color:#d1d5db; box-shadow:0 12px 28px rgba(0,0,0,.07); transform:translateY(-1px); }
+  .item-titre { font-size:1.05em; font-weight:600; }
+  .item-sous { color:#888; font-size:.85em; margin-top:2px; }
+  .btn {
+    padding:11px 26px; border-radius:10px; font-size:.95em; font-weight:600; border:none;
+    text-decoration:none; background:#5b5bff; color:#fff; white-space:nowrap; transition:all .25s ease;
+  }
+  .btn:hover { background:#4747e6; box-shadow:0 8px 20px rgba(91,91,255,.3); }
+  .info { text-align:center; color:#888; padding:40px 0; font-size:1em; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <a class="retour" href="../../index-fiches.html">← Retour aux catégories</a>
+  <header>
+    <h1 id="titre">Exemples de fiches</h1>
+    <p id="sous">ces fiches sont en consultation</p>
+  </header>
+  <div class="liste" id="liste"><div class="info">Chargement…</div></div>
+</div>
+
+<script>
+(function () {
+  var OWNER = "Moty31700";
+  var REPO  = "jeux-pedagogiques-hebreu";
+  var BRANCH = "main";
+
+  var liste = document.getElementById("liste");
+
+  // Dossier courant déduit de l'URL : /fiches/exemples/<slug>/
+  var chemin = location.pathname.replace(/\/index\.html$/i, "").replace(/\/+$/, "");
+  var parties = chemin.split("/").filter(Boolean);
+  var slug = parties[parties.length - 1] || "";
+
+  var LIBELLES = {
+    "fiches-interactives": "Fiches interactives",
+    "fiches-redigees": "Fiches rédigées",
+    "choix-personnels": "Choix personnels"
+  };
+  var titre = LIBELLES[slug] || "Exemples de fiches";
+  document.getElementById("titre").textContent = titre;
+  document.title = titre;
+
+  // Chemin API = le chemin de la page dans le repo (sans le / initial)
+  var apiPath = chemin.replace(/^\/+/, "");
+  var url = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/" + apiPath + "?ref=" + BRANCH;
+
+  // Transforme perso-202608200717.html -> "Fiche du 20/08/2026 à 07:17"
+  function joli(nom) {
+    var m = nom.match(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/);
+    if (m) return "Fiche du " + m[3] + "/" + m[2] + "/" + m[1] + " à " + m[4] + "h" + m[5];
+    return nom.replace(/\.html$/i, "");
+  }
+
+  fetch(url, { headers: { "Accept": "application/vnd.github+json" } })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (!Array.isArray(data)) {
+        liste.innerHTML = '<div class="info">Liste momentanément indisponible. Réessaie dans quelques minutes.</div>';
+        return;
+      }
+      var fiches = data.filter(function (f) {
+        return f.type === "file"
+          && /\.html$/i.test(f.name)
+          && f.name.toLowerCase() !== "index.html";
+      });
+      // plus récentes en premier (nom horodaté décroissant)
+      fiches.sort(function (a, b) { return a.name < b.name ? 1 : -1; });
+
+      if (fiches.length === 0) {
+        liste.innerHTML = '<div class="info">Aucune fiche pour le moment.</div>';
+        return;
+      }
+      var html = "";
+      for (var i = 0; i < fiches.length; i++) {
+        var f = fiches[i];
+        html += '<div class="item">'
+              +   '<div>'
+              +     '<div class="item-titre">' + joli(f.name) + '</div>'
+              +     '<div class="item-sous">' + f.name + '</div>'
+              +   '</div>'
+              +   '<a class="btn" href="' + encodeURIComponent(f.name) + '" target="_blank" rel="noopener">Ouvrir</a>'
+              + '</div>';
+      }
+      liste.innerHTML = html;
+    })
+    .catch(function () {
+      liste.innerHTML = '<div class="info">Liste momentanément indisponible. Réessaie dans quelques minutes.</div>';
+    });
+})();
+</script>
+</body>
+</html>
