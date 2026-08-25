@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"Jérusalem","auteur":"Yehuda Amichaï (1924-2000),","youtube":"","shironet":"","mots":[{"heb":"אֲוִיר","translit":"avir","fr":"air","sens":"nom masculin singulier construit ou absolu","racine":"א-ו-י-ר","nature":"nom","genre":"m","nombre":"sg","formes":"אֲוִיר · אֲוִירִים","cat":"noms","emploi":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת : l'air au-dessus de Jérusalem est saturé de prières."},{"heb":"רָווּי","translit":"ravuy","fr":"saturé, gorgé, imprégné","sens":"adjectif masculin singulier, forme passive (בינוני פעול) de la racine ר-ו-י","racine":"ר-ו-י","nature":"adjectif","genre":"m","nombre":"sg","formes":"רָווּי · רְוִיָּה · רְוִיִּים","cat":"adjectifs","emploi":"הָאֲוִיר רָווּי תְּפִלּוֹת : l'air est saturé de prières, comme une éponge gorgée d'eau."},{"heb":"תְּפִלּוֹת","translit":"tefilot","fr":"prières","sens":"nom féminin pluriel absolu","racine":"פ-ל-ל","nature":"nom","genre":"f","nombre":"pl","formes":"תְּפִלָּה · תְּפִלּוֹת · תְּפִלַּת","cat":"noms","emploi":"הָאֲוִיר רָווּי תְּפִלּוֹת : l'air est saturé de prières qui montent vers le ciel."},{"heb":"חֲלוֹמוֹת","translit":"khalomot","fr":"rêves","sens":"nom masculin pluriel absolu","racine":"ח-ל-מ","nature":"nom","genre":"m","nombre":"pl","formes":"חֲלוֹם · חֲלוֹמוֹת · חֲלוֹמוֹ","cat":"noms","emploi":"הָאֲוִיר רָווּי תְּפִלּוֹת וַחֲלוֹמוֹת : les rêves collectifs saturent l'air de la ville sainte."},{"heb":"אֲזוֹרֵי הַתַּעֲשִׂיָּה","translit":"azorey ha-ta'asiya","fr":"zones industrielles","sens":"syntagme nominal : nom m.pl construit + nom f.sg défini","racine":"א-ז-ר / ע-שׂ-י","nature":"expression","genre":"m","nombre":"pl","formes":"אֵזוֹר · אֲזוֹרִים · אֲזוֹרֵי","cat":"autre","emploi":"הָאֲוִיר כְּמוֹ הָאֲוִיר מֵעַל אֲזוֹרֵי הַתַּעֲשִׂיָּה : la comparaison avec les zones industrielles désacralise ironiquement."},{"heb":"לְהַרְגִּישׁ","translit":"lehargish","fr":"sentir, ressentir, percevoir","sens":"infinitif hif'il de ר-ג-שׁ","racine":"ר-ג-שׁ","nature":"verbe","genre":"—","nombre":"—","formes":"לְהַרְגִּישׁ · מַרְגִּישׁ · הִרְגִּישׁ · יַרְגִּישׁ","cat":"verbes","emploi":"אֶפְשָׁר לְהַרְגִּישׁ זֹאת בְּרֵיחַ הֶעָשָׁן : on peut percevoir cela à l'odeur de la fumée."},{"heb":"רֵיחַ","translit":"reakh","fr":"odeur, senteur","sens":"nom masculin singulier construit","racine":"ר-י-ח","nature":"nom","genre":"m","nombre":"sg","formes":"רֵיחַ · רֵיחוֹת","cat":"noms","emploi":"אֶפְשָׁר לְהַרְגִּישׁ זֹאת בְּרֵיחַ הֶעָשָׁן : la synesthésie rend les prières perceptibles par leur odeur."},{"heb":"עָשָׁן","translit":"ashan","fr":"fumée","sens":"nom masculin singulier absolu","racine":"ע-שׁ-נ","nature":"nom","genre":"m","nombre":"sg","formes":"עָשָׁן · עֲשָׁנִים · עֲשֵׁנִי","cat":"noms","emploi":"רֵיחַ הֶעָשָׁן שֶׁל הָעִיר מְבַטֵּא אֶת עֹמֶס הַתְּפִלּוֹת : la fumée métaphorise la densité spirituelle."},{"heb":"שְׂרִיפַת רְצוֹנוֹת","translit":"sreyat retsonot","fr":"la brûlure des velléités, le fait de brûler ses désirs","sens":"nom f.sg construit (שְׂרֵפָה) + nom m.pl absolu (רָצוֹן)","racine":"שׂ-ר-פ / ר-צ-י","nature":"expression","genre":"f","nombre":"sg construit","formes":"שְׂרֵפָה · שְׂרִיפַת · רָצוֹן · רְצוֹנוֹת","cat":"autre","emploi":"רֵיחַ הֶעָשָׁן מִשְּׂרִיפַת רְצוֹנוֹת : brûler ses désirs évoque le sacrifice rituel et la mortification spirituelle."},{"heb":"אֱמוּנָה","translit":"emuna","fr":"foi, croyance, fidélité","sens":"nom féminin singulier absolu","racine":"א-מ-נ","nature":"nom","genre":"f","nombre":"sg","formes":"אֱמוּנָה · אֱמוּנוֹת · בְּאֱמוּנָה","cat":"noms","emploi":"שְׂרִיפַת רְצוֹנוֹת וֶאֱמוּנָה : la foi elle-même se consume comme un sacrifice dans la ville sainte."},{"heb":"עַמּוּד","translit":"amud","fr":"colonne, pilier","sens":"nom masculin singulier absolu","racine":"ע-מ-ד","nature":"nom","genre":"m","nombre":"sg","formes":"עַמּוּד · עַמּוּדִים · עַמּוּד עָשָׁן","cat":"noms","emploi":"עַמּוּד כָּבֵד שֶׁל מָרָה עוֹלֶה : une lourde colonne d'amertume s'élève comme la fumée d'une usine."},{"heb":"מָרָה","translit":"mara","fr":"amertume, bile","sens":"nom féminin singulier absolu ; aussi adjectif (amer)","racine":"מ-ר-ר","nature":"nom","genre":"f","nombre":"sg","formes":"מָרָה · מַר · מְרִירוּת","cat":"noms","emploi":"עַמּוּד כָּבֵד שֶׁל מָרָה : l'amertume collective de Jérusalem monte comme une colonne de fumée lourde."},{"heb":"חֲרָטוֹת","translit":"kharatot","fr":"regrets, remords","sens":"nom féminin pluriel absolu","racine":"ח-ר-ט","nature":"nom","genre":"f","nombre":"pl","formes":"חֲרָטָה · חֲרָטוֹת","cat":"noms","emploi":"רַעַשׁ קַל שֶׁל חֲרָטוֹת : le grondement léger des regrets contraste avec la lourde colonne d'amertume."},{"heb":"תִּקְוָה","translit":"tikva","fr":"espérance, espoir","sens":"nom féminin singulier absolu","racine":"ק-ו-י","nature":"nom","genre":"f","nombre":"sg","formes":"תִּקְוָה · תִּקְווֹת · הַתִּקְוָה","cat":"noms","emploi":"רוּחַ תִּקְוָה עוֹבֶרֶת : une brise d'espérance passe fugitivement, allusion à l'hymne national Ha-Tikva."},{"heb":"עִיר נָמֵל","translit":"ir namel","fr":"ville portuaire","sens":"syntagme nominal : nom f.sg + nom m.sg en apposition","racine":"ע-י-ר / נ-מ-ל","nature":"expression","genre":"f","nombre":"sg","formes":"עִיר · עָרִים · נָמֵל · נְמָלִים","cat":"autre","emploi":"יְרוּשָׁלַיִם הִיא עִיר נָמֵל עַל שְׂפַת הָנֶּצַח : métaphore maritime paradoxale pour une ville de montagne enclavée."},{"heb":"נֶצַח","translit":"netsakh","fr":"éternité, perpétuité ; aussi : victoire","sens":"nom masculin singulier absolu ; polysémique","racine":"נ-צ-ח","nature":"nom","genre":"m","nombre":"sg","formes":"נֶצַח · לָנֶצַח · נִצְחוֹן","cat":"noms","emploi":"עַל שְׂפַת הָנֶּצַח : Jérusalem est un port sur les rives de l'éternité, ouverte sur le transcendant."},{"heb":"חֶרֶט סְפִינָה","translit":"kheret sfina","fr":"proue de navire","sens":"syntagme nominal construit : nom m.sg + nom f.sg","racine":"ח-ר-ט / ס-פ-נ","nature":"expression","genre":"m","nombre":"sg","formes":"חֶרֶט · סְפִינָה · סְפִינוֹת","cat":"autre","emploi":"הָהָר עוֹמֵד כְּחֶרֶט סְפִינָה : la montagne dressée comme une proue symbolise l'élan de la ville vers l'infini."},{"heb":"טָעוּן","translit":"ta'un","fr":"chargé, lesté, plein de","sens":"adjectif/participe passif (בינוני פעול) masculin singulier de ט-ע-נ","racine":"ט-ע-נ","nature":"adjectif","genre":"m","nombre":"sg","formes":"טָעוּן · טְעוּנָה · טְעוּנִים","cat":"adjectifs","emploi":"הָהָר טָעוּן בְּהִיסְטוֹרְיָה וּבִשְׁתִיקָה : la montagne est chargée d'histoire et de silence comme un navire de sa cargaison."},{"heb":"שְׁתִיקָה","translit":"shtika","fr":"silence","sens":"nom féminin singulier absolu","racine":"שׁ-ת-ק","nature":"nom","genre":"f","nombre":"sg","formes":"שְׁתִיקָה · שְׁתִיקוֹת · שׁוֹתֵק","cat":"noms","emploi":"טָעוּן בְּהִיסְטוֹרְיָה וּבִשְׁתִיקָה : le silence est la face cachée de l'histoire, ce qui reste quand les mots manquent."},{"heb":"רְצִיפִים","translit":"retsiyfim","fr":"quais, quays","sens":"nom masculin pluriel absolu","racine":"ר-צ-פ","nature":"nom","genre":"m","nombre":"pl","formes":"רָצִיף · רְצִיפִים","cat":"noms","emploi":"הָאֲנָשִׁים הוֹלְכִים וָבָאִים עַל הָרְצִיפִים : les gens errent sur les quais de la ville-port comme des marins perdus."},{"heb":"הוֹלְכִים וָבָאִים","translit":"holkhim va-va'im","fr":"vont et viennent, allant et venant","sens":"deux participes présents m.pl coordonnés, forme idiomatique du va-et-vient","racine":"ה-ל-כ / ב-ו-א","nature":"expression","genre":"m","nombre":"pl","formes":"הוֹלֵךְ · הוֹלְכִים · בָּא · בָּאִים","cat":"autre","emploi":"הָאֲנָשִׁים הוֹלְכִים וָבָאִים עַל הָרְצִיפִים : l'expression idiomatique exprime l'errance perpétuelle, sans direction fixe."},{"heb":"קְדוֹשִׁים","translit":"kedoshim","fr":"saints, personnes saintes ; aussi martyrs","sens":"nom masculin pluriel absolu","racine":"ק-ד-שׁ","nature":"nom","genre":"m","nombre":"pl","formes":"קָדוֹשׁ · קְדוֹשִׁים · קְדוּשָּׁה","cat":"noms","emploi":"צוֹעֲקִים שְׁמוֹת שֶׁל קְדוֹשִׁים וּנְבִיאִים : appeler les saints comme on crie dans le brouillard traduit une foi éperdue."},{"heb":"נְבִיאִים","translit":"nevi'im","fr":"prophètes","sens":"nom masculin pluriel absolu ; deuxième partie du canon hébreu","racine":"נ-ב-א","nature":"nom","genre":"m","nombre":"pl","formes":"נָבִיא · נְבִיאִים · נְבִיאָה","cat":"noms","emploi":"שְׁמוֹת שֶׁל קְדוֹשִׁים וּנְבִיאִים : les prophètes invoqués comme des bouées dans le brouillard de l'histoire."},{"heb":"קַפִּיטָנִים אֲבוּדִים","translit":"kapitanim avudim","fr":"capitaines égarés, perdus","sens":"nom m.pl (emprunt) + adjectif/participe passif m.pl","racine":"קַפִּיטָן / א-ב-ד","nature":"expression","genre":"m","nombre":"pl","formes":"קַפִּיטָן · קַפִּיטָנִים · אָבוּד · אֲבוּדִים","cat":"autre","emploi":"כְּקַפִּיטָנִים אֲבוּדִים בְּעַרְפֶל : les pèlerins sont comme des capitaines qui devraient guider mais se perdent eux-mêmes."},{"heb":"עַרְפֶל","translit":"arfel","fr":"brume, brouillard, nuée sombre","sens":"nom masculin singulier absolu ; aussi connotation biblique (nuée divine)","racine":"ע-ר-פ-ל","nature":"nom","genre":"m","nombre":"sg","formes":"עַרְפֶל · הָעַרְפֶל · עֲרָפַל","cat":"noms","emploi":"אֲבוּדִים בְּעַרְפֶל : le brouillard conclut le poème sur l'incertitude, l'opacité de la foi et de l'histoire."}],"phrases":[{"heb":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת וַחֲלוֹמוֹת","fr":"L'air au-dessus de Jérusalem est saturé de prières et de rêves"},{"heb":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת וַחֲלוֹמוֹת","fr":"L'air au-dessus de Jérusalem est saturé de prières et de rêves"},{"heb":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת וַחֲלוֹמוֹת","fr":"L'air au-dessus de Jérusalem est saturé de prières et de rêves"},{"heb":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת וַחֲלוֹמוֹת","fr":"L'air au-dessus de Jérusalem est saturé de prières et de rêves"},{"heb":"כְּמוֹ הָאֲוִיר מֵעַל אֲזוֹרֵי הַתַּעֲשִׂיָּה","fr":"Comme l'air au-dessus des zones industrielles"},{"heb":"אֶפְשָׁר לְהַרְגִּישׁ זֹאת בְּרֵיחַ הֶעָשָׁן שֶׁלָּהּ","fr":"On le sent à l'odeur de ses fumées"},{"heb":"אֶפְשָׁר לְהַרְגִּישׁ זֹאת בְּרֵיחַ הֶעָשָׁן שֶׁלָּהּ","fr":"On le sent à l'odeur de ses fumées"},{"heb":"אֶפְשָׁר לְהַרְגִּישׁ זֹאת בְּרֵיחַ הֶעָשָׁן שֶׁלָּהּ","fr":"On le sent à l'odeur de ses fumées"},{"heb":"מִשְּׂרִיפַת רְצוֹנוֹת וֶאֱמוּנָה","fr":"De velléités et de foi qui brûlent"},{"heb":"מִשְּׂרִיפַת רְצוֹנוֹת וֶאֱמוּנָה","fr":"De velléités et de foi"},{"heb":"לְעִתִּים קָרוֹבוֹת עַמּוּד כָּבֵד שֶׁל מָרָה עוֹלֶה","fr":"Souvent, une lourde colonne d'amertume s'élève"},{"heb":"לְעִתִּים קָרוֹבוֹת עַמּוּד כָּבֵד שֶׁל מָרָה עוֹלֶה","fr":"Souvent, une lourde colonne d'amertume s'élève"},{"heb":"לְפְעָמִים רַעַשׁ קַל שֶׁל חֲרָטוֹת","fr":"Parfois un grondement léger de regrets"},{"heb":"אוֹ רוּחַ תִּקְוָה עוֹבֶרֶת","fr":"Ou une brise d'espérance qui passe"},{"heb":"יְרוּשָׁלַיִם הִיא עִיר נָמֵל","fr":"Jérusalem est une ville portuaire"},{"heb":"עַל שְׂפַת הָנֶּצַח","fr":"Sur les rives de l'éternité"},{"heb":"הָהָר עוֹמֵד בָּהּ כְּחֶרֶט סְפִינָה","fr":"La montagne s'y dresse comme une proue de navire"},{"heb":"טָעוּן בְּהִיסְטוֹרְיָה וּבִשְׁתִיקָה","fr":"Chargée d'histoire et de silence"},{"heb":"טָעוּן בְּהִיסְטוֹרְיָה וּבִשְׁתִיקָה","fr":"Chargée d'histoire et de silence"},{"heb":"וְהָאֲנָשִׁים הוֹלְכִים וָבָאִים עַל הָרְצִיפִים","fr":"Et les gens vont et viennent sur les quais"},{"heb":"וְהָאֲנָשִׁים הוֹלְכִים וָבָאִים עַל הָרְצִיפִים","fr":"Et les gens vont et viennent sur les quais"},{"heb":"צוֹעֲקִים שְׁמוֹת שֶׁל קְדוֹשִׁים וּנְבִיאִים","fr":"Criant des noms de saints et de prophètes"},{"heb":"צוֹעֲקִים שְׁמוֹת שֶׁל קְדוֹשִׁים וּנְבִיאִים","fr":"Criant des noms de saints et de prophètes"},{"heb":"כְּקַפִּיטָנִים אֲבוּדִים בְּעַרְפֶל","fr":"Tels des capitaines égarés dans la brume"},{"heb":"כְּקַפִּיטָנִים אֲבוּדִים בְּעַרְפֶל","fr":"Tels des capitaines égarés dans la brume"}],"quatrains":[{"heb":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת וַחֲלוֹמוֹת\nכְּמוֹ הָאֲוִיר מֵעַל אֲזוֹרֵי הַתַּעֲשִׂיָּה.\nאֶפְשָׁר לְהַרְגִּישׁ זֹאת בְּרֵיחַ הֶעָשָׁן שֶׁלָּהּ\nמִשְּׁרִיפַת רְצוֹנוֹת וֶאֱמוּנָה.","fr":"L'air au-dessus de Jérusalem est saturé de prières et de rêves / Comme l'air au-dessus des zones industrielles. / On le sent à l'odeur de ses fumées de brûler / De velléités et de foi.","an":"Ce premier quatrain pose d'emblée la tension centrale du poème : le sacré est rendu visible et olfactif comme une pollution industrielle. La comparaison ('כְּמוֹ') entre l'air spirituel de Jérusalem et l'air des zones industrielles est délibérément choquante, presque blasphématoire en surface, mais profondément respectueuse : elle dit que la prière est ici aussi dense, aussi réelle, aussi pesante que la fumée d'usine. Le verbe 'רָווּי' (saturé, gorgé) insiste sur l'excès, la surcharge. La synesthésie est remarquable : ce qui appartient au domaine spirituel (prières, rêves, foi) devient sensoriellement perceptible par l'odorat ('בְּרֵיחַ הֶעָשָׁן'). 'שְׂרִיפַת רְצוֹנוֹת' — la brûlure des velléités — évoque le sacrifice, le rituel du Temple, mais aussi la frustration humaine. Le registre combine le lyrique et le prosaïque, l'ironie douce typique d'Amichaï."},{"heb":"לְעִתִּים קָרוֹבוֹת עַמּוּד כָּבֵד שֶׁל מָרָה עוֹלֶה\nמִצַּד הָעִיר הָעַתִּיקָה,\nלְפְעָמִים רַעַשׁ קַל שֶׁל חֲרָטוֹת\nאוֹ רוּחַ תִּקְוָה עוֹבֶרֶת.","fr":"Souvent, une lourde colonne d'amertume s'élève / Du côté de la Vieille Ville, / Parfois un grondement léger de regrets / Ou une brise d'espérance qui passe.","an":"Ce quatrain développe et nuance la métaphore atmosphérique inaugurée précédemment. Les émotions humaines collectives — amertume ('מָרָה'), regrets ('חֲרָטוֹת'), espérance ('תִּקְוָה') — sont personnifiées en phénomènes météorologiques ou industriels : colonnes de fumée ('עַמּוּד'), grondement ('רַעַשׁ'), brise ('רוּחַ'). L'antithèse entre le lourd ('כָּבֵד') et le léger ('קַל'), entre la lenteur de la montée et la légèreté du passage, structure le quatrain en chiasme émotionnel. La Vieille Ville ('הָעִיר הָעַתִּיקָה') est le foyer de l'émission : elle rayonne son histoire douloureuse. Le mot 'תִּקְוָה' résonne évidemment avec l'hymne national israélien, ajoutant une dimension nationale et mémorielle. La syntaxe averbale de certains syntagmes ('רַעַשׁ קַל שֶׁל חֲרָטוֹת') crée une économie expressive qui suspend le souffle du lecteur, mimant l'éphémère de la brise."},{"heb":"יְרוּשָׁלַיִם הִיא עִיר נָמֵל\nעַל שְׂפַת הָנֶּצַח.\nהָהָר עוֹמֵד בָּהּ כְּחֶרֶט סְפִינָה\nטָעוּן בְּהִיסְטוֹרְיָה וּבִשְׁתִיקָה.","fr":"Jérusalem est une ville portuaire / Sur les rives de l'éternité. / La montagne s'y dresse comme une proue de navire / Chargée d'histoire et de silence.","an":"Ce troisième quatrain opère un pivotement métaphorique majeur : la ville devient port ('עִיר נָמֵל'), non pas sur la mer géographique — Jérusalem est une ville de montagne, enclavée — mais sur les rives de l'éternité ('שְׂפַת הָנֶּצַח'). L'oxymore géographique est vertigineux et fécond : il fait de l'ancrage terrestre une ouverture vers le transcendant. La montagne ('הָהָר'), probablement le mont du Temple ou le mont Sion, devient proue de navire ('חֶרֶט סְפִינָה'), image d'un élan, d'une percée vers l'avenir ou vers Dieu. L'accumulation 'הִיסְטוֹרְיָה וּבִשְׁתִיקָה' — histoire et silence — crée une tension fertile : l'histoire est bruit, récit, conflits ; le silence est ce qui reste quand tout est dit. Le rythme binaire, la syntaxe nominale ample, donnent une majesté épique au quatrain."},{"heb":"וְהָאֲנָשִׁים הוֹלְכִים וָבָאִים עַל הָרְצִיפִים,\nצוֹעֲקִים שְׁמוֹת שֶׁל קְדוֹשִׁים וּנְבִיאִים\nכְּקַפִּיטָנִים אֲבוּדִים בְּעַרְפֶל.","fr":"Et les gens vont et viennent sur les quais, / Criant des noms de saints et de prophètes / Tels des capitaines égarés dans la brume.","an":"Ce quatrain final (ici de trois vers) conclut la métaphore maritime et humanise le tableau. Les habitants et pèlerins de Jérusalem arpentent les quais ('רְצִיפִים') comme des marins perdus. La clameur des noms sacrés — saints, prophètes — est ici réinterprétée non comme ferveur triomphante mais comme appel de détresse ('אֲבוּדִים בְּעַרְפֶל' : égarés dans la brume). L'image est pathétique au sens fort : elle inspire la compassion. Les capitaines sont supposés guider, mais ici ils se perdent eux-mêmes. Amichaï retourne ainsi le topos de Jérusalem phare du monde : la ville est port, mais le brouillard y règne. La répétition du mouvement 'הוֹלְכִים וָבָאִים' (va-et-vient) souligne l'errance perpétuelle, le pèlerinage sans destination fixe. Le poème s'achève sur l'incertitude, non sur la foi assurée, ce qui est la marque de l'humanisme lucide d'Amichaï."}],"analyse":"Yehuda Amichaï (1924-2000), né en Allemagne et installé en Israël, est le poète hébreu moderne le plus traduit au monde. Dans ce poème, Jérusalem n'est pas célébrée comme ville sainte abstraite mais vécue de l'intérieur, avec ironie tendre et sensorialité concrète. La métaphore industrielle du premier quatrain désacralise sans détruire ; la métaphore maritime du second quatrain ouvre sur l'éternité tout en ancrant la ville dans le temps humain. La forme est libre, le registre oscille entre le familier et le sublime, caractéristique du style d'Amichaï qui réconcilie quotidien et transcendance."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
