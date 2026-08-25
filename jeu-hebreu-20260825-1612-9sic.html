@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)https://lecons.hebreu-zen.cloud/jeu-hebreu-20260811-0759-vnku.html -->
+<html lang="fr" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème</title>
+<link href="./Chanson_files/css2" rel="stylesheet">
+<style>
+:root{
+  --cream:#0d0d0d;--parch:#161616;--ink:#e8e4dc;--ink2:#b8b2a6;--ink3:#888;
+  --gold:#c9a84c;--gold2:#e8c96a;--blue:#1a6aaa;--blue2:#70b0e0;
+  --green:#3d7a55;--red:#8b3a3a;--orange:#c9852a;--purple:#b49ee8;
+  --shadow:rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 12% 8%,rgba(201,168,76,.09) 0%,transparent 52%),
+             radial-gradient(ellipse at 88% 92%,rgba(30,95,168,.07) 0%,transparent 52%);
+  pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(201,168,76,.03) 28px,rgba(201,168,76,.03) 29px);
+  pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:26px 16px 90px}
+
+.app-header{text-align:center;margin-bottom:18px}.lien-src{display:inline-block;margin:6px 5px 0;padding:7px 14px;border:1px solid var(--gold);border-radius:8px;color:var(--gold);text-decoration:none;font-size:14px}.lien-src:hover{background:var(--gold);color:#1a1a1a}
+.app-heb{font-family:'Frank Ruhl Libre',serif;font-size:40px;font-weight:900;color:var(--ink);line-height:1.2;text-shadow:2px 2px 0 rgba(201,168,76,.13)}
+.app-fr{font-size:16px;font-style:italic;color:var(--ink2);margin-top:2px}
+.ornament{display:flex;align-items:center;justify-content:center;gap:14px;color:var(--gold);opacity:.45;margin:10px auto;width:220px}
+.ornament::before,.ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+.reglages{background:#161616;border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:12px 14px;margin-bottom:14px;box-shadow:0 2px 8px var(--shadow)}
+.reglages .titre-mini{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink3);margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid rgba(201,168,76,.3);background:rgba(201,168,76,.06);color:var(--ink2);border-radius:20px;padding:5px 13px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
+.chip.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.chip.tous{border-style:dashed}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink2)}
+.switch .box{width:44px;height:24px;border-radius:14px;background:rgba(0,0,0,.15);position:relative;transition:.2s}
+.switch .box::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.switch.on .box{background:var(--green)}
+.switch.on .box::after{left:22px}
+
+.tabs{display:flex;flex-wrap:wrap;gap:5px;background:#111;border-radius:16px;padding:5px;margin-bottom:20px;border:1px solid rgba(201,168,76,.15)}
+.tab{flex:1 0 auto;padding:9px 10px;border:none;border-radius:11px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;color:var(--ink3);background:transparent;transition:.2s}
+.tab.active{background:#1e1e1e;color:var(--ink);box-shadow:0 2px 12px var(--shadow);border:1px solid rgba(201,168,76,.22)}
+.tab:hover:not(.active){background:#1a1a1a}
+
+.card{background:#161616;border-radius:18px;padding:20px 20px;box-shadow:0 2px 0 rgba(201,168,76,.18),0 8px 28px var(--shadow);border:1px solid rgba(201,168,76,.18);margin-bottom:14px}
+.heb{font-family:'Frank Ruhl Libre',serif;direction:rtl;color:var(--ink)}
+.heb-xl{font-size:40px;font-weight:900;text-align:center;line-height:1.3}
+.heb-lg{font-size:26px;font-weight:700;line-height:1.6}
+.heb-md{font-size:20px;line-height:1.9}
+.fr{font-style:italic}
+.sens{color:var(--ink3);font-size:15px;margin-top:6px}
+.audio-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,.1);border:1.5px solid rgba(201,168,76,.3);color:var(--gold);border-radius:20px;padding:4px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;transition:.2s}
+.audio-btn:hover{background:rgba(201,168,76,.2)}
+.fr-hidden{filter:blur(7px);opacity:.4;cursor:pointer;user-select:none}
+.reveal{background:rgba(201,168,76,.08);border:1.5px solid rgba(201,168,76,.25);color:var(--gold);border-radius:9px;padding:6px 10px;cursor:pointer;font-size:14px}
+.center{text-align:center}
+.badge{display:inline-block;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.b-noms{background:var(--blue)}.b-verbes{background:var(--green)}.b-adjectifs{background:var(--purple)}.b-autre{background:var(--orange)}
+
+table.lex{width:100%;border-collapse:collapse}
+table.lex th,table.lex td{padding:9px 8px;border-bottom:1px solid rgba(201,168,76,.15);text-align:left}
+table.lex th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-size:20px;text-align:right;font-weight:700}
+.morpho-row{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:15px;margin-top:8px}
+.morpho-row .k{color:var(--ink3);font-weight:600}
+.morpho-he{font-family:'Frank Ruhl Libre',serif;direction:rtl}
+
+.btn{border:none;border-radius:12px;padding:12px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;transition:.2s}
+.btn-v{background:var(--green);color:#fff}.btn-f{background:var(--red);color:#fff}
+.btn-g{background:var(--gold);color:#fff}
+.btn-o{background:transparent;border:1.5px solid rgba(201,168,76,.35);color:var(--ink2)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.q-card.correct{background:#1a2e22;border-color:#3d7a55}
+.q-card.wrong{background:#2a1515;border-color:#8b3a3a}
+
+.tiles{display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center;margin:14px 0;min-height:44px}
+.tile{font-family:'Frank Ruhl Libre',serif;font-size:20px;background:rgba(201,168,76,.12);border:1.5px solid rgba(201,168,76,.35);border-radius:10px;padding:6px 12px;cursor:pointer}
+.tile.used{opacity:.3;pointer-events:none}
+.zone{min-height:48px;border:2px dashed rgba(201,168,76,.3);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center}
+
+.bilan-pct{font-size:56px;font-weight:900;text-align:center;color:var(--gold)}
+.bilan-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(201,168,76,.15);font-size:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="app-header" id="app-header"></div>
+
+  <div class="reglages">
+    <div class="titre-mini">Réglages</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div class="switch on" id="sw-nikoud" onclick="toggleNikoud()"><span class="box"></span><span>Avec nikoud</span></div>
+    </div>
+    <div class="titre-mini" style="margin-top:12px">Catégories</div>
+    <div class="chips" id="cat-chips"><button class="chip tous on" onclick="toutesCats()">Toutes</button><button class="chip on" onclick="toggleCat(&#39;adjectifs&#39;)">adjectifs</button><button class="chip on" onclick="toggleCat(&#39;verbes&#39;)">verbes</button><button class="chip on" onclick="toggleCat(&#39;noms&#39;)">noms</button><button class="chip on" onclick="toggleCat(&#39;autre&#39;)">autre</button></div>
+  </div>
+
+  <div class="tabs" id="tabs"><button class="tab active" onclick="showTab(&#39;mots&#39;)">Mots</button><button class="tab" onclick="showTab(&#39;morpho&#39;)">Morphologie</button><button class="tab" onclick="showTab(&#39;lexique&#39;)">Lexique</button><button class="tab" onclick="showTab(&#39;phrases&#39;)">Phrases</button><button class="tab" onclick="showTab(&#39;analyse&#39;)">Analyse</button><button class="tab" onclick="showTab(&#39;vf&#39;)">Vrai/Faux</button><button class="tab" onclick="showTab(&#39;recon&#39;)">Reconstituer</button><button class="tab" onclick="showTab(&#39;bilan&#39;)">Score</button></div>
+  <div id="content"><div class="card center"><span class="badge b-adjectifs">adjectifs</span><div class="heb heb-xl">עָשִׁיר</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;עָשִׁיר&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr0" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">riche</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr0&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : adjectif masculin singulier</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">בּוֹנֶה</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;בּוֹנֶה&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr1" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">bâtissant / qui bâtit</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr1&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe בנה, binyan Pa'al, participe présent masculin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מַדְרֵגוֹת</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מַדְרֵגוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr2" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">escaliers / marches</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr2&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom féminin pluriel</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">גַּבִּיר</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;גַּבִּיר&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr3" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">notable / homme riche et influent</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr3&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">אַוָּזִים</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;אַוָּזִים&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr4" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">oies</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr4&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin pluriel</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">בַּרְוָזִים</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;בַּרְוָזִים&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr5" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">canards</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr5&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin pluriel</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מִרְפֶּסֶת</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִרְפֶּסֶת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr6" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">balcon / véranda</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr6&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom féminin singulier</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">מִתְנַפַּחַת</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִתְנַפַּחַת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr7" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">se rengorgeant / se gonflant d'orgueil</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr7&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe נפח, binyan Hitpa'el, participe présent féminin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">טַוָּס</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;טַוָּס&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr8" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">paon</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr8&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">עֵצָה</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;עֵצָה&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr9" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">conseil / avis</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr9&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom féminin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מִנְהָג</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִנְהָג&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr10" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">coutume / usage</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr10&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin singulier</div></div><div class="card center"><span class="badge b-autre">autre</span><div class="heb heb-xl">בֵּית הַמִּדְרָשׁ</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;בֵּית הַמִּדְרָשׁ&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr11" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">maison d'étude / maison de prière</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr11&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : expression nominale masculine singulier défini</div></div><div class="card center"><span class="badge b-autre">autre</span><div class="heb heb-xl">כֹּתֶל הַמִּזְרָח</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;כֹּתֶל הַמִּזְרָח&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr12" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">le mur est / place d'honneur orientale dans la synagogue</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr12&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : expression nominale masculine singulier défini</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">מוֹשִׁיעָם</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מוֹשִׁיעָם&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr13" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">leur sauveur / celui qui les sauve</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr13&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe ישע, binyan Hif'il, participe présent ms avec suffixe 3mp</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">נִגְרַע</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;נִגְרַע&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr14" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">serait-il retranché / perdu / manquerait-il</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr14&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe גרע, binyan Nif'al, passé 3ms (ici valeur conditionnelle)</div></div></div>
+</div>
+
+<script>
+/* ============================================================
+   STRUCTURE "JEU" = LE CONTRAT que l'IA devra remplir à chaque leçon.
+   ============================================================ */
+const JEU = {"titre":"Jérusalem","auteur":"Yehuda Amichaï (1924-2000),","youtube":"","shironet":"","mots":[{"heb":"אֲוִיר","translit":"avir","fr":"air","sens":"nom masculin singulier, emprunté au grec via l'araméen","racine":"א-ו-ר","nature":"nom","genre":"m","nombre":"sg","formes":"אֲוִיר · הָאֲוִיר","cat":"noms","emploi":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת — l'air au-dessus de Jérusalem est saturé de prières"},{"heb":"רָווּי","translit":"ravui","fr":"saturé, gorgé, imprégné","sens":"adjectif masculin singulier, participe passif (בניין פועל)","racine":"ר-ו-י","nature":"adjectif","genre":"m","nombre":"sg","formes":"רָווּי · רְוּיָה · רְוּיִים · רְוּיוֹת","cat":"adjectifs","emploi":"הָאֲוִיר רָווּי תְּפִלּוֹת — l'air est saturé de prières, comme une éponge gorgée d'eau"},{"heb":"תְּפִלּוֹת","translit":"tefilot","fr":"prières","sens":"nom féminin pluriel de תְּפִלָּה","racine":"פ-ל-ל","nature":"nom","genre":"f","nombre":"pl","formes":"תְּפִלָּה · תְּפִלּוֹת · תְּפִלָּתִי","cat":"noms","emploi":"תְּפִלּוֹת עוֹלוֹת לַשָּׁמַיִם — les prières montent vers le ciel, comme des fumées rituelles"},{"heb":"חֲלוֹמוֹת","translit":"khalomot","fr":"rêves","sens":"nom masculin pluriel de חֲלוֹם","racine":"ח-ל-מ","nature":"nom","genre":"m","nombre":"pl","formes":"חֲלוֹם · חֲלוֹמוֹת · חֲלוֹמִי","cat":"noms","emploi":"חֲלוֹמוֹת נְבִיאִים מְלָאִים בְּחֲלוֹמוֹת — les prophètes sont pleins de rêves révélateurs"},{"heb":"אֵזוֹרֵי תַּעֲשִׂיָּה","translit":"ezorei ta'asiya","fr":"zones industrielles","sens":"syntagme nominal : nom masculin pluriel construit + nom féminin singulier","racine":"א-ז-ר / ע-ש-ה","nature":"expression","genre":"m","nombre":"pl","formes":"אֵזוֹר · תַּעֲשִׂיָּה","cat":"autre","emploi":"הָעִיר הַקְּדוֹשָׁה נִמְשֶׁלֶת לְאֵזוֹרֵי תַּעֲשִׂיָּה — la ville sainte est comparée aux zones industrielles, oxymore central du poème"},{"heb":"לְהָרִיחַ","translit":"lehariah","fr":"sentir (par l'odorat), flairer","sens":"infinitif הִפְעִיל de la racine ר-י-ח, forme causative","racine":"ר-י-ח","nature":"verbe","genre":"—","nombre":"—","formes":"לְהָרִיחַ · הֵרִיחַ · מֵרִיחַ · יָרִיחַ","cat":"verbes","emploi":"אֶפְשָׁר לְהָרִיחַ אֶת הַתְּפִלּוֹת — on peut sentir les prières, comme on sent une fumée d'encens ou de sacrifice"},{"heb":"עֲשַׁן","translit":"ashan","fr":"fumée","sens":"nom masculin singulier, état construit dans le texte","racine":"ע-ש-נ","nature":"nom","genre":"m","nombre":"sg","formes":"עָשָׁן · עֲשַׁן · עֲשָׁנִים","cat":"noms","emploi":"עֲשַׁן הַשְּׂרֵפָה עוֹלֶה לַשָּׁמַיִם — la fumée du brûlage monte au ciel, image sacrificielle biblique"},{"heb":"נְדָרִים","translit":"nedarim","fr":"vœux, serments, velléités","sens":"nom masculin pluriel de נֶדֶר","racine":"נ-ד-ר","nature":"nom","genre":"m","nombre":"pl","formes":"נֶדֶר · נְדָרִים · נִדְרִי","cat":"noms","emploi":"הוּא מָלֵא נְדָרִים שֶׁלֹּא קִיֵּם — il est plein de vœux qu'il n'a pas tenus, image d'intentions spirituelles suspendues"},{"heb":"אֱמוּנָה","translit":"emuna","fr":"foi, croyance, fidélité","sens":"nom féminin singulier","racine":"א-מ-נ","nature":"nom","genre":"f","nombre":"sg","formes":"אֱמוּנָה · אֱמוּנוֹת · אֱמוּנָתִי","cat":"noms","emploi":"אֱמוּנָה הִיא הַבָּסִיס שֶׁל הַדָּת — la foi est le fondement de la religion, ici présentée comme une émanation atmosphérique"},{"heb":"עַמּוּד","translit":"amud","fr":"colonne, pilier","sens":"nom masculin singulier","racine":"ע-מ-ד","nature":"nom","genre":"m","nombre":"sg","formes":"עַמּוּד · עַמּוּדִים · עַמּוּד הַשַּׁחַר","cat":"noms","emploi":"עַמּוּד עָנָן הָלַךְ לִפְנֵיהֶם — une colonne de nuée marchait devant eux, référence à l'Exode dans la mémoire collective"},{"heb":"מָרָה","translit":"mara","fr":"amertume, bile, fiel","sens":"nom féminin singulier","racine":"מ-ר-ר","nature":"nom","genre":"f","nombre":"sg","formes":"מָרָה · מַר · מָרָה","cat":"noms","emploi":"לִבָּהּ מָלֵא מָרָה אַחֲרֵי הָאֲבֵדָה — son cœur est plein d'amertume après la perte, sentiment collectif de Jérusalem"},{"heb":"חֲרָטוֹת","translit":"kharatot","fr":"regrets, remords","sens":"nom féminin pluriel de חֲרָטָה","racine":"ח-ר-ט","nature":"nom","genre":"f","nombre":"pl","formes":"חֲרָטָה · חֲרָטוֹת","cat":"noms","emploi":"הוּא מָלֵא חֲרָטוֹת עַל מַה שֶּׁעָשָׂה — il est plein de regrets pour ce qu'il a fait, conscience morale collective de la ville"},{"heb":"תִּקְוָה","translit":"tikva","fr":"espoir, espérance","sens":"nom féminin singulier","racine":"ק-ו-ה","nature":"nom","genre":"f","nombre":"sg","formes":"תִּקְוָה · תִּקְווֹת · הַתִּקְוָה","cat":"noms","emploi":"הַתִּקְוָה הִיא גַּם שֵׁם הַהִמְנוֹן הַיִּשְׂרְאֵלִי — l'espoir est aussi le nom de l'hymne national israélien, résonance patriotique et existentielle"},{"heb":"עִיר נָמֵל","translit":"ir namel","fr":"ville portuaire, port","sens":"syntagme nominal : nom féminin singulier + nom masculin singulier (apposition)","racine":"ע-ו-ר / נ-מ-ל","nature":"expression","genre":"f","nombre":"sg","formes":"עִיר · נָמֵל · עָרֵי נָמֵל","cat":"autre","emploi":"יְרוּשָׁלַיִם כְּעִיר נָמֵל — Jérusalem comme ville portuaire, métaphore audacieuse car la ville est enclavée dans les collines"},{"heb":"הָעוֹלָם הַבָּא","translit":"ha-olam ha-ba","fr":"le monde à venir, l'au-delà, l'éternité","sens":"syntagme nominal défini : terme théologique central du judaïsme rabbinique","racine":"ע-ל-מ / ב-ו-א","nature":"expression","genre":"m","nombre":"sg","formes":"הָעוֹלָם הַזֶּה · הָעוֹלָם הַבָּא","cat":"autre","emploi":"חוֹף הָעוֹלָם הַבָּא — le rivage du monde à venir, Jérusalem comme porte entre ce monde et l'éternité"},{"heb":"חֶרְטוֹם","translit":"khertom","fr":"proue, étrave d'un navire","sens":"nom masculin singulier","racine":"ח-ר-ט","nature":"nom","genre":"m","nombre":"sg","formes":"חֶרְטוֹם · חַרְטֻמִּים","cat":"noms","emploi":"הָהָר נִשָּׂא כְּחֶרְטוֹם סְפִינָה — la montagne se dresse comme une proue de navire, image de la Vieille Ville fendant l'histoire"},{"heb":"דְּמָמָה","translit":"demama","fr":"silence, quiétude, calme absolu","sens":"nom féminin singulier","racine":"ד-מ-מ","nature":"nom","genre":"f","nombre":"sg","formes":"דְּמָמָה · קוֹל דְּמָמָה דַּקָּה","cat":"noms","emploi":"קוֹל דְּמָמָה דַּקָּה — une voix ténue du silence (1 Rois 19,12), présence divine dans l'absence de bruit"},{"heb":"רְצִיפִים","translit":"retsifim","fr":"quais, trottoirs, quais de port","sens":"nom masculin pluriel de רָצִיף","racine":"ר-צ-פ","nature":"nom","genre":"m","nombre":"pl","formes":"רָצִיף · רְצִיפִים · הָרְצִיף","cat":"noms","emploi":"אֲנָשִׁים הוֹלְכִים עַל הָרְצִיפִים — les gens marchent sur les quais, espace de passage et d'attente entre deux mondes"},{"heb":"צוֹעֲקִים","translit":"tso'akim","fr":"criant, qui crient","sens":"participe présent masculin pluriel בניין קַל (פָּעַל)","racine":"צ-ע-ק","nature":"verbe","genre":"m","nombre":"pl","formes":"צָעַק · צוֹעֵק · צוֹעֲקִים · יִצְעַק","cat":"verbes","emploi":"הֵם צוֹעֲקִים שְׁמוֹת קְדוֹשִׁים — ils crient des noms de saints, comme des naufragés appelant au secours dans le brouillard"},{"heb":"קְדוֹשִׁים","translit":"kedoshim","fr":"saints, martyrs, êtres consacrés","sens":"nom masculin pluriel de קָדוֹשׁ","racine":"ק-ד-ש","nature":"nom","genre":"m","nombre":"pl","formes":"קָדוֹשׁ · קְדוֹשִׁים · קְדוֹשָׁה","cat":"noms","emploi":"שְׁמוֹת קְדוֹשִׁים נִקְרָאִים בַּרְחוֹבוֹת — des noms de saints sont appelés dans les rues de Jérusalem, invocations désespérées"},{"heb":"נְבִיאִים","translit":"neviim","fr":"prophètes","sens":"nom masculin pluriel de נָבִיא","racine":"נ-ב-א","nature":"nom","genre":"m","nombre":"pl","formes":"נָבִיא · נְבִיאִים · נְבִיאוֹת","cat":"noms","emploi":"נְבִיאִים דִּבְּרוּ בִּשְׁמוֹ שֶׁל אֱלֹהִים — les prophètes parlaient au nom de Dieu, ici leurs noms sont ceux qu'on crie dans le brouillard"},{"heb":"רַבָּי אֳנִיּוֹת","translit":"rabai oniyot","fr":"capitaines de navires (litt. : maîtres de navires)","sens":"syntagme : nom masculin pluriel construit + nom féminin pluriel","racine":"ר-ב-ב / א-נ-י","nature":"expression","genre":"m","nombre":"pl","formes":"רַב · רַבָּי · אֳנִיָּה · אֳנִיּוֹת","cat":"autre","emploi":"הֵם כְּרַבָּי אֳנִיּוֹת שֶׁאָבְדוּ — ils sont comme des capitaines perdus, image de chefs spirituels désorientés malgré leur autorité"},{"heb":"עֲרָפֶל","translit":"arafel","fr":"brouillard, nuée épaisse, obscurité","sens":"nom masculin singulier, terme poétique et biblique","racine":"ע-ר-פ-ל","nature":"nom","genre":"m","nombre":"sg","formes":"עֲרָפֶל · עֲרָפִילִים · עֲרָפִיל","cat":"noms","emploi":"מֹשֶׁה נִגַּשׁ אֶל הָעֲרָפֶל — Moïse s'approcha de la nuée épaisse (Exode 20,18), présence divine cachée dans l'obscurité"}],"phrases":[{"heb":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת וַחֲלוֹמוֹת","fr":"L'air au-dessus de Jérusalem est saturé de prières et de rêves"},{"heb":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת וַחֲלוֹמוֹת","fr":"L'air au-dessus de Jérusalem est saturé de prières et de rêves"},{"heb":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת וַחֲלוֹמוֹת","fr":"L'air au-dessus de Jérusalem est saturé de prières et de rêves"},{"heb":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת וַחֲלוֹמוֹת","fr":"L'air au-dessus de Jérusalem est saturé de prières et de rêves"},{"heb":"כְּמוֹ הָאֲוִיר מֵעַל אֵזוֹרֵי הַתַּעֲשִׂיָּה","fr":"Comme l'air au-dessus des zones industrielles"},{"heb":"אֶפְשָׁר לְהָרִיחַ אוֹתָם בְּרֵיחַ עֲשַׁן הַשְּׂרֵפָה","fr":"On peut les sentir à l'odeur de fumée brûlante"},{"heb":"אֶפְשָׁר לְהָרִיחַ אוֹתָם בְּרֵיחַ עֲשַׁן הַשְּׂרֵפָה","fr":"On peut les sentir à l'odeur de fumée brûlante"},{"heb":"שֶׁל נְדָרִים וֶאֱמוּנָה","fr":"De vœux et de foi"},{"heb":"שֶׁל נְדָרִים וֶאֱמוּנָה","fr":"De vœux et de foi"},{"heb":"לְעִתִּים עַמּוּד כָּבֵד שֶׁל מָרָה עוֹלֶה","fr":"Parfois une lourde colonne d'amertume s'élève"},{"heb":"לְעִתִּים עַמּוּד כָּבֵד שֶׁל מָרָה עוֹלֶה","fr":"Parfois une lourde colonne d'amertume s'élève"},{"heb":"וְלִפְעָמִים רַחַשׁ קַל שֶׁל חֲרָטוֹת","fr":"Et parfois un murmure léger de regrets"},{"heb":"אוֹ רוּחַ תִּקְוָה עוֹבֶרֶת","fr":"Ou une brise d'espoir qui passe"},{"heb":"יְרוּשָׁלַיִם הִיא עִיר נָמֵל","fr":"Jérusalem est une ville portuaire"},{"heb":"עַל חוֹף הָעוֹלָם הַבָּא","fr":"Sur le rivage du monde à venir"},{"heb":"הָהָר נִשָּׂא כְּחֶרְטוֹם סְפִינָה","fr":"La montagne se dresse comme une proue de navire"},{"heb":"טָעוּן הִיסְטוֹרְיָה וּדְמָמָה","fr":"Chargée d'histoire et de silence"},{"heb":"וְהָאֲנָשִׁים הוֹלְכִים וָשָׁבִים עַל הָרְצִיפִים","fr":"Et les gens vont et viennent sur les quais"},{"heb":"צוֹעֲקִים שְׁמוֹת שֶׁל קְדוֹשִׁים וּנְבִיאִים","fr":"Criant des noms de saints et de prophètes"},{"heb":"צוֹעֲקִים שְׁמוֹת שֶׁל קְדוֹשִׁים וּנְבִיאִים","fr":"Criant des noms de saints et de prophètes"},{"heb":"צוֹעֲקִים שְׁמוֹת שֶׁל קְדוֹשִׁים וּנְבִיאִים","fr":"Criant des noms de saints et de prophètes"},{"heb":"כְּמוֹ רַבָּי אֳנִיּוֹת שֶׁאָבְדוּ בָּעֲרָפֶל","fr":"Comme des capitaines de navires égarés dans le brouillard"},{"heb":"כְּמוֹ רַבָּי אֳנִיּוֹת שֶׁאָבְדוּ בָּעֲרָפֶל","fr":"Comme des capitaines de navires égarés dans le brouillard"}],"quatrains":[{"heb":"הָאֲוִיר מֵעַל יְרוּשָׁלַיִם רָווּי תְּפִלּוֹת וַחֲלוֹמוֹת\nכְּמוֹ הָאֲוִיר מֵעַל אֵזוֹרֵי הַתַּעֲשִׂיָּה.\nאֶפְשָׁר לְהָרִיחַ אוֹתָם בְּרֵיחַ עֲשַׁן הַשְּׂרֵפָה\nשֶׁל נְדָרִים וֶאֱמוּנָה.","fr":"L'air au-dessus de Jérusalem est saturé de prières et de rêves / Comme l'air au-dessus des zones industrielles. / On peut les sentir à l'odeur de fumée brûlante / De vœux et de foi.","an":"Ce quatrain inaugural pose l'oxymore fondateur du poème : le sacré est traduit dans le langage du banal industriel. La comparaison entre l'air chargé de prières et l'air pollué des usines n'est pas une dégradation du spirituel mais une égalisation provocatrice : le fervent et le fonctionnel produisent la même densité atmosphérique. Le verbe רָווּי (saturé, gorgé) évoque une imprégnation totale, presque physique. L'odorat, sens le plus archaïque et le plus lié au rite sacrificiel biblique (réiach nihoah, l'odeur apaisante des offrandes), est convoqué pour percevoir l'invisible. Le mot נְדָרִים (vœux, velléités) introduit une nuance d'inachèvement : ce ne sont pas des prières accomplies mais des intentions suspendues. La syntaxe parallèle (כְּמוֹ) ancre l'ironie douce qui caractérise Amichai : il ne raille pas, il observe avec une tendresse distanciée."},{"heb":"לְעִתִּים עַמּוּד כָּבֵד שֶׁל מָרָה עוֹלֶה\nמִכִּוּוּן הָעִיר הָעַתִּיקָה,\nוְלִפְעָמִים רַחַשׁ קַל שֶׁל חֲרָטוֹת\nאוֹ רוּחַ תִּקְוָה עוֹבֶרֶת.","fr":"Parfois une lourde colonne d'amertume s'élève / Du côté de la Vieille Ville, / Et parfois un murmure léger de regrets / Ou une brise d'espoir qui passe.","an":"Ce quatrain développe la métaphore atmosphérique en lui donnant une dimension émotionnelle graduée. L'opposition entre עַמּוּד כָּבֵד (colonne lourde) et רַחַשׁ קַל (murmure léger) crée un chiasme sensoriel : le lourd monte, le léger effleure. Le mot מָרָה (amertume, bile) renvoie à la racine biblique de Myriam et de Naomi — une amertume ancienne, collective, historique. La Vieille Ville est la source de cette pesanteur : ses pierres portent des siècles de deuil et de conflit. La חֲרָטָה (regret, remords) introduit une introspection : la ville ne souffre pas seulement de l'extérieur, elle se repent. La brise de תִּקְוָה (espoir — mot qui est aussi le nom de l'hymne national israélien) conclut le quatrain sur une note volontairement fragile, passagère, comme si l'espoir était toujours en transit dans cette ville, jamais installé."},{"heb":"יְרוּשָׁלַיִם הִיא עִיר נָמֵל\nעַל חוֹף הָעוֹלָם הַבָּא.\nהָהָר נִשָּׂא כְּחֶרְטוֹם סְפִינָה\nטָעוּן הִיסְטוֹרְיָה וּדְמָמָה.","fr":"Jérusalem est une ville portuaire / Sur le rivage du monde à venir. / La montagne se dresse comme une proue de navire / Chargée d'histoire et de silence.","an":"Ce quatrain constitue le pivot métaphorique du poème. La métaphore maritime est audacieuse : Jérusalem, ville de montagne et d'intérieur des terres, devient un port — mais un port tourné non vers la mer Méditerranée mais vers הָעוֹלָם הַבָּא (le monde à venir, l'au-delà), concept central de la théologie juive. Le renversement géographique est total et révélateur : ce qui paraît immobile (la montagne, le rocher, la pierre) est en réalité en mouvement vers l'éternité. Le חֶרְטוֹם (proue) transforme le mont en navire fendant l'histoire. Le couple final הִיסְטוֹרְיָה וּדְמָמָה (histoire et silence) est saisissant : la דְּמָמָה est un silence actif, presque mystique — celui d'Élie sur le mont Horeb (1 Rois 19,12), la voix ténue du silence. Histoire et silence coexistent dans cette proue qui avance sans bouger."},{"heb":"וְהָאֲנָשִׁים הוֹלְכִים וָשָׁבִים עַל הָרְצִיפִים,\nצוֹעֲקִים שְׁמוֹת שֶׁל קְדוֹשִׁים וּנְבִיאִים\nכְּמוֹ רַבָּי אֳנִיּוֹת שֶׁאָבְדוּ בָּעֲרָפֶל.","fr":"Et les gens vont et viennent sur les quais, / Criant des noms de saints et de prophètes / Comme des capitaines de navires égarés dans le brouillard.","an":"Le quatrain final ramène la métaphore portuaire au niveau humain et conclut le poème sur une image poignante de désorientation. Les gens qui crient des noms de saints se comportent comme des capitaines perdus dans le brouillard : ils cherchent des repères, ils appellent au secours en utilisant les noms sacrés comme des balises. L'ironie est douce et profonde : ces croyants fervents, ces pèlerins qui semblent si sûrs de leur chemin, sont en réalité des נִוָּדִים spirituels (errants), perdus dans l'עֲרָפֶל (brouillard, nuée) — mot qui dans la Bible désigne précisément la nuée divine où Dieu se manifeste (Exode 20,18). Le brouillard est donc simultanément opacité et présence divine. Amichai ne condamne pas : il comprend que chercher dans le brouillard est peut-être la définition même de la foi à Jérusalem."}],"analyse":"Yehuda Amichai, poète israélien né en Allemagne, est le maître de la métaphore quotidienne appliquée au sacré. Dans ce poème, Jérusalem devient un espace paradoxal où le spirituel et le matériel se télescopent : les prières ressemblent à des fumées d'usine, la ville sainte à un port de commerce. La forme est libre, sans rime régulière, en trois mouvements lyriques qui progressent du ciel vers la mer, du cosmique vers l'humain égaré. Le registre oscille entre l'ironique et l'élégiaque, signature d'Amichai qui démythifie le sacré pour mieux en révéler la profondeur vivante."};
+/* ↑ VIDE — l'IA remplit mots/phrases/textes/analyse à chaque leçon. */
+
+let sansNikoud = false;
+let selCats = new Set(JEU.mots.map(m=>m.cat));
+let score = {ok:0, ko:0};
+
+const NIKOUD = /[\u0591-\u05C7]/g;
+function strip(s){ return String(s).replace(NIKOUD,''); }
+function H(s){ return sansNikoud ? strip(s) : s; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function motsF(){ return JEU.mots.filter(m=>selCats.has(m.cat)); }
+function badgeClass(c){ return ['noms','verbes','adjectifs'].includes(c) ? 'b-'+c : 'b-autre'; }
+
+function say(txt){
+  try{ speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(strip(txt)); u.lang='he-IL'; u.rate=.9;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function audioBtn(txt){ return '<button class="audio-btn" onclick="say(\''+String(txt).replace(/'/g,"\\'")+'\')">🔊 Écouter</button>'; }
+
+const TABS = [
+  {id:'mots',lbl:'Mots'},{id:'quatrains',lbl:'Quatrains'},{id:'morpho',lbl:'Morphologie'},{id:'lexique',lbl:'Lexique'},
+  {id:'phrases',lbl:'Phrases'},{id:'analyse',lbl:'Analyse'},{id:'vf',lbl:'Vrai/Faux'},
+  {id:'recon',lbl:'Reconstituer'},{id:'bilan',lbl:'Score'}
+];
+let ongletCourant = 'mots';
+function initTabs(){
+  document.getElementById('tabs').innerHTML = TABS.map(t=>
+    '<button class="tab'+(t.id===ongletCourant?' active':'')+'" onclick="showTab(\''+t.id+'\')">'+t.lbl+'</button>').join('');
+}
+function showTab(id){ ongletCourant=id; initTabs(); render(); }
+
+function initReglages(){
+  const cats = [...new Set(JEU.mots.map(m=>m.cat))];
+  let html = '<button class="chip tous'+(selCats.size===cats.length?' on':'')+'" onclick="toutesCats()">Toutes</button>';
+  html += cats.map(c=>'<button class="chip '+(selCats.has(c)?'on':'')+'" onclick="toggleCat(\''+c+'\')">'+c+'</button>').join('');
+  document.getElementById('cat-chips').innerHTML = html;
+  const sw=document.getElementById('sw-nikoud');
+  sw.className = 'switch'+(sansNikoud?'':' on');
+  sw.querySelector('span:last-child').textContent = sansNikoud ? 'Sans nikoud' : 'Avec nikoud';
+}
+function toggleNikoud(){ sansNikoud=!sansNikoud; initReglages(); render(); }
+function toggleCat(c){ if(selCats.has(c)){ if(selCats.size>1) selCats.delete(c);} else selCats.add(c); vfList=[]; initReglages(); render(); }
+function toutesCats(){ selCats = new Set(JEU.mots.map(m=>m.cat)); vfList=[]; initReglages(); render(); }
+
+function render(){
+  if(!JEU.mots || JEU.mots.length===0){
+    document.getElementById('content').innerHTML = '<div class="card center" style="padding:44px 20px;color:var(--ink3)"><div style="font-size:40px;margin-bottom:12px;color:var(--gold)">✦</div>En attente du poème.<br>Le jeu se remplit dès que l\'élève fait sa demande.</div>';
+    return;
+  }
+  const map = {mots:rMots,quatrains:rQuatrains,morpho:rMorpho,lexique:rLexique,phrases:rPhrases,textes:rTextes,analyse:rAnalyse,vf:rVF,recon:rRecon,bilan:rBilan};
+  document.getElementById('content').innerHTML = (map[ongletCourant]||(()=> ''))();
+}
+
+function rMots(){
+  return motsF().map((m,i)=>
+    '<div class="card center">'
+    + '<span class="badge '+badgeClass(m.cat)+'">'+m.cat+'</span>'
+    + '<div class="heb heb-xl">'+H(m.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(m.heb)+'</div>'
+    + '<div class="fr fr-hidden" id="fr'+i+'" onclick="this.classList.remove(\'fr-hidden\')" style="font-size:20px">'+esc(m.fr)+'</div>'
+    + '<div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(\'fr'+i+'\').classList.remove(\'fr-hidden\')">Révéler la traduction</div>'
+    + '<div class="sens">Sens : '+esc(m.sens)+'</div>'
+    + '</div>').join('');
+}
+function rMorpho(){
+  return motsF().map(m=>
+    '<div class="card">'
+    + '<div class="heb heb-lg center">'+H(m.heb)+'</div>'
+    + '<div class="morpho-row">'
+    +   '<span class="k">Racine</span><span class="morpho-he">'+m.racine+'</span>'
+    +   '<span class="k">Nature</span><span>'+esc(m.nature)+'</span>'
+    +   '<span class="k">Genre / Nombre</span><span>'+esc(m.genre)+' · '+esc(m.nombre)+'</span>'
+    +   '<span class="k">Formes</span><span class="morpho-he">'+H(m.formes)+'</span>'
+    +   '<span class="k">Emploi</span><span>'+esc(m.emploi)+'</span>'
+    + '</div></div>').join('');
+}
+function rLexique(){
+  return '<div class="card"><table class="lex"><tr><th>Hébreu</th><th>Translit.</th><th>Français</th><th>Audio</th></tr>'
+    + motsF().map(m=>'<tr><td class="he">'+H(m.heb)+'</td><td>'+esc(m.translit)+'</td><td class="fr">'+esc(m.fr)+'</td><td style="text-align:center"><button class="audio-btn" onclick="say(\''+String(m.heb).replace(/'/g,"\\'")+'\')">🔊</button></td></tr>').join('')
+    + '</table></div>';
+}
+function rPhrases(){
+  return JEU.phrases.map(p=>
+    '<div class="card">'
+    + '<div class="heb heb-md" style="text-align:right">'+H(p.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(p.heb)+'</div>'
+    + '<div class="fr">'+esc(p.fr)+'</div>'
+    + '</div>').join('');
+}
+function rTextes(){
+  return JEU.textes.map(t=>
+    '<div class="card">'
+    + '<span class="badge b-autre">'+esc(t.titre)+'</span>'
+    + '<div class="heb heb-md" style="text-align:right">'+H(t.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(t.heb)+'</div>'
+    + '<div class="fr">'+esc(t.fr)+'</div>'
+    + '</div>').join('');
+}
+
+let vfList=[], vfIdx=0;
+function rVF(){
+  if(!vfList.length) buildVF();
+  if(vfIdx>=vfList.length){
+    return '<div class="card center"><h3>Quiz terminé</h3><p style="font-size:18px;margin:10px 0">'+score.ok+' justes · '+score.ko+' erreurs</p><button class="btn btn-g" onclick="resetVF()">Recommencer</button></div>';
+  }
+  const q=vfList[vfIdx];
+  return '<div class="card q-card center" id="qc">'
+    + '<div class="heb heb-xl">'+H(q.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(q.heb)+'</div>'
+    + '<div style="font-size:12px;color:#bbb;text-transform:uppercase;letter-spacing:.8px;margin:8px 0 2px">Traduction proposée</div>'
+    + '<div class="fr" style="font-size:22px;margin-bottom:16px">'+esc(q.propose)+'</div>'
+    + '<div class="row" style="justify-content:center">'
+    +   '<button class="btn btn-v" onclick="ansVF(true)">✓ Vrai</button>'
+    +   '<button class="btn btn-f" onclick="ansVF(false)">✗ Faux</button>'
+    + '</div>'
+    + '<div id="vf-reveal" style="margin-top:12px;font-size:16px;min-height:22px"></div>'
+    + '</div>';
+}
+function buildVF(){
+  const mots=motsF(); vfList=[]; vfIdx=0;
+  mots.forEach(m=>{
+    const vrai = Math.random()<0.5;
+    let propose = m.fr;
+    if(!vrai){ const autres=mots.filter(x=>x.fr!==m.fr); propose=(autres[Math.floor(Math.random()*autres.length)]||m).fr; }
+    vfList.push({heb:m.heb, propose, vrai: propose===m.fr, bonne:m.fr});
+  });
+  vfList.sort(()=>Math.random()-0.5);
+}
+function ansVF(rep){
+  const q=vfList[vfIdx]; const bon=(rep===q.vrai);
+  bon?score.ok++:score.ko++;
+  const qc=document.getElementById('qc'); if(qc) qc.classList.add(bon?'correct':'wrong');
+  const rv=document.getElementById('vf-reveal');
+  if(rv){ rv.innerHTML = (bon?'✓ Bonne réponse':'✗ Mauvaise réponse') + ' — traduction correcte : <b>'+esc(q.bonne)+'</b>'; }
+  setTimeout(()=>{ vfIdx++; render(); },1600);
+}
+function resetVF(){ vfList=[]; vfIdx=0; render(); }
+
+let reconIdx=0, reconChoix=[], reconBank=null;
+function rRecon(){
+  const p=JEU.phrases[reconIdx];
+  const mots=strip(p.heb).split(/\s+/).filter(Boolean);
+  if(!reconBank){ reconBank = mots.map((w,i)=>({w,i})).slice().sort(()=>Math.random()-0.5); }
+  const zone = reconChoix.map(c=>'<span class="tile" onclick="reconRetire('+c.i+')">'+c.w+'</span>').join('');
+  const tiles = reconBank.map(b=>'<span class="tile'+(reconChoix.find(c=>c.i===b.i)?' used':'')+'" onclick="reconAjoute('+b.i+')">'+b.w+'</span>').join('');
+  const fini = reconChoix.length===mots.length;
+  const ok = fini && reconChoix.map(c=>c.w).join(' ')===mots.join(' ');
+  return '<div class="card">'
+    + '<div class="fr center" style="margin-bottom:6px">'+esc(p.fr)+'</div>'
+    + '<div class="center" style="margin-bottom:8px">'+audioBtn(p.heb)+'</div>'
+    + '<div class="titre-mini center">Remets les mots dans l\'ordre (droite → gauche)</div>'
+    + '<div class="zone">'+ (zone||'<span style="color:#bbb">…</span>') +'</div>'
+    + '<div class="tiles">'+tiles+'</div>'
+    + (fini ? '<div class="center" style="font-size:18px;color:'+(ok?'var(--green)':'var(--red)')+'">'+(ok?'✓ Correct !':'✗ Pas encore')+'</div>' : '')
+    + '<div class="row" style="justify-content:center;margin-top:12px">'
+    +   '<button class="btn btn-o" onclick="reconReset()">Effacer</button>'
+    +   '<button class="btn btn-g" onclick="reconNext()">Phrase suivante</button>'
+    + '</div></div>';
+}
+function reconAjoute(i){ const m=strip(JEU.phrases[reconIdx].heb).split(/\s+/)[i]; if(!reconChoix.find(c=>c.i===i)){ reconChoix.push({w:m,i}); render(); } }
+function reconRetire(i){ reconChoix=reconChoix.filter(c=>c.i!==i); render(); }
+function reconReset(){ reconChoix=[]; reconBank=null; render(); }
+function reconNext(){ reconIdx=(reconIdx+1)%JEU.phrases.length; reconChoix=[]; reconBank=null; render(); }
+
+function rQuatrains(){
+  if(!JEU.quatrains || !JEU.quatrains.length) return '<div class="card center" style="color:var(--ink3)">Aucun quatrain.</div>';
+  return JEU.quatrains.map(function(q,i){
+    return '<div class="card">'
+    + '<span class="badge b-autre">Quatrain '+(i+1)+'</span>'
+    + '<div class="heb heb-md" style="text-align:right;margin-top:6px">'+H(q.heb||'').split('\n').join('<br>')+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(q.heb||'')+'</div>'
+    + '<div class="fr" style="margin-bottom:10px">'+esc(q.fr||'').split('\n').join('<br>')+'</div>'
+    + '<div class="titre-mini">Analyse</div>'
+    + '<div class="fr" style="font-style:normal;font-size:15px;line-height:1.75">'+esc(q.an||'\u2014')+'</div>'
+    + '</div>';
+  }).join('');
+}
+function rAnalyse(){ return '<div class="card"><span class="badge b-autre">Analyse globale du poème</span><div class="fr" style="font-size:16px;line-height:1.75;margin-top:8px">'+esc(JEU.analyse||'\u2014')+'</div></div>'; }
+function rBilan(){
+  const tot=score.ok+score.ko; const pct=tot?Math.round(score.ok/tot*100):0;
+  return '<div class="card">'
+    + '<div class="bilan-pct">'+pct+'%</div>'
+    + '<div class="center titre-mini" style="margin-bottom:14px">taux de réussite</div>'
+    + '<div class="bilan-line"><span>Réponses justes</span><b style="color:var(--green)">'+score.ok+'</b></div>'
+    + '<div class="bilan-line"><span>Erreurs</span><b style="color:var(--red)">'+score.ko+'</b></div>'
+    + '<div class="bilan-line"><span>Total</span><b>'+tot+'</b></div>'
+    + '<div class="row" style="justify-content:center;margin-top:16px"><button class="btn btn-o" onclick="score={ok:0,ko:0};render()">Remettre à zéro</button></div>'
+    + '</div>';
+}
+
+function renderHeader(){
+  const h=document.getElementById('app-header'); if(!h) return;
+  const t=(JEU.titre||'Poème'); const a=(JEU.auteur||'');
+  let liens='';
+  if(JEU.youtube) liens+='<a class="lien-src" href="'+JEU.youtube+'" target="_blank" rel="noopener">▶ Écouter (YouTube)</a>';
+  if(JEU.shironet) liens+='<a class="lien-src" href="'+JEU.shironet+'" target="_blank" rel="noopener">📄 Paroles (Shironet)</a>';
+  h.innerHTML='<div class="app-heb" style="font-family:\'Playfair Display\',serif;color:var(--gold)">'+esc(t)+'</div>'
+    +'<div class="app-fr">'+(a?esc(a):'Analyse d\'un poème')+'</div>'
+    +(liens?'<div style="margin-top:8px">'+liens+'</div>':'')
+    +'<div class="ornament">✦</div>';
+}
+renderHeader(); initReglages(); initTabs(); render();
+</script>
+<style>.copyright-hz{margin:34px auto 10px;padding-top:14px;max-width:900px;border-top:1px solid rgba(201,149,42,.3);text-align:center;font-size:12px;color:var(--ink3);font-family:'Crimson Pro',serif;direction:ltr}</style>
+<div class="copyright-hz">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>
+
+
+</body></html>
