@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)https://lecons.hebreu-zen.cloud/jeu-hebreu-20260811-0759-vnku.html -->
+<html lang="fr" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème</title>
+<link href="./Chanson_files/css2" rel="stylesheet">
+<style>
+:root{
+  --cream:#0d0d0d;--parch:#161616;--ink:#e8e4dc;--ink2:#b8b2a6;--ink3:#888;
+  --gold:#c9a84c;--gold2:#e8c96a;--blue:#1a6aaa;--blue2:#70b0e0;
+  --green:#3d7a55;--red:#8b3a3a;--orange:#c9852a;--purple:#b49ee8;
+  --shadow:rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 12% 8%,rgba(201,168,76,.09) 0%,transparent 52%),
+             radial-gradient(ellipse at 88% 92%,rgba(30,95,168,.07) 0%,transparent 52%);
+  pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(201,168,76,.03) 28px,rgba(201,168,76,.03) 29px);
+  pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:26px 16px 90px}
+
+.app-header{text-align:center;margin-bottom:18px}.lien-src{display:inline-block;margin:6px 5px 0;padding:7px 14px;border:1px solid var(--gold);border-radius:8px;color:var(--gold);text-decoration:none;font-size:14px}.lien-src:hover{background:var(--gold);color:#1a1a1a}
+.app-heb{font-family:'Frank Ruhl Libre',serif;font-size:40px;font-weight:900;color:var(--ink);line-height:1.2;text-shadow:2px 2px 0 rgba(201,168,76,.13)}
+.app-fr{font-size:16px;font-style:italic;color:var(--ink2);margin-top:2px}
+.ornament{display:flex;align-items:center;justify-content:center;gap:14px;color:var(--gold);opacity:.45;margin:10px auto;width:220px}
+.ornament::before,.ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+.reglages{background:#161616;border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:12px 14px;margin-bottom:14px;box-shadow:0 2px 8px var(--shadow)}
+.reglages .titre-mini{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink3);margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid rgba(201,168,76,.3);background:rgba(201,168,76,.06);color:var(--ink2);border-radius:20px;padding:5px 13px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
+.chip.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.chip.tous{border-style:dashed}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink2)}
+.switch .box{width:44px;height:24px;border-radius:14px;background:rgba(0,0,0,.15);position:relative;transition:.2s}
+.switch .box::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.switch.on .box{background:var(--green)}
+.switch.on .box::after{left:22px}
+
+.tabs{display:flex;flex-wrap:wrap;gap:5px;background:#111;border-radius:16px;padding:5px;margin-bottom:20px;border:1px solid rgba(201,168,76,.15)}
+.tab{flex:1 0 auto;padding:9px 10px;border:none;border-radius:11px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;color:var(--ink3);background:transparent;transition:.2s}
+.tab.active{background:#1e1e1e;color:var(--ink);box-shadow:0 2px 12px var(--shadow);border:1px solid rgba(201,168,76,.22)}
+.tab:hover:not(.active){background:#1a1a1a}
+
+.card{background:#161616;border-radius:18px;padding:20px 20px;box-shadow:0 2px 0 rgba(201,168,76,.18),0 8px 28px var(--shadow);border:1px solid rgba(201,168,76,.18);margin-bottom:14px}
+.heb{font-family:'Frank Ruhl Libre',serif;direction:rtl;color:var(--ink)}
+.heb-xl{font-size:40px;font-weight:900;text-align:center;line-height:1.3}
+.heb-lg{font-size:26px;font-weight:700;line-height:1.6}
+.heb-md{font-size:20px;line-height:1.9}
+.fr{font-style:italic}
+.sens{color:var(--ink3);font-size:15px;margin-top:6px}
+.audio-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,.1);border:1.5px solid rgba(201,168,76,.3);color:var(--gold);border-radius:20px;padding:4px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;transition:.2s}
+.audio-btn:hover{background:rgba(201,168,76,.2)}
+.fr-hidden{filter:blur(7px);opacity:.4;cursor:pointer;user-select:none}
+.reveal{background:rgba(201,168,76,.08);border:1.5px solid rgba(201,168,76,.25);color:var(--gold);border-radius:9px;padding:6px 10px;cursor:pointer;font-size:14px}
+.center{text-align:center}
+.badge{display:inline-block;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.b-noms{background:var(--blue)}.b-verbes{background:var(--green)}.b-adjectifs{background:var(--purple)}.b-autre{background:var(--orange)}
+
+table.lex{width:100%;border-collapse:collapse}
+table.lex th,table.lex td{padding:9px 8px;border-bottom:1px solid rgba(201,168,76,.15);text-align:left}
+table.lex th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-size:20px;text-align:right;font-weight:700}
+.morpho-row{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:15px;margin-top:8px}
+.morpho-row .k{color:var(--ink3);font-weight:600}
+.morpho-he{font-family:'Frank Ruhl Libre',serif;direction:rtl}
+
+.btn{border:none;border-radius:12px;padding:12px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;transition:.2s}
+.btn-v{background:var(--green);color:#fff}.btn-f{background:var(--red);color:#fff}
+.btn-g{background:var(--gold);color:#fff}
+.btn-o{background:transparent;border:1.5px solid rgba(201,168,76,.35);color:var(--ink2)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.q-card.correct{background:#1a2e22;border-color:#3d7a55}
+.q-card.wrong{background:#2a1515;border-color:#8b3a3a}
+
+.tiles{display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center;margin:14px 0;min-height:44px}
+.tile{font-family:'Frank Ruhl Libre',serif;font-size:20px;background:rgba(201,168,76,.12);border:1.5px solid rgba(201,168,76,.35);border-radius:10px;padding:6px 12px;cursor:pointer}
+.tile.used{opacity:.3;pointer-events:none}
+.zone{min-height:48px;border:2px dashed rgba(201,168,76,.3);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center}
+
+.bilan-pct{font-size:56px;font-weight:900;text-align:center;color:var(--gold)}
+.bilan-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(201,168,76,.15);font-size:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="app-header" id="app-header"></div>
+
+  <div class="reglages">
+    <div class="titre-mini">Réglages</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div class="switch on" id="sw-nikoud" onclick="toggleNikoud()"><span class="box"></span><span>Avec nikoud</span></div>
+    </div>
+    <div class="titre-mini" style="margin-top:12px">Catégories</div>
+    <div class="chips" id="cat-chips"><button class="chip tous on" onclick="toutesCats()">Toutes</button><button class="chip on" onclick="toggleCat(&#39;adjectifs&#39;)">adjectifs</button><button class="chip on" onclick="toggleCat(&#39;verbes&#39;)">verbes</button><button class="chip on" onclick="toggleCat(&#39;noms&#39;)">noms</button><button class="chip on" onclick="toggleCat(&#39;autre&#39;)">autre</button></div>
+  </div>
+
+  <div class="tabs" id="tabs"><button class="tab active" onclick="showTab(&#39;mots&#39;)">Mots</button><button class="tab" onclick="showTab(&#39;morpho&#39;)">Morphologie</button><button class="tab" onclick="showTab(&#39;lexique&#39;)">Lexique</button><button class="tab" onclick="showTab(&#39;phrases&#39;)">Phrases</button><button class="tab" onclick="showTab(&#39;analyse&#39;)">Analyse</button><button class="tab" onclick="showTab(&#39;vf&#39;)">Vrai/Faux</button><button class="tab" onclick="showTab(&#39;recon&#39;)">Reconstituer</button><button class="tab" onclick="showTab(&#39;bilan&#39;)">Score</button></div>
+  <div id="content"><div class="card center"><span class="badge b-adjectifs">adjectifs</span><div class="heb heb-xl">עָשִׁיר</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;עָשִׁיר&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr0" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">riche</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr0&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : adjectif masculin singulier</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">בּוֹנֶה</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;בּוֹנֶה&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr1" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">bâtissant / qui bâtit</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr1&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe בנה, binyan Pa'al, participe présent masculin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מַדְרֵגוֹת</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מַדְרֵגוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr2" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">escaliers / marches</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr2&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom féminin pluriel</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">גַּבִּיר</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;גַּבִּיר&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr3" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">notable / homme riche et influent</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr3&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">אַוָּזִים</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;אַוָּזִים&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr4" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">oies</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr4&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin pluriel</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">בַּרְוָזִים</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;בַּרְוָזִים&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr5" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">canards</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr5&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin pluriel</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מִרְפֶּסֶת</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִרְפֶּסֶת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr6" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">balcon / véranda</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr6&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom féminin singulier</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">מִתְנַפַּחַת</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִתְנַפַּחַת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr7" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">se rengorgeant / se gonflant d'orgueil</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr7&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe נפח, binyan Hitpa'el, participe présent féminin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">טַוָּס</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;טַוָּס&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr8" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">paon</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr8&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">עֵצָה</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;עֵצָה&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr9" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">conseil / avis</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr9&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom féminin singulier</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מִנְהָג</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִנְהָג&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr10" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">coutume / usage</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr10&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : nom masculin singulier</div></div><div class="card center"><span class="badge b-autre">autre</span><div class="heb heb-xl">בֵּית הַמִּדְרָשׁ</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;בֵּית הַמִּדְרָשׁ&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr11" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">maison d'étude / maison de prière</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr11&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : expression nominale masculine singulier défini</div></div><div class="card center"><span class="badge b-autre">autre</span><div class="heb heb-xl">כֹּתֶל הַמִּזְרָח</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;כֹּתֶל הַמִּזְרָח&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr12" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">le mur est / place d'honneur orientale dans la synagogue</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr12&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : expression nominale masculine singulier défini</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">מוֹשִׁיעָם</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מוֹשִׁיעָם&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr13" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">leur sauveur / celui qui les sauve</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr13&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe ישע, binyan Hif'il, participe présent ms avec suffixe 3mp</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">נִגְרַע</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;נִגְרַע&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr14" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">serait-il retranché / perdu / manquerait-il</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr14&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : verbe גרע, binyan Nif'al, passé 3ms (ici valeur conditionnelle)</div></div></div>
+</div>
+
+<script>
+/* ============================================================
+   STRUCTURE "JEU" = LE CONTRAT que l'IA devra remplir à chaque leçon.
+   ============================================================ */
+const JEU = {"titre":"Leah Goldberg","auteur":"Jours Blacs","youtube":"","shironet":"","mots":[{"heb":"יָמַי","translit":"yamai","fr":"mes jours","sens":"nom masculin pluriel construit avec suffixe 1ère personne singulier","racine":"י-ו-מ","nature":"nom","genre":"m","nombre":"pl","formes":"יוֹם · יָמִים · יְמֵי","cat":"noms","emploi":"יָמַי חֲקוּקִים בְּשִׁירַי — mes jours sont gravés dans mes poèmes"},{"heb":"חֲקוּקִים","translit":"khakoukim","fr":"gravés, inscrits","sens":"participe passif (pual) masculin pluriel","racine":"ח-ק-ק","nature":"adjectif","genre":"m","nombre":"pl","formes":"חָקַק · חָקוּק · חֲקוּקָה","cat":"adjectifs","emploi":"le verbe חָקַק désigne l'acte de graver dans la pierre ou le bois, connotant une inscription durable et irréversible"},{"heb":"שִׁירַי","translit":"shirai","fr":"mes poèmes","sens":"nom masculin pluriel construit avec suffixe 1ère personne singulier","racine":"ש-י-ר","nature":"nom","genre":"m","nombre":"pl","formes":"שִׁיר · שִׁירִים · שִׁירֵי","cat":"noms","emploi":"שִׁיר désigne le chant ou le poème, unité fondamentale de la création lyrique hébraïque"},{"heb":"קְמָטֵי","translit":"kemate","fr":"les rides de","sens":"nom masculin pluriel construit","racine":"ק-מ-ט","nature":"nom","genre":"m","nombre":"pl","formes":"קֶמֶט · קְמָטִים","cat":"noms","emploi":"קְמָטִים désigne les rides du visage, marques corporelles du temps qui passe"},{"heb":"מִצְחִי","translit":"mitsekhi","fr":"mon front","sens":"nom masculin singulier avec suffixe 1ère personne singulier","racine":"מ-צ-ח","nature":"nom","genre":"m","nombre":"sg","formes":"מֵצַח · מִצְחוֹ","cat":"noms","emploi":"מֵצַח désigne le front, ici symbole du corps comme archive du temps vécu"},{"heb":"טַבְּעוֹת","translit":"tabbaot","fr":"anneaux, cernes","sens":"nom féminin pluriel absolu","racine":"ט-ב-ע","nature":"nom","genre":"f","nombre":"pl","formes":"טַבַּעַת · טַבְּעוֹת · טַבְּעוֹת עֵץ","cat":"noms","emploi":"טַבַּעַת désigne l'anneau ou le cercle ; au pluriel, il s'agit ici des cernes de croissance d'un arbre"},{"heb":"קָשׁוֹת","translit":"kashot","fr":"difficiles, durs, hermétiques","sens":"adjectif féminin pluriel","racine":"ק-ש-ה","nature":"adjectif","genre":"f","nombre":"pl","formes":"קָשֶׁה · קָשָׁה · קָשִׁים","cat":"adjectifs","emploi":"מִלִּים קָשׁוֹת désigne des mots durs ou obscurs, que la poète dit rejeter au profit de la clarté"},{"heb":"שַׁסְפָּעוֹת","translit":"shasphaot","fr":"valves, écluses, vannes","sens":"nom féminin pluriel absolu","racine":"ש-ס-פ-ע","nature":"nom","genre":"f","nombre":"pl","formes":"שַׁסְפָּעָה","cat":"noms","emploi":"שַׁסְפָּעוֹת שֶׁל אַשְׁלָיָה désigne les artifices rhétoriques qui filtrent ou occultent la réalité, comme des vannes qui contrôlent le flux"},{"heb":"אַשְׁלָיָה","translit":"ashlaya","fr":"illusion, chimère","sens":"nom féminin singulier absolu","racine":"ש-ל-ה","nature":"nom","genre":"f","nombre":"sg","formes":"אַשְׁלָיוֹת · הִשְׁלָה","cat":"noms","emploi":"אַשְׁלָיָה désigne une illusion ou une tromperie ; ici, les mots obscurs sont accusés de créer de fausses apparences poétiques"},{"heb":"תְּמוּנוֹתַי","translit":"temonotai","fr":"mes images","sens":"nom féminin pluriel avec suffixe 1ère personne singulier","racine":"ת-מ-נ","nature":"nom","genre":"f","nombre":"pl","formes":"תְּמוּנָה · תְּמוּנוֹת","cat":"noms","emploi":"תְּמוּנָה désigne l'image ou la représentation ; au sens poétique, ce sont les images lyriques, les métaphores"},{"heb":"שְׁקוּפוֹת","translit":"shkoufot","fr":"transparentes","sens":"adjectif féminin pluriel","racine":"ש-ק-פ","nature":"adjectif","genre":"f","nombre":"pl","formes":"שָׁקוּף · שְׁקוּפִים · שְׁקִיפוּת","cat":"adjectifs","emploi":"שָׁקוּף désigne ce qui est transparent, limpide ; qualité revendiquée par Goldberg pour son écriture"},{"heb":"חַלּוֹנוֹת","translit":"khalonot","fr":"fenêtres","sens":"nom masculin pluriel absolu","racine":"ח-ל-נ","nature":"nom","genre":"m","nombre":"pl","formes":"חַלּוֹן · חַלּוֹנוֹת · חַלּוֹן הַכְּנֵסִיָּה","cat":"noms","emploi":"חַלּוֹן désigne la fenêtre ; ici en métaphore des poèmes comme ouvertures sur la réalité intérieure"},{"heb":"כְּנֵסִיָּה","translit":"knessiya","fr":"église","sens":"nom féminin singulier absolu","racine":"כ-נ-ס","nature":"nom","genre":"f","nombre":"sg","formes":"כְּנֵסִיּוֹת · בֵּית כְּנֶסֶת","cat":"noms","emploi":"כְּנֵסִיָּה désigne l'église chrétienne ; Goldberg, poète d'origine européenne, convoque une image architecturale et spirituelle pour parler de la lumière filtrée par l'art"},{"heb":"אֲהָבוֹתַי","translit":"ahavotai","fr":"mes amours","sens":"nom féminin pluriel avec suffixe 1ère personne singulier","racine":"א-ה-ב","nature":"nom","genre":"f","nombre":"pl","formes":"אַהֲבָה · אֲהָבוֹת · לֶאֱהֹב","cat":"noms","emploi":"אַהֲבָה désigne l'amour ; au pluriel et à la première personne, ce sont les expériences amoureuses vécues par la poète"},{"heb":"גּוֹסְסוֹת","translit":"gossot","fr":"agonisantes, mourantes","sens":"participe actif qal féminin pluriel","racine":"ג-ס-ס","nature":"adjectif","genre":"f","nombre":"pl","formes":"גּוֹסֵס · גְּסִיסָה · גָּסַס","cat":"adjectifs","emploi":"גּוֹסֵס désigne celui ou celle qui est en agonie, entre la vie et la mort ; terme médical et existentiel d'une précision saisissante"}],"phrases":[{"heb":"יָמַי חֲקוּקִים בְּשִׁירַי","fr":"Mes jours sont gravés dans mes poèmes"},{"heb":"יָמַי חֲקוּקִים בְּשִׁירַי","fr":"Mes jours sont gravés dans mes poèmes"},{"heb":"יָמַי חֲקוּקִים בְּשִׁירַי","fr":"Mes jours sont gravés dans mes poèmes"},{"heb":"כִּשְׁנוֹת חַיַּי בְּקְמָטֵי מִצְחִי","fr":"telles les années de ma vie dans les rides de mon front"},{"heb":"כִּשְׁנוֹת חַיַּי בְּקְמָטֵי מִצְחִי","fr":"telles les années de ma vie dans les rides de mon front"},{"heb":"כִּשְׁנִים בְּטַבְּעוֹת עֵץ","fr":"telles les années dans les anneaux d'un arbre"},{"heb":"אֵין לִי מִלִּים קָשׁוֹת","fr":"Je ne possède pas de mots difficiles"},{"heb":"שַׁסְפָּעוֹת שֶׁל אַשְׁלָיָה","fr":"des valves d'illusion"},{"heb":"שַׁסְפָּעוֹת שֶׁל אַשְׁלָיָה","fr":"des valves d'illusion"},{"heb":"תְּמוּנוֹתַי שְׁקוּפוֹת","fr":"Mes images sont transparentes"},{"heb":"תְּמוּנוֹתַי שְׁקוּפוֹת","fr":"Mes images sont transparentes"},{"heb":"כְּחַלּוֹנוֹת שֶׁל כְּנֵסִיָּה","fr":"que les fenêtres d'une église"},{"heb":"כְּחַלּוֹנוֹת שֶׁל כְּנֵסִיָּה","fr":"que les fenêtres d'une église"},{"heb":"וְאֵיךְ אֲהָבוֹתַי נוֹפְלוֹת כְּצִפֳּרִים גּוֹסְסוֹת","fr":"et comment mes amours défaillent tels des oiseaux mourants"},{"heb":"נוֹפְלוֹת כְּצִפֳּרִים גּוֹסְסוֹת","fr":"défaillent tels des oiseaux mourants"}],"quatrains":[{"heb":"יָמַי חֲקוּקִים בְּשִׁירַי\nכִּשְׁנוֹת חַיַּי בְּקְמָטֵי מִצְחִי\nכִּשְׁנִים בְּטַבְּעוֹת עֵץ","fr":"Mes jours sont gravés dans mes poèmes / telles les années de ma vie dans les rides de mon front / telles les années dans les anneaux d'un arbre","an":"Ce premier quatrain pose l'analogie fondatrice du poème : le texte poétique est une forme de mémoire organique, comparable aux cernes d'un arbre ou aux rides du visage. Le verbe חָקַק (graver, inscrire) convoque immédiatement un registre d'écriture lapidaire, presque sacrale — on grave dans la pierre, dans le bois, dans la chair du temps. Les trois termes de la comparaison (poèmes, rides, anneaux) forment une chaîne métaphorique cohérente : tous sont des inscriptions involontaires du passage du temps sur un support vivant. La syntaxe parallèle des deux comparaisons en כִּ (comme) crée un effet de triade ascendante, du plus intime (le front, le corps) au plus naturel et universel (l'arbre). Le registre est sobre, presque classique, sans effusion. Goldberg refuse le pathos : la douleur du temps qui passe est simplement constatée, tracée, sans plainte."},{"heb":"אֵין לִי מִלִּים קָשׁוֹת —\nשַׁסְפָּעוֹת שֶׁל אַשְׁלָיָה.\nתְּמוּנוֹתַי שְׁקוּפוֹת\nכְּחַלּוֹנוֹת שֶׁל כְּנֵסִיָּה","fr":"Je ne possède pas de mots difficiles — / des valves d'illusion. / Mes images sont aussi transparentes / que les fenêtres d'une église","an":"Ce deuxième quatrain constitue une déclaration de poétique. La poète affirme ne pas recourir aux mots obscurs ou hermétiques, qu'elle assimile à des שַׁסְפָּעוֹת שֶׁל אַשְׁלָיָה — terme rare et fort, désignant des valves ou écluses : des artifices rhétoriques qui filtrent la réalité et créent l'illusion. La négation אֵין לִי (il n'y a pas pour moi) est une formule d'humilité volontaire, presque programmatique. L'image centrale des fenêtres d'église est remarquable : les vitraux laissent passer la lumière tout en la colorant, ils sont à la fois transparents et symboliques. Goldberg revendique cette double qualité pour sa propre écriture — claire dans sa forme, mais chargée de sens spirituel et émotionnel. La syntaxe est elliptique, les vers courts : la forme épouse le contenu, illustrant la transparence revendiquée."},{"heb":"דֶּרֶךְ חַלּוֹנוֹתַי\nנִרְאֶה אֵיךְ אוֹר הַשָּׁמַיִם מִשְׁתַּנֶּה\nוְאֵיךְ אֲהָבוֹתַי\nנוֹפְלוֹת כְּצִפֳּרִים גּוֹסְסוֹת","fr":"À travers elles / on peut voir comment la lumière du ciel change / et comment mes amours / défaillent tels des oiseaux mourants","an":"Ce dernier quatrain est le plus lyrique et le plus douloureux. La métaphore des fenêtres établie au quatrain précédent se prolonge ici : c'est à travers les poèmes-fenêtres que le lecteur perçoit deux réalités simultanées — la lumière changeante du ciel (le temps cosmique, objectif) et les amours qui s'éteignent (le temps intime, subjectif). Le verbe נוֹפְלוֹת (tomber, choir) appliqué aux amours est d'une violence contenue : les amours ne meurent pas — elles tombent, comme des oiseaux blessés qui perdent leur vol. L'image des צִפֳּרִים גּוֹסְסוֹת (oiseaux agonisants) est bouleversante par sa précision : le participe גּוֹסֵס désigne spécifiquement l'agonie, le moment entre la vie et la mort. La structure en אֵיךְ... וְאֵיךְ (comment... et comment) crée un parallélisme douloureux entre le mouvement du ciel et la chute des sentiments."}],"analyse":"Ce poème de Léa Goldberg, extrait du recueil 'Jours bleus' (יָמִים כְּחֻלִּים), témoigne de la poétique de la transparence et de la mémoire propre à cette grande voix de la littérature hébraïque moderne. Goldberg construit une réflexion sur l'écriture poétique elle-même : le poème est à la fois trace du temps vécu et fenêtre ouverte sur l'intériorité. La forme est celle du poème en vers libres, sans rime régulière, ce qui renforce l'impression d'une parole directe, presque confessionnelle. Le thème central est la tension entre la fragilité de l'existence — amours qui s'éteignent, temps qui passe — et la permanence de l'écriture comme mémoire inscrite. Le registre oscille entre l'intime et le métaphysique, avec une sobriété stylistique caractéristique de Goldberg, qui refuse l'ornement superflu au profit d'images lumineuses et précises."};
+/* ↑ VIDE — l'IA remplit mots/phrases/textes/analyse à chaque leçon. */
+
+let sansNikoud = false;
+let selCats = new Set(JEU.mots.map(m=>m.cat));
+let score = {ok:0, ko:0};
+
+const NIKOUD = /[\u0591-\u05C7]/g;
+function strip(s){ return String(s).replace(NIKOUD,''); }
+function H(s){ return sansNikoud ? strip(s) : s; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function motsF(){ return JEU.mots.filter(m=>selCats.has(m.cat)); }
+function badgeClass(c){ return ['noms','verbes','adjectifs'].includes(c) ? 'b-'+c : 'b-autre'; }
+
+function say(txt){
+  try{ speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(strip(txt)); u.lang='he-IL'; u.rate=.9;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function audioBtn(txt){ return '<button class="audio-btn" onclick="say(\''+String(txt).replace(/'/g,"\\'")+'\')">🔊 Écouter</button>'; }
+
+const TABS = [
+  {id:'mots',lbl:'Mots'},{id:'quatrains',lbl:'Quatrains'},{id:'morpho',lbl:'Morphologie'},{id:'lexique',lbl:'Lexique'},
+  {id:'phrases',lbl:'Phrases'},{id:'analyse',lbl:'Analyse'},{id:'vf',lbl:'Vrai/Faux'},
+  {id:'recon',lbl:'Reconstituer'},{id:'bilan',lbl:'Score'}
+];
+let ongletCourant = 'mots';
+function initTabs(){
+  document.getElementById('tabs').innerHTML = TABS.map(t=>
+    '<button class="tab'+(t.id===ongletCourant?' active':'')+'" onclick="showTab(\''+t.id+'\')">'+t.lbl+'</button>').join('');
+}
+function showTab(id){ ongletCourant=id; initTabs(); render(); }
+
+function initReglages(){
+  const cats = [...new Set(JEU.mots.map(m=>m.cat))];
+  let html = '<button class="chip tous'+(selCats.size===cats.length?' on':'')+'" onclick="toutesCats()">Toutes</button>';
+  html += cats.map(c=>'<button class="chip '+(selCats.has(c)?'on':'')+'" onclick="toggleCat(\''+c+'\')">'+c+'</button>').join('');
+  document.getElementById('cat-chips').innerHTML = html;
+  const sw=document.getElementById('sw-nikoud');
+  sw.className = 'switch'+(sansNikoud?'':' on');
+  sw.querySelector('span:last-child').textContent = sansNikoud ? 'Sans nikoud' : 'Avec nikoud';
+}
+function toggleNikoud(){ sansNikoud=!sansNikoud; initReglages(); render(); }
+function toggleCat(c){ if(selCats.has(c)){ if(selCats.size>1) selCats.delete(c);} else selCats.add(c); vfList=[]; initReglages(); render(); }
+function toutesCats(){ selCats = new Set(JEU.mots.map(m=>m.cat)); vfList=[]; initReglages(); render(); }
+
+function render(){
+  if(!JEU.mots || JEU.mots.length===0){
+    document.getElementById('content').innerHTML = '<div class="card center" style="padding:44px 20px;color:var(--ink3)"><div style="font-size:40px;margin-bottom:12px;color:var(--gold)">✦</div>En attente du poème.<br>Le jeu se remplit dès que l\'élève fait sa demande.</div>';
+    return;
+  }
+  const map = {mots:rMots,quatrains:rQuatrains,morpho:rMorpho,lexique:rLexique,phrases:rPhrases,textes:rTextes,analyse:rAnalyse,vf:rVF,recon:rRecon,bilan:rBilan};
+  document.getElementById('content').innerHTML = (map[ongletCourant]||(()=> ''))();
+}
+
+function rMots(){
+  return motsF().map((m,i)=>
+    '<div class="card center">'
+    + '<span class="badge '+badgeClass(m.cat)+'">'+m.cat+'</span>'
+    + '<div class="heb heb-xl">'+H(m.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(m.heb)+'</div>'
+    + '<div class="fr fr-hidden" id="fr'+i+'" onclick="this.classList.remove(\'fr-hidden\')" style="font-size:20px">'+esc(m.fr)+'</div>'
+    + '<div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(\'fr'+i+'\').classList.remove(\'fr-hidden\')">Révéler la traduction</div>'
+    + '<div class="sens">Sens : '+esc(m.sens)+'</div>'
+    + '</div>').join('');
+}
+function rMorpho(){
+  return motsF().map(m=>
+    '<div class="card">'
+    + '<div class="heb heb-lg center">'+H(m.heb)+'</div>'
+    + '<div class="morpho-row">'
+    +   '<span class="k">Racine</span><span class="morpho-he">'+m.racine+'</span>'
+    +   '<span class="k">Nature</span><span>'+esc(m.nature)+'</span>'
+    +   '<span class="k">Genre / Nombre</span><span>'+esc(m.genre)+' · '+esc(m.nombre)+'</span>'
+    +   '<span class="k">Formes</span><span class="morpho-he">'+H(m.formes)+'</span>'
+    +   '<span class="k">Emploi</span><span>'+esc(m.emploi)+'</span>'
+    + '</div></div>').join('');
+}
+function rLexique(){
+  return '<div class="card"><table class="lex"><tr><th>Hébreu</th><th>Translit.</th><th>Français</th><th>Audio</th></tr>'
+    + motsF().map(m=>'<tr><td class="he">'+H(m.heb)+'</td><td>'+esc(m.translit)+'</td><td class="fr">'+esc(m.fr)+'</td><td style="text-align:center"><button class="audio-btn" onclick="say(\''+String(m.heb).replace(/'/g,"\\'")+'\')">🔊</button></td></tr>').join('')
+    + '</table></div>';
+}
+function rPhrases(){
+  return JEU.phrases.map(p=>
+    '<div class="card">'
+    + '<div class="heb heb-md" style="text-align:right">'+H(p.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(p.heb)+'</div>'
+    + '<div class="fr">'+esc(p.fr)+'</div>'
+    + '</div>').join('');
+}
+function rTextes(){
+  return JEU.textes.map(t=>
+    '<div class="card">'
+    + '<span class="badge b-autre">'+esc(t.titre)+'</span>'
+    + '<div class="heb heb-md" style="text-align:right">'+H(t.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(t.heb)+'</div>'
+    + '<div class="fr">'+esc(t.fr)+'</div>'
+    + '</div>').join('');
+}
+
+let vfList=[], vfIdx=0;
+function rVF(){
+  if(!vfList.length) buildVF();
+  if(vfIdx>=vfList.length){
+    return '<div class="card center"><h3>Quiz terminé</h3><p style="font-size:18px;margin:10px 0">'+score.ok+' justes · '+score.ko+' erreurs</p><button class="btn btn-g" onclick="resetVF()">Recommencer</button></div>';
+  }
+  const q=vfList[vfIdx];
+  return '<div class="card q-card center" id="qc">'
+    + '<div class="heb heb-xl">'+H(q.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(q.heb)+'</div>'
+    + '<div style="font-size:12px;color:#bbb;text-transform:uppercase;letter-spacing:.8px;margin:8px 0 2px">Traduction proposée</div>'
+    + '<div class="fr" style="font-size:22px;margin-bottom:16px">'+esc(q.propose)+'</div>'
+    + '<div class="row" style="justify-content:center">'
+    +   '<button class="btn btn-v" onclick="ansVF(true)">✓ Vrai</button>'
+    +   '<button class="btn btn-f" onclick="ansVF(false)">✗ Faux</button>'
+    + '</div>'
+    + '<div id="vf-reveal" style="margin-top:12px;font-size:16px;min-height:22px"></div>'
+    + '</div>';
+}
+function buildVF(){
+  const mots=motsF(); vfList=[]; vfIdx=0;
+  mots.forEach(m=>{
+    const vrai = Math.random()<0.5;
+    let propose = m.fr;
+    if(!vrai){ const autres=mots.filter(x=>x.fr!==m.fr); propose=(autres[Math.floor(Math.random()*autres.length)]||m).fr; }
+    vfList.push({heb:m.heb, propose, vrai: propose===m.fr, bonne:m.fr});
+  });
+  vfList.sort(()=>Math.random()-0.5);
+}
+function ansVF(rep){
+  const q=vfList[vfIdx]; const bon=(rep===q.vrai);
+  bon?score.ok++:score.ko++;
+  const qc=document.getElementById('qc'); if(qc) qc.classList.add(bon?'correct':'wrong');
+  const rv=document.getElementById('vf-reveal');
+  if(rv){ rv.innerHTML = (bon?'✓ Bonne réponse':'✗ Mauvaise réponse') + ' — traduction correcte : <b>'+esc(q.bonne)+'</b>'; }
+  setTimeout(()=>{ vfIdx++; render(); },1600);
+}
+function resetVF(){ vfList=[]; vfIdx=0; render(); }
+
+let reconIdx=0, reconChoix=[], reconBank=null;
+function rRecon(){
+  const p=JEU.phrases[reconIdx];
+  const mots=strip(p.heb).split(/\s+/).filter(Boolean);
+  if(!reconBank){ reconBank = mots.map((w,i)=>({w,i})).slice().sort(()=>Math.random()-0.5); }
+  const zone = reconChoix.map(c=>'<span class="tile" onclick="reconRetire('+c.i+')">'+c.w+'</span>').join('');
+  const tiles = reconBank.map(b=>'<span class="tile'+(reconChoix.find(c=>c.i===b.i)?' used':'')+'" onclick="reconAjoute('+b.i+')">'+b.w+'</span>').join('');
+  const fini = reconChoix.length===mots.length;
+  const ok = fini && reconChoix.map(c=>c.w).join(' ')===mots.join(' ');
+  return '<div class="card">'
+    + '<div class="fr center" style="margin-bottom:6px">'+esc(p.fr)+'</div>'
+    + '<div class="center" style="margin-bottom:8px">'+audioBtn(p.heb)+'</div>'
+    + '<div class="titre-mini center">Remets les mots dans l\'ordre (droite → gauche)</div>'
+    + '<div class="zone">'+ (zone||'<span style="color:#bbb">…</span>') +'</div>'
+    + '<div class="tiles">'+tiles+'</div>'
+    + (fini ? '<div class="center" style="font-size:18px;color:'+(ok?'var(--green)':'var(--red)')+'">'+(ok?'✓ Correct !':'✗ Pas encore')+'</div>' : '')
+    + '<div class="row" style="justify-content:center;margin-top:12px">'
+    +   '<button class="btn btn-o" onclick="reconReset()">Effacer</button>'
+    +   '<button class="btn btn-g" onclick="reconNext()">Phrase suivante</button>'
+    + '</div></div>';
+}
+function reconAjoute(i){ const m=strip(JEU.phrases[reconIdx].heb).split(/\s+/)[i]; if(!reconChoix.find(c=>c.i===i)){ reconChoix.push({w:m,i}); render(); } }
+function reconRetire(i){ reconChoix=reconChoix.filter(c=>c.i!==i); render(); }
+function reconReset(){ reconChoix=[]; reconBank=null; render(); }
+function reconNext(){ reconIdx=(reconIdx+1)%JEU.phrases.length; reconChoix=[]; reconBank=null; render(); }
+
+function rQuatrains(){
+  if(!JEU.quatrains || !JEU.quatrains.length) return '<div class="card center" style="color:var(--ink3)">Aucun quatrain.</div>';
+  return JEU.quatrains.map(function(q,i){
+    return '<div class="card">'
+    + '<span class="badge b-autre">Quatrain '+(i+1)+'</span>'
+    + '<div class="heb heb-md" style="text-align:right;margin-top:6px">'+H(q.heb||'').split('\n').join('<br>')+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(q.heb||'')+'</div>'
+    + '<div class="fr" style="margin-bottom:10px">'+esc(q.fr||'').split('\n').join('<br>')+'</div>'
+    + '<div class="titre-mini">Analyse</div>'
+    + '<div class="fr" style="font-style:normal;font-size:15px;line-height:1.75">'+esc(q.an||'\u2014')+'</div>'
+    + '</div>';
+  }).join('');
+}
+function rAnalyse(){ return '<div class="card"><span class="badge b-autre">Analyse globale du poème</span><div class="fr" style="font-size:16px;line-height:1.75;margin-top:8px">'+esc(JEU.analyse||'\u2014')+'</div></div>'; }
+function rBilan(){
+  const tot=score.ok+score.ko; const pct=tot?Math.round(score.ok/tot*100):0;
+  return '<div class="card">'
+    + '<div class="bilan-pct">'+pct+'%</div>'
+    + '<div class="center titre-mini" style="margin-bottom:14px">taux de réussite</div>'
+    + '<div class="bilan-line"><span>Réponses justes</span><b style="color:var(--green)">'+score.ok+'</b></div>'
+    + '<div class="bilan-line"><span>Erreurs</span><b style="color:var(--red)">'+score.ko+'</b></div>'
+    + '<div class="bilan-line"><span>Total</span><b>'+tot+'</b></div>'
+    + '<div class="row" style="justify-content:center;margin-top:16px"><button class="btn btn-o" onclick="score={ok:0,ko:0};render()">Remettre à zéro</button></div>'
+    + '</div>';
+}
+
+function renderHeader(){
+  const h=document.getElementById('app-header'); if(!h) return;
+  const t=(JEU.titre||'Poème'); const a=(JEU.auteur||'');
+  let liens='';
+  if(JEU.youtube) liens+='<a class="lien-src" href="'+JEU.youtube+'" target="_blank" rel="noopener">▶ Écouter (YouTube)</a>';
+  if(JEU.shironet) liens+='<a class="lien-src" href="'+JEU.shironet+'" target="_blank" rel="noopener">📄 Paroles (Shironet)</a>';
+  h.innerHTML='<div class="app-heb" style="font-family:\'Playfair Display\',serif;color:var(--gold)">'+esc(t)+'</div>'
+    +'<div class="app-fr">'+(a?esc(a):'Analyse d\'un poème')+'</div>'
+    +(liens?'<div style="margin-top:8px">'+liens+'</div>':'')
+    +'<div class="ornament">✦</div>';
+}
+renderHeader(); initReglages(); initTabs(); render();
+</script>
+<style>.copyright-hz{margin:34px auto 10px;padding-top:14px;max-width:900px;border-top:1px solid rgba(201,149,42,.3);text-align:center;font-size:12px;color:var(--ink3);font-family:'Crimson Pro',serif;direction:ltr}</style>
+<div class="copyright-hz">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>
+
+
+</body></html>
