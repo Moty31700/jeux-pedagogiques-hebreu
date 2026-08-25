@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"Leah Goldberg","auteur":"Jours Blacs","youtube":"","shironet":"","mots":[{"heb":"יָמַי","translit":"yamaï","fr":"mes jours","sens":"nom masculin pluriel + suffixe possessif 1sg","racine":"י-ו-מ","nature":"nom","genre":"m","nombre":"pl","formes":"יָמִים · יוֹם","cat":"noms","emploi":"יָמַי חֲקוּקִים בְּשִׁירַי — mes jours sont gravés dans mes poèmes"},{"heb":"חֲקוּקִים","translit":"khakoukim","fr":"gravés, inscrits","sens":"participe passif (קַטּוּל) masculin pluriel","racine":"ח-ק-ק","nature":"adjectif","genre":"m","nombre":"pl","formes":"חָקַק · חָקוּק","cat":"adjectifs","emploi":"Le verbe חֲקוּקִים évoque une inscription durable comme sur la pierre ou le bois"},{"heb":"שִׁירַי","translit":"chiray","fr":"mes poèmes","sens":"nom masculin pluriel + suffixe possessif 1sg","racine":"ש-י-ר","nature":"nom","genre":"m","nombre":"pl","formes":"שִׁיר · שִׁירִים","cat":"noms","emploi":"שִׁירַי désigne l'ensemble de l'œuvre poétique de la locutrice"},{"heb":"קְמָטֵי","translit":"kmatey","fr":"les rides de","sens":"nom masculin pluriel construit","racine":"ק-מ-ט","nature":"nom","genre":"m","nombre":"pl","formes":"קֶמֶט · קְמָטִים","cat":"noms","emploi":"קְמָטֵי מִצְחִי désigne les rides du front comme marques corporelles du temps"},{"heb":"מִצְחִי","translit":"mitskhî","fr":"mon front","sens":"nom masculin singulier + suffixe possessif 1sg","racine":"מ-צ-ח","nature":"nom","genre":"m","nombre":"sg","formes":"מֵצַח","cat":"noms","emploi":"מִצְחִי est le siège visible du passage du temps sur le visage de la poétesse"},{"heb":"טַבְּעוֹתָיו","translit":"tabbéotav","fr":"ses anneaux","sens":"nom féminin pluriel + suffixe possessif 3sg masc.","racine":"ט-ב-ע","nature":"nom","genre":"f","nombre":"pl","formes":"טַבַּעַת · טַבָּעוֹת","cat":"noms","emploi":"טַבְּעוֹתָיו renvoie aux anneaux de croissance de l'arbre, métaphore du temps qui s'accumule"},{"heb":"מִלִּים קָשׁוֹת","translit":"millim kashot","fr":"des mots difficiles","sens":"syntagme nominal : nom féminin pluriel + adjectif féminin pluriel","racine":"מ-ל-ל / ק-ש-ה","nature":"expression","genre":"f","nombre":"pl","formes":"מִלָּה · קָשֶׁה","cat":"autre","emploi":"מִלִּים קָשׁוֹת représente une poésie hermétique que Goldberg refuse d'employer"},{"heb":"שַׁסְפָּסִים","translit":"chaspasim","fr":"valves, clapets, battants","sens":"nom masculin pluriel absolu, terme technique rare","racine":"ש-פ-ס","nature":"nom","genre":"m","nombre":"pl","formes":"שַׁסְפָּס","cat":"noms","emploi":"שַׁסְפָּסִים désigne ici des mécanismes qui bloquent le passage du sens, métaphore d'une poésie fermée"},{"heb":"אַשְׁלָיָה","translit":"ashlayah","fr":"illusion, leurre","sens":"nom féminin singulier absolu","racine":"ש-ל-ה","nature":"nom","genre":"f","nombre":"sg","formes":"לְהַשְׁלוֹת","cat":"noms","emploi":"אַשְׁלָיָה qualifie la fausse profondeur d'une poésie obscure qui trompe le lecteur"},{"heb":"שְׁקוּפוֹת","translit":"chekufot","fr":"transparentes","sens":"adjectif féminin pluriel","racine":"ש-ק-פ","nature":"adjectif","genre":"f","nombre":"pl","formes":"שָׁקוּף · לְהַשְׁקִיף","cat":"adjectifs","emploi":"שְׁקוּפוֹת qualifie les images poétiques de Goldberg : elles laissent voir la réalité sans l'opacifier"},{"heb":"חַלּוֹנוֹת","translit":"khallonet","fr":"fenêtres, vitraux","sens":"nom féminin pluriel absolu","racine":"ח-ל-ן","nature":"nom","genre":"f","nombre":"pl","formes":"חַלּוֹן","cat":"noms","emploi":"חַלּוֹנוֹת שֶׁל כְּנֵסִיָּה : les vitraux d'église symbolisent une transparence colorée, non neutre"},{"heb":"כְּנֵסִיָּה","translit":"knessiyah","fr":"église","sens":"nom féminin singulier absolu","racine":"כ-נ-ס","nature":"nom","genre":"f","nombre":"sg","formes":"כְּנֵסֶת","cat":"noms","emploi":"כְּנֵסִיָּה introduit un espace sacré non-juif dans le poème, ce qui est un choix esthétique délibéré de Goldberg"},{"heb":"מִבַּעֲדָן","translit":"mibbaadam","fr":"à travers elles","sens":"préposition מִ + בַּעַד + suffixe 3fp","racine":"ב-ע-ד","nature":"préposition","genre":"—","nombre":"—","formes":"בְּעַד","cat":"autre","emploi":"מִבַּעֲדָן reprend anaphoriquement les fenêtres et crée la continuité visuelle entre les deux strophes"},{"heb":"מִשְׁתַּנֶּה","translit":"mishtanneh","fr":"change, se modifie","sens":"verbe hitpaël, présent/participe, 3sg masc.","racine":"ש-נ-ה","nature":"verbe","genre":"m","nombre":"sg","formes":"שִׁנָּה · הִשְׁתַּנּוּת","cat":"verbes","emploi":"מִשְׁתַּנֶּה אוֹר הַשָּׁמַיִם : le changement de lumière est continu, process cosmique sans fin"},{"heb":"כּוֹשְׁלוֹת","translit":"koshelot","fr":"défaillent, trébuchent, s'affaiblissent","sens":"verbe qal, participe présent, féminin pluriel","racine":"כ-ש-ל","nature":"verbe","genre":"f","nombre":"pl","formes":"כָּשַׁל · כִּשָּׁלוֹן","cat":"verbes","emploi":"כּוֹשְׁלוֹת décrit la mort progressive des amours, processus lent plutôt qu'événement brutal"},{"heb":"צִפֳּרִים גּוֹסְסוֹת","translit":"tsipporim gossesot","fr":"des oiseaux mourants, des oiseaux à l'agonie","sens":"syntagme nominal : nom féminin pluriel + participe qal féminin pluriel","racine":"צ-פ-ר / ג-ו-ס-ס","nature":"expression","genre":"f","nombre":"pl","formes":"צִפּוֹר · גּוֹסֵס · גְּסִיסָה","cat":"autre","emploi":"צִפֳּרִים גּוֹסְסוֹת est l'image finale du poème : la légèreté de l'oiseau rencontre l'agonie, métaphore de l'amour qui s'éteint"}],"phrases":[{"heb":"יָמַי חֲקוּקִים בְּשִׁירַי","fr":"Mes jours sont gravés dans mes poèmes"},{"heb":"יָמַי חֲקוּקִים בְּשִׁירַי","fr":"Mes jours sont gravés dans mes poèmes"},{"heb":"יָמַי חֲקוּקִים בְּשִׁירַי","fr":"Mes jours sont gravés dans mes poèmes"},{"heb":"כִּשְׁנוֹת חַיַּי בְּקְמָטֵי מִצְחִי","fr":"telles les années de ma vie dans les rides de mon front"},{"heb":"כִּשְׁנוֹת חַיַּי בְּקְמָטֵי מִצְחִי","fr":"telles les années de ma vie dans les rides de mon front"},{"heb":"כִּשְׁנוֹת הָעֵץ בְּטַבְּעוֹתָיו","fr":"telles les années de l'arbre dans ses anneaux"},{"heb":"אֵין לִי מִלִּים קָשׁוֹת","fr":"Je ne possède pas de mots difficiles"},{"heb":"שַׁסְפָּסִים שֶׁל אַשְׁלָיָה","fr":"des valves d'illusion"},{"heb":"שַׁסְפָּסִים שֶׁל אַשְׁלָיָה","fr":"des valves d'illusion"},{"heb":"תְּמוּנוֹתַי שְׁקוּפוֹת","fr":"Mes images sont transparentes"},{"heb":"כְּחַלּוֹנוֹת שֶׁל כְּנֵסִיָּה","fr":"comme les fenêtres d'une église"},{"heb":"כְּחַלּוֹנוֹת שֶׁל כְּנֵסִיָּה","fr":"comme les fenêtres d'une église"},{"heb":"מִבַּעֲדָן רוֹאִים","fr":"À travers elles on peut voir"},{"heb":"אֵיךְ מִשְׁתַּנֶּה אוֹר הַשָּׁמַיִם","fr":"comment la lumière du ciel change"},{"heb":"וְאֵיךְ אֲהָבוֹתַי כּוֹשְׁלוֹת","fr":"et comment mes amours défaillent"},{"heb":"כְּצִפֳּרִים גּוֹסְסוֹת","fr":"tels des oiseaux mourants"}],"quatrains":[{"heb":"יָמַי חֲקוּקִים בְּשִׁירַי\nכִּשְׁנוֹת חַיַּי בְּקְמָטֵי מִצְחִי.\nכִּשְׁנוֹת הָעֵץ בְּטַבְּעוֹתָיו —","fr":"Mes jours sont gravés dans mes poèmes / telles les années de ma vie dans les rides de mon front / telles les années de l'arbre dans ses anneaux —","an":"Le premier quatrain s'ouvre sur une triple comparaison structurée en anaphore (כִּשְׁנוֹת... כִּשְׁנוֹת), qui enchaîne trois registres d'inscription du temps : le poème (art), le front ridé (corps), les anneaux de l'arbre (nature). Le verbe חֲקוּקִים ('gravés', de la racine ח-ק-ק) est fondamental : il évoque une inscription durable, quasi lapidaire, et confère à l'écriture poétique la solidité de la pierre taillée. La syntaxe paratactique, sans conjonction de subordination explicite, mime la superposition naturelle des couches du temps. Le registre est à la fois intime et universel : la voix lyrique parle de sa propre vie (יָמַי, 'mes jours' ; מִצְחִי, 'mon front'), mais les images végétales et corporelles ancrent le propos dans une expérience humaine commune. La progressivité des images — du texte vers le corps puis vers la nature — suggère que l'écriture n'est pas séparée du vivant mais en est une expression organique."},{"heb":"אֵין לִי מִלִּים קָשׁוֹת —\nשַׁסְפָּסִים שֶׁל אַשְׁלָיָה.\nתְּמוּנוֹתַי שְׁקוּפוֹת\nכְּחַלּוֹנוֹת שֶׁל כְּנֵסִיָּה:","fr":"Je ne possède pas de mots difficiles — / des valves d'illusion. / Mes images sont transparentes / comme les fenêtres d'une église :","an":"Ce quatrain constitue le cœur poétologique du poème : la poétesse y définit son esthétique par la négative d'abord (אֵין לִי מִלִּים קָשׁוֹת, 'je n'ai pas de mots difficiles'), puis par l'affirmative (תְּמוּנוֹתַי שְׁקוּפוֹת, 'mes images sont transparentes'). Le terme שַׁסְפָּסִים ('valves', 'clapets') est rare et technique, presque paradoxal dans un discours sur la simplicité : il désigne des mécanismes qui bloquent ou filtrent, évoquant une poésie hermétique qui emprisonnerait le sens derrière des artifices. La comparaison des images aux vitraux d'église (חַלּוֹנוֹת שֶׁל כְּנֵסִיָּה) est riche et ambivalente : le vitrail est coloré, donc non neutre, mais laisse passer la lumière et donne à voir le ciel. Goldberg revendique ainsi une transparence relative, non une platitude, mais une clarté qui ne se ferme pas sur elle-même. Le deux-points final ouvre le troisième mouvement du poème."},{"heb":"מִבַּעֲדָן רוֹאִים\nאֵיךְ מִשְׁתַּנֶּה אוֹר הַשָּׁמַיִם\nוְאֵיךְ אֲהָבוֹתַי\nכּוֹשְׁלוֹת","fr":"À travers elles on peut voir / comment la lumière du ciel change / et comment mes amours / défaillent","an":"Ce troisième quatrain développe la conséquence logique de la métaphore du vitrail : puisque les images sont transparentes, elles permettent de voir à travers. La construction syntaxique bâtie sur la répétition de אֵיךְ ('comment') crée un parallélisme entre deux phénomènes apparemment dissemblables — la variation de la lumière céleste et la défaillance des amours. Cette mise en parallèle est le geste poétique le plus audacieux du texte : elle naturalise la perte amoureuse en l'inscrivant dans le rythme cosmique des changements de lumière. Le verbe כּוֹשְׁלוֹת ('défaillent', 'trébuchent', de la racine כ-ש-ל) est au participe présent, ce qui lui donne une valeur de processus continu plutôt que d'événement ponctuel : les amours ne meurent pas d'un coup, elles s'épuisent lentement. La syntaxe s'étire, le quatrain reste ouvert, tendu vers la chute finale."},{"heb":"כְּצִפֳּרִים גּוֹסְסוֹת.","fr":"tels des oiseaux mourants.","an":"Ce vers-quatrain final, réduit à une seule image, fonctionne comme une clausule poétique d'une grande économie de moyens. La comparaison כְּצִפֳּרִים גּוֹסְסוֹת ('comme des oiseaux agonisants') est à la fois tendre et cruelle : l'oiseau est symbole traditionnel de la légèreté, du chant, de la liberté — tout ce que l'amour incarne —, mais le participe גּוֹסְסוֹת (de la racine ג-ו-ס-ס, 'être à l'agonie') y introduit le registre de la mort lente et inexorable. Le point final, seul signe de ponctuation fort du poème, clôt brutalement l'image, comme un envol interrompu. La brièveté de ce dernier quatrain contraste avec l'amplitude des trois premiers et crée un effet de chute inattendu qui amplifie la tristesse du propos. Goldberg signe ici une fin de poème d'une sobriété absolument maîtrisée, typique de son style classique-moderne."}],"analyse":"Ce poème de Léa Goldberg, extrait du recueil 'ימים כחולים' (Jours bleus), illustre la poétique de transparence et d'authenticité qui caractérise son œuvre. La poétesse y médite sur le rapport entre l'expérience vécue, la mémoire du temps et l'écriture poétique. La forme libre, sans rime contraignante, reflète une volonté d'honnêteté stylistique : le poème se veut miroir fidèle de l'âme plutôt qu'ornement rhétorique. Goldberg oppose la densité opaque de certains langages poétiques à la clarté lumineuse qu'elle revendique pour le sien, faisant des vitraux d'église — paradoxalement colorés et translucides — une métaphore centrale de son art. Le thème du temps qui use les êtres et les sentiments traverse le poème tout entier, unissant l'image végétale des anneaux d'arbre, l'image corporelle des rides, et l'image animale des oiseaux mourants en une méditation cohérente sur la fragilité de l'amour et de la vie."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
