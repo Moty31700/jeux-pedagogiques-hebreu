@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"לוּ יְהִי","auteur":"נעמי שמר","youtube":"","shironet":"","mots":[{"heb":"עוֹד","translit":"od","fr":"encore, toujours","sens":"adverbe de temps","racine":"ע-ו-ד","nature":"adverbe","genre":"—","nombre":"—","formes":"עוֹד · עוֹד לֹא","cat":"autre","emploi":"עוֹד יֵשׁ תִּקְוָה — il y a encore de l'espoir"},{"heb":"יֵשׁ","translit":"yesh","fr":"il y a, il existe","sens":"particule existentielle, présent","racine":"י-ש","nature":"verbe","genre":"—","nombre":"—","formes":"יֵשׁ · אֵין","cat":"verbes","emploi":"יֵשׁ לִי חָבֵר — j'ai un ami (litt. il y a pour moi un ami)"},{"heb":"מִפְרָשׂ","translit":"mifras","fr":"voile (de bateau)","sens":"nom masculin singulier, construit sur le schème מִפְעָל","racine":"פ-ר-שׂ","nature":"nom","genre":"m","nombre":"s","formes":"מִפְרָשׂ · מִפְרָשִׂים","cat":"noms","emploi":"הַמִּפְרָשׂ נִשָּׂא בָּרוּחַ — la voile se gonfle dans le vent"},{"heb":"לָבָן","translit":"lavan","fr":"blanc","sens":"adjectif masculin singulier","racine":"ל-ב-ן","nature":"adjectif","genre":"m","nombre":"s","formes":"לָבָן · לְבָנָה · לְבָנִים","cat":"adjectifs","emploi":"שֶׁלֶג לָבָן כִּסָּה אֶת הָהָר — une neige blanche a recouvert la montagne"},{"heb":"בָּאֹפֶק","translit":"ba-ofek","fr":"à l'horizon","sens":"préposition בְּ + nom masculin singulier défini","racine":"א-פ-ק","nature":"préposition","genre":"m","nombre":"s","formes":"אֹפֶק · בָּאֹפֶק","cat":"autre","emploi":"רָאִיתִי אֳנִיָּה בָּאֹפֶק — j'ai aperçu un navire à l'horizon"},{"heb":"מוּל","translit":"mul","fr":"face à, en face de, contre","sens":"préposition","racine":"מ-ו-ל","nature":"préposition","genre":"—","nombre":"—","formes":"מוּל · מִמּוּל","cat":"autre","emploi":"הוּא עָמַד מוּל הָאוֹיֵב — il se tenait face à l'ennemi"},{"heb":"עָנָן","translit":"anan","fr":"nuage","sens":"nom masculin singulier","racine":"ע-נ-ן","nature":"nom","genre":"m","nombre":"s","formes":"עָנָן · עֲנָנִים","cat":"noms","emploi":"עָנָן כָּבֵד כִּסָּה אֶת הַשָּׁמַיִם — un nuage lourd a couvert le ciel"},{"heb":"שָׁחֹר","translit":"shakhor","fr":"noir","sens":"adjectif masculin singulier","racine":"ש-ח-ר","nature":"adjectif","genre":"m","nombre":"s","formes":"שָׁחֹר · שְׁחוֹרָה · שְׁחוֹרִים","cat":"adjectifs","emploi":"לַיְלָה שָׁחֹר וְסוֹעֵר אִיֵּם עַל הָעִיר — une nuit noire et orageuse menaçait la ville"},{"heb":"כָּבֵד","translit":"kaved","fr":"lourd, pesant","sens":"adjectif masculin singulier","racine":"כ-ב-ד","nature":"adjectif","genre":"m","nombre":"s","formes":"כָּבֵד · כְּבֵדָה · כְּבֵדִים","cat":"adjectifs","emploi":"נָשָׂא מַשָּׂא כָּבֵד — il portait un fardeau lourd"},{"heb":"כָּל","translit":"kol","fr":"tout, chaque","sens":"nom indéfini / quantifieur universel","racine":"כ-ל","nature":"nom","genre":"—","nombre":"—","formes":"כָּל · כֻּלָּם","cat":"noms","emploi":"כָּל הַיְלָדִים שָׂמְחוּ — tous les enfants étaient joyeux"},{"heb":"שֶׁנְּבַקֵּשׁ","translit":"she-nevakesh","fr":"que nous demandons, que nous sollicitons","sens":"conjonction שֶׁ + verbe Pi'el présent/futur 1ère personne pluriel","racine":"ב-ק-שׁ","nature":"verbe","genre":"—","nombre":"pl","formes":"בִּקֵּשׁ · מְבַקֵּשׁ · נְבַקֵּשׁ","cat":"verbes","emploi":"כָּל שֶׁנְּבַקֵּשׁ יִתְקַיֵּם — puisse tout ce que nous demandons se réaliser"},{"heb":"לוּ","translit":"lu","fr":"si seulement, puisse (particule optative)","sens":"particule conditionnelle/optative biblique","racine":"ל-ו","nature":"conjonction","genre":"—","nombre":"—","formes":"לוּ · לוּלֵא","cat":"autre","emploi":"לוּ יָדַעְתִּי אֶת הָאֱמֶת — si seulement j'avais su la vérité"},{"heb":"יְהִי","translit":"yehi","fr":"qu'il soit, qu'il en soit ainsi","sens":"verbe Qal jussif 3ème personne masculin singulier","racine":"ה-י-ה","nature":"verbe","genre":"m","nombre":"s","formes":"יִהְיֶה · יְהִי · הָיָה","cat":"verbes","emploi":"יְהִי אוֹר — que la lumière soit (Genèse 1:3)"}],"phrases":[{"heb":"עוֹד יֵשׁ מִפְרָשׂ לָבָן בָּאֹפֶק","fr":"Il y a encore une voile blanche à l'horizon"},{"heb":"עוֹד יֵשׁ מִפְרָשׂ לָבָן בָּאֹפֶק","fr":"Il y a encore une voile blanche à l'horizon"},{"heb":"עוֹד יֵשׁ מִפְרָשׂ לָבָן בָּאֹפֶק","fr":"Il y a encore une voile blanche à l'horizon"},{"heb":"עוֹד יֵשׁ מִפְרָשׂ לָבָן בָּאֹפֶק","fr":"Il y a encore une voile blanche à l'horizon"},{"heb":"עוֹד יֵשׁ מִפְרָשׂ לָבָן בָּאֹפֶק","fr":"Il y a encore une voile blanche à l'horizon"},{"heb":"מוּל עָנָן שָׁחֹר כָּבֵד","fr":"Face à un nuage noir et lourd"},{"heb":"מוּל עָנָן שָׁחֹר כָּבֵד","fr":"Face à un nuage noir et lourd"},{"heb":"מוּל עָנָן שָׁחֹר כָּבֵד","fr":"Face à un nuage noir et lourd"},{"heb":"מוּל עָנָן שָׁחֹר כָּבֵד","fr":"Face à un nuage noir et lourd"},{"heb":"כָּל שֶׁנְּבַקֵּשׁ לוּ יְהִי","fr":"Puisse tout ce que nous demandons être exaucé"},{"heb":"כָּל שֶׁנְּבַקֵּשׁ לוּ יְהִי","fr":"Puisse tout ce que nous demandons être exaucé"},{"heb":"כָּל שֶׁנְּבַקֵּשׁ לוּ יְהִי","fr":"Puisse tout ce que nous demandons être exaucé"},{"heb":"כָּל שֶׁנְּבַקֵּשׁ לוּ יְהִי","fr":"Puisse tout ce que nous demandons être exaucé"}],"quatrains":[{"heb":"עוֹד יֵשׁ מִפְרָשׂ לָבָן בָּאֹפֶק / מוּל עָנָן שָׁחֹר כָּבֵד / כָּל שֶׁנְּבַקֵּשׁ לוּ יְהִי","fr":"Il y a encore une voile blanche à l'horizon / Face à un nuage noir et lourd / Puisse tout ce que nous demandons être exaucé","an":"Ce quatrain (ici triplet dans sa forme originale) s'ouvre sur une image visuelle saisissante : 'עוֹד יֵשׁ' ('il y a encore') installe immédiatement une tension temporelle — le mot 'עוֹד' signalant que quelque chose subsiste malgré tout, contre toute attente. La voile blanche ('מִפְרָשׂ לָבָן') à l'horizon est une métaphore classique de l'espoir, du voyage, de la vie qui continue. Elle s'oppose frontalement au 'עָנָן שָׁחֹר כָּבֵד' — nuage noir et lourd — qui évoque la guerre, le deuil, la menace existentielle. Ce contraste chromatique (blanc/noir) et spatial (horizon ouvert/nuage oppressant) structure toute la tension du poème. Le verbe 'נְבַקֵּשׁ' (nous demandons, nous supplions) introduit la dimension collective et suppliante du locuteur. La formule finale 'לוּ יְהִי' est une construction optative hébraïque biblique, exprimant le souhait irréalisé ou incertain : 'si seulement cela pouvait être'. Ce refrain fonctionne comme une prière laïque, universelle, adressée à un destin ou à Dieu sans le nommer."}],"analyse":"Ce quatrain est extrait de la chanson emblématique 'לוּ יְהִי' (Lou Yehi) de Naomi Shemer, composée en 1973 en hommage à John Lennon et sa chanson 'Let It Be'. Naomi Shemer (1930-2004), figure majeure de la chanson israélienne, y exprime un désir universel de paix et d'espoir face à l'adversité. Le titre lui-même, 'לוּ יְהִי', signifie littéralement 'Puisse-t-il en être ainsi' ou 'Si seulement cela pouvait être', une formule optative hébraïque chargée de prière et de mélancolie douce. Le thème central est la résistance de l'espoir face aux forces obscures : une voile blanche symbolise la lumière et la vie, tandis qu'un nuage noir pesant représente la menace, le deuil, la guerre. La forme est sobre, elliptique, avec une syntaxe nominale et conditionnelle qui crée une tension entre le désir et le réel. Le registre est à la fois lyrique, biblique et populaire, ce qui confère à ce texte une portée émotionnelle exceptionnelle dans la culture israélienne."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
