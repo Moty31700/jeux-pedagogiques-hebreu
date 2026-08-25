@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"jours blancs","auteur":"lea goldberg","youtube":"","shironet":"","mots":[{"heb":"יָמִים לְבָנִים","translit":"yamim levanim","fr":"jours blancs","sens":"syntagme nominal masculin pluriel + adjectif masculin pluriel","racine":"י-ו-מ / ל-ב-נ","nature":"expression","genre":"m","nombre":"pl","formes":"יָמִים · לְבָנִים","cat":"autre","emploi":"יָמִים לְבָנִים הֵם יָמִים רֵיקִים מֵאֲרוּעוֹת — les jours blancs sont des jours vides d'événements."},{"heb":"נִמְתָּחִים","translit":"nimtakhim","fr":"s'étirent, se tendent","sens":"nif'al participe masculin pluriel","racine":"מ-ת-ח","nature":"verbe","genre":"m","nombre":"pl","formes":"נִמְתָּח · נִמְתָּחִים · מָתַח","cat":"verbes","emploi":"הַחֶבֶל נִמְתָּח עַד קְצֵהוּ — la corde s'étire jusqu'à son extrémité."},{"heb":"קֶרֶן","translit":"keren","fr":"rayon (de lumière), corne, fonds","sens":"nom féminin singulier construit","racine":"ק-ר-נ","nature":"nom","genre":"f","nombre":"sg","formes":"קַרְנַיִם · קְרָנוֹת","cat":"noms","emploi":"קֶרֶן שֶׁמֶשׁ חִדְּרָה אֶת הַחַלּוֹן — un rayon de soleil a traversé la fenêtre."},{"heb":"שְׁקֵטָה","translit":"sheketa","fr":"quiétude, calme (féminin)","sens":"nom féminin singulier absolu","racine":"ש-ק-ט","nature":"nom","genre":"f","nombre":"sg","formes":"שֶׁקֶט · שָׁקֵט · לִשְׁקֹט","cat":"noms","emploi":"שְׁקֵטָה שָׁרְתָה בַּחֶדֶר אַחֲרֵי הַמִּלְחָמָה — un calme régnait dans la pièce après la guerre."},{"heb":"בְּדִידוּת","translit":"bedidut","fr":"solitude","sens":"nom féminin singulier absolu","racine":"ב-ד-ד","nature":"nom","genre":"f","nombre":"sg","formes":"בּוֹדֵד · לְהִתְבּוֹדֵד · בַּד בְּבַד","cat":"noms","emploi":"הִיא חָיָה בִּבְדִידוּת בְּחוֹרֶף — elle a vécu dans la solitude durant l'hiver."},{"heb":"רוֹחֶפֶת","translit":"rokhefet","fr":"plane, flotte, plane au-dessus","sens":"pa'al participe féminin singulier","racine":"ר-ח-פ","nature":"verbe","genre":"f","nombre":"sg","formes":"רָחַף · רְחִיפָה · מְרַחֵף","cat":"verbes","emploi":"הָרוּחַ רָחֲפָה עַל פְּנֵי הַמַּיִם — l'Esprit planait sur la face des eaux (Genèse 1,2)."},{"heb":"רֹחַב","translit":"rokhav","fr":"largeur, ampleur, étendue","sens":"nom masculin singulier construit","racine":"ר-ח-ב","nature":"nom","genre":"m","nombre":"sg","formes":"רָחָב · לְהַרְחִיב · מֶרְחָב","cat":"noms","emploi":"רֹחַב הַנָּהָר הַגָּדוֹל הִפְלִיא אוֹתָם — l'ampleur du grand fleuve les étonna."},{"heb":"תְּכֵלֶת","translit":"tekhelet","fr":"azur, bleu céleste","sens":"nom féminin singulier absolu (mot archaïque biblique)","racine":"ת-כ-ל","nature":"nom","genre":"f","nombre":"sg","formes":"תְּכֵלֶת הַשָּׁמַיִם · כְּחוֹל","cat":"noms","emploi":"צִיצִיּוֹת הַטַּלִּית צְבוּעוֹת בִּתְכֵלֶת — les franges du talith sont teintes en bleu azur."},{"heb":"גְּשָׁרִים","translit":"gesharim","fr":"ponts","sens":"nom masculin pluriel absolu","racine":"ג-ש-ר","nature":"nom","genre":"m","nombre":"pl","formes":"גֶּשֶׁר · לְגַשֵּׁר · גְּשַׁר","cat":"noms","emploi":"גְּשָׁרִים רַבִּים נִבְנוּ עַל הַנָּהָר — de nombreux ponts furent construits sur le fleuve."},{"heb":"יְשָׁרִים","translit":"yesharim","fr":"droits, rectilignes, honnêtes, justes","sens":"adjectif masculin pluriel","racine":"י-ש-ר","nature":"adjectif","genre":"m","nombre":"pl","formes":"יָשָׁר · יְשָׁרָה · יֹשֶׁר · לְיַשֵּׁר","cat":"adjectifs","emploi":"הוּא אִישׁ יָשָׁר וְנֶאֱמָן — c'est un homme droit et loyal."},{"heb":"אֶתְמוֹל","translit":"etmol","fr":"hier","sens":"adverbe temporel (mot biblique, invariable)","racine":"א-ת-מ-ל","nature":"adverbe","genre":"—","nombre":"—","formes":"אֶתְמוֹל בִּשְׁלֹשׁוֹם · מֵאֶתְמוֹל","cat":"autre","emploi":"אֶתְמוֹל יָרַד גֶּשֶׁם כָּל הַיּוֹם — hier il a plu toute la journée."},{"heb":"שְׁתִיקוֹת","translit":"shtikot","fr":"silences (pluriel)","sens":"nom féminin pluriel absolu","racine":"ש-ת-ק","nature":"nom","genre":"f","nombre":"pl","formes":"שְׁתִיקָה · שָׁתַק · לִשְׁתֹּק","cat":"noms","emploi":"שְׁתִיקוֹתָיו אָמְרוּ יוֹתֵר מִדְּבָרָיו — ses silences disaient plus que ses paroles."},{"heb":"רֵיקִים","translit":"rekim","fr":"vides, creux","sens":"adjectif masculin pluriel","racine":"ר-י-ק","nature":"adjectif","genre":"m","nombre":"pl","formes":"רֵיק · רֵיקָה · רֵיקוּת · לְרֵיק","cat":"adjectifs","emploi":"הַכַּדִּים הָיוּ רֵיקִים אַחֲרֵי הַחַג — les cruches étaient vides après la fête."},{"heb":"לוּחַ הַשָּׁעוֹן","translit":"luakh ha-sha'on","fr":"le cadran de l'horloge","sens":"syntagme nominal masculin singulier construit","racine":"ל-ו-ח / ש-ע-ה","nature":"expression","genre":"m","nombre":"sg","formes":"לוּחַ · שָׁעוֹן · מַחֲרוֹזֶת שָׁעוֹת","cat":"autre","emploi":"עֵינָיו רָצוּ עַל לוּחַ הַשָּׁעוֹן בְּדַאֲגָה — ses yeux couraient anxieusement sur le cadran de l'horloge."},{"heb":"לִבִּי הָרָגִיל לְעַצְמוֹ","translit":"libi ha-ragil le-atsmo","fr":"mon coeur habitué à lui-même","sens":"syntagme nominal : nom + article + adjectif verbal + préposition + pronom réfléchi","racine":"ל-ב-ב / ר-ג-ל","nature":"expression","genre":"m","nombre":"sg","formes":"לֵב / לֵבָב · רָגִיל · לְהַרְגִּיל · עַצְמוֹ","cat":"autre","emploi":"לִבִּי הָרָגִיל לְעַצְמוֹ אֵינוֹ מְצַפֶּה לְנֶחָמָה — mon coeur habitué à lui-même n'attend plus de consolation."}],"phrases":[{"heb":"יָמִים לְבָנִים נִמְתָּחִים","fr":"Les jours blancs s'étirent"},{"heb":"יָמִים לְבָנִים נִמְתָּחִים","fr":"Les jours blancs s'étirent"},{"heb":"כְּקֶרֶן חַמָּה שֶׁל קַיִץ","fr":"tel un rayon chaud de soleil d'été"},{"heb":"שְׁקֵטָה שֶׁל בְּדִידוּת גְּדוֹלָה","fr":"une quiétude de grande solitude"},{"heb":"שְׁקֵטָה שֶׁל בְּדִידוּת גְּדוֹלָה","fr":"une quiétude de grande solitude"},{"heb":"רוֹחֶפֶת עַל רֹחַב הַנָּהָר","fr":"plane sur l'ampleur du fleuve"},{"heb":"רוֹחֶפֶת עַל רֹחַב הַנָּהָר","fr":"plane sur l'ampleur du fleuve"},{"heb":"אֶל הַתְּכֵלֶת הַשַּׁקְטָה","fr":"sur l'azur tranquille"},{"heb":"גְּשָׁרִים יְשָׁרִים עוֹמְדִים","fr":"des ponts tout droits se dressent"},{"heb":"גְּשָׁרִים יְשָׁרִים עוֹמְדִים","fr":"des ponts tout droits se dressent"},{"heb":"בֵּין אֶתְמוֹל וּמָחָר","fr":"entre hier et demain"},{"heb":"שְׁתִיקוֹתֶיךָ יָמִים לְבָנִים וְרֵיקִים","fr":"tes silences, jours blancs et vides"},{"heb":"שְׁתִיקוֹתֶיךָ יָמִים לְבָנִים וְרֵיקִים","fr":"tes silences, jours blancs et vides"},{"heb":"עַל לוּחַ הַשָּׁעוֹן","fr":"sur le cadran de l'horloge"},{"heb":"לִבִּי הָרָגִיל לְעַצְמוֹ","fr":"mon coeur habitué à lui-même"}],"quatrains":[{"heb":"יָמִים לְבָנִים נִמְתָּחִים\nכְּקֶרֶן חַמָּה שֶׁל קַיִץ.\nשְׁקֵטָה שֶׁל בְּדִידוּת גְּדוֹלָה\nרוֹחֶפֶת עַל רֹחַב הַנָּהָר.","fr":"Les jours blancs s'étirent / tel un rayon chaud de soleil d'été. / Une quiétude de grande solitude / plane sur l'ampleur du fleuve.","an":"Le premier quatrain installe le cadre spatio-temporel et émotionnel du poème. L'image inaugurale — les jours blancs qui 'se tirent' comme un rayon de lumière — associe le temps à la lumière physique : tous deux progressent lentement, silencieusement, sans rupture. Le verbe נִמְתָּחִים (s'étirer, se tendre) suggère à la fois la durée et une légère tension sous-jacente, comme une toile tendue. La comparaison avec 'un rayon chaud de soleil d'été' ancre la scène dans le sensible et le doux. La troisième ligne introduit la paradoxe central du poème : la quiétude (שְׁקֵטָה) naît d'une grande solitude (בְּדִידוּת גְּדוֹלָה), et non malgré elle. Le participe רוֹחֶפֶת — qui 'plane' ou 'flotte' — est un terme poétique fort, presque mystique en hébreu (il décrit l'Esprit planant sur les eaux en Genèse 1,2), conférant à cette solitude une dimension quasi cosmique. Le fleuve dans son ampleur devient miroir de l'âme."},{"heb":"הַחַלּוֹנוֹת פְּתוּחִים לִרְוָחָה\nאֶל הַתְּכֵלֶת הַשַּׁקְטָה.\nגְּשָׁרִים יְשָׁרִים עוֹמְדִים\nבֵּין אֶתְמוֹל וּמָחָר.","fr":"Les fenêtres sont grandes ouvertes / sur l'azur tranquille. / Des ponts tout droits se dressent / entre hier et demain.","an":"Ce second quatrain développe l'espace ouvert en deux directions : verticale (les fenêtres vers le ciel azuré) et horizontale (les ponts entre hier et demain). Les fenêtres grandes ouvertes לִרְוָחָה — expression figée hébraïque signifiant 'en grand, à plein espace' — symbolisent une disponibilité intérieure, une porosité au monde sans dissolution du moi. La תְּכֵלֶת, couleur hébreu spécifique de l'azur céleste (teinte des franges rituelles du talith), inscrit une dimension spirituelle discrète. Les גְּשָׁרִים יְשָׁרִים — ponts droits, rectilignes — constituent l'image la plus forte du poème : ils matérialisent le présent comme espace de passage serein entre passé et futur, sans courbure mélancolique ni espoir illusoire. L'adjectif יְשָׁרִים (droit, honnête, juste) porte aussi une connotation morale en hébreu, suggérant une droiture existentielle. Ce quatrain fonctionne comme un refrain structurant qui reviendra, soulignant la continuité et la stabilité."},{"heb":"שְׁתִיקוֹתֶיךָ יָמִים לְבָנִים וְרֵיקִים\nנִשְׂאָרִים בְּקַלּוּת —\nרְאֵה עֵינַי לָמְדוּ\nלִחְיוֹת וּמִזְּמַן רַב\nחָדְלוּ מֵרוּצָן הָאָמִיץ\nעַל לוּחַ הַשָּׁעוֹן.\nעוֹמְדִים יְשָׁרִים הַגְּשָׁרִים\nבֵּין אֶתְמוֹל וּמָחָר.","fr":"Tes silences, jours blancs et vides, / se supportent facilement — / vois, mes yeux ont appris / à vivre, et depuis longtemps / ont cessé leur course élancée / sur le cadran de l'horloge. / Se dressent tout droits les ponts / entre hier et demain.","an":"Cette strophe marque un tournant : le 'tu' apostrophé (les jours eux-mêmes) révèle une adresse lyrique et introduit la voix du sujet en première personne. Les שְׁתִיקוֹת — silences, pluriel intense — qualifient les jours de vides רֵיקִים, terme redoutable en hébreu (associé au néant, à la vanité). Pourtant ils 'se supportent facilement' נִשְׂאָרִים בְּקַלּוּת : la légèreté n'est pas superficialité mais sagesse acquise. L'image des yeux qui ont 'cessé leur course élancée sur le cadran de l'horloge' est saisissante : le regard ne traque plus anxieusement le temps qui passe. Le verbe לָמְדוּ — ils ont appris — indique un apprentissage douloureux dont on ne voit que le résultat apaisé. Le refrain des ponts revient, légèrement inversé syntaxiquement (עוֹמְדִים יְשָׁרִים הַגְּשָׁרִים), comme pour confirmer que cet équilibre tient malgré tout."},{"heb":"לִבִּי הָרָגִיל לְעַצְמוֹ\nסוֹפֵר לְאַט פְּעִימוֹתָיו.\nמְנֻגָּן בְּקֶצֶב שָׁלֵו הַמּוֹשְׁכוֹ\nכְּתִינוֹק הַמְשׁוֹרֵר עַצְמוֹ\nלִפְנֵי עֲצוֹם עֵינָיו\nאַחַר שֶׁנִּרְדְּמָה אִמּוֹ.","fr":"Mon cœur habitué à lui-même / compte doucement ses battements. / Bercé par le rythme paisible qui l'entraîne / comme un bébé se chantant sa berceuse / avant de fermer les yeux / une fois sa mère endormie.","an":"La strophe finale est la plus émouvante et la plus complexe. Le cœur, הָרָגִיל לְעַצְמוֹ — habitué à soi-même, accoutumé à sa propre compagnie — est une formulation d'une densité remarquable : elle dit l'autosuffisance apprise, la familiarité avec sa propre solitude intérieure. Il 'compte doucement ses battements' : image à la fois médicale et méditative, comme un moine comptant ses respirations. La comparaison finale avec l'enfant qui se berce lui-même après que sa mère s'est endormie est d'une tendresse bouleversante. Elle inverse le schéma habituel (la mère endort l'enfant) : ici c'est l'enfant — figure du cœur, du moi vulnérable — qui prend en charge son propre endormissement. Cette image dit la maturité douloureuse de celui qui n'attend plus d'être consolé de l'extérieur, et se suffit à lui-même avec une douceur mélancolique qui n'est pas désespoir mais accomplissement."}],"analyse":"Leah Goldberg (1911-1970), poétesse israélienne majeure d'origine lituanienne, compose dans ce poème une méditation lyrique sur le temps suspendu, la solitude apaisée et l'acceptation intérieure. Les 'jours blancs' — expression hébraïque évoquant des jours vides, neutres, ni douloureux ni joyeux — deviennent le prétexte à une exploration de l'état contemplatif de l'âme. La forme est celle d'un poème en trois strophes à structure répétitive, avec un refrain architectural ('ponts tout droits entre hier et demain') qui ancre le temps dans une durée stable. Le registre est intimiste, méditatif, presque stoïcien : l'affliction est absente, remplacée par une sérénité gagnée de haute lutte. La syntaxe hébraïque, sobre et nominale, produit un effet d'immobilité douce qui correspond au thème central : l'art de vivre dans le présent sans nostalgie ni attente."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
