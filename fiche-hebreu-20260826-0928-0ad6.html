@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"מסע ללא שם","auteur":"לאה גולדברג","youtube":"","shironet":"","mots":[{"heb":"מַסָּע","translit":"massa","fr":"voyage, périple","sens":"nom masculin singulier","racine":"נ-ס-ע","nature":"nom","genre":"m","nombre":"sg","formes":"מַסָּעוֹת","cat":"noms","emploi":"Le titre מַסָּע לְלֹא שֵׁם annonce un voyage privé de toute identité nominale."},{"heb":"אֵיכָה","translit":"eikha","fr":"où (interrogatif existentiel)","sens":"adverbe interrogatif de lieu, connotation biblique de lamentation","racine":"א-י-כ-ה","nature":"adverbe","genre":"—","nombre":"—","formes":"אֵיפֹה","cat":"autre","emploi":"אֵיכָה אֲנִי reprend l écho du livre des Lamentations, chargeant la question d une résonance de deuil collectif."},{"heb":"נִשְׁקָפוֹת","translit":"nishkafot","fr":"regardent depuis, donnent sur","sens":"nifal participe féminin pluriel","racine":"ש-ק-פ","nature":"verbe","genre":"f","nombre":"pl","formes":"נִשְׁקַף · הִשְׁקִיף","cat":"verbes","emploi":"עֵינַי אֵינָן נִשְׁקָפוֹת מִשּׁוּם חַלּוֹן : mes yeux ne regardent depuis aucune fenêtre, signifiant l absence de point d ancrage dans le monde."},{"heb":"מִשְׁתַּקְּפִים","translit":"mishtakfim","fr":"se reflètent","sens":"hitpael participe masculin pluriel","racine":"ש-ק-פ","nature":"verbe","genre":"m","nombre":"pl","formes":"שִׁקֵּף · הִשְׁתַּקְּפוּת","cat":"verbes","emploi":"פָּנַי אֵינָם מִשְׁתַּקְּפִים בְּשׁוּם רְאִי : le visage du moi n a aucun reflet, aucune existence visible."},{"heb":"בִּלְעָדַי","translit":"bil'adai","fr":"sans moi","sens":"préposition בִּלְעָדֵי + suffixe 1ère personne sg","racine":"ב-ל-ע-ד","nature":"préposition","genre":"—","nombre":"—","formes":"בִּלְעָדֶיךָ · בִּלְעָדֵינוּ","cat":"autre","emploi":"כָּל הַחַשְׁמַלִּיּוֹת נוֹסְעוֹת בִּלְעָדַי : la ville entière fonctionne en excluant le sujet."},{"heb":"נִזְהָרִים","translit":"nizharim","fr":"font attention, se méfient, prennent garde","sens":"nifal participe masculin pluriel","racine":"ז-ה-ר","nature":"verbe","genre":"m","nombre":"pl","formes":"הִזְהִיר · זָהִיר","cat":"verbes","emploi":"הַיָּמִים נִזְהָרִים וּמִתְנַמְּכִים : les jours eux-mêmes doivent se faire prudents dans la chambre exiguë."},{"heb":"מִתְנַמְּכִים","translit":"mitnamkhim","fr":"se courbent, s abaissent, se font petits","sens":"hitpael participe masculin pluriel","racine":"נ-מ-כ","nature":"verbe","genre":"m","nombre":"pl","formes":"נָמוּךְ · הִנְמִיךְ","cat":"verbes","emploi":"Les jours מִתְנַמְּכִים pour entrer dans la chambre : image forte de l espace qui contraint même le temps."},{"heb":"בִּזְהִירוּת","translit":"bizehirut","fr":"avec précaution, prudemment","sens":"préposition בְּ + nom féminin abstrait sg","racine":"ז-ה-ר","nature":"adverbe","genre":"f","nombre":"sg","formes":"זְהִירוּת · זָהִיר","cat":"autre","emploi":"וְגַם אֲנִי חַיָּה בוֹ בִּזְהִירוּת : le sujet calque sa manière d être sur celle des jours, écho lexical délibéré."},{"heb":"נַכְרִיָּה","translit":"nakhriya","fr":"étrangère","sens":"adjectif féminin singulier","racine":"נ-כ-ר","nature":"adjectif","genre":"f","nombre":"sg","formes":"נָכְרִי · נוֹכְרִי","cat":"adjectifs","emploi":"בְּעִיר נַכְרִיָּה : la ville étrangère est l espace de l exil où le moi perd ses repères."},{"heb":"מוֹלֶדֶת","translit":"molèdèt","fr":"patrie, pays natal","sens":"nom féminin singulier","racine":"י-ל-ד","nature":"nom","genre":"f","nombre":"sg","formes":"מוֹלֶדֶת · יְלִידִי","cat":"noms","emploi":"בְּלֵב מוֹלֶדֶת גְּדוֹלָה שֶׁל נֵכֶר : oxymore douloureux, une patrie qui est celle de l étrangeté."},{"heb":"נֵכֶר","translit":"nèkèr","fr":"étrangeté, pays étranger","sens":"nom masculin singulier","racine":"נ-כ-ר","nature":"nom","genre":"m","nombre":"sg","formes":"נָכְרִי · הִתְנַכֵּר","cat":"noms","emploi":"מוֹלֶדֶת גְּדוֹלָה שֶׁל נֵכֶר : la patrie elle-même est définie par l altérité, paradoxe fondateur du poème."},{"heb":"לִפְרָקִים","translit":"lifrakim","fr":"parfois, par moments","sens":"préposition לְ + nom masculin pluriel de פֶּרֶק","racine":"פ-ר-ק","nature":"adverbe","genre":"—","nombre":"—","formes":"פֶּרֶק · מִדֵּי פַּעַם","cat":"autre","emploi":"בַּלַּיְלָה לִפְרָקִים קָשֶׁה לִזְכֹּר : l oubli est intermittent mais récurrent, ce qui le rend plus angoissant."},{"heb":"לְבָנָה","translit":"levana","fr":"peuplier blanc (arbre) / lune","sens":"nom féminin singulier, ambiguïté sémantique poétique","racine":"ל-ב-נ","nature":"nom","genre":"f","nombre":"sg","formes":"לָבָן · לְבָנוֹן","cat":"noms","emploi":"מִבְּעַד לְעַנְפֵי לְבָנָה גָּבוֹהַּ : les branches du peuplier filtrent la lumière des voisins, interposant la nature."},{"heb":"פּוֹנֶה","translit":"ponè","fr":"s adresse à, se tourne vers","sens":"qal participe masculin singulier (présent)","racine":"פ-נ-ה","nature":"verbe","genre":"m","nombre":"sg","formes":"פָּנָה · לִפְנוֹת","cat":"verbes","emploi":"אִישׁ אֵינוֹ פּוֹנֶה אֵלַי בִּשְׁמִי : personne ne s adresse au sujet par son nom, effacement social total."},{"heb":"שֵׁם","translit":"shem","fr":"nom","sens":"nom masculin singulier","racine":"ש-מ","nature":"nom","genre":"m","nombre":"sg","formes":"שְׁמוֹ · בְּשֵׁם · שְׁמִי","cat":"noms","emploi":"הוּא קַיָּם רַק עַל נְיָּר, בִּכְתָב : le nom n existe plus que sur le papier, sans voix ni son."}],"phrases":[{"heb":"מַסָּע לְלֹא שֵׁם","fr":"voyage sans nom"},{"heb":"אֵיכָה אֲנִי? אֵיךְ לְהַסְבִּיר אֵיכָה אֲנִי","fr":"Où suis-je ? Comment expliquer où je suis"},{"heb":"עֵינַי אֵינָן נִשְׁקָפוֹת מִשּׁוּם חַלּוֹן","fr":"Mes yeux ne regardent depuis aucune fenêtre"},{"heb":"פָּנַי אֵינָם מִשְׁתַּקְּפִים בְּשׁוּם רְאִי","fr":"Mon visage ne se reflète dans aucun miroir"},{"heb":"כָּל הַחַשְׁמַלִּיּוֹת הָרַבּוֹת שֶׁבָּעִיר נוֹסְעוֹת בִּלְעָדַי","fr":"Tous les nombreux tramways de la ville voyagent sans moi"},{"heb":"שֶׁהַיָּמִים בּוֹ נִזְהָרִים וּמִתְנַמְּכִים","fr":"que les jours y font attention et se courbent"},{"heb":"שֶׁהַיָּמִים בּוֹ נִזְהָרִים וּמִתְנַמְּכִים","fr":"que les jours y font attention et se courbent"},{"heb":"וְגַם אֲנִי חַיָּה בוֹ בִּזְהִירוּת","fr":"et moi aussi j y vis avec précaution"},{"heb":"בְּעִיר נַכְרִיָּה","fr":"dans une ville étrangère"},{"heb":"בְּלֵב מוֹלֶדֶת גְּדוֹלָה שֶׁל נֵכֶר","fr":"au coeur d une grande patrie d étrangeté"},{"heb":"בְּלֵב מוֹלֶדֶת גְּדוֹלָה שֶׁל נֵכֶר","fr":"au coeur d une grande patrie d étrangeté"},{"heb":"בַּלַּיְלָה לִפְרָקִים קָשֶׁה לִזְכֹּר","fr":"La nuit parfois il est difficile de se rappeler"},{"heb":"מִבְּעַד לְעַנְפֵי לְבָנָה גָּבוֹהַּ","fr":"à travers les branches d un grand peuplier blanc"},{"heb":"זֶה שָׁבוּעוֹת שֶׁאִישׁ אֵינוֹ פּוֹנֶה אֵלַי בִּשְׁמִי","fr":"Cela fait des semaines que personne ne s adresse à moi par mon nom"},{"heb":"זֶה שָׁבוּעוֹת שֶׁאִישׁ אֵינוֹ פּוֹנֶה אֵלַי בִּשְׁמִי","fr":"Cela fait des semaines que personne ne s adresse à moi par mon nom"}],"quatrains":[{"heb":"אֵיכָה אֲנִי? אֵיךְ לְהַסְבִּיר אֵיכָה אֲנִי\nעֵינַי אֵינָן נִשְׁקָפוֹת מִשּׁוּם חַלּוֹן\nפָּנַי אֵינָם מִשְׁתַּקְּפִים בְּשׁוּם רְאִי\nכָּל הַחַשְׁמַלִּיּוֹת הָרַבּוֹת שֶׁבָּעִיר נוֹסְעוֹת בִּלְעָדַי","fr":"Où suis-je ? Comment expliquer où je suis / Mes yeux ne regardent depuis aucune fenêtre / Mon visage ne se reflète dans aucun miroir / Tous les nombreux tramways de la ville voyagent sans moi","an":"La strophe d ouverture pose d emblée la question ontologique centrale : non pas qui suis-je, mais où suis-je, interrogation spatiale qui déborde vers l existentiel. La répétition de la question dans le premier vers mime une tentative de mise au point qui échoue. Les deux vers suivants déploient une structure parallèle en négatif (אֵינָן / אֵינָם) : ni fenêtre, ni miroir, aucun dispositif de médiation ne permet au moi de s inscrire dans le réel visible. La fenêtre et le miroir sont des figures classiques de l intériorité et de l identité ; leur refus signale une double coupure, du monde extérieur et de soi-même. Le vers final sur les tramways introduit la métonymie de la ville vivante et mouvante qui exclut le sujet : la vie collective se déroule sans lui, et ce sans moi (בִּלְעָדַי) sera le mot-clé de toute la section."},{"heb":"חַדְרִי כָּל כָּךְ קָטָן\nשֶׁהַיָּמִים בּוֹ נִזְהָרִים וּמִתְנַמְּכִים\nוְגַם אֲנִי חַיָּה בוֹ בִּזְהִירוּת\nבְּרֵיחַ שֶׁל עָשָׁן וְתַפּוּחִים","fr":"Ma chambre est si petite / que les jours y font attention et se courbent / et moi aussi j y vis avec précaution / dans une odeur de fumée et de pommes","an":"Cette strophe opère un resserrement topographique : après la ville immense et étrangère, le poème se concentre sur la chambre, espace de survie réduit au minimum. La personnification des jours (הַיָּמִים נִזְהָרִים וּמִתְנַמְּכִים) est saisissante : le temps lui-même doit se courber pour entrer dans cet espace exigu, comme si la chambre résistait au passage ordinaire de la vie. La reprise en écho du même verbe de prudence (נִזְהָרִים / בִּזְהִירוּת) crée une solidarité ironique entre le sujet et le temps : tous deux doivent se faire petits. Le vers final introduit la sensation olfactive, seul ancrage sensoriel concret : l odeur de fumée et de pommes évoque un quotidien banal, presque domestique, mais aussi une douceur mélancolique, peut-être le souvenir d un ailleurs plus chaud. Le registre reste retenu, sans pathos."},{"heb":"בַּלַּיְלָה לִפְרָקִים קָשֶׁה לִזְכֹּר\nהָיָה חַלּוֹן שֶׁלִּי\nבַּלַּיְלָה הַשְּׁכֵנִים יַדְלִיקוּ אוֹר\nמֵעֵבֶר לֶחָצֵר גְּדוֹלָה, מִבְּעַד לְעַנְפֵי לְבָנָה גָּבוֹהַּ","fr":"La nuit parfois il est difficile de se rappeler / qu il y eut une fenêtre à moi / La nuit les voisins allumeront la lumière / de l autre côté d une grande cour, à travers les branches d un grand peuplier","an":"Le retour de la nuit comme cadre temporel organise cette strophe autour de la mémoire défaillante. Le premier distique est elliptique et douloureux : l oubli de sa propre fenêtre passée signale que le deuil de l appartenance est si profond que le souvenir même s efface. La fenêtre, déjà absente au début du poème comme lieu de regard, réapparaît ici dans le passé comme objet perdu. Le contraste est alors frappant avec les voisins qui allument leur lumière : leur fenêtre à eux existe, visible, lumineuse, tandis que la sienne n est plus qu un souvenir incertain. Le peuplier blanc (לְבָנָה) filtre cette lumière étrangère, interposant la nature entre le sujet et la vie des autres. La syntaxe s allonge dans les deux derniers vers, comme pour retarder la vision de cette lumière inaccessible."},{"heb":"זֶה שָׁבוּעוֹת שֶׁאִישׁ אֵינוֹ פּוֹנֶה\nאֵלַי בִּשְׁמִי, וְזֶה פָּשׁוּט מְאוֹד\nהָאֲנָשִׁים בְּכָל רַחֲבֵי הָעִיר\nאֵינָם יוֹדְעִים אוֹתוֹ","fr":"Cela fait des semaines que personne ne s adresse / à moi par mon nom, et c est tout simple / les gens dans toute l étendue de la ville / ne le connaissent pas","an":"La strophe finale de notre sélection atteint le paroxysme du dépouillement identitaire : la perte du nom propre. Le nom est dans toutes les cultures le signe premier de la reconnaissance sociale et de l existence individuée ; ne plus être appelé par son nom, c est flirter avec l inexistence. La formule וְזֶה פָּשׁוּט מְאוֹד (et c est tout simple) est d une ironie glaçante : ce qui est présenté comme une évidence banale est en réalité une catastrophe intime. La progression de la section C du poème, avec ses parallélismes (ימים... ברחוב, שעות... מול עץ, ולפרקים... על מי), amplifie ce vide : le sujet erre sans nom face à des choses qui ont leur nom, et pense sans nom à quelqu un dont il ignore le nom. Le poème se ferme sur une triple ignorance réciproque, creusant encore l anonymat."}],"analyse":"Leah Goldberg (1911-1970), poétesse israélienne majeure, écrit ce poème en s appuyant sur son expérience d exil et de déracinement, notamment son séjour en Europe avant son immigration en Palestine. Le poème s articule autour de trois mouvements : l invisibilité du moi dans l espace urbain étranger, l étroitesse oppressive du refuge intérieur, et enfin la dissolution du nom propre comme ultime perte identitaire. La forme est libre, sans rime contraignante, mais rythmée par des anaphores et des répétitions qui miment l errance. Le registre est sobre, introspectif, presque phénoménologique : Goldberg ne dramatise pas, elle constate, ce qui rend l étrangeté d autant plus poignante. Le titre lui-même, Voyage sans nom, programme la perte d ancrage qui traverse tout le poème."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
