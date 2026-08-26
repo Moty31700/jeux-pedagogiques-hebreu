@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"כוכבים בחוץ: שירים","auteur":"נתן אלתרמן","youtube":"","shironet":"","mots":[{"heb":"נִגּוּן","translit":"niggún","fr":"air, mélodie","sens":"nom masculin singulier, état absolu","racine":"נ-ג-נ","nature":"nom","genre":"m","nombre":"sg","formes":"נִגּוּנִים","cat":"noms","emploi":"Le niggoun est la mélodie intérieure que le voyageur croyait avoir abandonnée."},{"heb":"זָנַחְתָּ","translit":"zanákhta","fr":"tu as abandonné, tu as délaissé","sens":"qal passé 2sg masc","racine":"ז-נ-ח","nature":"verbe","genre":"m","nombre":"sg","formes":"זוֹנֵחַ · יִזְנַח","cat":"verbes","emploi":"Le sujet a abandonné la mélodie, mais elle revient malgré lui."},{"heb":"לַשָּׁוְא","translit":"lashav","fr":"en vain, pour rien, inutilement","sens":"préposition ל + nom masc sing défini","racine":"ש-ו-א","nature":"adverbe","genre":"—","nombre":"—","formes":"שָׁוְא","cat":"autre","emploi":"Lashav souligne que l'abandon du voyageur était illusoire et vain."},{"heb":"נִפְקַחַת","translit":"nifkákhat","fr":"s'ouvre, se déploie (de soi-même)","sens":"nifal présent féminin singulier","racine":"פ-ק-ח","nature":"verbe","genre":"f","nombre":"sg","formes":"פָּקַח · הִפְקִיחַ","cat":"verbes","emploi":"La route nifkakhat s'ouvre comme un œil, de manière autonome et irrésistible."},{"heb":"לָאֹרֶךְ","translit":"laórekh","fr":"en longueur, dans la longueur","sens":"préposition ל + nom masc sing défini","racine":"א-ר-כ","nature":"préposition","genre":"m","nombre":"sg","formes":"אֹרֶךְ","cat":"autre","emploi":"Laórekh évoque une route qui s'étire indéfiniment, sans fin visible."},{"heb":"מְצַפִּים","translit":"metsapím","fr":"ils attendent, ils guettent, ils espèrent","sens":"piel participe masculin pluriel","racine":"צ-פ-פ","nature":"verbe","genre":"m","nombre":"pl","formes":"צִפָּה · יְצַפֶּה","cat":"verbes","emploi":"Le nuage et l'arbre metsapim — ils guettent le voyageur avec une fidélité patiente."},{"heb":"עוֹבֵר אוֹרַח","translit":"ovér órakha","fr":"passant, voyageur de passage","sens":"participe qal masc sg + nom masc sg, locution nominale","racine":"ע-ב-ר / א-ר-ח","nature":"expression","genre":"m","nombre":"sg","formes":"עוֹבְרֵי אוֹרַח","cat":"autre","emploi":"Oveir orakha désigne le voyageur anonyme, figure universelle de l'homme en transit."},{"heb":"תָּקוּם","translit":"takúm","fr":"elle se lèvera, elle s'élèvera","sens":"qal futur féminin singulier (sujet : הָרוּחַ)","racine":"ק-ו-מ","nature":"verbe","genre":"f","nombre":"sg","formes":"קָמָה · קוּם","cat":"verbes","emploi":"Takum annonce le surgissement du vent comme un personnage qui entre en scène."},{"heb":"טִיסַת נַדְנֵדוֹת","translit":"tisat nadnedót","fr":"vol de balançoires, balancement de vol","sens":"nom fém sg construit + nom fém pl, locution nominale poétique","racine":"ט-ו-ס / נ-ד-נ-ד","nature":"expression","genre":"f","nombre":"—","formes":"טִיסָה · נַדְנֵדָה","cat":"autre","emploi":"Tisat nadnedot fusionne la légèreté enfantine et la fulgurance de l'éclair en une image surréaliste."},{"heb":"עֵדוֹת","translit":"edót","fr":"témoins (féminin pluriel)","sens":"nom féminin pluriel","racine":"ע-ד-ה","nature":"nom","genre":"f","nombre":"pl","formes":"עֵד · עֵדָה","cat":"noms","emploi":"La brebis et la biche sont edot, témoins muets mais irrécusables de la tendresse du marcheur."},{"heb":"לִטַּפְתָּ","translit":"litáfta","fr":"tu as caressé, tu as flatté doucement","sens":"piel passé 2sg masc","racine":"ל-ט-פ","nature":"verbe","genre":"m","nombre":"sg","formes":"מְלַטֵּף · יְלַטֵּף","cat":"verbes","emploi":"Litafta exprime la tendresse fugace du voyageur envers les animaux qu'il rencontre."},{"heb":"וְהוֹסַפְתָּ לֶכֶת","translit":"veosáfta lékhet","fr":"et tu as continué à marcher","sens":"hifil passé 2sg masc + infinitif qal","racine":"י-ס-פ / ה-ל-כ","nature":"expression","genre":"m","nombre":"sg","formes":"הוֹסִיף · לָלֶכֶת","cat":"autre","emploi":"Ve-hosafta lekhet résume la condition du voyageur : il repart toujours, sans pouvoir s'arrêter."},{"heb":"רֵיקוֹת","translit":"reikót","fr":"vides (féminin pluriel)","sens":"adjectif féminin pluriel (s'accorde avec יָדַיִם)","racine":"ר-י-ק","nature":"adjectif","genre":"f","nombre":"pl","formes":"רֵיק · רֵיקָה","cat":"adjectifs","emploi":"Reikot qualifie les mains vides du voyageur, symbole de son dénuement et de sa liberté."},{"heb":"סָגַדְתָּ אַפַּיִם","translit":"sagádta apáyim","fr":"tu t'es prosterné face contre terre","sens":"qal passé 2sg masc + nom masc duel (les deux faces)","racine":"ס-ג-ד / א-פ-פ","nature":"expression","genre":"m","nombre":"sg","formes":"סָגַד · אַפַּיִם","cat":"autre","emploi":"Sagadta apayim est un terme d'adoration religieuse appliqué ici à la beauté naturelle et féminine."},{"heb":"צַמֶּרֶת גְּשׁוּמַת עַפְעַפַּיִם","translit":"tsaméret gshumát afapáyim","fr":"cime d'arbre aux paupières de pluie","sens":"nom fém sg + adjectif fém sg construit + nom masc duel","racine":"צ-מ-ר / ג-ש-מ / ע-פ-פ","nature":"expression","genre":"f","nombre":"sg","formes":"צַמֶּרֶת · גְּשׁוּם · עַפְעַף","cat":"autre","emploi":"Tsameret gshumat afapayim est la métaphore finale la plus audacieuse : la pluie sur les branches devient des paupières humaines, brouillant les frontières entre nature et regard."}],"phrases":[{"heb":"עוֹד חוֹזֵר הַנִּגּוּן שֶׁזָּנַחְתָּ לַשָּׁוְא","fr":"L'air que tu as abandonné en vain revient encore"},{"heb":"עוֹד חוֹזֵר הַנִּגּוּן שֶׁזָּנַחְתָּ לַשָּׁוְא","fr":"L'air que tu as abandonné en vain revient encore"},{"heb":"עוֹד חוֹזֵר הַנִּגּוּן שֶׁזָּנַחְתָּ לַשָּׁוְא","fr":"L'air que tu as abandonné en vain revient encore"},{"heb":"וְהַדֶּרֶךְ עוֹדֶנָּה נִפְקַחַת לָאֹרֶךְ","fr":"Et la route s'ouvre toujours en longueur"},{"heb":"וְהַדֶּרֶךְ עוֹדֶנָּה נִפְקַחַת לָאֹרֶךְ","fr":"Et la route s'ouvre toujours en longueur"},{"heb":"מְצַפִּים עוֹד לְךָ, עוֹבֵר אוֹרַח.","fr":"T'attendent encore, toi le passant"},{"heb":"מְצַפִּים עוֹד לְךָ, עוֹבֵר אוֹרַח.","fr":"T'attendent encore, toi le passant"},{"heb":"וְהָרוּחַ תָּקוּם וּבְטִיסַת נַדְנֵדוֹת","fr":"Et le vent se lèvera et dans un balancement de vol"},{"heb":"וְהָרוּחַ תָּקוּם וּבְטִיסַת נַדְנֵדוֹת","fr":"Et dans un balancement de vol"},{"heb":"וְכִבְשָׂה וְאַיֶּלֶת תִּהְיֶינָה עֵדוֹת","fr":"Et une brebis et une biche seront témoins"},{"heb":"שֶׁלִּטַּפְתָּ אוֹתָן וְהוֹסַפְתָּ לֶכֶת – –","fr":"Que tu les as caressées et as continué ta route"},{"heb":"שֶׁלִּטַּפְתָּ אוֹתָן וְהוֹסַפְתָּ לֶכֶת – –","fr":"Que tu les as caressées et as continué ta route"},{"heb":"שֶׁיָּדֶיךָ רֵיקוֹת וְעִירְךָ רְחוֹקָה","fr":"Que tes mains sont vides et ta ville lointaine"},{"heb":"וְלֹא פַּעַם סָגַדְתָּ אַפַּיִם","fr":"Et que plus d'une fois tu t'es prosterné face contre terre"},{"heb":"וְצַמֶּרֶת גְּשׁוּמַת עַפְעַפַּיִם.","fr":"Et une cime d'arbre aux paupières de pluie"}],"quatrains":[{"heb":"עוֹד חוֹזֵר הַנִּגּוּן שֶׁזָּנַחְתָּ לַשָּׁוְא\nוְהַדֶּרֶךְ עוֹדֶנָּה נִפְקַחַת לָאֹרֶךְ\nוְעָנָן בְּשָׁמָיו וְאִילָן בִּגְשָׁמָיו\nמְצַפִּים עוֹד לְךָ, עוֹבֵר אוֹרַח.","fr":"L'air que tu as abandonné en vain revient encore / Et la route s'ouvre toujours en longueur / Et un nuage dans son ciel et un arbre sous sa pluie / T'attendent encore, toi le passant.","an":"Ce premier quatrain installe le paradoxe fondateur du poème : le voyageur a cru pouvoir abandonner ('זָנַחְתָּ') une mélodie, un chemin, un paysage, mais le monde naturel résiste à cet abandon et persiste à l'attendre. Le mot 'לַשָּׁוְא' (en vain) frappe dès le premier vers : c'est l'errance qui est vaine, non la fidélité du monde. La route qui 'se rouvre' ('נִפְקַחַת') est une image quasi anatomique — comme un œil qui s'ouvre — conférant à la nature un regard actif. Le parallélisme 'עָנָן בְּשָׁמָיו / אִילָן בִּגְשָׁמָיו' (nuage dans son ciel / arbre sous sa pluie) crée une symétrie musicale et visuelle, chaque élément naturel possédant son propre espace intime. L'apostrophe finale 'עוֹבֵר אוֹרַח' (passant, voyageur de passage) nomme le destinataire avec une distance touchante : il n'a pas de nom, il est universellement l'homme en transit."},{"heb":"וְהָרוּחַ תָּקוּם וּבְטִיסַת נַדְנֵדוֹת\nיַעַבְרוּ הַבְּרָקִים מֵעָלֶיךָ\nוְכִבְשָׂה וְאַיֶּלֶת תִּהְיֶינָה עֵדוֹת\nשֶׁלִּטַּפְתָּ אוֹתָן וְהוֹסַפְתָּ לֶכֶת – –","fr":"Et le vent se lèvera et dans un balancement de vol / Les éclairs passeront au-dessus de toi / Et une brebis et une biche seront témoins / Que tu les as caressées et as continué ta route – –","an":"Ce quatrain introduit la dynamique et le mouvement — vent, éclairs, vol — dans un tableau qui était jusqu'ici statique. L'image 'בְּטִיסַת נַדְנֵדוֹת' (dans un balancement de vol, littéralement 'vol de balancements') est l'une des plus originales du poème : elle associe la légèreté enfantine de la balançoire à la fulgurance de l'éclair, créant un effet de sublime ludique caractéristique d'Alterman. La présence de la brebis ('כִּבְשָׂה') et de la biche ('אַיֶּלֶת'), animaux doux et vulnérables, fonctionne comme une mise en scène de la tendresse fugace du voyageur : il caresse, puis repart. Le verbe 'וְהוֹסַפְתָּ לֶכֶת' (et tu as continué à marcher) est brutal dans sa simplicité. Les tirets doubles finaux ('– –') signalent une suspension, une phrase inachevée qui se prolonge dans le quatrain suivant, liant les deux strophes syntaxiquement et émotionnellement."},{"heb":"– – שֶׁיָּדֶיךָ רֵיקוֹת וְעִירְךָ רְחוֹקָה\nוְלֹא פַּעַם סָגַדְתָּ אַפַּיִם\nלְחֹרְשָׁה יְרוֹקָה וְאִשָּׁה בִּצְחוֹקָהּ\nוְצַמֶּרֶת גְּשׁוּמַת עַפְעַפַּיִם.","fr":"– – Que tes mains sont vides et ta ville lointaine / Et que plus d'une fois tu t'es prosterné face contre terre / Devant un bosquet vert et une femme dans son rire / Et une cime d'arbre aux paupières de pluie.","an":"Ce quatrain final, rattaché syntaxiquement au précédent par les tirets, révèle le sens profond du poème tout entier. 'יָדֶיךָ רֵיקוֹת' (tes mains vides) et 'עִירְךָ רְחוֹקָה' (ta ville lointaine) formulent la double solitude du voyageur : il n'a rien rapporté, il n'appartient nulle part. Pourtant, paradoxalement, il a su se prosterner ('סָגַדְתָּ אַפַּיִם', littéralement s'incliner face contre terre, terme d'adoration religieuse) devant des beautés fugaces : un bosquet, le rire d'une femme, la cime pluvieuse d'un arbre. L'image finale 'צַמֶּרֶת גְּשׁוּמַת עַפְעַפַּיִם' (cime aux paupières de pluie) est extraordinaire : la pluie sur les branches devient des paupières mi-closes, soit un regard humain prêté à l'arbre, soit la vision voilée du marcheur. Le registre oscille entre humilité spirituelle et sensualité subtile, réconciliant l'errance et la plénitude dans un même geste de dévotion au monde."}],"analyse":"Nathan Alterman (1910-1970), poète majeur du modernisme hébraïque, publie 'כּוֹכָבִים בַּחוּץ' en 1938. Ce recueil fonde un lyrisme symboliste et expressionniste propre à la renaissance de la langue hébraïque. Le poème étudié explore la tension entre le mouvement perpétuel du voyageur et la fidélité nostalgique du monde naturel qui l'attend. La forme en quatrains rimés (ABAB), la musicalité des répétitions et la personnification de la nature créent une atmosphère mélancolique et contemplative. Le thème central est la solitude du marcheur errant, dont les mains vides et la ville lointaine symbolisent un exil intérieur autant que géographique."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
