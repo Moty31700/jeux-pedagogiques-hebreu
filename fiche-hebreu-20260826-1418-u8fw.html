@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"‏פְּגִישָׁה לְאֵין קֵץ","auteur":"נתן אלתרמן","youtube":"","shironet":"","mots":[{"heb":"סָעַרְתְּ","translit":"sa'art","fr":"tu t'es déchaînée / tu as fait tempête","sens":"qal passé 2fs","racine":"ס-ע-ר","nature":"verbe","genre":"f","nombre":"sg","formes":"סוֹעֵר · סְעָרָה · נִסְעַר","cat":"verbes","emploi":"Le verbe סָעַרְתְּ décrit l'irruption violente et tempétueuse de l'aimée sur le moi lyrique."},{"heb":"אֲנַגְּנֵךְ","translit":"anagnekh","fr":"je te chanterai / je jouerai pour toi","sens":"piel futur 1cs + suf. 2fs","racine":"נ-ג-נ","nature":"verbe","genre":"—","nombre":"—","formes":"נִגּוּן · מְנַגֵּן · נְגִינָה","cat":"verbes","emploi":"אֲנַגְּנֵךְ exprime la promesse éternelle de célébrer l'aimée par le chant et la musique."},{"heb":"שָׁוְא","translit":"shav","fr":"en vain / néant / vide","sens":"nom-adverbe invariable","racine":"ש-ו-א","nature":"adverbe","genre":"—","nombre":"—","formes":"לַשָּׁוְא · שֶׁקֶר","cat":"autre","emploi":"שָׁוְא souligne l'inutilité de toute tentative de se protéger de l'aimée."},{"heb":"סְחַרְחַר","translit":"s'kharkhár","fr":"étourdi / pris de vertige / qui tourne","sens":"adjectif redoublé ms","racine":"ס-ח-ר","nature":"adjectif","genre":"m","nombre":"sg","formes":"סְחַרְחֹרֶת · סָחַר","cat":"adjectifs","emploi":"סְחַרְחַר qualifie le corps du moi lyrique saisi de vertige sous l'effet du désir."},{"heb":"אֹבֵד יָדַיִם","translit":"óved yadáyim","fr":"perdant les mains / impuissant / désemparé","sens":"part. qal ms + nom dual","racine":"א-ב-ד","nature":"expression","genre":"m","nombre":"sg","formes":"אָבַד · אוֹבֵד","cat":"autre","emploi":"L'expression אֹבֵד יָדַיִם signifie perdre toute maîtrise, être totalement dépassé par les événements."},{"heb":"הַחֵטְא","translit":"ha-khét","fr":"la faute / le péché","sens":"nom ms défini","racine":"ח-ט-א","nature":"nom","genre":"m","nombre":"sg","formes":"חָטָא · חַטָּאת · חוֹטֵא","cat":"noms","emploi":"הַחֵטְא désigne l'aimée comme incarnation même de la transgression désirable."},{"heb":"הַשּׁוֹפֶטֶת","translit":"ha-shofetet","fr":"la juge","sens":"part. qal fs défini","racine":"ש-פ-ט","nature":"nom","genre":"f","nombre":"sg","formes":"שָׁפַט · שֶׁפֶט · מִשְׁפָּט","cat":"noms","emploi":"הַשּׁוֹפֶטֶת place l'aimée en position d'autorité absolue, juge de la faute qu'elle représente elle-même."},{"heb":"פִּתְאֹמִית לָעַד","translit":"pit'omít la'ad","fr":"soudaine à jamais / instantanée pour toujours","sens":"adj fs + prép + nom","racine":"פ-ת-א","nature":"expression","genre":"f","nombre":"sg","formes":"פִּתְאוֹם · לָנֶצַח","cat":"autre","emploi":"L'oxymore פִּתְאֹמִית לָעַד condense le paradoxe de l'apparition aimée : fugitive et éternelle à la fois."},{"heb":"הֲלוּמוֹת","translit":"halumót","fr":"frappées / assommées / hébétées","sens":"part. qal passif fp","racine":"ה-ל-מ","nature":"adjectif","genre":"f","nombre":"pl","formes":"הָלַם · מַהֲלֻמָּה","cat":"adjectifs","emploi":"הֲלוּמוֹת qualifie les yeux du poète comme frappés de stupeur par la vision de l'aimée."},{"heb":"שְׁקִיעוֹת שֶׁל פֶּטֶל","translit":"shkiót shel pétel","fr":"des couchers de soleil couleur framboise","sens":"nom fp cs + prép + nom ms","racine":"ש-ק-ע","nature":"expression","genre":"f","nombre":"pl","formes":"שְׁקִיעָה · פֶּטֶל","cat":"autre","emploi":"שְׁקִיעוֹת שֶׁל פֶּטֶל est une métaphore synesthésique qui peint le crépuscule en couleur et saveur de framboise."},{"heb":"תְּאַלְּמִי","translit":"te'almi","fr":"tu me rends muet / tu me réduis au silence","sens":"piel futur 2fs","racine":"א-ל-מ","nature":"verbe","genre":"f","nombre":"sg","formes":"אִלֵּם · אִלְמוּת · נֶאֱלַם","cat":"verbes","emploi":"תְּאַלְּמִי exprime le paradoxe central : l'aimée qui inspire le chant impose aussi le silence absolu."},{"heb":"אֲלֻמּוֹת","translit":"alumót","fr":"gerbes / fagots / bottes de blé","sens":"nom fp absolu","racine":"א-ל-מ","nature":"nom","genre":"f","nombre":"pl","formes":"אֲלֻמָּה · עֹמֶר","cat":"noms","emploi":"אֲלֻמּוֹת crée un jeu de mots avec אִלֵּם (muet) : le poète est réduit en gerbes silencieuses."},{"heb":"צִוַּנִּי","translit":"tzivváni","fr":"il m'a ordonné / il m'a commandé","sens":"piel passé 3ms + suf. 1cs","racine":"צ-ו-ה","nature":"verbe","genre":"m","nombre":"sg","formes":"מִצְוָה · צַו · מְצַוֶּה","cat":"verbes","emploi":"צִוַּנִּי introduit la dimension prophétique : le moi reçoit un commandement divin à accomplir."},{"heb":"שְׁקֵדִים וְצִמּוּקִים","translit":"shkédim ve-tzimukím","fr":"des amandes et des raisins secs","sens":"nom mp + conj + nom mp","racine":"ש-ק-ד / צ-מ-ק","nature":"expression","genre":"m","nombre":"pl","formes":"שָׁקֵד · צִמּוּק","cat":"autre","emploi":"שְׁקֵדִים וְצִמּוּקִים symbolisent le don humble et doux offert malgré la pauvreté, par amour et obéissance."},{"heb":"פְּצוּעַ־רֹאשׁ","translit":"p'tzúa-rosh","fr":"la tête blessée / blessé à la tête","sens":"part. qal passif ms + nom ms en état construit","racine":"פ-צ-ע","nature":"expression","genre":"m","nombre":"sg","formes":"פָּצוּעַ · פֶּצַע · רֹאשׁ","cat":"autre","emploi":"פְּצוּעַ־רֹאשׁ décrit la chute sacrificielle du poète qui tombe blessé pour accomplir un geste de beauté."}],"phrases":[{"heb":"כִּי סָעַרְתְּ עָלַי, לָנֶצַח אֲנַגְּנֵךְ","fr":"Car tu t'es déchaînée sur moi, je te chanterai pour l'éternité"},{"heb":"כִּי סָעַרְתְּ עָלַי, לָנֶצַח אֲנַגְּנֵךְ","fr":"Car tu t'es déchaînée sur moi, je te chanterai pour l'éternité"},{"heb":"שָׁוְא חוֹמָה אָצוּר לָךְ, שָׁוְא אַצִּיב דְּלָתַיִם","fr":"En vain j'élèverais pour toi un mur, en vain j'érigherais des portes"},{"heb":"וְאֵלַי גּוּפִי סְחַרְחַר, אֹבֵד יָדַיִם","fr":"Et vers moi mon corps est étourdi, perdant les mains"},{"heb":"וְאֵלַי גּוּפִי סְחַרְחַר, אֹבֵד יָדַיִם","fr":"Et vers moi mon corps est étourdi, perdant les mains"},{"heb":"לַסְּפָרִים רַק אַתְּ הַחֵטְא וְהַשּׁוֹפֶטֶת","fr":"Pour les livres, tu es seule la faute et la juge"},{"heb":"לַסְּפָרִים רַק אַתְּ הַחֵטְא וְהַשּׁוֹפֶטֶת","fr":"Pour les livres, tu es seule la faute et la juge"},{"heb":"פִּתְאֹמִית לָעַד! עֵינַי בָּךְ הֲלוּמוֹת","fr":"Soudaine à jamais ! Mes yeux sont frappés en toi"},{"heb":"פִּתְאֹמִית לָעַד! עֵינַי בָּךְ הֲלוּמוֹת","fr":"Soudaine à jamais ! Mes yeux sont frappés en toi"},{"heb":"עֵת בִּרְחוֹב לוֹחֵם, שׁוֹתֵת שְׁקִיעוֹת שֶׁל פֶּטֶל","fr":"Quand dans la rue combattante, saignant des couchers de soleil couleur framboise"},{"heb":"תְּאַלְּמִי אוֹתִי לַאֲלֻמּוֹת","fr":"Tu me réduis au silence en gerbes"},{"heb":"תְּאַלְּמִי אוֹתִי לַאֲלֻמּוֹת","fr":"Tu me réduis au silence en gerbes"},{"heb":"אֱלֹהַי צִוַּנִּי שֵׂאת לְעוֹלָלַיִךְ","fr":"Mon Dieu m'a ordonné de porter à tes enfants"},{"heb":"מֵעָנְיִי הָרַב, שְׁקֵדִים וְצִמּוּקִים","fr":"De ma grande pauvreté, des amandes et des raisins secs"},{"heb":"יוֹם אֶחָד אֶפֹּל עוֹד פְּצוּעַ־רֹאשׁ לִקְטֹף","fr":"Un jour je tomberai encore, la tête blessée, pour cueillir"}],"quatrains":[{"heb":"כִּי סָעַרְתְּ עָלַי, לָנֶצַח אֲנַגְּנֵךְ.\nשָׁוְא חוֹמָה אָצוּר לָךְ, שָׁוְא אַצִּיב דְּלָתַיִם!\nתְּשׁוּקָתִי אֵלַיִךְ וְאֵלַי גַּנֵּךְ\nוְאֵלַי גּוּפִי סְחַרְחַר, אֹבֵד יָדַיִם!","fr":"Car tu t'es déchaînée sur moi, je te chanterai pour l'éternité. / En vain j'élèverais pour toi un mur, en vain j'érigherais des portes ! / Mon désir est vers toi et vers moi ton jardin / Et vers moi mon corps est étourdi, perdant les mains !","an":"Le premier quatrain pose d'emblée la dynamique fondatrice du poème : une irruption violente de l'aimée ('tu t'es déchaînée') qui déclenche une promesse éternelle de chant. Le verbe אֲנַגְּנֵךְ (je te chanterai) contient la racine נגן (jouer de la musique, chanter) : l'amour se mue immédiatement en acte poétique, le chant devenant la seule réponse possible à la tempête intérieure. La répétition anaphorique de שָׁוְא (en vain) souligne l'inutilité de toute défense : le moi sait d'avance qu'il ne peut se protéger. L'image du jardin (גַּן) attire vers le moi avec la même force que le désir, créant une réciprocité qui abolit la distance. Le dernier vers, avec גּוּפִי סְחַרְחַר (mon corps est étourdi), plonge dans le registre sensoriel : le vertige corporel traduit la perte de maîtrise et l'engloutissement dans le désir, où אֹבֵד יָדַיִם (perdant les mains) exprime l'impuissance totale face à cet envahissement."},{"heb":"לַסְּפָרִים רַק אַתְּ הַחֵטְא וְהַשּׁוֹפֶטֶת.\nפִּתְאֹמִית לָעַד! עֵינַי בָּךְ הֲלוּמוֹת,\nעֵת בִּרְחוֹב לוֹחֵם, שׁוֹתֵת שְׁקִיעוֹת שֶׁל פֶּטֶל,\nתְּאַלְּמִי אוֹתִי לַאֲלֻמּוֹת.","fr":"Pour les livres, tu es seule la faute et la juge. / Soudaine à jamais ! Mes yeux sont frappés en toi, / Quand dans la rue combattante, saignant des couchers de soleil couleur framboise, / Tu me réduis au silence en gerbes.","an":"Ce quatrain ouvre sur une tension paradoxale : l'aimée est simultanément הַחֵטְא (la faute) et הַשּׁוֹפֶטֶת (la juge), ce qui place le moi dans une position d'accusé incapable de plaider car l'instance judiciaire est elle-même l'objet du désir. L'expression פִּתְאֹמִית לָעַד (soudaine à jamais) est une oxymore saisissante : ce qui est instantané devient éternel, condensant la nature de l'apparition aimée. L'image de la rue 'qui combat' et 'saigne des couchers de soleil couleur framboise' (שְׁקִיעוֹת שֶׁל פֶּטֶל) est d'un surréalisme lyrique typique d'Alterman : la ville urbaine s'anime en être blessé, les couleurs du crépuscule deviennent une hémorragie chromatique. Le verbe תְּאַלְּמִי (tu me rends muet) renoue avec le motif du chant : la même femme qui inspire le chant éternel réduit le poète au silence absolu, paradoxe constitutif de tout lyrisme amoureux."},{"heb":"עַד קַצְוֵי הָעֶצֶב, עַד עֵינוֹת הַלַּיִל,\nבִּרְחוֹבוֹת בַּרְזֶל רֵיקִים וַאֲרֻכִּים,\nאֱלֹהַי צִוַּנִּי שֵׂאת לְעוֹלָלַיִךְ,\nמֵעָנְיִי הָרַב, שְׁקֵדִים וְצִמּוּקִים.","fr":"Jusqu'aux confins de la tristesse, jusqu'aux sources de la nuit, / Dans les rues de fer vides et longues, / Mon Dieu m'a ordonné de porter à tes enfants, / De ma grande pauvreté, des amandes et des raisins secs.","an":"Ce quatrain déplace le poème vers une dimension quasi prophétique et messianique. Le moi lyrique reçoit un commandement divin (צִוַּנִּי, il m'a ordonné) de traverser des espaces extrêmes — les 'confins de la tristesse', les 'sources de la nuit', les 'rues de fer vides et longues' — images d'une modernité urbaine froide et déshumanisée. Mais ce chemin de désolation aboutit à un geste d'une douceur déconcertante : offrir des amandes et des raisins secs (שְׁקֵדִים וְצִמּוּקִים) aux enfants de l'aimée. Ce contraste entre l'immensité tragique du décor et la petitesse concrète de l'offrande crée un effet d'humilité bouleversant. L'expression מֵעָנְיִי הָרַב (de ma grande pauvreté) souligne que ce don est d'autant plus précieux qu'il vient du dénuement : le poète, pauvre, donne ce qu'il peut, et ce peu est sanctifié par l'ordre divin. La structure spatiale (jusqu'à... dans... à tes enfants) mime le parcours même du messager."},{"heb":"וַאֲנִי יוֹדֵעַ כִּי לְקוֹל הַתֹּף,\nבְּעָרֵי מִסְחָר חֵרְשׁוֹת וְכוֹאֲבוֹת,\nיוֹם אֶחָד אֶפֹּל עוֹד פְּצוּעַ־רֹאשׁ לִקְטֹף\nאֶת חִיּוּכֵנוּ זֶה, מִבֵּין הַמֶּרְכָּבוֹת.","fr":"Et moi je sais qu'au son du tambour, / Dans les villes de commerce sourdes et souffrantes, / Un jour je tomberai encore, la tête blessée, pour cueillir / Ce sourire nôtre, d'entre les chariots.","an":"La clôture du poème est une prophétie de chute consentie et lucide. La formule וַאֲנִי יוֹדֵעַ (et moi je sais) installe une conscience tragique : le moi ne s'illusionne pas, il anticipe sa propre blessure. Les 'villes de commerce sourdes et souffrantes' (עָרֵי מִסְחָר חֵרְשׁוֹת וְכוֹאֲבוֹת) reprennent le motif de la modernité urbaine hostile, incapable d'entendre la beauté. Le 'son du tambour' évoque à la fois la marche militaire et la fête foraine, deux formes d'un bruit qui écrase le lyrisme. Mais c'est précisément dans cet espace hostile que le moi tombera — פְּצוּעַ־רֹאשׁ (la tête blessée) — pour accomplir un acte d'une délicatesse extrême : cueillir le sourire partagé (חִיּוּכֵנוּ זֶה, ce sourire nôtre) d'entre les chariots. Ce sourire, trésor fragile et collectif, résiste à l'écrasement de la ville marchande. La chute n'est pas défaite mais dévotion ultime : le poète sacrifie son corps pour sauver la tendresse."}],"analyse":"Nathan Alterman (1910-1970), poète majeur de la modernité hébraïque, compose ici un poème d'amour absolu et mystique intitulé 'Rencontre sans fin'. La ville nocturne, le corps désirant, la prière et la nature cosmique s'y entremêlent dans une langue à la fois classique et surréaliste. Le poème tisse un lien indissoluble entre le moi lyrique et un 'tu' féminin qui dépasse la femme aimée pour incarner la vie elle-même, la cité, la beauté. La forme en quatrains rimés, le registre élevé teinté d'élans prophétiques, et la syntaxe souvent inversée ou elliptique créent une tension permanente entre abandon et dévotion."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
