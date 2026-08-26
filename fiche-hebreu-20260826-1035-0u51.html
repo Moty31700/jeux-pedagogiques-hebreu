@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"מסע ללא שם","auteur":"לאה גולדברג","youtube":"","shironet":"","mots":[{"heb":"מַסָּע","translit":"massa","fr":"voyage, expédition","sens":"nom masculin singulier, construit sur racine du mouvement","racine":"נ-ס-ע","nature":"nom","genre":"m","nombre":"sg","formes":"מַסָּעוֹת · מַסַּע-","cat":"noms","emploi":"הַמַּסָּע הַזֶּה הָיָה אָרֹךְ - ce voyage était long"},{"heb":"שָׁבוּעוֹת","translit":"shavuot","fr":"semaines","sens":"nom masculin pluriel","racine":"שׁ-ב-ע","nature":"nom","genre":"m","nombre":"pl","formes":"שָׁבוּעַ · שְׁבוּעַיִם","cat":"noms","emploi":"עָבְרוּ שָׁבוּעוֹת מֵאָז - des semaines ont passé depuis"},{"heb":"פּוֹנֶה","translit":"poneh","fr":"s'adresse, se tourne vers","sens":"binyan Qal, participe présent masculin singulier","racine":"פ-נ-ה","nature":"verbe","genre":"m","nombre":"sg","formes":"פָּנָה · יִפְנֶה · פְּנִיָּה","cat":"verbes","emploi":"הוּא פּוֹנֶה אֵלַי בְּחִיּוּךְ - il se tourne vers moi avec un sourire"},{"heb":"תּוּכִּי","translit":"tuki","fr":"perroquet","sens":"nom masculin singulier","racine":"racine incertaine, emprunt","nature":"nom","genre":"m","nombre":"sg","formes":"תּוּכִּיִּים","cat":"noms","emploi":"הַתּוּכִּי חוֹזֵר עַל כָּל מִלָּה - le perroquet répète chaque mot"},{"heb":"קַיָּים","translit":"qayyam","fr":"existant, qui existe","sens":"adjectif masculin singulier, forme intensive","racine":"ק-י-מ","nature":"adjectif","genre":"m","nombre":"sg","formes":"קַיֶּמֶת · קַיָּימִים","cat":"adjectifs","emploi":"הַחוֹק קַיָּים עֲדַיִין - la loi existe encore"},{"heb":"צְלִיל","translit":"tslil","fr":"son, sonorité","sens":"nom masculin singulier","racine":"צ-ל-ל","nature":"nom","genre":"m","nombre":"sg","formes":"צְלִילִים · צִלְצוּל","cat":"noms","emploi":"הַצְּלִיל שֶׁל שְׁמָהּ יָפֶה - la sonorité de son nom est belle"},{"heb":"תָּו","translit":"tav","fr":"note (musicale), signe, marque","sens":"nom masculin singulier","racine":"ת-ו-ה","nature":"nom","genre":"m","nombre":"sg","formes":"תָּוִים · תָּוִית","cat":"noms","emploi":"הוּא לֹא יוֹדֵעַ לִקְרֹא תָּוִים - il ne sait pas lire les notes"},{"heb":"לְלֹא","translit":"lelo","fr":"sans","sens":"préposition composée (לְ + לֹא)","racine":"ל-א","nature":"préposition","genre":"—","nombre":"—","formes":"בְּלִי · ללא-","cat":"autre","emploi":"הוּא יָצָא לְלֹא מְעִיל - il est sorti sans manteau"},{"heb":"לִפְרָקִים","translit":"lifrakim","fr":"parfois, de temps en temps","sens":"préposition לְ + nom masculin pluriel פְּרָקִים (intervalles)","racine":"פ-ר-ק","nature":"adverbe","genre":"—","nombre":"—","formes":"לְעִתִּים · מִדֵּי פַּעַם","cat":"autre","emploi":"לִפְרָקִים הִיא חוֹשֶׁבֶת עָלָיו - parfois elle pense à lui"},{"heb":"סְפִינוֹת","translit":"sfinot","fr":"bateaux, navires","sens":"nom féminin pluriel","racine":"ס-פ-נ","nature":"nom","genre":"f","nombre":"pl","formes":"סְפִינָה · אֳנִיָּה","cat":"noms","emploi":"הַסְּפִינוֹת יָצְאוּ לַיָּם - les bateaux sont partis en mer"},{"heb":"גְּשָׁרִים","translit":"gsharim","fr":"ponts","sens":"nom masculin pluriel","racine":"ג-שׁ-ר","nature":"nom","genre":"m","nombre":"pl","formes":"גֶּשֶׁר · גַּשָּׁר","cat":"noms","emploi":"עִיר הַגְּשָׁרִים הִיא פָּרִיז - la ville des ponts c'est Paris"},{"heb":"מֻטֶּלֶת","translit":"mutelet","fr":"étendue, jetée, allongée","sens":"binyan Hufal ou Pual, participe féminin singulier - voix passive","racine":"ט-ו-ל","nature":"verbe","genre":"f","nombre":"sg","formes":"מֻטָּל · הֻטַּל","cat":"verbes","emploi":"הִיא הָיְתָה מֻטֶּלֶת עַל הַמִּיטָּה - elle était étendue sur le lit"},{"heb":"תַּדְהָר","translit":"tadhar","fr":"platane (arbre)","sens":"nom masculin singulier, terme botanique biblique réactualisé","racine":"ד-ה-ר","nature":"nom","genre":"m","nombre":"sg","formes":"עֲלֵי תַּדְהָר","cat":"noms","emploi":"צֵל הַתַּדְהָר קָרִיר בַּקַּיִץ - l'ombre du platane est fraîche en été"},{"heb":"נוֹשְׁרִים","translit":"noshrim","fr":"qui tombent, qui chutent (feuilles)","sens":"binyan Qal, participe présent masculin pluriel","racine":"נ-שׁ-ר","nature":"verbe","genre":"m","nombre":"pl","formes":"נָשַׁר · נְשִׁירָה","cat":"verbes","emploi":"עֲלֵי הַסְּתָו נוֹשְׁרִים לָאָרֶץ - les feuilles d'automne tombent à terre"},{"heb":"מוּזָר","translit":"muzar","fr":"étrange, bizarre","sens":"adjectif masculin singulier, forme passive de זוּר (être étranger)","racine":"ז-ו-ר","nature":"adjectif","genre":"m","nombre":"sg","formes":"מוּזָרָה · מוּזָרוּת","cat":"adjectifs","emploi":"הַשֵּׁם הַזֶּה נִשְׁמָע מוּזָר לְאָזְנַי - ce nom semble étrange à mes oreilles"}],"phrases":[{"heb":"מסע ללא שם","fr":"voyage sans nom"},{"heb":"זה שבועות שאיש אינו פונה","fr":"cela fait des semaines que personne ne s'adresse"},{"heb":"שאיש אינו פונה אלי בשמי","fr":"que personne ne s'adresse à moi par mon nom"},{"heb":"התוכיים שבמטבח ביתי","fr":"les perroquets dans la cuisine de ma maison"},{"heb":"והוא קיים רק על נייר, בכתב","fr":"il n'existe que sur papier, en écriture"},{"heb":"ואין לו קול, ואין לו צליל ותו","fr":"il n'a pas de voix, pas de son ni de note"},{"heb":"ואין לו קול, ואין לו צליל ותו","fr":"il n'a pas de voix, pas de son ni de note"},{"heb":"ימים אני הולכת ללא שם","fr":"des jours je marche sans nom"},{"heb":"ולפרקים אני חושבת ללא שם","fr":"parfois je pense sans nom"},{"heb":"הלכתי עם הספינות ועמדתי עם הגשרים","fr":"j'ai marché avec les bateaux et me suis tenue avec les ponts"},{"heb":"הלכתי עם הספינות ועמדתי עם הגשרים","fr":"j'ai marché avec les bateaux et me suis tenue avec les ponts"},{"heb":"והייתי מוטלת ברחוב","fr":"et j'étais étendue dans la rue"},{"heb":"עם עלי התדהר הנושרים","fr":"avec les feuilles du platane qui tombent"},{"heb":"עם עלי התדהר הנושרים","fr":"avec les feuilles du platane qui tombent"},{"heb":"והיה לי שם מוזר","fr":"et j'avais un nom étrange"}],"quatrains":[{"heb":"זֶה שָׁבוּעוֹת שֶׁאִישׁ אֵינוֹ פּוֹנֶה\nאֵלַי בִּשְׁמִי, וְזֶה פָּשׁוּט מְאֹד\nהַתּוּכִּיִּים שֶׁבַּמִּטְבָּח בֵּיתִי\nעוֹד לֹא לָמְדוּ אוֹתוֹ","fr":"Cela fait des semaines que personne ne s'adresse\nà moi par mon nom, et c'est très simple:\nles perroquets dans la cuisine de ma maison\nne l'ont pas encore appris.","an":"Cette première strophe installe le motif central: l'absence d'interpellation nominale. La locution temporelle 'זֶה שָׁבוּעוֹת' (cela fait des semaines) ancre la durée dans le vécu. Le tour 'אִישׁ אֵינוֹ פּוֹנֶה אֵלַי בִּשְׁמִי' adopte la négation indéfinie hébraïque (אִישׁ + אֵין) pour signifier l'absence absolue d'autrui. L'image des perroquets dans la cuisine est à la fois prosaïque et poétique: le perroquet, qui imite la parole humaine, devient le seul être susceptible de prononcer le nom, mais il ne l'a pas encore appris. Cette ironie douce souligne l'isolement: même l'oiseau mimétique reste muet quant au nom de la locutrice. Le registre est délibérément quotidien, presque désabusé ('וְזֶה פָּשׁוּט מְאֹד'), ce qui renforce le pathétique par contraste. La syntaxe est simple, déclarative, comme une constatation résignée."},{"heb":"הָאֲנָשִׁים בְּכָל רַחֲבֵי הָעִיר\nאֵינָם יוֹדְעִים אוֹתוֹ\nוְהוּא קַיָּים רַק עַל נְיָיר, בִּכְתַב\nוְאֵין לוֹ קוֹל, וְאֵין לוֹ צְלִיל וָתוֹ","fr":"Les gens dans toute l'étendue de la ville\nne le connaissent pas;\nil n'existe que sur papier, en écriture,\nil n'a pas de voix, pas de son ni de note.","an":"Cette strophe élargit l'absence du nom de l'intime (la cuisine, les perroquets) à l'espace urbain entier. La construction parallèle 'אֵין לוֹ קוֹל, וְאֵין לוֹ צְלִיל וָתוֹ' (il n'a pas de voix, pas de son ni de note) crée une anaphore ternaire qui dépouille le nom de toute réalité phonique. Le mot 'תָּו' (note musicale, signe) est particulièrement riche: il désigne à la fois une note de musique et un signe graphique, renvoyant au plan de l'écriture. Le nom n'existe plus que 'עַל נְיָיר, בִּכְתַב' (sur papier, en écriture) - opposition fondamentale entre écrit et oral, entre existence abstraite et présence vivante. Cette strophe illustre une problématique propre à l'immigration: le nom étranger qui résiste à la phonétique locale reste lettre morte. La progression du particulier (cuisine) au général (toute la ville) mime un élargissement de la solitude."},{"heb":"יָמִים אֲנִי הוֹלֶכֶת לְלֹא שֵׁם\nבִּרְחוֹב שֶׁאֲנִי יוֹדַעַת אֶת שְׁמוֹ\nשָׁעוֹת אֲנִי יוֹשֶׁבֶת לְלֹא שֵׁם\nמוּל עֵץ שֶׁאֲנִי יוֹדַעַת אֶת שְׁמוֹ\nוְלִפְרָקִים אֲנִי חוֹשֶׁבֶת לְלֹא שֵׁם\nעַל מִי שֶׁאֵינֶנִּי יוֹדַעַת אֶת שְׁמוֹ","fr":"Des jours je marche sans nom\ndans une rue dont je connais le nom;\ndes heures je suis assise sans nom\nface à un arbre dont je connais le nom;\nparfois je pense sans nom\nà quelqu'un dont je ne connais pas le nom.","an":"Cette strophe est le cœur formel du poème: une triple anaphore bâtie sur la structure 'אֲנִי [verbe] לְלֹא שֵׁם / [objet] שֶׁאֲנִי יוֹדַעַת אֶת שְׁמוֹ'. Le paradoxe est saisissant: le sujet connaît le nom des réalités extérieures (rue, arbre) mais est lui-même dépourvu de nom. La gradation temporelle (יָמִים / שָׁעוֹת / לִפְרָקִים) et la gradation des verbes (marcher / s'asseoir / penser) évoquent une intériorisation croissante. Le renversement final est crucial: la troisième occurrence brise le schéma en introduisant 'אֵינֶנִּי יוֹדַעַת אֶת שְׁמוֹ' - l'être aimé (ou fantasmé) est lui aussi sans nom pour le sujet. L'anonymat se révèle donc réciproque et double. La structure répétitive crée un effet incantatoire proche de la litanie, renforçant le sentiment d'une errance à la fois physique et mentale. C'est la strophe la plus musicale et la plus aboutie du poème."},{"heb":"הָלַכְתִּי עִם הַסְּפִינוֹת וְעָמַדְתִּי עִם הַגְּשָׁרִים\nוְהָיִיתִי מֻטֶּלֶת בָּרְחוֹב\nעִם עֲלֵי הַתַּדְהָר הַנּוֹשְׁרִים\nהָיָה לִי סְתָו\nוְהָיָה לִי עָנָן מוּאָר לְיַד אֲרוּבָּה שְׁחוֹרָה\nוְהָיָה לִי שֵׁם מוּזָר\nאֲשֶׁר אִישׁ לֹא יָכוֹל לִנְחֹשׁ","fr":"J'ai marché avec les bateaux et me suis tenue avec les ponts,\net j'étais étendue dans la rue\navec les feuilles du platane qui tombent.\nJ'avais un automne,\nj'avais un nuage éclairé près d'une cheminée noire,\net j'avais un nom étrange\nque personne ne pouvait deviner.","an":"Cette strophe conclusive opère un basculement vers le passé (temps accomplis) et vers un lyrisme plus ample. La solidarité avec les éléments du paysage urbain - bateaux, ponts, feuilles de platane (תַּדְהָר, arbre spécifique de la flore méditerranéenne) - exprime une fusion panthéiste du moi avec le monde. L'anaphore 'הָיָה לִי' (j'avais) au passé construit un bilan nostalgique: l'automne, le nuage éclairé près de la cheminée noire (image contrastée, lumière/obscurité), et enfin le nom. Ce nom est qualifié de 'מוּזָר' (étrange, bizarre) et 'אֲשֶׁר אִישׁ לֹא יָכוֹל לִנְחֹשׁ' (que personne ne pouvait deviner). Le cercle se referme: autrefois le nom existait mais était impénétrable aux autres; maintenant il n'est plus prononcé du tout. La clôture est mélancolique - le nom étrange était une richesse singulière, même dans son étrangeté. La comparaison implicite entre les deux états (passé/présent) donne au poème sa profondeur autobiographique."}],"analyse":"Ce poème de Léa Goldberg, poétesse israélienne majeure du XXe siècle (1911-1970), explore l'expérience de l'exil intérieur et de l'anonymat à travers le motif du nom propre. Le titre 'מסע ללא שם' (voyage sans nom) annonce une quête identitaire marquée par l'effacement du sujet. La forme est libre, oscillant entre strophes narratives et lyriques, avec une syntaxe répétitive et incantatoire qui mime l'errance. Le thème central est la dissolution du moi dans l'espace urbain étranger, la perte du nom comme perte de soi, et paradoxalement la connaissance des noms du monde extérieur (rues, arbres) contre l'ignorance de sa propre identité nommée. Le poème s'inscrit dans la tradition moderniste européenne tout en portant la spécificité de l'expérience immigrante hébraïque."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
