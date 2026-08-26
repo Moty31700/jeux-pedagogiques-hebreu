@@ -423,12 +423,14 @@
       <button data-entree="theme" class="actif">Un thème</button>
       <button data-entree="chanson">Une chanson</button>
       <button data-entree="perso">Mes choix personnels</button>
+      <button data-entree="poesie">Un poème</button>
     </div>
 
     <span class="libelle">Sous quelle forme</span>
     <div class="choix" id="choix-sortie">
       <button data-sortie="jeu" class="actif">Une fiche interactive</button>
       <button data-sortie="doc">Une fiche rédigée</button>
+      <button data-sortie="duo" id="sortie-duo" style="display:none">Fiche interactive et rédigée</button>
     </div>
 
     <div class="bascules">
@@ -521,6 +523,25 @@
       </div>
     </div>
 
+    <!-- entrée : poème -->
+    <div class="bloc" id="bloc-poesie">
+      <label><span class="libelle">Titre du poème</span>
+        <input id="po-titre" dir="rtl" placeholder="&#1500;&#1493; &#1497;&#1492;&#1497;"></label>
+
+      <label><span class="libelle">Poète</span>
+        <input id="po-auteur" dir="rtl" placeholder="&#1504;&#1506;&#1502;&#1497; &#1513;&#1502;&#1512;"></label>
+
+      <span class="libelle">Type de poésie</span>
+      <div class="choix" id="choix-ptype" style="margin-bottom:1rem">
+        <button data-ptype="biblique">Biblique / médiévale</button>
+        <button data-ptype="moderne" class="actif">Moderne métrée</button>
+      </div>
+
+      <label><span class="libelle">Le poème — à copier toi-même (jusqu'à 4 quatrains)</span>
+        <textarea id="po-poeme" dir="rtl"></textarea>
+        <span class="compte-mots" id="po-compte">0 / 150 mots</span></label>
+    </div>
+
     <button id="btn-envoyer">Demander ma leçon</button>
 
     <div class="message" id="msg-lecon"></div>
@@ -583,7 +604,10 @@ var CHEMINS = {
   "theme|doc":     "/lecon-doc",
   "chanson|jeu":   "/chanson-jeu",
   "chanson|doc":   "/chanson-doc",
-  "perso|doc":     "/perso-doc"
+  "perso|doc":     "/perso-doc",
+  "poesie|duo":    "/poesie-jeu",
+  "poesie|jeu":    "/poesie-jeu",
+  "poesie|doc":    "/poesie-jeu"
 };
 
 var MAX_PAROLES = 250;
@@ -593,6 +617,7 @@ var connecte = false;       /* vrai UNIQUEMENT après connexion validée (code r
 var sousCourant = "fiche";  /* sous-onglet courant de l'espace */
 var entreeCourante = "theme";
 var sortieCourante = "jeu";
+var poesieType = "moderne";
 var envoiEnCours = false;   /* verrou anti-double-envoi */
 
 /* bas niveau : bascule seulement l'écran de droite (jamais de nav, jamais de boucle) */
@@ -761,19 +786,34 @@ brancherChoix("choix-entree", "data-entree", function (valeur) {
   document.getElementById("bloc-theme").className   = "bloc" + (valeur === "theme"   ? " visible" : "");
   document.getElementById("bloc-chanson").className = "bloc" + (valeur === "chanson" ? " visible" : "");
   document.getElementById("bloc-perso").className   = "bloc" + (valeur === "perso"   ? " visible" : "");
+  document.getElementById("bloc-poesie").className  = "bloc" + (valeur === "poesie"  ? " visible" : "");
 
-  /* Mes choix personnels ne donne qu'une fiche */
   var btnJeu   = document.querySelector("[data-sortie='jeu']");
   var btnFiche = document.querySelector("[data-sortie='doc']");
+  var btnDuo   = document.getElementById("sortie-duo");
   if (valeur === "perso") {
+    /* Mes choix personnels ne donne qu'une fiche rédigée */
+    btnJeu.style.display = ""; btnFiche.style.display = ""; btnDuo.style.display = "none";
     btnJeu.disabled = true;
     btnJeu.classList.remove("actif");
     btnFiche.classList.add("actif");
+    btnDuo.classList.remove("actif");
     sortieCourante = "doc";
+  } else if (valeur === "poesie") {
+    /* Un poème donne toujours les deux : un seul bouton combiné */
+    btnJeu.style.display = "none"; btnFiche.style.display = "none"; btnDuo.style.display = "";
+    btnJeu.classList.remove("actif");
+    btnFiche.classList.remove("actif");
+    btnDuo.classList.add("actif");
+    btnJeu.disabled = false;
+    sortieCourante = "duo";
   } else {
+    /* thème / chanson : les deux boutons normaux, fiche interactive rallumée */
+    btnJeu.style.display = ""; btnFiche.style.display = ""; btnDuo.style.display = "none";
     btnJeu.disabled = false;
     btnJeu.classList.add("actif");
     btnFiche.classList.remove("actif");
+    btnDuo.classList.remove("actif");
     sortieCourante = "jeu";
   }
 });
@@ -781,6 +821,22 @@ brancherChoix("choix-entree", "data-entree", function (valeur) {
 brancherChoix("choix-sortie", "data-sortie", function (valeur) {
   sortieCourante = valeur;
 });
+
+brancherChoix("choix-ptype", "data-ptype", function (valeur) {
+  poesieType = valeur;
+});
+
+(function () {
+  var champ = document.getElementById("po-poeme");
+  var compte = document.getElementById("po-compte");
+  if (champ && compte) {
+    champ.addEventListener("input", function () {
+      var n = compterMots(champ.value);
+      compte.textContent = n + " / 150 mots";
+      compte.className = "compte-mots" + (n > 150 ? " trop" : "");
+    });
+  }
+})();
 
 /* --- compteur de mots de la zone Paroles --- */
 function compterMots(t) {
@@ -872,7 +928,7 @@ document.getElementById("btn-envoyer").addEventListener("click", function () {
     quoi = (mots.length === 1) ? "\u00ab " + mots[0] + " \u00bb"
                                : "mes " + mots.length + " mots";
 
-  } else {
+  } else if (entreeCourante === "chanson") {
     var titre   = document.getElementById("ch-titre").value.trim();
     var paroles = document.getElementById("ch-paroles").value.trim();
     if (!titre || !paroles) {
@@ -889,10 +945,27 @@ document.getElementById("btn-envoyer").addEventListener("click", function () {
     donnees.shironet = document.getElementById("ch-shironet").value.trim();
     donnees.paroles  = paroles;
     quoi = "« " + titre + " »";
+
+  } else {
+    var potitre = document.getElementById("po-titre").value.trim();
+    var poeme   = document.getElementById("po-poeme").value.trim();
+    if (!potitre || !poeme) {
+      dire("msg-lecon", "Le titre et le poème sont nécessaires.", "erreur");
+      return;
+    }
+    if (compterMots(poeme) > 150) {
+      dire("msg-lecon", "Le poème dépasse 150 mots. Raccourcis-le (4 quatrains max).", "erreur");
+      return;
+    }
+    donnees.titre       = potitre;
+    donnees.auteur      = document.getElementById("po-auteur").value.trim();
+    donnees.poeme       = poeme;
+    donnees.type_poesie = poesieType;
+    quoi = "« " + potitre + " »";
   }
 
   var chemin = CHEMINS[entreeCourante + "|" + sortieCourante];
-  var forme  = (sortieCourante === "jeu") ? "Ton jeu sur " : "Ta fiche sur ";
+  var forme  = (sortieCourante === "jeu") ? "Ton jeu sur " : (sortieCourante === "duo" ? "Tes fiches sur " : "Ta fiche sur ");
 
   appeler(chemin, donnees, this, "msg-lecon", function () {
     dire("msg-lecon",
