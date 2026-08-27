@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"אמא","auteur":"ארי","youtube":"","shironet":"","mots":[{"heb":"אִמָּא","translit":"ima","fr":"maman","sens":"nom féminin singulier, forme familière et affective","racine":"א-מ-א","nature":"nom","genre":"f","nombre":"sg","formes":"אֵם","cat":"noms","emploi":"אִמָּא היא המילה הרכה ביותר בשפה העברית."},{"heb":"מִלָּה","translit":"mila","fr":"mot, parole","sens":"nom féminin singulier","racine":"מ-ל-ל","nature":"nom","genre":"f","nombre":"sg","formes":"מִלִּים · מִלּוּל","cat":"noms","emploi":"כל מִלָּה בשפה נושאת משמעות עמוקה."},{"heb":"עוֹלָם","translit":"olam","fr":"monde, univers, éternité","sens":"nom masculin singulier","racine":"ע-ל-מ","nature":"nom","genre":"m","nombre":"sg","formes":"עוֹלָמוֹת · לְעוֹלָם","cat":"noms","emploi":"עוֹלָם הוא המושג הגדול ביותר בדמיון האנושי."},{"heb":"וּמְלוֹאוֹ","translit":"u-melo'o","fr":"et sa plénitude, et ce qu'il contient","sens":"conjonction + nom masculin singulier avec suffixe possessif 3e personne masculin singulier","racine":"מ-ל-א","nature":"expression","genre":"m","nombre":"sg","formes":"מָלֵא · מִלּוּי","cat":"autre","emploi":"הביטוי 'עוֹלָם וּמְלוֹאוֹ' מציין שלמות מוחלטת."},{"heb":"יִשָּׂא","translit":"yissa","fr":"il portera","sens":"verbe qal, futur, 3e personne masculin singulier","racine":"נ-ש-א","nature":"verbe","genre":"m","nombre":"sg","formes":"נָשָׂא · נוֹשֵׂא","cat":"verbes","emploi":"הוא יִשָּׂא את זכר אמו בלבו לכל ימי חייו."},{"heb":"בִּלְבָבוֹ","translit":"bi-lvavo","fr":"dans son cœur","sens":"préposition + nom masculin singulier avec suffixe possessif 3e personne masculin singulier","racine":"ל-ב-ב","nature":"nom","genre":"m","nombre":"sg","formes":"לֵב · לְבָבוֹת","cat":"noms","emploi":"הוא שמר את סודו בִּלְבָבוֹ ולא גילה לאיש."},{"heb":"רֹךְ","translit":"rokh","fr":"tendresse, douceur","sens":"nom masculin singulier abstrait","racine":"ר-כ-כ","nature":"nom","genre":"m","nombre":"sg","formes":"רַךְ · רְכוּת","cat":"noms","emploi":"הִיא הִתייחסה אליו בְּרֹךְ ובחמלה."},{"heb":"שִׁיר עֶרֶשׂ","translit":"shir eress","fr":"berceuse","sens":"syntagme nominal : nom masculin + nom masculin en état construit","racine":"ש-י-ר / ע-ר-שׂ","nature":"expression","genre":"m","nombre":"sg","formes":"שִׁירִים · עֲרִיסָה","cat":"autre","emploi":"אמא שרה לתינוקה שִׁיר עֶרֶשׂ לפני השינה."},{"heb":"מְלַטֵּף","translit":"melatef","fr":"caressant, qui caresse","sens":"participe piel actif, masculin singulier","racine":"ל-ט-ף","nature":"adjectif","genre":"m","nombre":"sg","formes":"לִיטֵּף · לִיטוּף","cat":"adjectifs","emploi":"הרוח הִיתָה מְלַטֶּפֶת את פניה בעדינות."},{"heb":"לוֹחֵשׁ","translit":"lokhesh","fr":"murmurant, qui chuchote","sens":"participe qal actif, masculin singulier, valeur de présent","racine":"ל-ח-שׁ","nature":"verbe","genre":"m","nombre":"sg","formes":"לָחַשׁ · לַחַשׁ","cat":"verbes","emploi":"הוא לוֹחֵשׁ תפילה בשקט כדי שלא יישמע."},{"heb":"מִבְּלִי מֵשִׂים","translit":"mi-bli mesim","fr":"sans s'en rendre compte, sans y prendre garde","sens":"locution adverbiale figée : préposition + négation + participe","racine":"ב-ל-י / שׂ-י-מ","nature":"expression","genre":"—","nombre":"—","formes":"בְּלִי יֹדֵעַ · שֶׁלֹּא בְּמִתְכַּוֵּן","cat":"autre","emploi":"הוא נרדם מִבְּלִי מֵשִׂים בזמן שצפה בסרט."},{"heb":"נָטְעָה","translit":"nat'a","fr":"elle a planté","sens":"verbe qal, passé, 3e personne féminin singulier","racine":"נ-ט-ע","nature":"verbe","genre":"f","nombre":"sg","formes":"לִנְטֹעַ · נֶטַע","cat":"verbes","emploi":"הגנן נָטַע עצים צעירים לאורך הדרך."},{"heb":"בַּת חֲלוֹף","translit":"bat khalof","fr":"périssable, transitoire, éphémère","sens":"locution nominale figée : nom féminin singulier + nom en état construit","racine":"ח-ל-ף","nature":"expression","genre":"f","nombre":"sg","formes":"חוֹלֵף · חֲלִיפָה","cat":"autre","emploi":"השמחה האמיתית אינה בַּת חֲלוֹף."},{"heb":"הָאֹפֶק","translit":"ha-ofek","fr":"l'horizon","sens":"nom masculin singulier avec article défini","racine":"א-פ-ק","nature":"nom","genre":"m","nombre":"sg","formes":"אֳפָקִים · אוֹפְקִי","cat":"noms","emploi":"הוא הביט אל הָאֹפֶק ודמיין עתיד טוב יותר."},{"heb":"הֹוֶה","translit":"hove","fr":"présent (dimension temporelle)","sens":"nom masculin singulier, participe qal substantivé du verbe être","racine":"ה-ו-י","nature":"nom","genre":"m","nombre":"sg","formes":"עָבָר · עָתִיד / מָחָר","cat":"noms","emploi":"חשוב לחיות בַּהֹוֶה ולא להתחרט על העבר."}],"phrases":[{"heb":"אִמָּא, מִלָּה אַחַת קְטַנָּה וּבָהּ עוֹלָם וּמְלוֹאוֹ","fr":"Maman, un seul petit mot et en lui tout un univers et sa plénitude"},{"heb":"אִמָּא, מִלָּה אַחַת קְטַנָּה וּבָהּ עוֹלָם וּמְלוֹאוֹ","fr":"Maman, un seul petit mot et en lui tout un univers et sa plénitude"},{"heb":"אִמָּא, מִלָּה אַחַת קְטַנָּה וּבָהּ עוֹלָם וּמְלוֹאוֹ","fr":"Maman, un seul petit mot et en lui tout un univers et sa plénitude"},{"heb":"אִמָּא, מִלָּה אַחַת קְטַנָּה וּבָהּ עוֹלָם וּמְלוֹאוֹ","fr":"Maman, un seul petit mot et en lui tout un univers et sa plénitude"},{"heb":"אִמָּא, עַד סוֹף יָמָיו יִשָּׂא אוֹתָהּ אָדָם בִּלְבָבוֹ","fr":"Maman, jusqu'à la fin de ses jours l'homme la portera dans son cœur"},{"heb":"אִמָּא, עַד סוֹף יָמָיו יִשָּׂא אוֹתָהּ אָדָם בִּלְבָבוֹ","fr":"Maman, jusqu'à la fin de ses jours l'homme la portera dans son cœur"},{"heb":"וְהִיא מַבָּט שֶׁל רֹךְ וְצְחוֹק","fr":"C'est un regard de tendresse et de rire"},{"heb":"וְהִיא שִׁיר עֶרֶשׂ מְלַטֵּף","fr":"C'est une berceuse caressante"},{"heb":"וְהִיא שִׁיר עֶרֶשׂ מְלַטֵּף","fr":"C'est une berceuse caressante"},{"heb":"אַתָּה לוֹחֵשׁ מִבְּלִי מֵשִׂים","fr":"Tu murmures sans t'en rendre compte"},{"heb":"אַתָּה לוֹחֵשׁ מִבְּלִי מֵשִׂים","fr":"Tu murmures sans t'en rendre compte"},{"heb":"אִמָּא, אֲשֶׁר נָטְעָה בִּי אַהֲבָה","fr":"Maman, qui a planté en moi un amour"},{"heb":"אֲשֶׁר נָטְעָה בִּי אַהֲבָה, וְהִיא לֹא בַּת חֲלוֹף","fr":"Qui a planté en moi un amour qui n'est pas périssable"},{"heb":"וְהִיא הָאֹפֶק הָרָחָב אֲשֶׁר הַזְּמַן בּוֹ לֹא חָלַף","fr":"C'est l'horizon vaste où le temps n'a pas passé"},{"heb":"וְהִיא הֹוֶה וְהִיא עָבָר וְהִיא הָאֹשֶׁר בְּמָחָר","fr":"C'est le présent et c'est le passé et c'est le bonheur dans le demain"}],"quatrains":[{"heb":"אִמָּא, מִלָּה אַחַת קְטַנָּה וּבָהּ עוֹלָם וּמְלוֹאוֹ\nאִמָּא, עַד סוֹף יָמָיו יִשָּׂא אוֹתָהּ אָדָם בִּלְבָבוֹ\nוְהִיא עוֹלַם יַלְדוּת רָחוֹק וְהִיא מַבָּט שֶׁל רֹךְ וְצְחוֹק\nוְהִיא שִׁיר עֶרֶשׂ מְלַטֵּף וְהִיא יֵצוּר שֶׁרַק אוֹהֵב","fr":"Maman, un seul petit mot, et en lui tout un univers et sa plénitude / Maman, jusqu'à la fin de ses jours l'homme le portera dans son cœur / C'est un monde d'enfance lointain, c'est un regard de tendresse et de rire / C'est une berceuse caressante, c'est un être qui sait seulement aimer","an":"Ce quatrain inaugural pose la tension fondatrice du poème : la disproportion entre l'exiguïté du mot 'אמא' et l'immensité de ce qu'il contient. L'expression 'עוֹלָם וּמְלוֹאוֹ' (un monde et sa plénitude) est une formule hébraïque traditionnelle qui amplifie l'idée d'une totalité absolue. Le deuxième vers universalise le propos par l'emploi du terme générique 'אָדָם' (l'homme, tout homme), inscrivant la relation maternelle dans une dimension anthropologique. Les deux derniers vers déploient une série d'appositions anaphoriques introduites par 'וְהִיא' (et elle, c'est elle), procédé qui accumule les images : enfance, tendresse, berceuse, amour pur. Le champ lexical de la douceur sensorielle — 'רֹךְ', 'מְלַטֵּף', 'אוֹהֵב' — instaure un registre lyrique intime. La syntaxe nominale des deux derniers vers, sans verbe conjugué, donne une valeur d'évidence et d'intemporalité à ces définitions de la mère."},{"heb":"בִּשְׁעַת עָמָל אוֹ הִרְהוּרִים\nבִּשְׁעַת דְּמָמָה וּבְשִׁירִים\nבִּשְׁעַת חֲרִישׁ הָאֲדָמָה\nבִּשְׁעַת שָׁלוֹם וּמִלְחָמָה\nאַתָּה לוֹחֵשׁ מִבְּלִי מֵשִׂים\nמִלָּה שֶׁהִיא הַרְבֵּה מִלִּים","fr":"À l'heure du labeur ou des méditations / À l'heure du silence et dans les chansons / À l'heure du labour de la terre / À l'heure de la paix et de la guerre / Tu murmures sans t'en rendre compte / Un mot qui est tant de mots","an":"Cette strophe fonctionne comme un refrain philosophique qui universalise l'invocation maternelle. La structure anaphorique de 'בִּשְׁעַת' (à l'heure de) crée un effet d'accumulation rythmique qui balaie toutes les sphères de l'existence humaine : le travail, le silence, l'agriculture, la guerre. La paire antithétique 'שָׁלוֹם וּמִלְחָמָה' (paix et guerre) est particulièrement puissante : elle affirme que le mot 'אמא' surgit dans toutes les extrémités de l'expérience humaine, y compris les plus brutales. Le verbe 'לוֹחֵשׁ' (murmurer) introduit une dimension quasi-inconsciente, mystique — le mot s'échappe des lèvres sans volonté délibérée, 'מִבְּלִי מֵשִׂים' (sans y prendre garde). La clausule finale, 'מִלָּה שֶׁהִיא הַרְבֵּה מִלִּים', résume en paradoxe élégant toute la poétique du texte : un mot qui en contient une multitude."},{"heb":"אִמָּא, מִלָּה אַחַת וְסִיפּוּרִים יֵשׁ בָּהּ אֵין סוֹף\nאִמָּא, אֲשֶׁר נָטְעָה בִּי אַהֲבָה, וְהִיא לֹא בַּת חֲלוֹף\nוְהִיא הַחֶדֶר הַחַמִּים וְהִיא פִּלְאֵי הַסִּיפּוּרִים\nוְהִיא עוֹלַם הָאַגָּדוֹת וְהִיא שָׁעוֹת מְאֻשָּׁרוֹת","fr":"Maman, un seul mot et les histoires qu'il renferme sont sans fin / Maman, qui a planté en moi un amour qui n'est pas périssable / C'est la chambre chaude et ce sont les merveilles des récits / C'est le monde des contes et ce sont les heures bienheureuses","an":"Cette strophe introduit la dimension mémorielle et narrative du mot 'אמא'. L'expression 'אֵין סוֹף' (sans fin, infini) reprend et amplifie l'idée du premier quatrain. La métaphore centrale 'נָטְעָה בִּי אַהֲבָה' (elle a planté en moi l'amour) est particulièrement belle : le verbe 'נטע' (planter), tiré du domaine agricole, suggère que l'amour maternel est une graine déposée dans l'être de l'enfant, qui croît et dure. Cet amour est qualifié de 'לֹא בַּת חֲלוֹף' — une formule hébraïque idiomatique signifiant 'impérissable, non transitoire'. Les deux derniers vers évoquent l'univers de l'enfance par des images concrètes et sensorielles : 'הַחֶדֶר הַחַמִּים' (la chambre chaude), les contes et les fées. Le registre est celui de la nostalgie douce, de la Geborgenheit — la sécurité chaleureuse de l'enfance protégée."},{"heb":"אִמָּא, אִשָּׁה אַחַת וּמַה רַבּוֹת בָּהּ הַדְּמֻיּוֹת\nאִמָּא, הִיא כָּל אוֹתָם הָרְגָשׁוֹת בֵּין אֹשֶׁר לְדְמָעוֹת\nוְהִיא הָאֹפֶק הָרָחָב אֲשֶׁר הַזְּמַן בּוֹ לֹא חָלַף\nוְהִיא הֹוֶה וְהִיא עָבָר וְהִיא הָאֹשֶׁר בְּמָחָר","fr":"Maman, une seule femme et que nombreuses sont les figures qu'elle renferme / Maman, elle est tous ces sentiments entre bonheur et larmes / C'est l'horizon vaste où le temps n'a pas passé / C'est le présent et c'est le passé et c'est le bonheur dans le demain","an":"Ce quatrain final est le plus métaphysique du poème. Le poète quitte l'inventaire affectif et mémoriel pour élever la figure maternelle à une dimension ontologique et temporelle. La mère est 'une seule femme' mais porteuse d'une multiplicité de visages — 'דְּמֻיּוֹת' (figures, portraits, personas) — ce qui fait d'elle un être pluriel et insaisissable. La polarité 'אֹשֶׁר לְדְמָעוֹת' (bonheur et larmes) englobe tout le spectre émotionnel de la relation. La métaphore de 'הָאֹפֶק הָרָחָב' (le vaste horizon) transforme la mère en paysage intérieur, un espace mental où le temps suspend son cours — 'הַזְּמַן בּוֹ לֹא חָלַף'. La clausule tripartite 'הֹוֶה — עָבָר — מָחָר' (présent, passé, avenir) est une apothéose : la mère transcende toutes les dimensions temporelles, elle est éternité elle-même. Le registre atteint ici le sublime."}],"analyse":"Le poème 'אמא' d'Ari est une ode lyrique à la figure maternelle, construite sur une alternance entre refrains contemplatifs et strophes évocatrices. Le poète explore la polysémie d'un seul mot — 'maman' — pour déployer un univers affectif et mémoriel d'une richesse infinie. La forme, proche de la chanson poétique, use de parallélismes, d'anaphores et d'images sensorielles pour ancrer l'amour filial dans l'universalité de l'expérience humaine. Ari fait du mot 'אמא' un symbole condensé qui transcende le temps, l'espace et les circonstances de la vie."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
