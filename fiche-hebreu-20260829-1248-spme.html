@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"שירים","auteur":"נתן אלתרמן","youtube":"","shironet":"","mots":[{"heb":"עוֹד","translit":"od","fr":"encore / toujours","sens":"adverbe temporel","racine":"ע-ו-ד","nature":"adverbe","genre":"—","nombre":"—","formes":"עוֹד · עוֹדֶנָּה","cat":"autre","emploi":"עוֹד חוֹזֵר הַנִּגּוּן — la mélodie revient encore"},{"heb":"חוֹזֵר","translit":"khozér","fr":"revient / retourne","sens":"binyan Qal, participe présent, masculin singulier","racine":"ח-ז-ר","nature":"verbe","genre":"m","nombre":"sg","formes":"חוֹזֵר · חָזַר · יַחְזֹר","cat":"verbes","emploi":"הַנִּגּוּן חוֹזֵר — la mélodie revient"},{"heb":"הַנִּגּוּן","translit":"ha-niguún","fr":"la mélodie / l'air / le chant intérieur","sens":"nom masculin singulier défini","racine":"נ-ג-נ","nature":"nom","genre":"m","nombre":"sg","formes":"נִּגּוּן · הַנִּגּוּן · נִּגּוּנִים","cat":"noms","emploi":"הַנִּגּוּן מסמל את הזהות הפנימית — la mélodie symbolise l'identité intérieure"},{"heb":"שֶׁזָּנַחְתָּ","translit":"she-zanákhtá","fr":"que tu as abandonnée / délaissée","sens":"conjonction relative שֶׁ + binyan Qal passé 2ms","racine":"ז-נ-ח","nature":"verbe","genre":"m","nombre":"sg","formes":"זָנַח · זָנַחְתָּ · יִזְנַח","cat":"verbes","emploi":"הַנִּגּוּן שֶׁזָּנַחְתָּ — la mélodie que tu as abandonnée"},{"heb":"לַשָּׁוְא","translit":"la-shav","fr":"en vain / inutilement / pour rien","sens":"préposition לְ + nom masculin singulier défini (שָּׁוְא)","racine":"ש-ו-א","nature":"adverbe","genre":"m","nombre":"sg","formes":"שָׁוְא · לַשָּׁוְא","cat":"autre","emploi":"זָנַחְתָּ לַשָּׁוְא — tu as abandonné en vain"},{"heb":"הַדֶּרֶךְ","translit":"ha-dérekh","fr":"la route / le chemin / la voie","sens":"nom féminin singulier défini","racine":"ד-ר-כ","nature":"nom","genre":"f","nombre":"sg","formes":"דֶּרֶךְ · הַדֶּרֶךְ · דְּרָכִים","cat":"noms","emploi":"הַדֶּרֶךְ נִפְקַחַת — la route s'ouvre"},{"heb":"עוֹדֶנָּה","translit":"odenná","fr":"elle est encore / toujours encore (elle)","sens":"adverbe עוֹד + pronom suffixe féminin singulier נָּה","racine":"ע-ו-ד","nature":"adverbe","genre":"f","nombre":"sg","formes":"עוֹד · עוֹדֶנּוּ · עוֹדֶנָּה","cat":"autre","emploi":"הַדֶּרֶךְ עוֹדֶנָּה פְּתוּחָה — la route est encore ouverte"},{"heb":"נִפְקַחַת","translit":"nifkákhat","fr":"s'ouvre / s'éveille (en parlant des yeux ou d'une voie)","sens":"binyan Nifal, participe présent, féminin singulier","racine":"פ-ק-ח","nature":"verbe","genre":"f","nombre":"sg","formes":"נִפְקַח · נִפְקַחַת · נִפְקַח","cat":"verbes","emploi":"הַדֶּרֶךְ נִפְקַחַת — la route s'ouvre (comme des yeux qui s'éveillent)"},{"heb":"לָאֹרֶךְ","translit":"la-órekh","fr":"en longueur / dans la longueur / à l'infini","sens":"préposition לְ + nom masculin singulier défini (אֹרֶךְ)","racine":"א-ר-כ","nature":"préposition","genre":"m","nombre":"sg","formes":"אֹרֶךְ · לָאֹרֶךְ","cat":"autre","emploi":"הַדֶּרֶךְ נִפְקַחַת לָאֹרֶךְ — la route s'étend à l'infini"},{"heb":"עָנָן","translit":"anán","fr":"nuage","sens":"nom masculin singulier indéfini","racine":"ע-נ-נ","nature":"nom","genre":"m","nombre":"sg","formes":"עָנָן · עֲנָנִים","cat":"noms","emploi":"עָנָן בְּשָׁמָיו מְצַפֶּה — un nuage dans ses cieux attend"},{"heb":"בְּשָׁמָיו","translit":"be-shamáv","fr":"dans ses cieux / dans son ciel","sens":"préposition בְּ + nom masculin pluriel (שָׁמַיִם) + pronom suffixe 3ms (וֹ)","racine":"ש-מ-י","nature":"préposition","genre":"m","nombre":"pl","formes":"שָׁמַיִם · שָׁמָיו · בְּשָׁמָיו","cat":"autre","emploi":"הֶעָנָן בְּשָׁמָיו — le nuage dans ses propres cieux"},{"heb":"אִילָן","translit":"ilán","fr":"arbre","sens":"nom masculin singulier indéfini (araméisme intégré à l'hébreu)","racine":"א-י-ל","nature":"nom","genre":"m","nombre":"sg","formes":"אִילָן · אִילָנוֹת","cat":"noms","emploi":"אִילָן בִּגְשָׁמָיו מְצַפֶּה — un arbre dans ses pluies attend"},{"heb":"בִּגְשָׁמָיו","translit":"bi-gshamáv","fr":"dans ses pluies","sens":"préposition בְּ + nom masculin pluriel (גְּשָׁמִים) + pronom suffixe 3ms","racine":"ג-ש-מ","nature":"préposition","genre":"m","nombre":"pl","formes":"גֶּשֶׁם · גְּשָׁמִים · גְּשָׁמָיו","cat":"autre","emploi":"הָאִילָן בִּגְשָׁמָיו — l'arbre dans ses propres pluies"},{"heb":"מְצַפִּים","translit":"metsapím","fr":"attendent / guettent / espèrent","sens":"binyan Piel, participe présent, masculin pluriel","racine":"צ-פ-י","nature":"verbe","genre":"m","nombre":"pl","formes":"מְצַפֶּה · מְצַפִּים · צִפָּה","cat":"verbes","emploi":"עָנָן וְאִילָן מְצַפִּים לְךָ — nuage et arbre t'attendent"},{"heb":"עוֹבֵר אוֹרַח","translit":"ovér órakH","fr":"voyageur de passage / passant","sens":"syntagme nominal : participe Qal ms (עוֹבֵר) + nom ms (אוֹרַח)","racine":"ע-ב-ר / א-ר-ח","nature":"expression","genre":"m","nombre":"sg","formes":"עוֹבֵר · אוֹרַח","cat":"autre","emploi":"עוֹבֵר אוֹרַח, הַטֶּבַע מְצַפֶּה לְךָ — passant, la nature t'attend"}],"phrases":[{"heb":"עוֹד חוֹזֵר הַנִּגּוּן שֶׁזָּנַחְתָּ לַשָּׁוְא","fr":"La mélodie que tu as abandonnée en vain revient encore"},{"heb":"עוֹד חוֹזֵר הַנִּגּוּן שֶׁזָּנַחְתָּ לַשָּׁוְא","fr":"La mélodie que tu as abandonnée en vain revient encore"},{"heb":"עוֹד חוֹזֵר הַנִּגּוּן שֶׁזָּנַחְתָּ לַשָּׁוְא","fr":"La mélodie que tu as abandonnée en vain revient encore"},{"heb":"עוֹד חוֹזֵר הַנִּגּוּן שֶׁזָּנַחְתָּ לַשָּׁוְא","fr":"La mélodie que tu as abandonnée en vain revient encore"},{"heb":"עוֹד חוֹזֵר הַנִּגּוּן שֶׁזָּנַחְתָּ לַשָּׁוְא","fr":"La mélodie que tu as abandonnée en vain revient encore"},{"heb":"וְהַדֶּרֶךְ עוֹדֶנָּה נִפְקַחַת לָאֹרֶךְ","fr":"et la route s'ouvre toujours en longueur"},{"heb":"וְהַדֶּרֶךְ עוֹדֶנָּה נִפְקַחַת לָאֹרֶךְ","fr":"et la route s'ouvre toujours en longueur"},{"heb":"וְהַדֶּרֶךְ עוֹדֶנָּה נִפְקַחַת לָאֹרֶךְ","fr":"et la route s'ouvre toujours en longueur"},{"heb":"וְהַדֶּרֶךְ עוֹדֶנָּה נִפְקַחַת לָאֹרֶךְ","fr":"et la route s'ouvre toujours en longueur"},{"heb":"וְעָנָן בְּשָׁמָיו וְאִילָן בִּגְשָׁמָיו","fr":"et un nuage dans ses cieux et un arbre dans ses pluies"},{"heb":"וְעָנָן בְּשָׁמָיו וְאִילָן בִּגְשָׁמָיו","fr":"et un nuage dans ses cieux et un arbre dans ses pluies"},{"heb":"וְעָנָן בְּשָׁמָיו וְאִילָן בִּגְשָׁמָיו","fr":"et un nuage dans ses cieux et un arbre dans ses pluies"},{"heb":"וְעָנָן בְּשָׁמָיו וְאִילָן בִּגְשָׁמָיו","fr":"et un nuage dans ses cieux et un arbre dans ses pluies"},{"heb":"מְצַפִּים עוֹד לְךָ, עוֹבֵר אוֹרַח.","fr":"attendent encore, voyageur de passage"},{"heb":"מְצַפִּים עוֹד לְךָ, עוֹבֵר אוֹרַח.","fr":"attendent encore, voyageur de passage"}],"quatrains":[{"heb":"עוֹד חוֹזֵר הַנִּגּוּן שֶׁזָּנַחְתָּ לַשָּׁוְא\nוְהַדֶּרֶךְ עוֹדֶנָּה נִפְקַחַת לָאֹרֶךְ\nוְעָנָן בְּשָׁמָיו וְאִילָן בִּגְשָׁמָיו\nמְצַפִּים עוֹד לְךָ, עוֹבֵר אוֹרַח.","fr":"La mélodie que tu as abandonnée en vain revient encore,\net la route s'ouvre toujours en longueur,\net un nuage dans ses cieux et un arbre dans ses pluies\nattendent encore, voyageur de passage.","an":"Ce quatrain unique constitue l'intégralité du poème analysé. Le premier vers pose l'axe thématique : le retour du 'niguoun' (נִּגּוּן, mélodie, air intérieur) abandonné 'לַשָּׁוְא' (en vain, inutilement) signale que la fuite était illusoire — ce que l'on quitte revient. L'adverbe 'עוֹד' (encore) est répété trois fois dans le quatrain, créant une anaphore discrète qui rythme l'insistance du monde sur le sujet. Le deuxième vers élargit l'espace : la route 'נִפְקַחַת' (s'ouvre, littéralement 's'éveille') à l'infini, image d'un horizon toujours disponible. Les troisième et quatrième vers anthropomorphisent la nature : nuage et arbre 'מְצַפִּים' (attendent, guettent) le passant. La double structure 'בְּשָׁמָיו / בִּגְשָׁמָיו' crée une rime interne et un parallélisme syntaxique élégant. L'apostrophe finale 'עוֹבֵר אוֹרַח' (voyageur de passage) interpelle le lecteur directement, instaurant une complicité intime et universelle entre le poème et celui qui le lit."}],"analyse":"Ce quatrain est extrait du recueil 'שִׁירִים' (Poèmes) de נָתָן אַלְתֶּרְמָן (Nathan Alterman, 1910-1970), poète majeur de la littérature hébraïque moderne, figure centrale du mouvement de la Hasskala tardive et de la poésie palestinienne des années 1930-1950. Le poème s'inscrit dans un registre lyrique et méditatif, traversé par une tension entre l'abandon et le retour, entre la fuite et la fidélité. Le thème central est celui du rappel existentiel : la nature, la route, le ciel et l'arbre figurent une présence patiente et universelle qui attend le voyageur égaré. La forme du quatrain à rimes croisées (ABAB) et le rythme ample confèrent une musicalité douce et insistante, mimant le retour cyclique évoqué dans le premier vers. Alterman mobilise ici un lyrisme sobre et profond, caractéristique de sa manière."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
