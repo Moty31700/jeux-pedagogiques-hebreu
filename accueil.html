@@ -590,12 +590,6 @@
 <script>
 var BASE = "https://n8n.hebreu-zen.cloud/webhook";
 
-/* ===== INTERRUPTEUR MAINTENANCE =====
-   true  = site fermé aux élèves (bannière), sauf admin
-   false = site ouvert à tous
-   Pour rouvrir : repasser à false et redéposer ce fichier. */
-var MAINTENANCE = true;
-
 var ECRANS = {
   accueil:     { el: "ecran-accueil",     etape: 0 },
   inscription: { el: "ecran-inscription", etape: 1 },
@@ -1193,52 +1187,112 @@ async function chargerFAQEspace(){
 /* état initial : écran d'accueil + colonne publique */
 montrer('accueil');
 
-/* ===== MODE MAINTENANCE : bannière plein écran + accès admin via /verif-admin ===== */
-(function () {
-  if (!MAINTENANCE) return;                                   /* site ouvert : rien à faire */
-  if (localStorage.getItem('admin_ok') === '1') return;       /* admin déjà validé : accès normal */
+/* ===================================================================
+   ADMIN + MAINTENANCE (v2) — état stocké dans Supabase, basculable ici
+   Webhooks : GET /etat-maintenance · POST /verif-admin · POST /set-maintenance
+   =================================================================== */
+var passAdmin = "";  /* pass gardé en mémoire volatile pendant la session admin (jamais stocké) */
 
-  /* bannière plein écran qui bloque tout le site */
+function estAdmin() { return localStorage.getItem('admin_ok') === '1'; }
+
+function afficherBanniere() {
+  if (document.getElementById('overlay-maintenance')) return;
   var ov = document.createElement('div');
   ov.id = 'overlay-maintenance';
   ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#0f172a;color:#f8fafc;'
     + 'display:flex;flex-direction:column;align-items:center;justify-content:center;'
     + 'text-align:center;padding:24px;font-family:inherit;';
-  ov.innerHTML =
-      '<div style="font-size:20pt;font-weight:700;margin-bottom:12px;">Site en maintenance</div>'
+  ov.innerHTML = '<div style="font-size:20pt;font-weight:700;margin-bottom:12px;">Site en maintenance</div>'
     + '<div style="font-size:12pt;max-width:520px;line-height:1.5;opacity:.9;">'
-    + 'Le site est momentanément indisponible pendant une mise à jour. '
-    + 'Merci de revenir un peu plus tard.</div>';
+    + 'Le site est momentanément indisponible pendant une mise à jour. Merci de revenir un peu plus tard.</div>';
+  var b = document.createElement('button');
+  b.textContent = 'Admin';
+  b.style.cssText = 'position:fixed;left:14px;bottom:12px;z-index:100000;background:transparent;'
+    + 'border:none;color:#94a3b8;font-size:9pt;cursor:pointer;opacity:.6;padding:4px;';
+  b.onclick = ouvrirAdmin;
+  ov.appendChild(b);
+  document.body.appendChild(ov);
+}
+function retirerBanniere() { var o = document.getElementById('overlay-maintenance'); if (o) o.remove(); }
 
-  /* lien "Admin" discret, en bas à gauche */
-  var lien = document.createElement('button');
-  lien.textContent = 'Admin';
-  lien.style.cssText = 'position:fixed;left:14px;bottom:12px;z-index:100000;background:transparent;'
-    + 'border:none;color:#64748b;font-size:9pt;cursor:pointer;opacity:.55;padding:4px;';
-  lien.onclick = function () {
-    var p = prompt('Mot de passe admin :');
-    if (!p) return;
-    fetch(BASE + '/verif-admin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pass: p })
-    })
+/* au chargement : lire l'état serveur ; si maintenance et pas admin -> bannière */
+fetch(BASE + '/etat-maintenance')
+  .then(function (r) { return r.json().catch(function () { return {}; }); })
+  .then(function (x) { if (x && x.maintenance === true && !estAdmin()) afficherBanniere(); })
+  .catch(function () {});
+
+/* ouvrir l'espace admin : demande le pass une fois par session */
+function ouvrirAdmin() {
+  if (passAdmin) { panneauAdmin(); return; }
+  var p = prompt('Mot de passe admin :');
+  if (!p) return;
+  fetch(BASE + '/verif-admin', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pass: p })
+  })
+  .then(function (r) { return r.json().catch(function () { return {}; }); })
+  .then(function (x) {
+    if (x && x.acces === 'autorise') {
+      passAdmin = p;
+      localStorage.setItem('admin_ok', '1');
+      retirerBanniere();
+      panneauAdmin();
+    } else { alert('Mot de passe incorrect.'); }
+  })
+  .catch(function () { alert('Le serveur ne répond pas. Réessaie.'); });
+}
+
+/* petit panneau flottant : état + bouton activer/désactiver */
+function panneauAdmin() {
+  var anc = document.getElementById('panneau-admin'); if (anc) anc.remove();
+  fetch(BASE + '/etat-maintenance')
     .then(function (r) { return r.json().catch(function () { return {}; }); })
     .then(function (x) {
-      if (x && x.acces === 'autorise') {
-        localStorage.setItem('admin_ok', '1');
-        var o = document.getElementById('overlay-maintenance');
-        if (o) o.remove();
-        lien.remove();
-      } else {
-        alert('Mot de passe incorrect.');
-      }
-    })
-    .catch(function () { alert('Le serveur ne répond pas. Réessaie.'); });
-  };
+      var actif = !!(x && x.maintenance);
+      var pan = document.createElement('div');
+      pan.id = 'panneau-admin';
+      pan.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:100001;background:#fff;'
+        + 'border:1px solid #d0d7de;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.15);'
+        + 'padding:14px 16px;font-family:inherit;font-size:10.5pt;color:#1f2937;min-width:230px;';
+      pan.innerHTML = '<div style="font-weight:700;margin-bottom:8px;">Espace admin</div>'
+        + '<div style="margin-bottom:10px;">Maintenance : <strong>' + (actif ? 'ACTIVÉE' : 'désactivée') + '</strong></div>';
+      var btn = document.createElement('button');
+      btn.textContent = actif ? 'Désactiver la maintenance' : 'Activer la maintenance';
+      btn.style.cssText = 'display:block;width:100%;padding:8px;border:none;border-radius:6px;cursor:pointer;'
+        + 'color:#fff;font-size:10pt;margin-bottom:8px;background:' + (actif ? '#16a34a' : '#dc2626') + ';';
+      btn.onclick = function () {
+        btn.disabled = true; btn.textContent = '…';
+        fetch(BASE + '/set-maintenance', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pass: passAdmin, actif: !actif })
+        })
+        .then(function (r) { return r.json().catch(function () { return {}; }); })
+        .then(function (y) {
+          if (y && y.ok) { retirerBanniere(); panneauAdmin(); }
+          else { alert('Échec de la mise à jour.'); btn.disabled = false; }
+        })
+        .catch(function () { alert('Le serveur ne répond pas.'); btn.disabled = false; });
+      };
+      var fer = document.createElement('button');
+      fer.textContent = 'Fermer';
+      fer.style.cssText = 'display:block;width:100%;padding:6px;border:1px solid #d0d7de;border-radius:6px;'
+        + 'cursor:pointer;background:#f6f8fa;font-size:9.5pt;';
+      fer.onclick = function () { pan.remove(); };
+      pan.appendChild(btn); pan.appendChild(fer);
+      document.body.appendChild(pan);
+    });
+}
 
-  document.body.appendChild(ov);
-  document.body.appendChild(lien);
+/* bouton "Admin" apparent dans la barre de navigation, juste sous "Se connecter" */
+(function () {
+  var seCon = document.querySelector('[data-nav="connexion"]');
+  if (seCon && seCon.parentNode) {
+    var b = document.createElement('button');
+    b.className = seCon.className;   /* même style que les autres boutons de nav */
+    b.textContent = 'Admin';
+    b.onclick = ouvrirAdmin;
+    seCon.parentNode.insertBefore(b, seCon.nextSibling);
+  }
 })();
 </script>
 </body>
