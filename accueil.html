@@ -590,6 +590,12 @@
 <script>
 var BASE = "https://n8n.hebreu-zen.cloud/webhook";
 
+/* ===== INTERRUPTEUR MAINTENANCE =====
+   true  = site fermé aux élèves (bannière), sauf admin
+   false = site ouvert à tous
+   Pour rouvrir : repasser à false et redéposer ce fichier. */
+var MAINTENANCE = true;
+
 var ECRANS = {
   accueil:     { el: "ecran-accueil",     etape: 0 },
   inscription: { el: "ecran-inscription", etape: 1 },
@@ -1186,6 +1192,54 @@ async function chargerFAQEspace(){
 }
 /* état initial : écran d'accueil + colonne publique */
 montrer('accueil');
+
+/* ===== MODE MAINTENANCE : bannière plein écran + accès admin via /verif-admin ===== */
+(function () {
+  if (!MAINTENANCE) return;                                   /* site ouvert : rien à faire */
+  if (localStorage.getItem('admin_ok') === '1') return;       /* admin déjà validé : accès normal */
+
+  /* bannière plein écran qui bloque tout le site */
+  var ov = document.createElement('div');
+  ov.id = 'overlay-maintenance';
+  ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#0f172a;color:#f8fafc;'
+    + 'display:flex;flex-direction:column;align-items:center;justify-content:center;'
+    + 'text-align:center;padding:24px;font-family:inherit;';
+  ov.innerHTML =
+      '<div style="font-size:20pt;font-weight:700;margin-bottom:12px;">Site en maintenance</div>'
+    + '<div style="font-size:12pt;max-width:520px;line-height:1.5;opacity:.9;">'
+    + 'Le site est momentanément indisponible pendant une mise à jour. '
+    + 'Merci de revenir un peu plus tard.</div>';
+
+  /* lien "Admin" discret, en bas à gauche */
+  var lien = document.createElement('button');
+  lien.textContent = 'Admin';
+  lien.style.cssText = 'position:fixed;left:14px;bottom:12px;z-index:100000;background:transparent;'
+    + 'border:none;color:#64748b;font-size:9pt;cursor:pointer;opacity:.55;padding:4px;';
+  lien.onclick = function () {
+    var p = prompt('Mot de passe admin :');
+    if (!p) return;
+    fetch(BASE + '/verif-admin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pass: p })
+    })
+    .then(function (r) { return r.json().catch(function () { return {}; }); })
+    .then(function (x) {
+      if (x && x.acces === 'autorise') {
+        localStorage.setItem('admin_ok', '1');
+        var o = document.getElementById('overlay-maintenance');
+        if (o) o.remove();
+        lien.remove();
+      } else {
+        alert('Mot de passe incorrect.');
+      }
+    })
+    .catch(function () { alert('Le serveur ne répond pas. Réessaie.'); });
+  };
+
+  document.body.appendChild(ov);
+  document.body.appendChild(lien);
+})();
 </script>
 </body>
 </html>
