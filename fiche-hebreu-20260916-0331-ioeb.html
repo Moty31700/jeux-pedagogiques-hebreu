@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"שֵדרֹות ַּבֶּגֶׁשם","auteur":"נתן אלתרמן","youtube":"","shironet":"","mots":[{"heb":"שְׂדֵרָה","translit":"sderá","fr":"avenue, boulevard","sens":"nom féminin singulier construit","racine":"ש-ד-ר","nature":"nom","genre":"f","nombre":"s","formes":"שְׂדֵרוֹת · הַשְּׂדֵרָה","cat":"noms","emploi":"La שְׂדֵרָה désigne une avenue plantée d'arbres, espace public central de la ville."},{"heb":"מְסֹרֶקֶת","translit":"mesoréket","fr":"peignée, lissée","sens":"participe passif (pual) féminin singulier","racine":"ס-ר-ק","nature":"adjectif","genre":"f","nombre":"s","formes":"מְסֹרָק · לְסָרֵק","cat":"adjectifs","emploi":"מְסֹרֶקֶת qualifie la ville ou l'avenue, personnifiées comme une femme qui se coiffe sous la pluie."},{"heb":"בַּיְשָׁנִית","translit":"bayshánit","fr":"timide, pudique","sens":"adjectif féminin singulier","racine":"ב-י-שׁ","nature":"adjectif","genre":"f","nombre":"s","formes":"בַּיְשָׁן · בּוֹשָׁה","cat":"adjectifs","emploi":"בַּיְשָׁנִית est habituellement un adjectif de personnalité humaine, appliqué ici métaphoriquement à la ville belle."},{"heb":"הַצּוֹחֶקֶת","translit":"hatsokháket","fr":"celle qui rit, la riante","sens":"participe actif qal féminin singulier avec article","racine":"צ-ח-ק","nature":"adjectif","genre":"f","nombre":"s","formes":"לִצְחוֹק · צְחוֹק","cat":"adjectifs","emploi":"הַצּוֹחֶקֶת fonctionne comme épithète constante de la fille, caractérisant sa joie de vivre tout au long du poème."},{"heb":"שֵׁנִית","translit":"shénit","fr":"une seconde fois, à nouveau","sens":"adverbe de répétition","racine":"שׁ-נ-י","nature":"adverbe","genre":"—","nombre":"—","formes":"שֵׁנִי · לְשַׁנּוֹת","cat":"autre","emploi":"שֵׁנִית indique la répétition ou la renaissance; ici, la pluie re-génère le monde comme à une nouvelle création."},{"heb":"זְגוּגִית","translit":"zegugít","fr":"vitre, verre (surface)","sens":"nom féminin singulier","racine":"ז-ג-ג","nature":"nom","genre":"f","nombre":"s","formes":"זְגוּגִיּוֹת · זְכוּכִית","cat":"noms","emploi":"הַזְּגוּגִית désigne la vitrine ou la vitre de devanture, objet urbain que le poète contemple et personnifie."},{"heb":"צָלוּל","translit":"tsalúl","fr":"limpide, clair, transparent","sens":"adjectif masculin singulier","racine":"צ-ל-ל","nature":"adjectif","genre":"m","nombre":"s","formes":"צְלִילוּת · לְצַלְצֵל","cat":"adjectifs","emploi":"צָלוּל qualifie le nom de la vitre, jouant sur la transparence physique du verre et la clarté sonore ou sémantique du mot."},{"heb":"קִפְאוֹן","translit":"kip'ón","fr":"gel, figement, immobilité glacée","sens":"nom masculin singulier","racine":"ק-פ-א","nature":"nom","genre":"m","nombre":"s","formes":"לִקְפֹּא · קָפוּא","cat":"noms","emploi":"קִפְאוֹן décrit l'état figé de la rêverie de la vitre, comme une pensée cristallisée dans le verre froid."},{"heb":"הִרְהוּר","translit":"hirkhúr","fr":"rêverie, méditation, pensée vague","sens":"nom masculin singulier, ici avec pronom suffixe 3fs: הִרְהוּרָהּ","racine":"ה-ר-ה-ר","nature":"nom","genre":"m","nombre":"s","formes":"הִרְהוּרִים · לְהַרְהֵר","cat":"noms","emploi":"הִרְהוּרָהּ attribue une vie intérieure à la vitre; la rêverie de la vitre est un état contemplatif figé et inaccessible."},{"heb":"מִפְתָּן","translit":"miftán","fr":"seuil, pas de porte","sens":"nom masculin singulier, ici avec pronom suffixe 3fs: מִפְתָּנָהּ","racine":"פ-ת-נ","nature":"nom","genre":"m","nombre":"s","formes":"מִפְתָּנִים · סַף","cat":"noms","emploi":"מִפְתָּנָהּ désigne le seuil de la vitrine, comparé métaphoriquement au seuil de l'âme humaine."},{"heb":"נִשְׁמָה","translit":"neshamá","fr":"âme, souffle vital","sens":"nom féminin singulier, ici avec pronom suffixe 1pp: נִשְׁמָתֵנוּ","racine":"נ-שׁ-מ","nature":"nom","genre":"f","nombre":"s","formes":"נְשָׁמוֹת · לִנְשֹׁם","cat":"noms","emploi":"נִשְׁמָתֵנוּ (notre âme) place la comparaison urbaine dans une dimension spirituelle: la vitrine est seuil d'âme collective."},{"heb":"בַּרְזֶל","translit":"barzél","fr":"fer","sens":"nom masculin singulier","racine":"ב-ר-ז-ל","nature":"nom","genre":"m","nombre":"s","formes":"בַּרְזֶל · כְּלֵי בַּרְזֶל","cat":"noms","emploi":"הַבַּרְזֶל est personnifié en idole et esclave simultanément, symbole de la modernité industrielle urbaine."},{"heb":"אֱלִיל","translit":"elíl","fr":"idole, faux dieu","sens":"nom masculin singulier","racine":"א-ל-ל","nature":"nom","genre":"m","nombre":"s","formes":"אֱלִילִים · אֵל","cat":"noms","emploi":"הָאֱלִיל place le fer dans un registre biblique: comme une idole vénérée par les hommes, il est à la fois adoré et servile."},{"heb":"נַפַּח","translit":"nafákh","fr":"forgeron, souffleur","sens":"nom masculin singulier construct","racine":"נ-פ-ח","nature":"nom","genre":"m","nombre":"s","formes":"נַפָּחִים · לִנְפֹּחַ","cat":"noms","emploi":"נַפַּח הַיָּמִים est une métaphore audacieuse: le fer forge les jours du temps comme un forgeron travaille le métal."},{"heb":"עֹל","translit":"ol","fr":"joug, fardeau","sens":"nom masculin singulier avec pronom suffixe 3mp: עֻלָּם","racine":"ע-ו-ל","nature":"nom","genre":"m","nombre":"s","formes":"עֹל · לַעֲלוֹת","cat":"noms","emploi":"עֻלָּם (leur joug) désigne le poids des jours portés par le fer; image biblique du joug comme servitude et responsabilité."},{"heb":"אֲחוֹת","translit":"akhót","fr":"sœur","sens":"nom féminin singulier construct avec pronom suffixe 1pp: אֲחוֹתֵנוּ","racine":"א-ח-ת","nature":"nom","genre":"f","nombre":"s","formes":"אֲחָיוֹת · אָח","cat":"noms","emploi":"אֲחוֹתֵנוּ (notre sœur) appliqué à la pierre crée un lien de fraternité affective entre les humains et la matière inerte."},{"heb":"אֶבֶן","translit":"éven","fr":"pierre","sens":"nom féminin singulier","racine":"א-ב-נ","nature":"nom","genre":"f","nombre":"s","formes":"אֲבָנִים · אֶבֶן פִּנָּה","cat":"noms","emploi":"הָאֶבֶן personnifiée en sœur stoïque qui ne pleure jamais représente la permanence silencieuse et l'endurance face au temps."},{"heb":"יְרֻקָּה","translit":"yeruká","fr":"verdure, chose verte","sens":"adjectif substantivé féminin singulier, ici apostrophe","racine":"י-ר-ק","nature":"nom","genre":"f","nombre":"s","formes":"יֶרֶק · יָרֹק","cat":"noms","emploi":"יְרֻקָּה est une apostrophe adressée à la végétation de l'avenue, invitée à parler et bruire dans la joie de la pluie."},{"heb":"מְטַיֵּל","translit":"metayél","fr":"se promène, flâne","sens":"participe piel masculin singulier, présent","racine":"ט-י-ל","nature":"verbe","genre":"m","nombre":"s","formes":"לְטַיֵּל · טִיּוּל","cat":"verbes","emploi":"אֲנִי מְטַיֵּל exprime une promenade tranquille et délibérée; la forme participiale en hébreu moderne indique une action en cours."},{"heb":"רְחוֹב","translit":"rekhóv","fr":"rue, avenue","sens":"nom masculin singulier avec pronom suffixe 2ms: רְחוֹבְךָ","racine":"ר-ח-ב","nature":"nom","genre":"m","nombre":"s","formes":"רְחוֹבוֹת · רָחָב","cat":"noms","emploi":"בִּרְחוֹבְךָ (dans ta rue) avec le pronom renvoyant à Dieu sacralise l'espace urbain: la ville entière devient domaine divin."},{"heb":"חֶסֶד","translit":"khésed","fr":"grâce, bonté, amour bienveillant","sens":"nom masculin singulier","racine":"ח-ס-ד","nature":"nom","genre":"m","nombre":"s","formes":"חֲסָדִים · חָסִיד","cat":"noms","emploi":"חֶסֶד est un terme théologique central en hébreu biblique; ici il désigne la grâce d'une seule parole d'amour que ni le fer ni la pierre n'oublient."}],"phrases":[{"heb":"בְּאוֹר וּמָטָר הַשְּׂדֵרָה מְסֹרֶקֶת","fr":"Dans la lumière et la pluie, l'avenue se peigne"},{"heb":"בְּאוֹר וּבַגֶּשֶׁם הָעִיר מְסֹרֶקֶת","fr":"Dans la lumière et la pluie, la ville se peigne"},{"heb":"הַיָּפָה בֶּאֱמֶת – הִיא תָּמִיד בַּיְשָׁנִית","fr":"Celle qui est vraiment belle – elle est toujours timide"},{"heb":"אֵלֵךְ נָא הַיּוֹם, עִם בִּתִּי הַצּוֹחֶקֶת","fr":"Je marcherai donc aujourd'hui, avec ma fille qui rit"},{"heb":"בֵּין כָּל הַדְּבָרִים שֶׁנּוֹלְדוּ שֵׁנִית","fr":"Parmi toutes les choses qui sont nées une seconde fois"},{"heb":"הִנֵּה הַזְּגוּגִית – שְׁמָהּ צָלוּל מִשְּׁמוֹתֵינוּ","fr":"Voici la vitre – son nom est plus limpide que les nôtres"},{"heb":"הִנֵּה הַזְּגוּגִית – שְׁמָהּ צָלוּל מִשְּׁמוֹתֵינוּ","fr":"Voici la vitre – son nom est plus limpide que les nôtres"},{"heb":"וּמִי בְּקִפְאוֹן הִרְהוּרָהּ יַעֲבוֹר","fr":"Et qui traverserait la gelée de sa rêverie"},{"heb":"וּמִי בְּקִפְאוֹן הִרְהוּרָהּ יַעֲבוֹר","fr":"Et qui traverserait la gelée de sa rêverie"},{"heb":"עַל קַו מִפְתָּנָהּ, כְּעַל סַף נִשְׁמָתֵנוּ","fr":"Sur la ligne de son seuil, comme sur le seuil de notre âme"},{"heb":"עַל קַו מִפְתָּנָהּ, כְּעַל סַף נִשְׁמָתֵנוּ","fr":"Sur la ligne de son seuil, comme sur le seuil de notre âme"},{"heb":"הִנֵּה הַבַּרְזֶל, הָאֱלִיל וְהָעֶבֶד","fr":"Voici le fer, l'idole et l'esclave"},{"heb":"הִנֵּה הַבַּרְזֶל, הָאֱלִיל וְהָעֶבֶד","fr":"Voici le fer, l'idole et l'esclave"},{"heb":"נַפַּח הַיָּמִים הַנּוֹשֵׂא בְּעֻלָּם","fr":"Le forgeron des jours qui porte leur joug"},{"heb":"נַפַּח הַיָּמִים הַנּוֹשֵׂא בְּעֻלָּם","fr":"Le forgeron des jours qui porte leur joug"},{"heb":"הִנֵּה, בַּת שֶׁלִּי, אֲחוֹתֵנוּ הָאֶבֶן","fr":"Voici, ma fille, notre sœur la pierre"},{"heb":"הִנֵּה, בַּת שֶׁלִּי, אֲחוֹתֵנוּ הָאֶבֶן","fr":"Voici, ma fille, notre sœur la pierre"},{"heb":"דַּבְּרִי, יְרֻקָּה, רַעֲשִׁי","fr":"Parle, verdure, fais du bruit"},{"heb":"אֲנִי מְטַיֵּל בִּרְחוֹבְךָ הָרָאשִׁי","fr":"Je me promène dans ta rue principale"},{"heb":"אֲנִי מְטַיֵּל בִּרְחוֹבְךָ הָרָאשִׁי","fr":"Je me promène dans ta rue principale"},{"heb":"הַלָּלוּ אֵינָם שׁוֹכְחִים אֶת הַחֶסֶד","fr":"Ceux-là n'oublient pas la grâce"}],"quatrains":[{"heb":"בְּאוֹר וּבַגֶּשֶׁם הָעִיר מְסֹרֶקֶת.\nהַיָּפָה בֶּאֱמֶת – הִיא תָּמִיד בַּיְשָׁנִית.\nאֵלֵךְ נָא הַיּוֹם, עִם בִּתִּי הַצּוֹחֶקֶת,\nבֵּין כָּל הַדְּבָרִים שֶׁנּוֹלְדוּ שֵׁנִית.","fr":"Dans la lumière et la pluie, la ville se peigne.\nCelle qui est vraiment belle – elle est toujours timide.\nJe marcherai donc aujourd'hui, avec ma fille qui rit,\nParmi toutes les choses qui sont nées une seconde fois.","an":"Ce quatrain d'ouverture installe le cadre spatio-temporel et émotionnel du poème. La métaphore inaugurale 'הָעִיר מְסֹרֶקֶת' (la ville se peigne) est une personnification saisissante: la pluie et la lumière deviennent un peigne qui lustrent les rues, rendant la ville coquette et vivante. La beauté véritable est qualifiée de 'בַּיְשָׁנִית' (timide, pudique), adjectif habituellement réservé aux personnes, ce qui prolonge la personnification. Le registre est intime et tendre. La syntaxe de la troisième ligne, avec la particule d'invitation 'נָא', traduit une douce résolution du locuteur. L'expression finale 'שֶׁנּוֹלְדוּ שֵׁנִית' (nées une seconde fois) est le pivot thématique: la pluie régénère le monde, et la promenade avec l'enfant riante offre une re-naissance du regard. Le participe 'הַצּוֹחֶקֶת' (qui rit) campe immédiatement la fille comme figure de joie et de vitalité."},{"heb":"הִנֵּה הַזְּגוּגִית – שְׁמָהּ צָלוּל מִשְּׁמוֹתֵינוּ\nוּמִי בְּקִפְאוֹן הִרְהוּרָהּ יַעֲבוֹר?\nעַל קַו מִפְתָּנָהּ, כְּעַל סַף נִשְׁמָתֵנוּ,\nהָרַעַשׁ נִפְרָד מִן הָאוֹר.","fr":"Voici la vitre – son nom est plus limpide que les nôtres,\nEt qui traverserait la gelée de sa rêverie?\nSur la ligne de son seuil, comme sur le seuil de notre âme,\nLe bruit se sépare de la lumière.","an":"Ce quatrain opère un glissement du concret vers le métaphysique à travers la vitre de devanture. Alterman choisit un objet ordinaire et lui confère une intériorité: la vitre 'rêve' ('הִרְהוּרָהּ'), et son nom même est décrit comme 'plus limpide' ('צָלוּל') que les noms humains, jeu sur la transparence physique du verre et la clarté sémantique. La question rhétorique 'וּמִי יַעֲבוֹר?' souligne l'inaccessibilité de cette rêverie figée ('קִפְאוֹן'). La comparaison centrale est audacieuse: le seuil de la vitrine devient 'סַף נִשְׁמָתֵנוּ' (seuil de notre âme), frontière entre le monde extérieur bruyant et la lumière intérieure. La clausule 'הָרַעַשׁ נִפְרָד מִן הָאוֹר' est aphoristische, presque philosophique: le bruit et la lumière obéissent à des lois distinctes, le verre les sépare comme la conscience sépare l'émotion du tumulte. Registre élevé, syntaxe nominale à la fin."},{"heb":"הִנֵּה הַבַּרְזֶל, הָאֱלִיל וְהָעֶבֶד,\nנַפַּח הַיָּמִים הַנּוֹשֵׂא בְּעֻלָּם.\nהִנֵּה, בַּת שֶׁלִּי, אֲחוֹתֵנוּ הָאֶבֶן,\nהַזּוֹ שֶׁאֵינֶנָּה בּוֹכָה לְעוֹלָם.","fr":"Voici le fer, l'idole et l'esclave,\nLe forgeron des jours qui porte leur joug.\nVoici, ma fille, notre sœur la pierre,\nCelle qui ne pleure jamais.","an":"Ce quatrain personnifie deux matières urbaines, le fer et la pierre, en figures allégoriques opposées et complémentaires. Le fer est caractérisé par une double tension: 'הָאֱלִיל וְהָעֶבֶד' (l'idole et l'esclave), oxymore qui dit à la fois sa puissance dominatrice et sa servitude aux hommes. La métaphore 'נַפַּח הַיָּמִים' (forgeron des jours) est frappante: le fer forge le temps lui-même, portant le joug ('עֻלָּם') des siècles. L'apostrophe 'בַּת שֶׁלִּי' (ma fille) réintroduit la chaleur parentale au cœur de l'allégorie. La pierre devient 'אֲחוֹתֵנוּ' (notre sœur), intégrée à la famille humaine avec tendresse. Sa définition par la négation 'שֶׁאֵינֶנָּה בּוֹכָה לְעוֹלָם' (qui ne pleure jamais) lui confère une stoïcité admirable, presque enviable. Le ton est à la fois didactique – le père montre le monde à l'enfant – et lyrique, avec une syntaxe d'anaphore ('הִנֵּה...הִנֵּה')."},{"heb":"בְּאוֹר וּמָטָר הַשְּׂדֵרָה מְסֹרֶקֶת.\nדַּבְּרִי, יְרֻקָּה, רַעֲשִׁי!\nרְאֵה, אֱלֹהַי, עִם בִּתִּי הַצּוֹחֶקֶת\nאֲנִי מְטַיֵּל בִּרְחוֹבְךָ הָרָאשִׁי.","fr":"Dans la lumière et la pluie, l'avenue se peigne.\nParle, verdure, fais du bruit!\nRegarde, mon Dieu, avec ma fille qui rit\nJe me promène dans ta rue principale.","an":"Ce quatrain conclusif est le plus bouleversant du poème: il transforme la promenade en acte de prière et la rue en espace divin. La reprise de l'image initiale 'מְסֹרֶקֶת' crée une structure circulaire (anneau), mais en substituant 'הָעִיר' (la ville) par 'הַשְּׂדֵרָה' (l'avenue), Alterman resserre la focale. L'apostrophe impérative à la verdure 'דַּבְּרִי, יְרֻקָּה, רַעֲשִׁי!' est une invocation exubérante, joyeuse, quasi chamanique: la nature est sommée de parler et de bruire. Le tournant décisif vient avec 'אֱלֹהַי' (mon Dieu): la promenade ordinaire devient une audience divine. La rue appartient à Dieu ('בִּרְחוֹבְךָ'), et le poète s'y promène avec sa fille rieuse comme dans un temple vivant. La syntaxe de la dernière ligne, sujet en finale ('אֲנִי מְטַיֵּל'), est une déclaration d'existence humble et fière. Registre : lyrique-religieux, ton d'action de grâces."}],"analyse":"Nathan Alterman (1910-1970), poète israélien majeur, figure du modernisme hébraïque, compose ici une promenade urbaine sous la pluie avec sa fille. Le poème appartient à son recueil Kokhavim ba-Khutz (1938). Le thème central est la redécouverte émerveillée du monde quotidien à travers le regard de l'enfant et la communion entre père, fille et ville. La forme est régulière: quatrains à rimes croisées ou embrassées, mètre syllabique soutenu, lexique concret et métaphysique entrelacés. Alterman personnifie les matériaux urbains (verre, fer, pierre) et fait de la rue un espace sacré, presque liturgique, où la parole d'amour devient acte de foi."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
