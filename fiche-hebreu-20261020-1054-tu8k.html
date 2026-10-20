@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"כלכליות","auteur":"כלכליות","youtube":"","shironet":"","mots":[{"heb":"כַּלָּנִיּוֹת","translit":"kalaniyot","fr":"anémones (fleurs sauvages rouges)","sens":"nom féminin pluriel","racine":"כ-ל-נ","nature":"nom","genre":"f","nombre":"pl","formes":"כַּלָּנִית · כַּלָּנִיּוֹת","cat":"noms","emploi":"הַכַּלָּנִיּוֹת פּוֹרְחוֹת בָּהָר בָּאָבִיב — Les anémones fleurissent sur la montagne au printemps."},{"heb":"יוֹקֶדֶת","translit":"yokhedet","fr":"embrase, flamboie (elle)","sens":"participe présent féminin singulier, binyan qal","racine":"י-ק-ד","nature":"verbe","genre":"f","nombre":"sg","formes":"יוֹקֵד · יוֹקֶדֶת · יוֹקְדִים · יוֹקְדוֹת","cat":"verbes","emploi":"הַשְּׁקִיעָה יוֹקֶדֶת בְּצִבְעֵי אָדוֹם וְזָהָב — Le coucher de soleil flamboie en rouge et or."},{"heb":"הַגַּיְא","translit":"ha-gay","fr":"le ravin, la vallée encaissée","sens":"nom masculin singulier défini","racine":"ג-י-א","nature":"nom","genre":"m","nombre":"sg","formes":"גַּיְא · הַגַּיְא · גְּאָיוֹת","cat":"noms","emploi":"יְרוּשָׁלַיִם יוֹשֶׁבֶת בֵּין הֶהָרִים וּבֵין הַגְּאָיוֹת — Jérusalem est assise entre les montagnes et les ravins."},{"heb":"לוֹהֵט","translit":"lohet","fr":"brûle, est ardent, flamboie","sens":"participe présent masculin singulier, binyan qal","racine":"ל-ה-ט","nature":"verbe","genre":"m","nombre":"sg","formes":"לוֹהֵט · לוֹהֶטֶת · לוֹהֲטִים","cat":"verbes","emploi":"הַמִּדְבָּר לוֹהֵט בְּחֹם הַיּוֹם — Le désert flamboie sous la chaleur du jour."},{"heb":"תְּלַקֵּט","translit":"telakket","fr":"elle cueille, elle ramasse (avec soin)","sens":"inaccompli 3e pers fém sg, binyan pi'el","racine":"ל-ק-ט","nature":"verbe","genre":"f","nombre":"sg","formes":"לִקֵּט · תְּלַקֵּט · לְלַקֵּט","cat":"verbes","emploi":"הַיַּלְדָּה תְּלַקֵּט פְּרָחִים בַּשָּׂדֶה — La fillette cueillera des fleurs dans le champ."},{"heb":"נֶחְפֶּזֶת","translit":"nekhpezet","fr":"elle se hâte, elle se précipite","sens":"participe présent féminin singulier, binyan nif'al","racine":"ח-פ-ז","nature":"verbe","genre":"f","nombre":"sg","formes":"נֶחְפָּז · נֶחְפֶּזֶת · נֶחְפָּזִים","cat":"verbes","emploi":"הִיא נֶחְפֶּזֶת לָצֵאת כְּדֵי שֶׁלֹּא תְּאַחֵר — Elle se hâte de sortir pour ne pas être en retard."},{"heb":"הַמִּתְכַּסִּים","translit":"ha-mitkasim","fr":"qui se couvrent (eux-mêmes)","sens":"participe présent masculin pluriel, binyan hitpa'el","racine":"כ-ס-י","nature":"verbe","genre":"m","nombre":"pl","formes":"מִתְכַּסֶּה · מִתְכַּסִּים · מִתְכַּסּוֹת","cat":"verbes","emploi":"הַשְּׁבִילִים הַמִּתְכַּסִּים בְּשֶׁלֶג נִרְאִים לְבָנִים — Les sentiers qui se couvrent de neige semblent blancs."},{"heb":"טַל","translit":"tal","fr":"rosée","sens":"nom masculin singulier","racine":"ט-ל-ל","nature":"nom","genre":"m","nombre":"sg","formes":"טַל · טְלָלִים","cat":"noms","emploi":"בַּבֹּקֶר הַטַּל מְכַסֶּה אֶת הָעֲשָׂבִים — Le matin, la rosée recouvre les herbes."},{"heb":"תִּבְעַרְנָה","translit":"tiv'arnah","fr":"elles s'embraseront, elles brûleront","sens":"futur 3e pers fém pl, binyan qal","racine":"ב-ע-ר","nature":"verbe","genre":"f","nombre":"pl","formes":"בּוֹעֵר · תִּבְעַר · תִּבְעַרְנָה","cat":"verbes","emploi":"הַמְּדוּרוֹת תִּבְעַרְנָה כָּל הַלַּיְלָה — Les feux de camp brûleront toute la nuit."},{"heb":"תִּדְעַכְנָה","translit":"tid'akhnah","fr":"elles s'éteindront","sens":"futur 3e pers fém pl, binyan qal","racine":"ד-ע-כ","nature":"verbe","genre":"f","nombre":"pl","formes":"דּוֹעֵךְ · תִּדְעַךְ · תִּדְעַכְנָה","cat":"verbes","emploi":"הַנֵּרוֹת תִּדְעַכְנָה בְּסוֹף הַלַּיְלָה — Les bougies s'éteindront en fin de nuit."},{"heb":"תִּפְרַחְנָה","translit":"tifrakhnah","fr":"elles fleuriront","sens":"futur 3e pers fém pl, binyan qal","racine":"פ-ר-ח","nature":"verbe","genre":"f","nombre":"pl","formes":"פּוֹרֵחַ · תִּפְרַח · תִּפְרַחְנָה","cat":"verbes","emploi":"הַוַּרְדִּים תִּפְרַחְנָה בַּגָּן בְּבֹא הָאָבִיב — Les roses fleuriront dans le jardin à l'arrivée du printemps."},{"heb":"תֵּהֹמְנָה","translit":"tehomnenah","fr":"elles grounderont, elles rugissent comme un abîme","sens":"futur 3e pers fém pl, binyan qal (ou dénominatif de תְּהוֹם)","racine":"ה-מ-ה","nature":"verbe","genre":"f","nombre":"pl","formes":"הוֹמֶה · תֵּהֹם · תֵּהֹמְנָה","cat":"verbes","emploi":"הַגַּלִּים תֵּהֹמְנָה בְּלֵיל הַסּוּפָה — Les vagues grondera comme des abîmes la nuit de la tempête."},{"heb":"סָבְתָא","translit":"savta","fr":"grand-mère","sens":"nom féminin singulier (araméisme intégré)","racine":"ס-ב-א","nature":"nom","genre":"f","nombre":"sg","formes":"סָבְתָא · סָבְתוֹת","cat":"noms","emploi":"הַסָּבְתָא מְסַפֶּרֶת לַנְּכָדִים סִפּוּרִים לִפְנֵי הַשֵּׁנָה — La grand-mère raconte des histoires aux petits-enfants avant le sommeil."},{"heb":"נֶכְדָּתָהּ","translit":"nekhdatah","fr":"sa petite-fille","sens":"nom féminin singulier avec pronom suffixe 3e pers fém sg","racine":"נ-כ-ד","nature":"nom","genre":"f","nombre":"sg","formes":"נֶכְדָּה · נֶכְדָּתָהּ · נְכָדוֹת","cat":"noms","emploi":"הִיא שָׂמְחָה לִרְאוֹת אֶת נֶכְדָּתָהּ גְּדֵלָה — Elle est heureuse de voir sa petite-fille grandir."},{"heb":"יְדִידַי","translit":"yedidai","fr":"mes amis (apostrophe)","sens":"nom masculin pluriel avec pronom suffixe 1e pers sg","racine":"י-ד-ד","nature":"nom","genre":"m","nombre":"pl","formes":"יָדִיד · יְדִידִים · יְדִידַי","cat":"noms","emploi":"יְדִידַי, שִׁמְעוּ נָא אֶת הַסִּפּוּר הַזֶּה — Mes amis, écoutez donc cette histoire."}],"phrases":[{"heb":"וּבְאֵשׁ כַּלָּנִיּוֹת לוֹהֵט הַגַּיְא","fr":"Et le ravin brûle du feu des anémones"},{"heb":"שְׁקִיעָה בָּהָר יוֹקֶדֶת","fr":"Un coucher de soleil embrase la montagne"},{"heb":"וּבְאֵשׁ כַּלָּנִיּוֹת לוֹהֵט הַגַּיְא","fr":"Et le ravin brûle du feu des anémones"},{"heb":"וּבְאֵשׁ כַּלָּנִיּוֹת לוֹהֵט הַגַּיְא","fr":"Et le ravin brûle du feu des anémones"},{"heb":"אֶת הַפְּרָחִים לִצְרוֹר הִיא תְּלַקֵּט לָהּ","fr":"Elle cueille les fleurs pour en faire un bouquet"},{"heb":"אֶל אִמָּא הִיא נֶחְפֶּזֶת וְקוֹרֵאת לָהּ","fr":"Elle court vers sa maman en l'appelant"},{"heb":"וּבַשְּׁבִילִים הַמִּתְכַּסִּים בְּטַל","fr":"Et sur les sentiers couverts de rosée"},{"heb":"וּבַשְּׁבִילִים הַמִּתְכַּסִּים בְּטַל","fr":"Et sur les sentiers couverts de rosée"},{"heb":"שְׁקִיעוֹת בָּהָר תִּבְעַרְנָה וְתִדְעַכְנָה","fr":"Les couchers de soleil sur la montagne s'embraseront et s'éteindront"},{"heb":"שְׁקִיעוֹת בָּהָר תִּבְעַרְנָה וְתִדְעַכְנָה","fr":"Les couchers de soleil sur la montagne s'embraseront et s'éteindront"},{"heb":"אֲבָל כַּלָּנִיּוֹת תָּמִיד תִּפְרַחְנָה","fr":"Mais les anémones fleuriront toujours"},{"heb":"סוּפוֹת לָרֹב תֵּהֹמְנָה וְתִסְעַרְנָה","fr":"Les tempêtes souvent grondera et se déchaîneront"},{"heb":"הַנַּעֲרָהּ כְּבָר סָבְתָא, יְדִידַי","fr":"La fillette est déjà grand-mère, mes amis"},{"heb":"הִנֵּה כְּבָר נֶכְדָּתָהּ לַגַּיְא יוֹרֶדֶת","fr":"Voici que déjà sa petite-fille descend vers le ravin"},{"heb":"הַנַּעֲרָהּ כְּבָר סָבְתָא, יְדִידַי","fr":"La fillette est déjà grand-mère, mes amis"}],"quatrains":[{"heb":"הָעֶרֶב בָּא. שְׁקִיעָה בָּהָר יוֹקֶדֶת.\nאֲנִי חוֹלֶמֶת וְרוֹאוֹת עֵינַי:\nהַגַּיְאָה נַעֲרָה קְטַנָּה יוֹרֶדֶת\nוּבְאֵשׁ כַּלָּנִיּוֹת לוֹהֵט הַגַּיְא.","fr":"Le soir tombe. Un coucher de soleil embrase la montagne. / Je rêve et mes yeux voient : / Dans le ravin, une petite fille descend / Et le ravin brûle du feu des anémones.","an":"Le premier quatrain pose le cadre onirique et sensoriels du poème. Le soir qui 'vient' (בָּא) et la 'flamme' du coucher de soleil (יוֹקֶדֶת) établissent d'emblée une métaphore filée du feu, que reprend immédiatement le verbe לוֹהֵט ('brûle, flamboie') au dernier vers. Cette circularité ígnée crée une cohérence sémantique forte : le rouge du ciel crépusculaire et le rouge des anémones se confondent synesthésiquement. Le sujet lyrique ('אֲנִי חוֹלֶמֶת', 'je rêve') est féminin — participe présent en -ת — ce qui situe la voix poétique. Le terme הַגַּיְאָה désigne la vallée/ravin dans sa forme féminine, alors que הַגַּיְא au vers 4 est masculin : cette oscillation de genre mime la dualité nature/vision. La syntaxe est simple, nominale et sensorielle, caractéristique d'un registre lyrique populaire. L'image de la 'petite fille qui descend' introduit le premier âge du triptyque."},{"heb":"אֶת הַפְּרָחִים לִצְרוֹר הִיא תְּלַקֵּט לָהּ,\nוּבַשְּׁבִילִים הַמִּתְכַּסִּים בְּטַל\nאֶל אִמָּא הִיא נֶחְפֶּזֶת וְקוֹרֵאת לָהּ:\nהַבִּיטִי מַה הֵבֵאתִי לָךְ בַּסַּל!","fr":"Elle cueille les fleurs pour en faire un bouquet, / Et sur les sentiers couverts de rosée / Elle court vers sa maman en l'appelant : / Regarde ce que je t'ai apporté dans le panier !","an":"Ce quatrain est celui du mouvement et de la parole vive. Le verbe תְּלַקֵּט (forme pi'el, sens intensif de 'cueillir soin par soin') souligne la délicatesse du geste enfantin. Le participe הַמִּתְכַּסִּים ('qui se couvrent', voix réfléchie hitpa'el) donne vie aux sentiers comme s'ils s'enveloppaient eux-mêmes de rosée. Le verbe נֶחְפֶּזֶת ('elle se hâte', niphal) exprime la précipitation joyeuse. La syntaxe s'anime par la coordination (וְ-) qui enchaîne les actions sans pause, imitant le souffle de l'enfant. Le discours direct final — הַבִּיטִי מַה הֵבֵאתִי — est au registre familier et affectueux, avec l'impératif féminin הַבִּיטִי. Le panier (סַּל) devient objet symbolique de l'offrande : donner des fleurs à sa mère, c'est offrir la beauté du monde. Ce quatrain est le plus concret et le plus touchant du poème."},{"heb":"שְׁקִיעוֹת בָּהָר תִּבְעַרְנָה וְתִדְעַכְנָה,\nאֲבָל כַּלָּנִיּוֹת תָּמִיד תִּפְרַחְנָה.\nסוּפוֹת לָרֹב תֵּהֹמְנָה וְתִסְעַרְנָה,\nאַךְ מֵחָדָשׁ כַּלָּנִיּוֹת תִּבְעַרְנָה.","fr":"Les couchers de soleil sur la montagne s'embraseront et s'éteindront, / Mais les anémones fleuriront toujours. / Les tempêtes souvent grondera et déchaîneront, / Pourtant les anémones brûleront à nouveau.","an":"Ce quatrain constitue le pivot philosophique du poème. La structure syntaxique est rigoureusement antithétique : chaque distique oppose une réalité éphémère (couchers de soleil, tempêtes) à la permanence des anémones, grâce aux conjonctions אֲבָל et אַךְ ('mais', 'pourtant'). Les verbes au futur pluriel féminin — תִּבְעַרְנָה, תִדְעַכְנָה, תִּפְרַחְנָה, תֵּהֹמְנָה, תִּסְעַרְנָה — créent un rythme incantato­ire, presque une psalmodie. Noterons le parallélisme presque exact entre le premier et le dernier vers : תִּבְעַרְנָה revient, formant une inclusion. Le champ lexical de la violence naturelle (סוּפוֹת = tempêtes ; תֵּהֹמְנָה = gronder comme un abîme) contraste avec la douceur du verbe תִּפְרַחְנָה ('fleurir'). L'anémone devient ici symbole de résilience collective, écho possible à la conscience nationale israélienne."},{"heb":"שָׁנִים עָבְרוּ. שְׁקִיעָה בָּהָר יוֹקֶדֶת.\nהַנַּעֲרָהּ כְּבָר סָבְתָא, יְדִידַי.\nהִנֵּה כְּבָר נֶכְדָּתָהּ לַגַּיְא יוֹרֶדֶת\nוְשׁוּב כַּלָּנִיּוֹת פּוֹרְחוֹת בַּגַּיְא.","fr":"Les années ont passé. Le coucher de soleil embrase toujours la montagne. / La fillette est déjà grand-mère, mes amis. / Voici que déjà sa petite-fille descend vers le ravin / Et les anémones fleurissent de nouveau dans le ravin.","an":"Le quatrain final boucle le cycle avec une maîtrise remarquable. La formule שָׁנִים עָבְרוּ ('les années ont passé', passé accompli) contraste avec le présent perpétuel יוֹקֶדֶת ('embrase', participe-présent) du coucher de soleil : le temps humain s'est écoulé mais le temps de la nature reste au présent. L'apostrophe יְדִידַי ('mes amis') est une rupture soudaine du registre : le poète interpelle directement le lecteur/auditeur, brisant la quatrième paroi dans un geste proche de la tradition orale. Le mot נֶכְדָּתָהּ ('sa petite-fille') introduit la troisième génération, accomplissant le triptyque enfance-amour-vieillesse. La répétition du verbe יוֹרֶדֶת ('descend') — identique au premier quatrain — crée un écho structurel parfait. Le vers final, avec le retour du participe présent פּוֹרְחוֹת ('fleurissent'), affirme la victoire du cycle naturel sur le temps biographique : seules les anémones ne vieillissent pas."}],"analyse":"Le poème 'כַּלָּנִיּוֹת' (Kalaniyot / Les anémones) est une œuvre lyrique hébraïque dont la structure cyclique épouse le mouvement même de la nature. Le poète — dont le nom de plume est précisément 'כַּלְכָּלִיּוֹת' — construit un triptyque générationnel : enfance, amour, vieillesse, trois âges d'une même femme face à la même vallée fleurie. La forme strophique régulière, avec son refrain obsédant, donne au poème une tonalité de chanson populaire (שִׁיר עַם), presque folklorique. Le thème central est la tension entre la fugacité humaine — vœux, couchers de soleil, jeunesse — et la pérennité de la fleur sauvage, symbole de renaissance et d'identité nationale israélienne. L'anémone rouge (כַּלָּנִית) est la fleur nationale de l'État d'Israël, ce qui confère au poème une résonance à la fois intime et collective."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
