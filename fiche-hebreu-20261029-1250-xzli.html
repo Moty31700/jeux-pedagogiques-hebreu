@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"אפשרות שהוחמצה","auteur":"נינו אורסיאנו","youtube":"","shironet":"","mots":[{"heb":"אַפְשָׁרוּת","translit":"efsharut","fr":"possibilité","sens":"nom féminin singulier, forme abstraite dérivée de אֶפְשָׁר","racine":"א-פ-שׁ-ר","nature":"nom","genre":"f","nombre":"sg","formes":"אַפְשָׁרוּיוֹת · אֶפְשָׁר","cat":"noms","emploi":"אַפְשָׁרוּת שֶׁהוּחְמְצָה פֵּרוּשָׁהּ רֶגַע שֶׁלֹּא נוֹצַל : une possibilité manquée désigne un moment non saisi."},{"heb":"שֶׁהוּחְמְצָה","translit":"she-hukhmtsa","fr":"qui a été manquée / ratée","sens":"verbe, binyan hufal, passé 3e personne féminin singulier, proposition relative","racine":"ח-מ-צ","nature":"verbe","genre":"f","nombre":"sg","formes":"הֶחְמִיץ · חָמַץ","cat":"verbes","emploi":"הַהַזְדַּמְּנוּת שֶׁהוּחְמְצָה לֹא תַּחֲזֹר : l occasion qui a été ratée ne reviendra pas."},{"heb":"לְאָן","translit":"le-an","fr":"où (vers où)","sens":"adverbe interrogatif de direction, préposition ל + אָן","racine":"א-נ","nature":"adverbe","genre":"—","nombre":"—","formes":"אָן · לְאָן שֶׁלֹּא","cat":"autre","emploi":"לְאָן הַדֶּרֶךְ מוֹבִילָה אוֹתְךָ? : vers où le chemin te mène-t-il ?"},{"heb":"הַדֶּרֶךְ","translit":"ha-dérekh","fr":"le chemin / la voie","sens":"nom féminin singulier défini","racine":"ד-ר-כ","nature":"nom","genre":"f","nombre":"sg","formes":"דְּרָכִים · דֶּרֶךְ אֶרֶץ","cat":"noms","emploi":"הַדֶּרֶךְ הִיא גַּם מָסָר וְגַם מַסָּע : le chemin est à la fois itinéraire et trajet de vie."},{"heb":"הוֹלֶכֶת","translit":"holékhet","fr":"va / marche","sens":"verbe, binyan kal, présent-participe féminin singulier","racine":"ה-ל-כ","nature":"verbe","genre":"f","nombre":"sg","formes":"הָלַךְ · הוֹלֵךְ וָשָׁב","cat":"verbes","emploi":"הַדֶּרֶךְ הוֹלֶכֶת וּמִתְרַחֶקֶת לָאוֹפֶק : le chemin s en va en s éloignant vers l horizon."},{"heb":"כָּל","translit":"kol","fr":"chaque / tout","sens":"déterminant universel, invariable, précède un nom indéfini pour le sens distributif","racine":"כ-ל-ל","nature":"adjectif","genre":"—","nombre":"—","formes":"הַכֹּל · כֻּלָּם","cat":"adjectifs","emploi":"כָּל מַחְשָׁבָה מְשַׁנָּה אֶת הַמְּצִיאוּת : chaque pensée transforme la réalité."},{"heb":"מַבָּט","translit":"mabat","fr":"regard / coup d œil","sens":"nom masculin singulier, schème מַקְטָל déverbal de הִבִּיט","racine":"נ-ב-ט","nature":"nom","genre":"m","nombre":"sg","formes":"מַבָּטִים · הִבִּיט","cat":"noms","emploi":"מַבָּט אֶחָד יָכוֹל לְהַכִּיל עוֹלָמוֹת שְׁלֵמִים : un seul regard peut contenir des mondes entiers."},{"heb":"מַזְמִין","translit":"mazmin","fr":"invite / convie / appelle","sens":"verbe, binyan hifil, présent-participe masculin singulier","racine":"ז-מ-נ","nature":"verbe","genre":"m","nombre":"sg","formes":"הִזְמִין · הַזְמָנָה","cat":"verbes","emploi":"כָּל מַבָּט מַזְמִין אוֹתְךָ לְהִכָּנֵס לְמָקוֹם לֹא מוּכָּר : chaque regard t invite à entrer dans un espace inconnu."},{"heb":"רְחוֹב","translit":"rekhov","fr":"rue","sens":"nom masculin singulier indéfini","racine":"ר-ח-ב","nature":"nom","genre":"m","nombre":"sg","formes":"רְחוֹבוֹת · רָחָב","cat":"noms","emploi":"הָרְחוֹב הוּא הַמִּרְחָב שֶׁבֵּין הַבָּתִּים שֶׁבּוֹ נִפְגְּשִׁים זָרִים : la rue est l espace entre les maisons où les étrangers se croisent."},{"heb":"תְּחוּשָׁה","translit":"tkhusha","fr":"sensation / sentiment","sens":"nom féminin singulier, déverbal de חָשׁ","racine":"ח-ו-שׁ","nature":"nom","genre":"f","nombre":"sg","formes":"תְּחוּשׁוֹת · חוּשׁ","cat":"noms","emploi":"תְּחוּשָׁה עֲמוּמָה שֶׁל אֵיבוּד דֶּרֶךְ אוֹחֶזֶת בְּלִבּוֹ : une vague sensation d être égaré l étreint."},{"heb":"סִמְטָה","translit":"simta","fr":"ruelle / venelle","sens":"nom féminin singulier, emprunt à l araméen, désigne une ruelle étroite","racine":"ס-מ-ט","nature":"nom","genre":"f","nombre":"sg","formes":"סִמְטָאוֹת · סִמְטַת מַעֲבָר","cat":"noms","emploi":"הַסִּמְטָה הַצָּרָה הוֹבִילָה אוֹתָהּ אֶל חָצֵר נִסְתֶּרֶת : la ruelle étroite la mena vers une cour cachée."},{"heb":"הִרְהוּר","translit":"hirhur","fr":"pensée / réflexion / méditation","sens":"nom masculin singulier, déverbal du verbe quadrilitère הִרְהֵר","racine":"ה-ר-ה-ר","nature":"nom","genre":"m","nombre":"sg","formes":"הִרְהוּרִים · הִרְהֵר","cat":"noms","emploi":"הִרְהוּר שֶׁל רֶגַע יָכוֹל לְשַׁנּוֹת מַסְלוּל שֶׁל חַיִּים : une pensée fugace peut changer une trajectoire de vie."},{"heb":"קֶרֶן רְחוֹב","translit":"kéren rekhov","fr":"coin de rue","sens":"syntagme nominal : קֶרֶן (nom féminin singulier : coin, angle) + רְחוֹב (nom masculin singulier : rue), état construit","racine":"ק-ר-נ","nature":"expression","genre":"f","nombre":"sg","formes":"פִּנַּת רְחוֹב · קֶרֶן","cat":"autre","emploi":"הֵם נִפְגְּשׁוּ בְּקֶרֶן הָרְחוֹב וְלֹא אָמְרוּ דָּבָר : ils se rencontrèrent au coin de la rue sans dire un mot."}],"phrases":[{"heb":"אפשרות שהוחמצה","fr":"Une occasion manquée"},{"heb":"אפשרות שהוחמצה","fr":"Une occasion manquée"},{"heb":"לאן הדרך הולכת","fr":"Où va le chemin"},{"heb":"לאן הדרך הולכת","fr":"Où va le chemin"},{"heb":"לאן הדרך הולכת","fr":"Où va le chemin"},{"heb":"כל מבט מזמין רחוב","fr":"Chaque regard invite une rue"},{"heb":"כל מבט מזמין רחוב","fr":"Chaque regard invite une rue"},{"heb":"כל מבט מזמין רחוב","fr":"Chaque regard invite une rue"},{"heb":"כל מבט מזמין רחוב","fr":"Chaque regard invite une rue"},{"heb":"כל תחושה סימטה","fr":"Chaque sensation, une ruelle"},{"heb":"כל תחושה סימטה","fr":"Chaque sensation, une ruelle"},{"heb":"כל הרהור קרן רחוב","fr":"Chaque pensée, un coin de rue"},{"heb":"כל הרהור קרן רחוב","fr":"Chaque pensée, un coin de rue"}],"quatrains":[{"heb":"לְאָן הַדֶּרֶךְ הוֹלֶכֶת\nכָּל מַבָּט מַזְמִין רְחוֹב\nכָּל תְּחוּשָׁה סִמְטָה\nכָּל הִרְהוּר קֶרֶן רְחוֹב","fr":"Où va le chemin / Chaque regard invite une rue / Chaque sensation, une ruelle / Chaque pensée, un coin de rue","an":"Le premier vers, interrogatif et sans réponse, pose la question existentielle fondamentale du poème : la direction, le sens, la destination. Le chemin ('הַדֶּרֶךְ') est ici à la fois concret (une rue) et abstrait (un parcours de vie). Les trois vers suivants développent une structure anaphorique ('כָּל... כָּל... כָּל...') qui énumère trois modes d expérience intérieure : le regard (visuel), la sensation (sensorielle), la pensée (intellectuelle). À chacun correspond un espace urbain de taille décroissante : la rue large ('רְחוֹב'), la ruelle étroite ('סִמְטָה'), le coin de rue ('קֶרֶן רְחוֹב'). Ce rétrécissement spatial mime le mouvement de l intériorisation, voire de l impasse. Le verbe 'מַזְמִין' (invite, convie) n apparaît qu au deuxième vers ; les deux suivants sont nominaux, ce qui crée une ellipse et accélère le rythme. L occasion manquée du titre se lit en creux : toutes ces possibilités ouvertes n ont pas été empruntées. La syntaxe fragmentée, le refus de la subordination, donnent au texte une tonalité de flash mental, d instantané poétique suspendu."}],"analyse":"Nino Ursiano est un poète hébraïen contemporain dont l écriture se situe à la croisée de l intimisme et de l urbanité. Ce poème unique, intitulé 'אפשרות שהוחמצה' (Une occasion manquée), est construit autour d un seul quatrain dense et elliptique. La forme est minimaliste : quatre vers brefs, sans verbe conjugué dominant, bâtis sur une structure anaphorique ('כל... כל... כל...') qui produit un effet de litanie ou d inventaire existentiel. Le thème central est celui du potentiel non réalisé : chaque perception sensorielle ou mentale aurait pu ouvrir un chemin, une direction, une rencontre — mais ne l a pas fait. L espace urbain (rue, ruelle, coin de rue) devient métaphore de l existence ramifiée et des choix non effectués. Le registre est mélancolique, contemplatif, proche du poème en prose."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
