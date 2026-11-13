@@ -1,5 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><script>
-/* =====================================================================
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><script>/* =====================================================================
    hébreu-zen · Mishpatim — module de connexion (remplace claude.ai)
    Fournit window.claude.use('sample' | 'downloads') à la page Mishpatim :
    - 'sample'    : les demandes à l'IA passent par n8n (/webhook/mishpatim),
@@ -164,6 +163,94 @@
     }, function () { etat('horsligne'); });
   }
 
+  /* ---------- inactivité : verrouiller, puis fermer la session ----------
+     - 10 min sans geste : la page se VERROUILLE (contenu masqué) ; pour continuer,
+       l'élève doit saisir à nouveau son code d'accès. 3 codes faux = déconnexion.
+     - 20 min sans geste (verrou resté sans réponse, ou téléphone resté en veille) :
+       DÉCONNEXION complète ; il faut ressaisir identifiant et code.
+     L'heure du dernier geste est gardée dans sessionStorage, car un téléphone
+     en veille suspend les minuteurs de la page : on la contrôle au réveil. */
+  var VERROU = 10 * 60 * 1000, FERMETURE = 20 * 60 * 1000;
+  var CLE_ACT = 'hz-mishpatim-activite', CLE_MSG = 'hz-mishpatim-msg';
+  var MSG_INACTIF = 'Pour votre sécurité, votre session a été fermée après 20 minutes sans activité. Saisissez à nouveau votre identifiant et votre code d’accès.';
+  var derniereEcriture = 0, surveillance = null, compteARebours = null;
+
+  function derniere() { try { return Number(sessionStorage.getItem(CLE_ACT)) || 0; } catch (e) { return 0; } }
+  function noterActivite(force) {
+    if (!force && (!acces || document.getElementById('hz-inactif'))) return;
+    var t = Date.now(); if (!force && t - derniereEcriture < 5000) return;
+    derniereEcriture = t; try { sessionStorage.setItem(CLE_ACT, String(t)); } catch (e) {}
+  }
+  ['pointerdown', 'keydown', 'touchstart', 'wheel', 'scroll'].forEach(function (ev) {
+    document.addEventListener(ev, function () { noterActivite(false); }, { capture: true, passive: true });
+  });
+
+  function deconnecter(message) {
+    if (acces && Object.keys(enAttente).length) envoyer(true);
+    progActive = false; acces = null; statut = null; ecrire(null);
+    clearInterval(surveillance); clearInterval(compteARebours);
+    try { sessionStorage.removeItem(CLE_ACT); if (message) sessionStorage.setItem(CLE_MSG, message); } catch (e) {}
+    setTimeout(function () { location.reload(); }, 300);
+  }
+
+  function verrouiller() {
+    if (document.getElementById('hz-inactif')) return;
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    var essais = 0;
+    var v = document.createElement('div'); v.id = 'hz-inactif';
+    v.innerHTML = '<form id="hz-boite" role="alertdialog" aria-labelledby="hz-inactif-t" autocomplete="off">' +
+      '<h2 id="hz-inactif-t">Session verrouillée</h2>' +
+      '<p>Pas d’activité depuis 10 minutes. Pour continuer, saisissez à nouveau votre code d’accès.</p>' +
+      '<label for="hz-recode">Code d’accès</label><input id="hz-recode" name="code" autocomplete="off" autocapitalize="characters" required>' +
+      '<button type="submit" id="hz-continuer">Continuer</button>' +
+      '<button type="button" class="hz-second" id="hz-sortir">Se déconnecter</button>' +
+      '<div id="hz-msg2" style="margin-top:12px;font-size:14px;color:#b3261e;min-height:1em"></div>' +
+      '<p id="hz-inactif-p" style="margin:10px 0 0;font-size:13px"></p></form>';
+    document.body.appendChild(v);
+    function maj() {
+      var reste = Math.ceil((derniere() + FERMETURE - Date.now()) / 1000);
+      if (reste <= 0) { deconnecter(MSG_INACTIF); return; }
+      var m = Math.floor(reste / 60), s = reste % 60;
+      document.getElementById('hz-inactif-p').textContent =
+        'Sans code, la session se fermera dans ' + (m ? m + ' min ' : '') + (s < 10 && m ? '0' : '') + s + ' s.';
+    }
+    maj(); compteARebours = setInterval(maj, 1000);
+    document.getElementById('hz-boite').onsubmit = function (ev) {
+      ev.preventDefault();
+      var champ = document.getElementById('hz-recode');
+      var code = champ.value.trim().toUpperCase();
+      if (!code || !acces) return;
+      if (code === String(acces.code).toUpperCase()) {
+        clearInterval(compteARebours); v.remove(); noterActivite(true);
+        return;
+      }
+      essais++; champ.value = '';
+      if (essais >= 3) { deconnecter('Code incorrect trois fois : la session a été fermée. Saisissez à nouveau votre identifiant et votre code d’accès.'); return; }
+      document.getElementById('hz-msg2').textContent = 'Code incorrect. Encore ' + (3 - essais) + ' essai' + (3 - essais > 1 ? 's' : '') + '.';
+    };
+    document.getElementById('hz-sortir').onclick = function () { deconnecter(''); };
+  }
+
+  function surveiller() {
+    if (!acces) return false;
+    var inactif = Date.now() - derniere();
+    if (inactif >= FERMETURE) { deconnecter(MSG_INACTIF); return true; }
+    if (inactif >= VERROU) verrouiller();
+    return false;
+  }
+  // nouvelle connexion : le compteur repart de zéro ;
+  // reprise (page rechargée) : on garde l'heure du dernier geste et on contrôle tout de suite
+  function lancerSurveillance(reprise) {
+    if (!reprise || !derniere()) noterActivite(true);
+    clearInterval(surveillance); surveillance = setInterval(surveiller, 15000);
+    if (reprise) surveiller();
+  }
+  // au retour sur la page (téléphone sorti de veille, onglet revenu au premier plan) :
+  // vérifié AVANT la resynchronisation de la progression, déclarée plus bas
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') surveiller();
+  });
+
   window.addEventListener('pagehide', function () { if (Object.keys(enAttente).length) envoyer(true); });
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'hidden') { if (Object.keys(enAttente).length) envoyer(true); }
@@ -177,15 +264,21 @@
 
   /* ---------- styles ---------- */
   var css = '' +
-    '#hz-voile{position:fixed;inset:0;z-index:9999;background:rgba(20,24,33,.55);display:flex;align-items:center;justify-content:center;padding:16px}' +
+    '#hz-voile,#hz-inactif{position:fixed;inset:0;z-index:9999;background:rgba(20,24,33,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px}' +
+    '#hz-inactif{z-index:10001}' +
+    '#hz-boite button.hz-second{margin-top:8px;background:#fff;color:#33489a;border:1px solid #33489a}' +
+    /* sur téléphone, la barre d'onglets passait sur une seule ligne de 717 px : la page débordait
+       et la barre « Se déconnecter », fixée en bas à droite, sortait de l'écran */
+    '@media (max-width:760px){nav.tabs{flex-wrap:wrap;max-width:100%;box-sizing:border-box}}' +
+    'body::after{content:"";display:block;height:64px}' +
     '#hz-boite{background:#fff;color:#23272f;border-radius:14px;max-width:380px;width:100%;padding:22px 20px;font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 12px 40px rgba(0,0,0,.25)}' +
     '#hz-boite h2{margin:0 0 4px;font-size:20px;color:#33489a}#hz-boite p{margin:0 0 14px;color:#555;font-size:14px}' +
     '#hz-boite label{display:block;font-size:13px;margin:10px 0 4px;color:#444}' +
     '#hz-boite input{width:100%;box-sizing:border-box;padding:10px;border:1px solid #c9ccd6;border-radius:8px;font-size:15px;background:#fff;color:#23272f;color-scheme:light}' +
     '#hz-boite button{margin-top:16px;width:100%;padding:11px;border:0;border-radius:8px;background:#33489a;color:#fff;font-size:15px;cursor:pointer}' +
     '#hz-boite button:disabled{opacity:.6}#hz-msg{margin-top:12px;font-size:14px;color:#b3261e;min-height:1em}' +
-    '#hz-barre{position:fixed;right:12px;bottom:12px;z-index:9998;background:#fff;border:1px solid #d9dbe3;border-radius:20px;padding:6px 12px;font:13px -apple-system,BlinkMacSystemFont,sans-serif;color:#33489a;box-shadow:0 2px 8px rgba(0,0,0,.1);display:flex;gap:10px;align-items:center}' +
-    '#hz-barre a{color:#888;cursor:pointer;text-decoration:underline}' +
+    '#hz-barre{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9998;background:#fff;border:1px solid #d9dbe3;border-radius:20px;padding:6px 12px;font:13px -apple-system,BlinkMacSystemFont,sans-serif;color:#33489a;box-shadow:0 2px 8px rgba(0,0,0,.1);display:flex;gap:10px;align-items:center}' +
+    '#hz-barre a{color:#b3261e;font-weight:600;cursor:pointer;text-decoration:underline}' +
     '#hz-prog{color:#2f7d4f}#hz-prog:empty{display:none}#hz-prog.hz-alerte{color:#b5482c}' +
     '@media (max-width:560px){#hz-barre{left:12px;flex-wrap:wrap;justify-content:center;row-gap:2px}}' +
     '#hz-toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:10000;max-width:92%;background:#fff4e5;color:#6b3d00;border:1px solid #f0c27b;border-radius:10px;padding:10px 14px;font:14px -apple-system,BlinkMacSystemFont,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.15)}' +
@@ -215,10 +308,7 @@
     t.textContent = formule + ' · IA : ' + q.utilises + ' / ' + q.max + ' ce mois-ci';
     var p = document.createElement('span'); p.id = 'hz-prog';
     var a = document.createElement('a'); a.textContent = 'Se déconnecter';
-    a.onclick = function () {
-      if (Object.keys(enAttente).length) envoyer(true);
-      progActive = false; ecrire(null); setTimeout(function () { location.reload(); }, 300);
-    };
+    a.onclick = function () { deconnecter(''); };
     b.appendChild(t); b.appendChild(p); b.appendChild(a);
     etat(etatProg);
   }
@@ -268,11 +358,11 @@
     };
   }
 
-  function verifier(a) {
+  function verifier(a, reprise) {
     return poster({ identifiant: a.identifiant, code: a.code, type: 'statut' })
       .then(function (r) {
         if (r && r.ok) {
-          acces = a; statut = r; ecrire(a);
+          acces = a; statut = r; ecrire(a); lancerSurveillance(reprise);
           majBarre(); verrouillerOnglets(); resoudre(sample);
           try {
             if (sessionStorage.getItem('hz-mishpatim-recharge')) {
@@ -354,14 +444,19 @@
   /* ---------- démarrage ---------- */
   function demarrer() {
     ajouterStyle();
-    var a = lire();
-    if (a && a.identifiant && a.code) verifier(a);
-    else afficherConnexion('');
+    var msg = '';
+    try { msg = sessionStorage.getItem(CLE_MSG) || ''; sessionStorage.removeItem(CLE_MSG); } catch (e) {}
+    var a = lire(), d = derniere();
+    if (a && a.identifiant && a.code && d && Date.now() - d >= FERMETURE) {
+      // page rouverte ou rechargée après une longue absence : on redemande le code
+      ecrire(null); try { sessionStorage.removeItem(CLE_ACT); } catch (e) {}
+      afficherConnexion(MSG_INACTIF);
+    } else if (a && a.identifiant && a.code) verifier(a, true);
+    else afficherConnexion(msg);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
   else demarrer();
 })();
-
 </script></head><body>
 
 <meta name="robots" content="noindex, nofollow">
