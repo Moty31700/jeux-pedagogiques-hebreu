@@ -305,7 +305,11 @@
     var formule = statut.formule === 'complet' ? 'Complet' : 'Sectoriel';
     b.innerHTML = '';
     var t = document.createElement('span');
-    t.textContent = formule + ' · IA : ' + q.utilises + ' / ' + q.max + ' ce mois-ci';
+    // date de fin payée (la fin enregistrée inclut un jour de marge) : « jusqu'au 13/12 »
+    var jusquau = '';
+    var d = statut.fin ? new Date(statut.fin) : null;
+    if (d && !isNaN(d)) { d.setDate(d.getDate() - 1); jusquau = ' jusqu’au ' + d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }); }
+    t.textContent = formule + jusquau + ' · IA : ' + q.utilises + ' / ' + q.max + ' ce mois-ci';
     var p = document.createElement('span'); p.id = 'hz-prog';
     var a = document.createElement('a'); a.textContent = 'Se déconnecter';
     a.onclick = function () { deconnecter(''); };
