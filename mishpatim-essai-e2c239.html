@@ -40,7 +40,7 @@
     '#hz-boite{background:#fff;color:#23272f;border-radius:14px;max-width:380px;width:100%;padding:22px 20px;font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 12px 40px rgba(0,0,0,.25)}' +
     '#hz-boite h2{margin:0 0 4px;font-size:20px;color:#33489a}#hz-boite p{margin:0 0 14px;color:#555;font-size:14px}' +
     '#hz-boite label{display:block;font-size:13px;margin:10px 0 4px;color:#444}' +
-    '#hz-boite input{width:100%;box-sizing:border-box;padding:10px;border:1px solid #c9ccd6;border-radius:8px;font-size:15px}' +
+    '#hz-boite input{width:100%;box-sizing:border-box;padding:10px;border:1px solid #c9ccd6;border-radius:8px;font-size:15px;background:#fff;color:#23272f;color-scheme:light}' +
     '#hz-boite button{margin-top:16px;width:100%;padding:11px;border:0;border-radius:8px;background:#33489a;color:#fff;font-size:15px;cursor:pointer}' +
     '#hz-boite button:disabled{opacity:.6}#hz-msg{margin-top:12px;font-size:14px;color:#b3261e;min-height:1em}' +
     '#hz-barre{position:fixed;right:12px;bottom:12px;z-index:9998;background:#fff;border:1px solid #d9dbe3;border-radius:20px;padding:6px 12px;font:13px -apple-system,BlinkMacSystemFont,sans-serif;color:#33489a;box-shadow:0 2px 8px rgba(0,0,0,.1);display:flex;gap:10px;align-items:center}' +
@@ -148,7 +148,9 @@
       opts = opts || {};
       if (!acces) return Promise.reject({ code: 'not_granted', message: 'Connectez-vous pour utiliser l’IA.' });
       var onglet = ongletActif();
-      return poster({ identifiant: acces.identifiant, code: acces.code, onglet: onglet, type: onglet, prompt: String(prompt) }, opts.signal)
+      // hébreu-zen vouvoie ses élèves : l'IA aussi, dans tout ce qu'elle leur écrit
+      var consigne = String(prompt) + '\n\nSi ta réponse contient des explications, des commentaires ou des conseils adressés à l’élève, vouvoie-le.';
+      return poster({ identifiant: acces.identifiant, code: acces.code, onglet: onglet, type: onglet, prompt: consigne }, opts.signal)
         .then(function (r) {
           if (r && r.ok) {
             if (statut && r.quota) { statut.quota = r.quota; majBarre(); }
@@ -641,7 +643,7 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
   <header>
     <div>
       <h1><span class="he" lang="he" style="color:var(--accent)">מִשְׁפָּטִים</span> Mishpatim</h1>
-      <p>Fabrique des phrases à partir d’une racine et d’un moule, transforme-les, puis traduis-les : Claude corrige, et les phrases ratées reviennent en révision.</p>
+      <p>Fabriquez des phrases à partir d’une racine et d’un moule, transformez-les, puis traduisez-les : Claude corrige, et les phrases ratées reviennent en révision.</p>
     </div>
     <div class="hdr">
     <div class="speed" role="group" aria-label="Vitesse de lecture"><span class="lab">🔊 Lecture</span><div class="seg" id="speed"><button type="button" data-s="0">Lente</button><button type="button" data-s="1">Moyenne</button><button type="button" data-s="2">Normale</button></div></div>
@@ -657,19 +659,19 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
     </nav>
     </div>
   </header>
-  <div class="banner" id="noclaude" hidden>Les propositions et les transformations sont écrites par l’IA. Connectez-vous pour les utiliser ; ici tu peux parcourir les racines et relire « Mes phrases ».</div>
+  <div class="banner" id="noclaude" hidden>Les propositions et les transformations sont écrites par l’IA. Connectez-vous pour les utiliser ; ici vous pouvez parcourir les racines et relire « Mes phrases ».</div>
 
   <!-- ========== ATELIER ========== -->
   <section id="sp-w" class="main">
     <div class="side">
       <form class="box" id="rbox" autocomplete="off">
-        <h2><span class="step">1</span> Racine<button type="button" id="rreset" class="small ghost" style="margin-inline-start:auto" title="Revenir à l’état de départ : aucune racine, moule libre, réglages vides, exemple שמר (tes phrases, ton niveau et la vitesse restent)">↺ Tout réinitialiser</button></h2>
+        <h2><span class="step">1</span> Racine<button type="button" id="rreset" class="small ghost" style="margin-inline-start:auto" title="Revenir à l’état de départ : aucune racine, moule libre, réglages vides, exemple שמר (vos phrases, votre niveau et la vitesse restent)">↺ Tout réinitialiser</button></h2>
         <div class="rootshow empty" id="rshow" aria-live="polite"><span>?</span><span>?</span><span>?</span></div>
         <div class="rootsense" id="rsense"></div>
         <button type="button" id="rconf" class="small cl" hidden>🔀 Racine piégeuse : voir ses mots de confusion</button>
-        <div class="row"><input id="rq" lang="he" maxlength="12" placeholder="שמר" aria-label="Racine (tape la première lettre)"><button type="submit">Choisir</button><button type="button" id="rrnd" title="Une racine au hasard parmi celles de ton catalogue">🎲 Au hasard</button></div>
+        <div class="row"><input id="rq" lang="he" maxlength="12" placeholder="שמר" aria-label="Racine (tapez la première lettre)"><button type="submit">Choisir</button><button type="button" id="rrnd" title="Une racine au hasard parmi celles de votre catalogue">🎲 Au hasard</button></div>
         <div class="sug" id="sug" hidden></div>
-        <div class="hint" id="rhint">Tape une première lettre : les racines de ton catalogue s’affichent.</div>
+        <div class="hint" id="rhint">Tapez une première lettre : les racines de votre catalogue s’affichent.</div>
         <div class="verbs" id="verbs"></div>
         <details class="myr" id="myr" hidden><summary id="myrsum">Mes racines ajoutées</summary>
           <div class="hint">Racines absentes du catalogue d’origine, ajoutées quand Claude a écrit des phrases avec elles. Elles comptent dans l’autocomplétion (★) et le tirage au hasard.</div>
@@ -724,12 +726,12 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
           <div class="tfg"><span class="lab">Racine</span><div class="tfb" id="tf-r"></div></div>
           <div class="tfg"><span class="lab">Contenu</span><div class="tfb" id="tf-c"></div></div>
           <div class="tfg"><span class="lab">Moule</span><div class="tfb" id="tf-m"></div></div>
-          <form class="tfg" id="freef"><label class="lab" for="free">Ta consigne</label><div class="tfb"><input id="free" maxlength="160" placeholder="ex. ajoute « hier soir », mets-la au pluriel…"><button class="cl" type="submit">✨ Appliquer</button></div></form>
+          <form class="tfg" id="freef"><label class="lab" for="free">Votre consigne</label><div class="tfb"><input id="free" maxlength="160" placeholder="ex. ajoute « hier soir », mets-la au pluriel…"><button class="cl" type="submit">✨ Appliquer</button></div></form>
           <div id="tmsg"></div>
         </div>
 
         <div class="tf">
-          <div class="row" style="justify-content:space-between"><span class="lab">Famille de cette phrase</span><span class="hint">Clique une version pour repartir d’elle.</span></div>
+          <div class="row" style="justify-content:space-between"><span class="lab">Famille de cette phrase</span><span class="hint">Cliquez sur une version pour repartir d’elle.</span></div>
           <div class="fam" id="fam"></div>
         </div>
       </section>
@@ -745,7 +747,7 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
       <div class="side">
         <div class="box">
           <h2><span class="step">1</span> Verbes conjugués</h2>
-          <span class="hint">Les formes viennent de ton travail dans l’atelier. Clique une forme pour l’insérer dans ta phrase.</span>
+          <span class="hint">Les formes viennent de votre travail dans l’atelier. Cliquez sur une forme pour l’insérer dans votre phrase.</span>
           <div class="forms" id="cr-forms"></div>
           <div class="row"><select id="cr-verb" aria-label="Verbe à conjuguer"></select><button type="button" id="cr-conj" class="cl small">✨ Conjuguer</button></div>
           <div id="cr-conjmsg"></div>
@@ -779,11 +781,11 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
     </div>
 
     <div class="box th" id="cr-v2" hidden>
-      <div class="row" style="justify-content:space-between"><h2>Traduis cette phrase en hébreu</h2>
+      <div class="row" style="justify-content:space-between"><h2>Traduisez cette phrase en hébreu</h2>
         <div class="row"><span class="hint" id="th-info"></span><button type="button" id="th-gen" class="cl pri">✨ Nouvelle phrase</button></div></div>
       <div id="th-genmsg"></div>
-      <div class="thsrc" id="th-src"><span class="hint">Clique « Nouvelle phrase » : Claude écrit une phrase française avec la racine, le moule et le niveau de l’atelier.</span></div>
-      <div class="hint" id="th-tip" hidden>Chaque couleur correspond à un ou plusieurs mots en hébreu. Clique un bloc pour avoir un indice.</div>
+      <div class="thsrc" id="th-src"><span class="hint">Cliquez sur « Nouvelle phrase » : Claude écrit une phrase française avec la racine, le moule et le niveau de l’atelier.</span></div>
+      <div class="hint" id="th-tip" hidden>Chaque couleur correspond à un ou plusieurs mots en hébreu. Cliquez sur un bloc pour avoir un indice.</div>
       <div id="th-clues" class="side" style="gap:6px"></div>
       <textarea id="th-in" lang="he" dir="rtl" placeholder="כתוב כאן את התרגום, בלי ניקוד…" aria-label="Ma traduction en hébreu, sans nikoud" disabled></textarea>
       <div class="crbtns">
@@ -810,7 +812,7 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
     <div class="crctx" id="es-ctx"></div>
     <div class="box">
       <h2><span class="step">1</span> Mot-clé tiré de la racine</h2>
-      <span class="hint" id="es-kwh">Choisis une racine dans l’Atelier : ses mots-clés apparaissent ici.</span>
+      <span class="hint" id="es-kwh">Choisissez une racine dans l’Atelier : ses mots-clés apparaissent ici.</span>
       <div class="es-kw" id="es-kw"></div>
       <div class="row"><button type="button" id="es-kwgo" class="cl small">✨ Mots-clés de la racine</button><span id="es-kwmsg" class="hint"></span></div>
     </div>
@@ -847,7 +849,7 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
         <button type="button" id="q-hintb">💡 Indice</button>
         <button type="button" id="q-show">Réponse</button>
         <button type="button" id="q-frb">Traduction</button>
-        <button type="button" id="q-say" title="Écouter (le trou reste muet tant que tu n’as pas répondu)">🔊 Écouter</button>
+        <button type="button" id="q-say" title="Écouter (le trou reste muet tant que vous n’avez pas répondu)">🔊 Écouter</button>
         <button type="button" id="q-next" class="cl pri nx">Next ›</button>
       </div>
       <div id="q-msg"></div>
@@ -865,12 +867,12 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
     <div class="crctx" id="x-ctx"></div>
     <section class="box" aria-live="polite">
       <div class="row" style="justify-content:space-between"><h2>Mots de confusion</h2><button type="button" id="x-rnd" class="small">🎲 Racine piégeuse au hasard</button></div>
-      <span class="hint">Une même racine peut porter des sens sans lien entre eux : deux racines anciennes confondues, un mot chargé de sens nouveaux, ou une écriture identique sans nikoud. Clique un mot hébreu pour l’écouter.</span>
+      <span class="hint">Une même racine peut porter des sens sans lien entre eux : deux racines anciennes confondues, un mot chargé de sens nouveaux, ou une écriture identique sans nikoud. Cliquez sur un mot hébreu pour l’écouter.</span>
       <div id="x-card" class="side" style="gap:10px"></div>
     </section>
     <div class="box">
       <div class="row" style="justify-content:space-between"><h2>Toutes les racines piégeuses</h2><span class="hint" id="x-n"></span></div>
-      <span class="hint">Clique une racine : elle devient la racine de l’Atelier. ★ = racine analysée par Claude depuis cette page.</span>
+      <span class="hint">Cliquez sur une racine : elle devient la racine de l’Atelier. ★ = racine analysée par Claude depuis cette page.</span>
       <div class="x-list" id="x-list"></div>
     </div>
     <script type="application/json" id="x-data">{"racines":[{"racine":"פ.ר.ח","mots":[{"he":"פָּרַח · פֶּרַח","fr":"fleurir · fleur"},{"he":"פָּרַח · פָּרַח מִזִּכְרוֹנִי","fr":"s'envoler · oublier"},{"he":"הִפְרִיחַ","fr":"faire fleurir ; faire voler ; lancer (des rumeurs)"},{"he":"פְּרִיחָה","fr":"floraison ; éruption cutanée"},{"he":"אֶפְרוֹחַ · פִּרְחָח","fr":"poussin · voyou"}]},{"racine":"ע.ב.ר","mots":[{"he":"עָבַר · עָבָר","fr":"passer · le passé"},{"he":"עִבְרִי","fr":"Hébreu"},{"he":"עֻבָּר","fr":"fœtus"},{"he":"עֶבְרָה · עֲבֵרָה","fr":"colère · transgression, faute"}]},{"racine":"ע.ר.ב","mots":[{"he":"עֶרֶב","fr":"soir"},{"he":"עָרַב · עָרֵב","fr":"se porter garant · agréable"},{"he":"עִרְבֵּב","fr":"mélanger"},{"he":"עֹרֵב","fr":"corbeau"},{"he":"עֲרָבָה","fr":"steppe, désert ; saule"}]},{"racine":"ח.ב.ל","mots":[{"he":"חֶבֶל","fr":"corde ; région (חֶבֶל אֶרֶץ)"},{"he":"חֲבָל!","fr":"dommage !"},{"he":"חִבֵּל","fr":"saboter"},{"he":"חֶבְלֵי לֵדָה","fr":"douleurs de l'accouchement"}]},{"racine":"ח.ר.ש","mots":[{"he":"חָרַשׁ","fr":"labourer"},{"he":"חֵרֵשׁ · הֶחֱרִישׁ","fr":"sourd · se taire"},{"he":"חָרָשׁ","fr":"artisan"},{"he":"חֹרֶשׁ","fr":"bosquet"}]},{"racine":"ס.פ.ר","mots":[{"he":"סָפַר · סִפֵּר","fr":"compter · raconter ; couper les cheveux"},{"he":"סֵפֶר · סַפָּר","fr":"livre · coiffeur"},{"he":"סְפָר","fr":"frontière, confins"}]},{"racine":"כ.פ.ר","mots":[{"he":"כִּפֵּר · כָּפַר","fr":"expier · renier"},{"he":"כְּפָר","fr":"village"},{"he":"כֹּפֶר","fr":"rançon"},{"he":"כְּפִיר","fr":"lionceau"}]},{"racine":"ח.ל.ל","mots":[{"he":"חִלֵּל","fr":"profaner ; jouer de la flûte"},{"he":"חָלָל","fr":"espace, vide ; victime tuée"},{"he":"חָלִיל","fr":"flûte"},{"he":"הִתְחִיל","fr":"commencer"}]},{"racine":"ש.ב.ר","mots":[{"he":"שָׁבַר","fr":"briser ; acheter du grain (Genèse 42)"},{"he":"שֶׁבֶר · מַשְׁבֵּר","fr":"fraction, fracture · crise"}]},{"racine":"ע.נ.ה","mots":[{"he":"עָנָה","fr":"répondre ; chanter en alternance (Exode 15:21)"},{"he":"עִנָּה","fr":"affliger, humilier"}]},{"racine":"ע.ל.ם","mots":[{"he":"עוֹלָם","fr":"monde ; éternité"},{"he":"נֶעֱלַם","fr":"disparaître"},{"he":"עֶלֶם","fr":"jeune homme"}]},{"racine":"ש.ח.ר","mots":[{"he":"שַׁחַר","fr":"aube"},{"he":"שָׁחֹר","fr":"noir"},{"he":"שִׁחֵר","fr":"rechercher, solliciter"}]},{"racine":"ג.ל.ה","mots":[{"he":"גִּלָּה","fr":"découvrir, révéler"},{"he":"גָּלָה · גָּלוּת","fr":"partir en exil · l'exil"}]},{"racine":"ז.מ.ר","mots":[{"he":"זִמֵּר","fr":"chanter"},{"he":"זָמַר","fr":"tailler la vigne"}]},{"racine":"ח.ר.ם","mots":[{"he":"הֶחֱרִים","fr":"boycotter ; confisquer"},{"he":"חֵרֶם","fr":"excommunication ; filet de pêche"}]},{"racine":"ק.ר.ן","mots":[{"he":"קֶרֶן","fr":"corne ; rayon (de lumière) ; fonds (financier) ; coin de rue"}]},{"racine":"ש.ע.ר","mots":[{"he":"שַׁעַר","fr":"porte ; taux (de change)"},{"he":"שֵׂעָר · שְׂעוֹרָה","fr":"cheveux · orge"},{"he":"שִׁעֵר","fr":"estimer, supposer"}]},{"racine":"ש.כ.ר","mots":[{"he":"שָׂכַר · שָׂכָר","fr":"louer · salaire"},{"he":"שִׁכּוֹר","fr":"ivre"}]},{"racine":"ד.ב.ר","mots":[{"he":"דִּבֵּר · דָּבָר","fr":"parler · chose, parole"},{"he":"דֶּבֶר","fr":"peste"},{"he":"מִדְבָּר","fr":"désert"},{"he":"דְּבוֹרָה","fr":"abeille"}]},{"racine":"ב.ק.ר","mots":[{"he":"בֹּקֶר","fr":"matin"},{"he":"בָּקָר","fr":"bétail, bovins"},{"he":"בִּקֵּר","fr":"visiter ; critiquer"},{"he":"בִּקֹּרֶת · בַּקָּרָה","fr":"critique · contrôle"}]},{"racine":"ל.ח.ם","mots":[{"he":"לֶחֶם","fr":"pain"},{"he":"נִלְחַם · מִלְחָמָה","fr":"combattre · guerre"},{"he":"הִלְחִים","fr":"souder"}]},{"racine":"ב.ר.ך","mots":[{"he":"בֵּרֵךְ · בְּרָכָה","fr":"bénir · bénédiction"},{"he":"בֶּרֶךְ","fr":"genou"},{"he":"הִבְרִיךְ","fr":"faire s'agenouiller (un chameau) ; marcotter"},{"he":"בְּרֵכָה","fr":"bassin, piscine"}]},{"racine":"ח.מ.ר","mots":[{"he":"חֹמֶר","fr":"matière ; argile"},{"he":"חֲמוֹר","fr":"âne"},{"he":"חָמוּר · הֶחְמִיר","fr":"grave, sévère · s'aggraver ; être strict"}]},{"racine":"ג.ז.ר","mots":[{"he":"גָּזַר","fr":"couper ; décréter"},{"he":"גֶּזֶר","fr":"carotte"},{"he":"גִּזְרָה · גְּזֵרָה","fr":"secteur ; silhouette · décret"},{"he":"נִגְזָר","fr":"être dérivé (grammaire)"}]},{"racine":"ר.ג.ל","mots":[{"he":"רֶגֶל","fr":"pied ; fête de pèlerinage (שָׁלֹשׁ רְגָלִים)"},{"he":"רִגֵּל · מְרַגֵּל","fr":"espionner · espion"},{"he":"רָגִיל · הִרְגִּיל","fr":"habituel · habituer"}]},{"racine":"פ.ק.ד","mots":[{"he":"פָּקַד","fr":"ordonner ; recenser ; se souvenir de (פָּקַד אֶת שָׂרָה)"},{"he":"פָּקִיד","fr":"employé, fonctionnaire"},{"he":"הִפְקִיד · פִּקָּדוֹן","fr":"déposer · dépôt, consigne"},{"he":"נִפְקָד","fr":"absent, manquant"}]},{"racine":"ק.ר.ב","mots":[{"he":"קָרוֹב","fr":"proche ; parent"},{"he":"קְרָב","fr":"combat, bataille"},{"he":"קֶרֶב","fr":"entrailles ; au sein de"},{"he":"קָרְבָּן","fr":"sacrifice ; victime"}]},{"racine":"ש.נ.ה","mots":[{"he":"שָׁנָה","fr":"année ; répéter, étudier (→ מִשְׁנָה)"},{"he":"שִׁנָּה","fr":"changer"},{"he":"שֵׁנִי","fr":"deuxième ; écarlate"},{"he":"שֵׁן","fr":"dent"}]},{"racine":"נ.ש.א","mots":[{"he":"נָשָׂא","fr":"porter ; épouser (נָשָׂא אִשָּׁה)"},{"he":"נָשִׂיא","fr":"président ; prince"},{"he":"נוֹשֵׂא","fr":"sujet, thème"}]},{"racine":"מ.ש.ל","mots":[{"he":"מָשַׁל · מֶמְשָׁלָה","fr":"gouverner · gouvernement"},{"he":"מָשָׁל · לְמָשָׁל","fr":"fable, parabole · par exemple"}]},{"racine":"ט.ע.ם","mots":[{"he":"טַעַם · טָעַם","fr":"goût · goûter"},{"he":"טַעַם","fr":"raison, motif ; accent (cantillation)"},{"he":"הִטְעִים","fr":"souligner, accentuer"}]},{"racine":"ח.ל.ק","mots":[{"he":"חָלָק","fr":"lisse"},{"he":"חֵלֶק · חִלֵּק","fr":"partie · partager, diviser"},{"he":"הֶחֱלִיק","fr":"glisser ; patiner ; lisser"}]},{"racine":"ק.צ.ר","mots":[{"he":"קָצָר","fr":"court"},{"he":"קָצַר · קָצִיר","fr":"moissonner · moisson"},{"he":"קֹצֶר רוּחַ","fr":"impatience"}]},{"racine":"ק.נ.ה","mots":[{"he":"קָנָה","fr":"acheter ; acquérir"},{"he":"קָנֶה","fr":"roseau ; trachée ; canon (de fusil)"}]},{"racine":"ע.י.ן","mots":[{"he":"עַיִן","fr":"œil ; source ; la lettre ע"},{"he":"עִיֵּן","fr":"examiner, étudier un texte"}]},{"racine":"ע.ש.ר","mots":[{"he":"עֶשֶׂר","fr":"dix"},{"he":"עָשִׁיר · הֶעֱשִׁיר","fr":"riche · enrichir"},{"he":"מַעֲשֵׂר","fr":"dîme"}]},{"racine":"מ.ל.ח","mots":[{"he":"מֶלַח","fr":"sel"},{"he":"מַלָּח","fr":"marin, matelot"}]},{"racine":"ש.מ.ן","mots":[{"he":"שֶׁמֶן","fr":"huile"},{"he":"שָׁמֵן","fr":"gros, gras"}]},{"racine":"צ.ל.ע","mots":[{"he":"צֵלָע","fr":"côte (anatomie) ; côté (géométrie)"},{"he":"צָלַע","fr":"boiter"}]},{"racine":"כ.ל.ה","mots":[{"he":"כַּלָּה","fr":"mariée ; belle-fille"},{"he":"כִּלָּה · כִּלָּיוֹן","fr":"achever, anéantir · destruction"},{"he":"כִּלְיָה","fr":"rein (même écriture : כליה)"}]},{"racine":"ת.ו.ר","mots":[{"he":"תּוֹר","fr":"tour (file d'attente) ; rendez-vous ; tourterelle"},{"he":"תָּר · תַּיָּר","fr":"explorer · touriste"}]},{"racine":"א.פ.ס","mots":[{"he":"אֶפֶס","fr":"zéro ; néant"},{"he":"אֶפֶס כִּי","fr":"mais, cependant (biblique)"},{"he":"אַפְסֵי אָרֶץ","fr":"confins de la terre"},{"he":"אָפֵס · אִפֵּס","fr":"cesser, s'épuiser (Gn 47:15) · remettre à zéro (moderne)"}]},{"racine":"ע.ל.ה","mots":[{"he":"עָלָה","fr":"monter ; coûter (כַּמָּה זֶה עוֹלֶה?)"},{"he":"עָלֶה","fr":"feuille"},{"he":"עֲלִיָּה","fr":"montée ; immigration en Israël ; chambre haute (biblique)"},{"he":"עוֹלָה","fr":"holocauste (sacrifice) ; nouvelle immigrante"}]},{"racine":"מ.ט.ה","mots":[{"he":"מַטֶּה","fr":"bâton ; tribu ; état-major"},{"he":"מִטָּה","fr":"lit"},{"he":"לְמַטָּה","fr":"en bas"},{"he":"הִטָּה","fr":"incliner ; fausser (le jugement) — racine נ.ט.ה, même écriture מטה"}]},{"racine":"ק.ו.ה","mots":[{"he":"קִוָּה · תִּקְוָה","fr":"espérer · espoir"},{"he":"קַו","fr":"ligne ; ligne de bus"},{"he":"נִקְוָה · מִקְוֶה","fr":"s'amasser (eaux, Gn 1:9) · bain rituel ; réservoir"},{"he":"תִּקְוַת חוּט","fr":"cordon (Jos 2:18)"}]},{"racine":"ח.ז.ה","mots":[{"he":"חָזָה","fr":"voir (en vision) ; prévoir"},{"he":"חָזֶה","fr":"poitrine"},{"he":"חוֹזֶה","fr":"contrat ; voyant, prophète (biblique)"},{"he":"חָזוֹן · תַּחֲזִית","fr":"vision · prévision (météo)"}]},{"racine":"ס.ג.ל","mots":[{"he":"סְגֻלָּה","fr":"trésor (עַם סְגֻלָּה) ; vertu, propriété ; remède de bonne femme"},{"he":"סָגֹל · סֶגּוֹל","fr":"violet · la voyelle ֶ"},{"he":"סֶגֶל","fr":"personnel, équipe (enseignante)"},{"he":"סִגֵּל · הִסְתַּגֵּל","fr":"adapter · s'adapter"}]},{"racine":"נ.ק.ב","mots":[{"he":"נֶקֶב","fr":"trou, orifice"},{"he":"נְקֵבָה","fr":"femelle ; féminin (grammaire)"},{"he":"נָקַב · נָקוּב","fr":"désigner nommément · nominal (valeur nominale)"},{"he":"נֹקֵב שֵׁם","fr":"blasphémer le Nom (Lv 24:16)"}]},{"racine":"ע.ק.ב","mots":[{"he":"עָקֵב","fr":"talon"},{"he":"עֵקֶב","fr":"à cause de ; conséquence (עֵקֶב כִּי)"},{"he":"עִקֵּב · מַעֲקָב","fr":"suivre à la trace · suivi, surveillance"},{"he":"עָקֹב","fr":"tortueux, fourbe (Jr 17:9)"}]},{"racine":"ג.ר.ש","mots":[{"he":"גֵּרֵשׁ","fr":"expulser, chasser ; divorcer (de sa femme)"},{"he":"גֵּרוּשִׁין · גְּרוּשָׁה","fr":"divorce · divorcée"},{"he":"גֶּרֶשׁ","fr":"apostrophe hébraïque ׳"},{"he":"מִגְרָשׁ","fr":"terrain, parcelle ; terrain de sport"}]},{"racine":"ח.ל.ף","mots":[{"he":"חָלַף","fr":"passer, s'écouler"},{"he":"הֶחֱלִיף","fr":"échanger ; remplacer"},{"he":"חֲלִיפָה","fr":"costume (vêtement)"},{"he":"חֲלוּפָה · תַּחֲלִיף","fr":"alternative · substitut"}]},{"racine":"ש.ו.ר","mots":[{"he":"שׁוֹר","fr":"taureau, bœuf"},{"he":"שׁוּר","fr":"contempler (biblique, אֲשׁוּרֶנּוּ Nb 24:17)"},{"he":"שׁוּרָה","fr":"rangée ; ligne (de texte)"},{"he":"שׁוּר","fr":"muraille (biblique, Gn 49:22)"}]},{"racine":"נ.ה.ר","mots":[{"he":"נָהָר","fr":"fleuve"},{"he":"נָהַר","fr":"affluer (Is 2:2)"},{"he":"נָהַר · נְהָרָה","fr":"rayonner (Is 60:5) · lumière (Jb 3:4)"}]},{"racine":"ע.ז","mots":[{"he":"עֵז · עִזִּים","fr":"chèvre · chèvres (racine ע.נ.ז)"},{"he":"עַז","fr":"fort, intense (vent, couleur)"},{"he":"עֹז","fr":"force, courage (racine ע.ז.ז — même écriture עז)"}]},{"racine":"ח.נ.ן","mots":[{"he":"חָנַן · חֲנִינָה","fr":"faire grâce · amnistie"},{"he":"חֵן","fr":"grâce, charme"},{"he":"חִנָּם","fr":"gratuitement ; en vain (שִׂנְאַת חִנָּם : haine gratuite)"}]},{"racine":"צ.פ.ה","mots":[{"he":"צָפָה · צָפוּי","fr":"observer ; prévoir · prévu"},{"he":"צִפָּה","fr":"recouvrir (d'or) ; attendre, espérer (צִפָּה לְ־)"},{"he":"צִפּוּי","fr":"revêtement ; glaçage (pâtisserie)"},{"he":"צָף · צָפָה","fr":"flotter · elle a flotté (racine צ.ו.ף — même écriture צפה)"}]},{"racine":"ש.ק.ד","mots":[{"he":"שָׁקַד · שַׁקְדָן","fr":"être assidu, veiller · studieux"},{"he":"שָׁקֵד","fr":"amande ; amandier (jeu de mots en Jr 1:11-12)"}]}]}</script>
@@ -891,19 +893,19 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
       <button id="dlp" hidden>⬇ PDF</button>
     </div>
     <div class="exo" id="exo" hidden>
-      <span class="hint">Remets les morceaux dans l’ordre (de droite à gauche).</span>
+      <span class="hint">Remettez les morceaux dans l’ordre (de droite à gauche).</span>
       <div id="exq" style="font-style:italic;font-size:1.05rem"></div>
       <div class="ans" id="exans"></div>
       <div class="pool" id="expool"></div>
       <div class="row"><button id="exok" class="pri">Vérifier</button><button id="exre">Recommencer</button><button id="exnx">Autre phrase</button><button id="exx" class="ghost">Fermer</button><span id="exmsg"></span></div>
     </div>
-    <p class="empty" id="mempty">Les phrases que tu travailles dans l’atelier s’ajoutent ici automatiquement, rangées par racine.</p>
+    <p class="empty" id="mempty">Les phrases que vous travaillez dans l’atelier s’ajoutent ici automatiquement, rangées par racine.</p>
     <div id="mlist" class="side"></div>
     <div class="row"><button id="mclr" class="small ghost">Tout effacer</button><span class="hint" id="mstore"></span></div>
   </section>
   <!-- ========== TRADUIRE ========== -->
   <section id="sp-t" hidden>
-    <div class="mt-top"><span class="mt-intro">Traduis de l’hébreu vers le français, phrase par phrase : les phrases de l’atelier, le cahier Targilim ou tes propres textes.</span><div class="mt-stats" id="t-stats"></div></div>
+    <div class="mt-top"><span class="mt-intro">Traduisez de l’hébreu vers le français, phrase par phrase : les phrases de l’atelier, le cahier Targilim ou vos propres textes.</span><div class="mt-stats" id="t-stats"></div></div>
     <div id="t-main"></div>
     <p class="mt-note" id="t-save"></p>
   </section>
@@ -985,9 +987,9 @@ function showRoot(){
   const box = $('verbs'); box.innerHTML = '';
   const vs = CAT.filter(c => c[3] === root);
   if (root){
-    $('rhint').textContent = vs.length ? vs.length + ' verbe' + (vs.length > 1 ? 's' : '') + ' dans ton catalogue. Clique-en un pour l’imposer (facultatif).'
-      : myRoots.some(o => o.r === root) ? '★ Racine que tu as ajoutée (absente du catalogue d’origine) : Claude utilise les mots qu’il connaît.'
-      : 'Cette racine n’est pas dans ton catalogue : Claude utilisera les mots qu’il connaît. Si ses phrases arrivent, elle sera ajoutée à « Mes racines ».';
+    $('rhint').textContent = vs.length ? vs.length + ' verbe' + (vs.length > 1 ? 's' : '') + ' dans votre catalogue. Cliquez sur l’un d’eux pour l’imposer (facultatif).'
+      : myRoots.some(o => o.r === root) ? '★ Racine que vous avez ajoutée (absente du catalogue d’origine) : Claude utilise les mots qu’il connaît.'
+      : 'Cette racine n’est pas dans votre catalogue : Claude utilisera les mots qu’il connaît. Si ses phrases arrivent, elle sera ajoutée à « Mes racines ».';
   }
   vs.forEach(c => {
     const b = el('button', 'vb' + (pinVerb === c ? ' on' : '')); b.type = 'button';
@@ -1016,7 +1018,7 @@ function suggest(){
   const hits = ROOTS.filter(o => o.r.startsWith(q) && o.r !== q);
   if (!hits.length){ box.hidden = true; return; }
   const MAX = 60;
-  box.appendChild(el('span', 'more', hits.length + ' racine' + (hits.length > 1 ? 's' : '') + ' commençant par ' + dash(q) + (hits.length > MAX ? ' : tape une lettre de plus pour affiner.' : '.')));
+  box.appendChild(el('span', 'more', hits.length + ' racine' + (hits.length > 1 ? 's' : '') + ' commençant par ' + dash(q) + (hits.length > MAX ? ' : tapez une lettre de plus pour affiner.' : '.')));
   hits.slice(0, MAX).forEach(o => { const b = el('button'); b.type = 'button'; b.title = o.n + ' verbe' + (o.n > 1 ? 's' : '');
     b.appendChild(el('b', '', (o.mine ? '★ ' : '') + dash(o.r))); b.appendChild(el('span', '', o.fr)); if (o.mine) b.title = 'Racine ajoutée par toi'; b.onclick = () => setRoot(o.r); box.appendChild(b); });
   box.hidden = false;
@@ -1026,7 +1028,7 @@ $('rq').addEventListener('keydown', e => { if (e.key === 'Escape') $('sug').hidd
 $('rbox').onsubmit = e => {
   e.preventDefault();
   const q = normR($('rq').value);
-  if (q.length < 2 || q.length > 5){ $('rhint').textContent = 'Écris une racine de 2 à 5 lettres, par exemple שמר.'; return; }
+  if (q.length < 2 || q.length > 5){ $('rhint').textContent = 'Écrivez une racine de 2 à 5 lettres, par exemple שמר.'; return; }
   const hits = ROOTS.filter(o => o.r.startsWith(q));
   setRoot(ROOTS.some(o => o.r === q) || hits.length !== 1 ? q : hits[0].r);
 };
@@ -1049,7 +1051,7 @@ function renderMyRoots(){
     const t = el('span'); t.title = (o.fr || '') + (o.d ? ' · ajoutée le ' + o.d : '');
     const b = el('b', '', dash(o.r)); b.style.cursor = 'pointer'; b.onclick = () => setRoot(o.r); t.appendChild(b);
     if (o.fr) t.appendChild(el('small', '', o.fr.length > 30 ? o.fr.slice(0, 29) + '…' : o.fr));
-    const x = el('button', '', '✕'); x.type = 'button'; x.title = 'Retirer ' + dash(o.r) + ' de mes racines (tes phrases restent)';
+    const x = el('button', '', '✕'); x.type = 'button'; x.title = 'Retirer ' + dash(o.r) + ' de mes racines (vos phrases restent)';
     x.onclick = () => { myRoots = myRoots.filter(z => z !== o); store.set('myroots', myRoots); mergeMyRoots(); renderMyRoots(); if (root) showRoot(); };
     t.appendChild(x); l.appendChild(t);
   });
@@ -1105,9 +1107,9 @@ const cleanSegs = s => Array.isArray(s) ? s.filter(x => Array.isArray(x) && x.le
 const clean = p => ({ he: p.he.trim(), male: isStr(p.male) ? p.male.trim() : bare(p.he).trim(), fr: p.fr.trim(), segs: cleanSegs(p.segs),
   mot: isStr(p.mot) ? p.mot.trim() : '', binyan: isStr(p.binyan) ? p.binyan.trim() : '', moule: MO(p.moule) ? p.moule : (moule !== '*' ? moule : ''),
   note: isStr(p.note) ? p.note.trim() : '', change: isStr(p.change) ? p.change.trim() : '', registre: isStr(p.registre) ? p.registre.trim() : '' });
-const errTxt = e => e && e.message && e.code !== 'shape' ? e.message : e && e.code === 'rate_limited' ? 'Claude est très sollicité : réessaie dans une minute.'
-  : e && e.code === 'not_granted' ? 'Claude n’est pas autorisé sur cette page. Autorise-le dans le menu Permissions de la page.'
-  : 'Claude n’a pas pu répondre correctement. Réessaie.';
+const errTxt = e => e && e.message && e.code !== 'shape' ? e.message : e && e.code === 'rate_limited' ? 'Claude est très sollicité : réessayez dans une minute.'
+  : e && e.code === 'not_granted' ? 'Claude n’est pas autorisé sur cette page. Reconnectez-vous.'
+  : 'Claude n’a pas pu répondre correctement. Réessayez.';
 function lock(on){ busy = on; ['go','rrnd'].forEach(id => $(id).disabled = on || (id === 'go' && !sample));
   document.querySelectorAll('#tf button, #free').forEach(b => b.disabled = on || !sample || !fam || fam.example); }
 function catLine(){ return CAT.filter(c => c[3] === root).map(c => c[0] + ' (' + (BIN[c[1]] || c[1]) + ' : ' + firstFr(c[2]) + ')').join(' ; '); }
@@ -1153,7 +1155,7 @@ Réponds UNIQUEMENT en JSON :
     if (my === ctl){ $('pmsg').innerHTML = ''; $('pmsg').appendChild(el('div', 'err', errTxt(e))); }
   } finally { if (my === ctl){ lock(false); ctl = null; } }
 }
-$('go').onclick = () => { if (!root){ $('rhint').textContent = 'Choisis d’abord une racine (ou 🎲 Au hasard).'; $('rq').focus(); return; } doPropose(); };
+$('go').onclick = () => { if (!root){ $('rhint').textContent = 'Choisissez d’abord une racine (ou 🎲 Au hasard).'; $('rq').focus(); return; } doPropose(); };
 
 function renderProps(){
   const box = $('props'); box.innerHTML = '';
@@ -1201,7 +1203,7 @@ function renderCur(){
   });
   $('curchg').hidden = !v.change; $('curchg').textContent = v.change ? 'Ce qui a changé : ' + v.change : '';
   $('curnote').hidden = !v.note; $('curnote').textContent = v.note;
-  $('saved').textContent = fam.example ? 'Exemple : choisis une racine pour travailler tes propres phrases.' : phrases.some(p => p.id === v.id) ? '✔ Dans « Mes phrases »' : '';
+  $('saved').textContent = fam.example ? 'Exemple : choisissez une racine pour travailler vos propres phrases.' : phrases.some(p => p.id === v.id) ? '✔ Dans « Mes phrases »' : '';
   $('nik').textContent = nik ? 'אָ ניקוד' : 'א כתיב מלא';
 }
 function renderFam(){
@@ -1221,7 +1223,7 @@ $('say').onclick = () => { const v = current(); if (!v || !window.speechSynthesi
   speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(v.he); u.lang = 'he-IL'; u.rate = RATES[speed]; speechSynthesis.speak(u); };
 $('copy').onclick = async () => { const v = current(); if (!v) return;
   try { await navigator.clipboard.writeText(nik ? v.he : v.male); $('saved').textContent = 'Copiée.'; }
-  catch (e) { const r = document.createRange(); r.selectNodeContents($('cur')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $('saved').textContent = 'Phrase sélectionnée : copie-la avec ⌘C.'; } };
+  catch (e) { const r = document.createRange(); r.selectNodeContents($('cur')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $('saved').textContent = 'Phrase sélectionnée : copiez-la avec ⌘C.'; } };
 
 /* ----- transformations ----- */
 const PERS = [['אֲנִי','je'],['אַתָּה','tu (m.)'],['אַתְּ','tu (f.)'],['הוּא','il'],['הִיא','elle'],['אֲנַחְנוּ','nous'],['אַתֶּם','vous (m.)'],['אַתֵּן','vous (f.)'],['הֵם','ils'],['הֵן','elles']];
@@ -1278,7 +1280,7 @@ async function transform(instr, label, newMoule){
   const v = current(); if (!v || !sample || busy || fam.example) return;
   if (instr === '__SUBJ__'){
     const s = $('subj').value.trim();
-    if (!s){ $('tmsg').innerHTML = ''; $('tmsg').appendChild(el('div', 'hint', 'Écris d’abord ton sujet dans Réglages → « Mon sujet ».')); $('subj').focus(); return; }
+    if (!s){ $('tmsg').innerHTML = ''; $('tmsg').appendChild(el('div', 'hint', 'Écrivez d’abord votre sujet dans Réglages → « Mon sujet ».')); $('subj').focus(); return; }
     instr = `Remplace le sujet par « ${s} » et fais tous les accords.`;
   }
   const m = MO(newMoule || v.moule);
@@ -1410,7 +1412,7 @@ async function makePdf(list, title, fname, btn, msg, blocksFn){
     }
     await downloads.save({ filename: fname + '-' + stamp() + '.pdf', data: doc.output('arraybuffer') });
   } catch (e) {
-    if (!e || e.code !== 'declined'){ const m = msg; if (m) m.textContent = 'Le PDF n’a pas pu être créé' + (e && e.code === 'extension_not_enabled' ? ' : format PDF indisponible ici.' : '. Réessaie dans un instant.'); }
+    if (!e || e.code !== 'declined'){ const m = msg; if (m) m.textContent = 'Le PDF n’a pas pu être créé' + (e && e.code === 'extension_not_enabled' ? ' : format PDF indisponible ici.' : '. Réessayez dans un instant.'); }
   } finally { host.remove(); btn.disabled = false; btn.textContent = lbl; }
 }
 
@@ -1477,12 +1479,12 @@ function rvDraw(){
   const rs = el('div', 'rootshow'); r.split('').forEach(ch => rs.appendChild(el('span', '', ch))); c.appendChild(rs);
   c.appendChild(el('div', 'rvlv', 'Niveau ' + (st.lv || 0) + ' / 5 · ' + ps.length + ' phrase' + (ps.length > 1 ? 's' : '')));
   if (!rvShown){
-    c.appendChild(el('div', 'rvq', 'Que veut dire cette racine ? Quels mots et quels binyanim en as-tu tirés ? Réfléchis, puis affiche tes phrases.'));
+    c.appendChild(el('div', 'rvq', 'Que veut dire cette racine ? Quels mots et quels binyanim en avez-vous tirés ? Réfléchissez, puis affichez vos phrases.'));
     const b = el('div', 'rvbtns'), x = el('button', 'pri', 'Afficher mes phrases'); x.onclick = () => { rvShown = true; rvDraw(); }; b.appendChild(x); c.appendChild(b);
   } else {
     const sense = CAT.filter(k => k[3] === r).map(k => k[0] + ' : ' + firstFr(k[2]));
     if (sense.length) c.appendChild(el('div', 'rvq', sense.slice(0, 4).join(' · ')));
-    c.appendChild(el('div', 'hint', 'Lis chaque phrase à voix haute et traduis-la dans ta tête, puis vérifie.'));
+    c.appendChild(el('div', 'hint', 'Lisez chaque phrase à voix haute et traduisez-la mentalement, puis vérifiez.'));
     ps.forEach(p => {
       const d = el('div', 'rvp'); d.appendChild(el('div', 'mh', nik ? p.he : p.male));
       const a = el('div', 'act');
@@ -1578,7 +1580,7 @@ function crRender(){
   // nouvelle racine dans l'atelier : on repart d'une page blanche
   if (r !== crSeen){ if (crSeen !== null){ $('cr-in').value = ''; $('cr-fr').value = ''; $('cr-res').innerHTML = ''; $('cr-msg').innerHTML = ''; } crForm = ''; crSeen = r; crResetAids(); th = null; thClues = new Set(); if (typeof thRenderSrc === 'function'){ $('th-in').value = ''; $('th-res').innerHTML = ''; $('th-msg').innerHTML = ''; } }
   if (!r){
-    cx.appendChild(el('span', '', 'Commence par choisir une racine dans l’atelier : la création part de ce que tu y as étudié.'));
+    cx.appendChild(el('span', '', 'Commencez par choisir une racine dans l’atelier : la création part de ce que vous y avez étudié.'));
     const b = el('button', 'pri', 'Aller à l’atelier'); b.type = 'button'; b.onclick = () => tab('w'); cx.appendChild(b);
   } else {
     cx.appendChild(el('span', 'lab', 'Depuis l’atelier'));
@@ -1592,7 +1594,7 @@ function crRender(){
   // verbes
   const fs = $('cr-forms'); fs.innerHTML = '';
   const forms = crForms();
-  if (!forms.length) fs.appendChild(el('span', 'hint', r ? 'Pas encore de formes : fais proposer des phrases dans l’atelier, ou clique « Conjuguer ».' : '—'));
+  if (!forms.length) fs.appendChild(el('span', 'hint', r ? 'Pas encore de formes : faites proposer des phrases dans l’atelier, ou cliquez sur « Conjuguer ».' : '—'));
   forms.forEach(f => { const b = el('button', bare(f.he) === bare(crForm) ? 'on' : ''); b.type = 'button'; b.title = f.info;
     b.appendChild(el('b', '', nik ? f.he : bare(f.he))); if (f.info) b.appendChild(el('span', '', f.info.length > 24 ? f.info.slice(0, 23) + '…' : f.info));
     b.onclick = () => crInsert(f.he); fs.appendChild(b); });
@@ -1644,17 +1646,17 @@ $('cr-hint').onclick = () => {
   if (n >= 2){ const s2 = el('div', '', m[4]); s2.appendChild(el('span', 'ex he', m[3])); box.appendChild(crHintBox('Indice 2 · la règle et un exemple', s2)); }
   if (n >= 3 || t.length){
     const ul = el('ul'), add = (ok, txt) => ul.appendChild(el('li', '', (ok ? '✔ ' : '✘ ') + txt));
-    if (!t.length) add(false, 'Écris d’abord une phrase : je vérifierai les points du moule.');
+    if (!t.length) add(false, 'Écrivez d’abord une phrase : je vérifierai les points du moule.');
     else {
       const r = crRoot(), R = [...r];
       const rootOk = t.some(w => { const L = normR(w); let i = 0; for (const c of L) if (c === R[i]) i++; return i >= Math.min(R.length, 3) || (R.length === 3 && i >= 2 && /[הוי]/.test(R.join(''))); });
-      add(rootOk, rootOk ? 'Un mot de la racine ' + dash(r) + ' est bien là.' : 'Je ne repère pas la racine ' + dash(r) + ' : vérifie qu’un mot de cette racine apparaît.');
+      add(rootOk, rootOk ? 'Un mot de la racine ' + dash(r) + ' est bien là.' : 'Je ne repère pas la racine ' + dash(r) + ' : vérifiez qu’un mot de cette racine apparaît.');
       if (crForm) add(bare(raw).includes(bare(crForm)), bare(raw).includes(bare(crForm)) ? 'Tu utilises la forme ' + crForm + '.' : 'La forme choisie (' + crForm + ') n’apparaît plus dans la phrase.');
       const c = MCHECK[crMoule]; if (c){ const ok = c.test(t, raw); add(ok, ok ? 'Le repère du moule ' + m[0] + ' est présent.' : c.miss); }
       const [a, b] = LVTARGET[level]; add(t.length >= a && t.length <= b, t.length + ' mot' + (t.length > 1 ? 's' : '') + ' : au niveau ' + ['', 'A1-A2', 'B1-B2', 'C1-C2'][level] + ', vise ' + a + ' à ' + b + ' mots.');
       if (t.some(w => /^לא$/.test(w))){ const i = t.indexOf('לא'); add(i < t.length - 1, 'לֹא se place juste devant le mot qu’il nie (souvent le verbe).'); }
     }
-    box.appendChild(crHintBox(n >= 3 ? 'Indice 3 · vérification de ta phrase' : 'Vérification de ta phrase', ul));
+    box.appendChild(crHintBox(n >= 3 ? 'Indice 3 · vérification de votre phrase' : 'Vérification de votre phrase', ul));
   }
   crBtns();
 };
@@ -1715,11 +1717,11 @@ Réponds UNIQUEMENT en JSON : {"formes":[{"he":"forme avec nikoud","temps":"pré
 /* ----- 3. correction, note et commentaire ----- */
 $('cr-check').onclick = async () => {
   const txt = $('cr-in').value.trim();
-  if (!txt || !/[א-ת]/.test(txt)){ $('cr-msg').innerHTML = ''; $('cr-msg').appendChild(el('div', 'hint', 'Écris d’abord ta phrase en hébreu.')); $('cr-in').focus(); return; }
+  if (!txt || !/[א-ת]/.test(txt)){ $('cr-msg').innerHTML = ''; $('cr-msg').appendChild(el('div', 'hint', 'Écrivez d’abord votre phrase en hébreu.')); $('cr-in').focus(); return; }
   if (!sample || crBusy) return;
   const m = MO(crMoule), r = crRoot(), intent = $('cr-fr').value.trim(), verb = crVerbs()[+$('cr-verb').value];
   crBusy = true; crBtns();
-  const w = el('div', 'wait'); w.appendChild(el('span', 'dot')); w.appendChild(el('span', '', 'Claude corrige ta phrase…')); $('cr-msg').innerHTML = ''; $('cr-msg').appendChild(w); $('cr-res').innerHTML = '';
+  const w = el('div', 'wait'); w.appendChild(el('span', 'dot')); w.appendChild(el('span', '', 'Claude corrige votre phrase…')); $('cr-msg').innerHTML = ''; $('cr-msg').appendChild(w); $('cr-res').innerHTML = '';
   const prompt = `Tu es professeur d'hébreu moderne, bienveillant et exigeant, pour un élève francophone. L'élève a CRÉÉ seul la phrase ci-dessous. Corrige-la.
 Consigne qu'il devait respecter :
 - racine ${dash(r)}${rootSense ? ' (' + rootSense + ')' : ''}${verb ? ', verbe étudié ' + verb[0] + ' (' + (BIN[verb[1]] || verb[1]) + ')' : ''}${crForm ? ', forme choisie ' + crForm : ''} ;
@@ -1767,8 +1769,8 @@ function crShowResult(c){
     if (x.extrait || x.correction){ li.appendChild(el('span', 'he', x.extrait)); li.appendChild(document.createTextNode(x.extrait && x.correction ? ' → ' : '')); li.appendChild(el('span', 'he', x.correction)); li.appendChild(document.createTextNode(' ')); }
     li.appendChild(document.createTextNode(x.explication)); ul.appendChild(li); }); d.appendChild(ul); }
   if (c.commentaire) d.appendChild(el('div', 'crcom', '💬 ' + c.commentaire));
-  if (c.belle && bare(c.belle) !== bare(c.he)) d.appendChild(crLine('✨ Plus belle, à ton niveau', c.belle, c.belle_fr));
-  d.appendChild(el('div', 'hint', 'Aides : ' + c.hints + ' indice' + (c.hints > 1 ? 's' : '') + ', ' + c.helps + ' aide' + (c.helps > 1 ? 's' : '') + ' de Claude. Le nikoud corrigé est une proposition : en cas de doute, vérifie-le.'));
+  if (c.belle && bare(c.belle) !== bare(c.he)) d.appendChild(crLine('✨ Plus belle, à votre niveau', c.belle, c.belle_fr));
+  d.appendChild(el('div', 'hint', 'Aides : ' + c.hints + ' indice' + (c.hints > 1 ? 's' : '') + ', ' + c.helps + ' aide' + (c.helps > 1 ? 's' : '') + ' de Claude. Le nikoud corrigé est une proposition : en cas de doute, vérifiez-le.'));
   const bt = el('div', 'crbtns');
   const sb = el('button', '', '🔊 Écouter la correction'); sb.type = 'button'; sb.onclick = () => sayHe(c.he);
   const ab = el('button', '', c.added ? '✔ Dans « Mes phrases »' : '+ Ajouter à « Mes phrases »'); ab.type = 'button'; ab.disabled = c.added;
@@ -1810,7 +1812,7 @@ function crRenderHist(){
   const bars = $('cr-bars'); bars.innerHTML = ''; bars.hidden = !list.length;
   list.slice(0, 20).reverse().forEach(c => { const i = el('i', scoreCls(c.score)); i.style.height = Math.max(6, c.score * 10) + '%'; i.title = dash(c.root) + ' · ' + String(c.score).replace('.', ',') + '/10'; bars.appendChild(i); });
   const h = $('cr-hist'); h.innerHTML = '';
-  if (!list.length) h.appendChild(el('p', 'empty', 'Tes phrases corrigées s’afficheront ici avec leur note et le commentaire de Claude.'));
+  if (!list.length) h.appendChild(el('p', 'empty', 'Vos phrases corrigées s’afficheront ici avec leur note et le commentaire de Claude.'));
   list.forEach(c => {
     const d = el('div', 'crh');
     d.appendChild(el('div', 'sc ' + scoreCls(c.score), String(c.score).replace('.', ',')));
@@ -1900,7 +1902,7 @@ function thBtns(){
 function thRenderSrc(){
   const s = $('th-src'); s.innerHTML = ''; $('th-clues').innerHTML = '';
   $('th-tip').hidden = !th;
-  if (!th){ s.appendChild(el('span', 'hint', crRoot() ? 'Clique « Nouvelle phrase » : Claude écrit une phrase française avec la racine, le moule et le niveau de l’atelier.' : 'Choisis d’abord une racine dans l’atelier.')); return; }
+  if (!th){ s.appendChild(el('span', 'hint', crRoot() ? 'Cliquez sur « Nouvelle phrase » : Claude écrit une phrase française avec la racine, le moule et le niveau de l’atelier.' : 'Choisissez d’abord une racine dans l’atelier.')); return; }
   th.blocs.forEach((b, i) => {
     const x = el('button', kc(i), b.fr); x.type = 'button'; x.title = 'Indice pour « ' + b.fr + ' »';
     x.onclick = () => { thClues.add(i); thRenderClues(); };
@@ -1944,7 +1946,7 @@ $('th-say').onclick = () => { const t = $('th-in').value.trim(); if (t) sayHe(t)
 $('th-skip').onclick = () => { if (!th) return; const box = $('th-res'); box.innerHTML = ''; const d = el('div', 'crres');
   d.appendChild(el('span', 'lab', 'Traduction proposée')); d.appendChild(thSegs(th.blocs.map((b, i) => [b.he, i])));
   d.appendChild(el('div', 'hint', th.male)); if (th.note) d.appendChild(el('div', 'crcom', '💬 ' + th.note));
-  d.appendChild(el('div', 'hint', 'Pas de note : la phrase n’entre pas dans l’historique. Clique « Nouvelle phrase » pour continuer.'));
+  d.appendChild(el('div', 'hint', 'Pas de note : la phrase n’entre pas dans l’historique. Cliquez sur « Nouvelle phrase » pour continuer.'));
   box.appendChild(d); };
 function thSegs(segs){ const d = el('div', 'thseg'); segs.forEach(([he, i]) => d.appendChild(el('span', i >= 0 ? kc(i) : '', nik ? he : bare(he)))); return d; }
 function thSrcLine(blocs){ const d = el('div', 'thsrc small'); blocs.forEach((b, i) => d.appendChild(el('span', kc(i), b.fr))); return d; }
@@ -1952,11 +1954,11 @@ function thSrcLine(blocs){ const d = el('div', 'thsrc small'); blocs.forEach((b,
 $('th-check').onclick = async () => {
   const txt = $('th-in').value.trim();
   if (!th) return;
-  if (!txt || !/[א-ת]/.test(txt)){ $('th-msg').innerHTML = ''; $('th-msg').appendChild(el('div', 'hint', 'Écris d’abord ta traduction en hébreu.')); $('th-in').focus(); return; }
+  if (!txt || !/[א-ת]/.test(txt)){ $('th-msg').innerHTML = ''; $('th-msg').appendChild(el('div', 'hint', 'Écrivez d’abord votre traduction en hébreu.')); $('th-in').focus(); return; }
   if (!sample || thBusy) return;
   const m = MO(th.moule);
   thBusy = true; thBtns();
-  const w = el('div', 'wait'); w.appendChild(el('span', 'dot')); w.appendChild(el('span', '', 'Claude corrige ta traduction…')); $('th-msg').innerHTML = ''; $('th-msg').appendChild(w); $('th-res').innerHTML = '';
+  const w = el('div', 'wait'); w.appendChild(el('span', 'dot')); w.appendChild(el('span', '', 'Claude corrige votre traduction…')); $('th-msg').innerHTML = ''; $('th-msg').appendChild(w); $('th-res').innerHTML = '';
   const prompt = `Tu es professeur d'hébreu moderne, bienveillant et exigeant, pour un élève francophone. Il devait traduire en hébreu une phrase française. Corrige sa traduction.
 Phrase française : ${th.src}
 Blocs (numérotés à partir de 0) : ${th.blocs.map((b, i) => i + '. « ' + b.fr + ' » ≈ ' + b.he).join(' ; ')}
@@ -2028,7 +2030,7 @@ function resetAll(){
   resetChoices();
   root = ''; rootSense = ''; pinVerb = null;
   $('rq').value = ''; $('sug').innerHTML = ''; $('sug').hidden = true;
-  $('rhint').textContent = 'Tape une première lettre : les racines de ton catalogue s’affichent.';
+  $('rhint').textContent = 'Tapez une première lettre : les racines de votre catalogue s’affichent.';
   showRoot(); showExample(); crRender();
   lock(false); tab('w'); window.scrollTo(0, 0); $('rq').focus();
 }
@@ -2055,18 +2057,18 @@ function esCtx(){
   if (esRoot()){
     c.appendChild(el('span', 'crr', dash(esRoot())));
     c.appendChild(el('span', 'grow hint', rootSense ? 'Racine de l’Atelier — ' + rootSense : 'Racine choisie dans l’Atelier'));
-  } else c.appendChild(el('span', 'grow hint', 'Aucune racine choisie : choisis-en une dans l’Atelier, ou tape directement un mot hébreu ci-dessous.'));
+  } else c.appendChild(el('span', 'grow hint', 'Aucune racine choisie : choisissez-en une dans l’Atelier, ou tapez directement un mot hébreu ci-dessous.'));
   const b = el('button', 'small', '← Changer de racine'); b.type = 'button'; b.onclick = () => tab('w'); c.appendChild(b);
 }
 function esRenderKw(){
   const box = $('es-kw'); box.innerHTML = '';
   const r = esRoot();
-  if (!r){ $('es-kwh').textContent = 'Choisis une racine dans l’Atelier : ses mots-clés apparaissent ici.'; return; }
+  if (!r){ $('es-kwh').textContent = 'Choisissez une racine dans l’Atelier : ses mots-clés apparaissent ici.'; return; }
   // 1) verbes du catalogue (immédiats) ; 2) mots-clés proposés par Claude (noms, adjectifs…)
   const items = [];
   CAT.filter(c => c[3] === r).forEach(c => items.push({ he: c[0], fr: firstFr(c[2]), cat: BIN[c[1]] || c[1] }));
   (esKwRoot === r ? esKws : []).forEach(k => { if (!items.some(i => bare(i.he) === bare(k.he))) items.push(k); });
-  $('es-kwh').textContent = items.length ? 'Clique un mot-clé : il est envoyé dans l’escalier.' : 'Demande à Claude les mots-clés de cette racine.';
+  $('es-kwh').textContent = items.length ? 'Cliquez sur un mot-clé : il est envoyé dans l’escalier.' : 'Demandez à Claude les mots-clés de cette racine.';
   const w = bare($('es-word').value).trim();
   items.forEach(k => {
     const b = el('button', bare(k.he) === w && w ? 'on' : ''); b.type = 'button';
@@ -2096,7 +2098,7 @@ async function esKeywords(force){
     esKwCache[r] = list; const ks = Object.keys(esKwCache); if (ks.length > 40) delete esKwCache[ks[0]]; store.set('eskw', esKwCache);
     $('es-kwmsg').textContent = '';
   } catch (e) {
-    $('es-kwmsg').textContent = e && e.code === 'rate_limited' ? 'Trop de demandes — réessaie dans un instant.' : 'Les mots-clés n’ont pas pu être générés. Réessaie.';
+    $('es-kwmsg').textContent = e && e.code === 'rate_limited' ? 'Trop de demandes — réessayez dans un instant.' : 'Les mots-clés n’ont pas pu être générés. Réessayez.';
   }
   esKwBusy = false; esBtns(); esRenderKw();
 }
@@ -2117,7 +2119,7 @@ function esPrompt(word){
 }
 async function esBuild(){
   const word = $('es-word').value.trim();
-  if (!word){ $('es-msg').innerHTML = '<div class="err">Choisis ou tape un mot-clé hébreu.</div>'; $('es-word').focus(); return; }
+  if (!word){ $('es-msg').innerHTML = '<div class="err">Choisissez ou tapez un mot-clé hébreu.</div>'; $('es-word').focus(); return; }
   const key = bare(word);
   const hit = esCache.find(o => o.key === key);
   if (hit){ $('es-msg').innerHTML = ''; esShow(hit.data); return; }
@@ -2132,7 +2134,7 @@ async function esBuild(){
     store.set('escaliers', esCache);
     $('es-msg').innerHTML = ''; esShow(o);
   } catch (e) {
-    $('es-msg').innerHTML = '<div class="err">' + (e && e.code === 'rate_limited' ? 'Trop de demandes — réessaie dans un instant.' : e && e.code === 'not_granted' ? 'La génération a été refusée pour cette page.' : 'La génération a échoué. Réessaie, ou vérifie le mot.') + '</div>';
+    $('es-msg').innerHTML = '<div class="err">' + (e && e.code === 'rate_limited' ? 'Trop de demandes — réessayez dans un instant.' : e && e.code === 'not_granted' ? 'La génération a été refusée pour cette page.' : 'La génération a échoué. Réessayez, ou vérifiez le mot.') + '</div>';
   }
   esBusy = false; esBtns();
 }
@@ -2232,14 +2234,14 @@ function qCtx(){
   if (root){
     c.appendChild(el('span', 'crr', dash(root)));
     c.appendChild(el('span', 'grow hint', (rootSense ? 'Racine de l’Atelier — ' + rootSense : 'Racine choisie dans l’Atelier') + (pinVerb ? ' · verbe imposé : ' + pinVerb[0] : '')));
-  } else c.appendChild(el('span', 'grow hint', 'Aucune racine choisie : choisis-en une dans l’Atelier pour lancer le jeu.'));
+  } else c.appendChild(el('span', 'grow hint', 'Aucune racine choisie : choisissez-en une dans l’Atelier pour lancer le jeu.'));
   const b = el('button', 'small', '← Changer de racine'); b.type = 'button'; b.onclick = () => tab('w'); c.appendChild(b);
 }
 function qDraw(keep){
   const it = Q.item, box = $('q-sent'), meta = $('q-meta');
   const old = $('q-gap'), val = keep && old ? old.value : '', cls = keep && old ? old.className : 'q-gap';
   box.innerHTML = ''; meta.innerHTML = '';
-  if (!it){ box.appendChild(el('span', 'hint', root ? 'Clique « Next » : Claude écrit une phrase à trou avec la racine ' + dash(root) + '.' : 'Choisis d’abord une racine dans l’Atelier.')); box.style.direction = 'ltr'; box.style.textAlign = 'left'; return; }
+  if (!it){ box.appendChild(el('span', 'hint', root ? 'Cliquez sur « Next » : Claude écrit une phrase à trou avec la racine ' + dash(root) + '.' : 'Choisissez d’abord une racine dans l’Atelier.')); box.style.direction = 'ltr'; box.style.textAlign = 'left'; return; }
   box.style.direction = ''; box.style.textAlign = '';
   box.append(qShow(it.before) + ' ');
   const inp = el('input', cls); inp.id = 'q-gap'; inp.type = 'text'; inp.dir = 'rtl'; inp.autocomplete = 'off'; inp.lang = 'he';
@@ -2315,7 +2317,7 @@ function qPrompt(){
 }
 async function qNext(){
   if (Q.busy) return;
-  if (!root){ $('q-msg').innerHTML = '<div class="err">Choisis d’abord une racine dans l’Atelier.</div>'; return; }
+  if (!root){ $('q-msg').innerHTML = '<div class="err">Choisissez d’abord une racine dans l’Atelier.</div>'; return; }
   if (!sample){ $('q-msg').innerHTML = '<div class="err">La génération fonctionne une fois connecté(e).</div>'; return; }
   Q.busy = true; qBtns();
   $('q-msg').innerHTML = '<div class="wait"><span class="dot"></span>Claude écrit une phrase avec ' + dash(root) + '…</div>';
@@ -2330,8 +2332,8 @@ async function qNext(){
     qDraw(false); $('q-msg').innerHTML = '';
     const g = $('q-gap'); if (g) g.focus({ preventScroll: true });
   } catch (e) {
-    const m = { not_granted: 'Accès à Claude refusé pour cette page.', rate_limited: 'Trop de demandes ou limite d’usage atteinte. Réessaie dans quelques minutes.',
-      session_expired: 'Session expirée : reconnecte-toi à Claude.', refused: 'Phrase refusée pour cette racine. Essaie une autre racine.' }[e && e.code] || 'La phrase n’a pas pu être générée. Clique à nouveau sur Next.';
+    const m = { not_granted: 'Accès à Claude refusé pour cette page.', rate_limited: 'Trop de demandes ou limite d’usage atteinte. Réessayez dans quelques minutes.',
+      session_expired: 'Session expirée : reconnectez-vous.', refused: 'Phrase refusée pour cette racine. Essayez une autre racine.' }[e && e.code] || 'La phrase n’a pas pu être générée. Cliquez à nouveau sur Next.';
     $('q-msg').innerHTML = e && e.code === 'cancelled' ? '' : '<div class="err">' + m + '</div>';
   }
   Q.busy = false; qBtns();
@@ -2346,7 +2348,7 @@ function qRenderList(){
   roots.forEach(r => { const o = el('option', '', dash(r) + ' (' + qHist.filter(h => h.root === r).length + ')'); o.value = r; sel.appendChild(o); });
   sel.value = roots.includes(cur) ? cur : (root && roots.includes(root) ? root : '');
   const list = qFiltered(), box = $('q-list'); box.innerHTML = '';
-  $('q-fmsg').textContent = list.length ? '' : 'Chaque phrase jouée s’ajoute ici avec ta réponse. Tu pourras ensuite exporter la fiche en PDF.';
+  $('q-fmsg').textContent = list.length ? '' : 'Chaque phrase jouée s’ajoute ici avec votre réponse. Vous pourrez ensuite exporter la fiche en PDF.';
   list.slice().reverse().forEach(h => {
     const v = Q_V[h.verdict] || Q_V.vu, row = el('div', 'q-row');
     row.appendChild(el('span', 'v ' + v[1], v[0]));
@@ -2421,12 +2423,12 @@ function xRender(){
   if (root){
     c.appendChild(el('span', 'crr', dash(root)));
     c.appendChild(el('span', 'grow hint', rootSense ? 'Racine de l’Atelier — ' + rootSense : 'Racine choisie dans l’Atelier'));
-  } else c.appendChild(el('span', 'grow hint', 'Aucune racine choisie : choisis-en une dans l’Atelier, ou tire une racine piégeuse au hasard.'));
+  } else c.appendChild(el('span', 'grow hint', 'Aucune racine choisie : choisissez-en une dans l’Atelier, ou tirez une racine piégeuse au hasard.'));
   const bw = el('button', 'small', '← Changer de racine'); bw.type = 'button'; bw.onclick = () => tab('w'); c.appendChild(bw);
 
   const card = $('x-card'); card.innerHTML = '';
   const o = root ? xFind(root) : null;
-  if (!root) card.appendChild(el('p', 'empty', 'Choisis une racine dans l’Atelier (ou « 🎲 Racine piégeuse au hasard ») pour voir ses sens qui prêtent à confusion.'));
+  if (!root) card.appendChild(el('p', 'empty', 'Choisissez une racine dans l’Atelier (ou « 🎲 Racine piégeuse au hasard ») pour voir ses sens qui prêtent à confusion.'));
   else if (xTrap(o)){
     const h = el('div', 'x-head'); h.appendChild(el('span', 'x-root', o.r || xDot(root)));
     h.appendChild(el('span', 'tag ' + (o.base ? 'r' : 'c'), o.base ? 'base « mots de confusion »' : 'analyse de Claude'));
@@ -2585,8 +2587,8 @@ function put(id, data) {
   };
   chains[id] = (chains[id] || Promise.resolve()).then(run).catch(e => {
     $("t-save").textContent = e?.code === "quota_exceeded"
-      ? "Espace plein : supprime un texte pour pouvoir enregistrer."
-      : "Ta dernière réponse n'a pas pu être enregistrée. Elle reste affichée, réessaie plus tard.";
+      ? "Espace plein : supprimez un texte pour pouvoir enregistrer."
+      : "Votre dernière réponse n'a pas pu être enregistrée. Elle reste affichée, réessayez plus tard.";
   });
   return chains[id];
 }
@@ -2601,17 +2603,17 @@ async function attachStore() {
     rerender(); return;
   }
   S.db = db; S.base = "data/users/" + uid; S.mode = "db";
-  $("t-save").textContent = "Chargement de ta progression…";
-  const timer = setTimeout(() => { $("t-save").textContent = "Ta progression ne répond pas encore. Ce que tu fais maintenant sera enregistré dès qu'elle revient."; }, 10000);
+  $("t-save").textContent = "Chargement de votre progression…";
+  const timer = setTimeout(() => { $("t-save").textContent = "Votre progression ne répond pas encore. Ce que vous faites maintenant sera enregistré dès qu'elle revient."; }, 10000);
   db.collection(S.base).onSnapshot(snap => {
     const next = {};
     for (const d of snap.docs) next[d.id] = d.data();
     S.docs = next;
-    if (!snap.metadata.fromCache) { clearTimeout(timer); $("t-save").textContent = "Progression enregistrée sur ton compte Claude."; }
+    if (!snap.metadata.fromCache) { clearTimeout(timer); $("t-save").textContent = "Progression enregistrée sur votre compte."; }
     rerender();
   }, err => {
     clearTimeout(timer);
-    $("t-save").textContent = err?.code === "revoked" ? "" : "Ta progression n'est plus synchronisée pour cette visite.";
+    $("t-save").textContent = err?.code === "revoked" ? "" : "Votre progression n'est plus synchronisée pour cette visite.";
   });
 }
 
@@ -2660,12 +2662,12 @@ function renderHome() {
     h("div", { class: "mt-panel" },
       h("span", { class: "mt-lbl", text: "Révision du jour" }),
       h("span", { class: "mt-big", text: due.length ? due.length + (due.length > 1 ? " phrases" : " phrase") : "Rien à revoir" }),
-      h("span", { class: "mt-lbl", text: due.length ? "Les phrases ratées reviennent le jour même, les justes de plus en plus espacées." : "Traduis une série : les phrases à retravailler apparaîtront ici." }),
+      h("span", { class: "mt-lbl", text: due.length ? "Les phrases ratées reviennent le jour même, les justes de plus en plus espacées." : "Traduisez une série : les phrases à retravailler apparaîtront ici." }),
       h("div", { class: "mt-row" }, h("button", { class: "mt-btn mt-primary", type: "button", disabled: !due.length, onclick: () => startRun({ src: "review", keys: due, title: "Révision du jour" }) }, "Commencer la révision"))),
     h("div", { class: "mt-panel" },
       h("span", { class: "mt-lbl", text: "Reprendre" }),
       h("span", { class: "mt-big", style: "font-size:20px", text: lastItem ? lastItem.where : "Série 1 · Thèmes variés I" }),
-      h("span", { class: "mt-lbl", text: lastItem ? "Phrase " + (last.i + 1) : "Commence par le début du cahier." }),
+      h("span", { class: "mt-lbl", text: lastItem ? "Phrase " + (last.i + 1) : "Commencez par le début du cahier." }),
       h("div", { class: "mt-row" }, h("button", { class: "mt-btn", type: "button", onclick: () => {
         if (lastItem) openSource(last.src, last.id, last.i); else openSource("c", 1, 0);
       } }, lastItem ? "Continuer" : "Commencer"))),
@@ -2687,7 +2689,7 @@ function renderHome() {
 
   const tx = texts();
   const textList = h("div", { class: "mt-texts" },
-    tx.length ? tx.map(t => textRow(t)) : h("div", { class: "mt-empty", text: "Colle un article, un passage de la paracha ou une chanson : il sera découpé en phrases à traduire une à une." }),
+    tx.length ? tx.map(t => textRow(t)) : h("div", { class: "mt-empty", text: "Collez un article, un passage de la paracha ou une chanson : il sera découpé en phrases à traduire une à une." }),
     h("div", { class: "mt-row" },
       h("button", { class: "mt-btn", type: "button", onclick: () => go({ name: "new" }) }, "+ Ajouter un texte"),
       h("button", { class: "mt-btn", type: "button", onclick: () => go({ name: "import" }) }, "Importer de Moules de phrases")));
@@ -2700,7 +2702,7 @@ function renderHome() {
       h("span", { class: "mt-tt", text: g.ps.length + (g.ps.length > 1 ? " phrases de l'atelier" : " phrase de l'atelier") }),
       progressBar(c),
       h("span", { class: "mt-meta" }, h("span", { text: c.total + " phrases" }), h("span", { text: c.juste ? c.juste + " justes" : "" })));
-  })) : h("div", { class: "mt-empty", text: "Les phrases que tu écris dans l'onglet Atelier apparaissent ici, rangées par racine, prêtes à traduire." });
+  })) : h("div", { class: "mt-empty", text: "Les phrases que vous écrivez dans l'onglet Atelier apparaissent ici, rangées par racine, prêtes à traduire." });
   $("t-main").replaceChildren(
     today,
     h("h2", { class: "mt-sec", text: "Mes textes" }), textList,
@@ -2761,7 +2763,7 @@ function renderEx() {
   } }, S.nikud ? "Sans nikoud" : "Avec nikoud");
   const hintBtn = h("button", { class: "mt-btn", type: "button", onclick: () => nextHint() }, "Indice");
   const hints = h("div", { class: "mt-hints" });
-  const ans = h("textarea", { class: "mt-ans", id: "t-answer", lang: "fr", placeholder: "Ta traduction en français…", "aria-label": "Ta traduction" });
+  const ans = h("textarea", { class: "mt-ans", id: "t-answer", lang: "fr", placeholder: "Votre traduction en français…", "aria-label": "Votre traduction" });
   const prev = progress(key);
   const checkBtn = h("button", { class: "mt-btn mt-primary", type: "button", onclick: () => check() }, "Corriger");
   const showBtn = h("button", { class: "mt-btn", type: "button", onclick: () => reveal() }, "Voir la traduction");
@@ -2784,7 +2786,7 @@ function renderEx() {
       hebEl,
       h("div", { class: "mt-tools" }, listenBtn, nikBtn, hintBtn),
       hints,
-      h("label", { class: "mt-lab", for: "t-answer", text: "Ta traduction" }),
+      h("label", { class: "mt-lab", for: "t-answer", text: "Votre traduction" }),
       ans,
       h("div", { class: "mt-row" }, checkBtn, showBtn, h("span", { class: "mt-kbd", text: "⌘ + Entrée pour corriger" })),
       fb,
@@ -2917,12 +2919,12 @@ function speak(text) {
 function errCopy(code) {
   switch (code) {
     case "not_granted": case "sampling_disabled": case "not_declared": case "capability_disabled": case "capability_removed":
-      return "La correction par Claude n'est pas disponible ici. Utilise « Voir la traduction » et note-toi toi-même.";
-    case "rate_limited": return "Trop de demandes pour le moment. Attends un peu avant de réessayer.";
-    case "session_expired": return "Ta session Claude a expiré : reconnecte-toi puis réessaie.";
-    case "refused": case "empty_completion": return "Claude n'a pas pu répondre à cette demande. Reformule ta traduction et réessaie.";
-    case "invalid_json": return "La réponse de Claude était illisible. Clique à nouveau pour réessayer.";
-    default: return "La connexion a échoué. Clique à nouveau pour réessayer.";
+      return "La correction par Claude n'est pas disponible ici. Utilisez « Voir la traduction » et notez-vous vous-même.";
+    case "rate_limited": return "Trop de demandes pour le moment. Attendez un peu avant de réessayer.";
+    case "session_expired": return "Votre session a expiré : reconnectez-vous puis réessayez.";
+    case "refused": case "empty_completion": return "Claude n'a pas pu répondre à cette demande. Reformulez votre traduction et réessayez.";
+    case "invalid_json": return "La réponse de Claude était illisible. Cliquez à nouveau pour réessayer.";
+    default: return "La connexion a échoué. Cliquez à nouveau pour réessayer.";
   }
 }
 function hideIfGone(code) {
@@ -3007,7 +3009,7 @@ function record(v, extra) {
 
 function corrPrompt(it, txt) {
   return (
-      "Tu es professeur d'hébreu pour un francophone de niveau B1-B2. Tu le tutoies.\n\n" +
+      "Tu es professeur d'hébreu pour un francophone de niveau B1-B2. Tu le vouvoies.\n\n" +
       "Phrase hébraïque : " + it.heb + "\n" +
       (it.ref ? "Traduction de référence (indicative : d'autres formulations peuvent être justes) : " + it.ref + "\n" : "") +
       "Traduction de l'élève : " + txt + "\n\n" +
@@ -3019,10 +3021,10 @@ function corrPrompt(it, txt) {
 }
 async function check() {
   const it = ex.it; const txt = ex.ans.value.trim(); const myKey = ex.key;
-  if (!txt) { ex.fb.replaceChildren(h("p", { class: "mt-err", text: "Écris d'abord ta traduction." })); ex.ans.focus(); return; }
+  if (!txt) { ex.fb.replaceChildren(h("p", { class: "mt-err", text: "Écrivez d'abord votre traduction." })); ex.ans.focus(); return; }
   ex.ctl?.abort(); ex.ctl = new AbortController();
   ex.checkBtn.disabled = true;
-  ex.fb.replaceChildren(h("div", { class: "mt-fb mt-neutral" }, h("p", { class: "mt-wait", text: "Claude relit ta traduction" })));
+  ex.fb.replaceChildren(h("div", { class: "mt-fb mt-neutral" }, h("p", { class: "mt-wait", text: "Claude relit votre traduction" })));
   let r;
   try {
     r = await askJSON(corrPrompt(it, txt), { signal: ex.ctl.signal, cache: false });
@@ -3076,7 +3078,7 @@ async function reveal() {
   const self = v => () => { record(v, { ...(ex.ans.value.trim() ? { ans: ex.ans.value.trim().slice(0, 400) } : {}), ...(ex.pendingRef ? { ref: ex.pendingRef } : {}) }); step(1); };
   ex.fb.replaceChildren(h("div", { class: "mt-fb mt-neutral" },
     h("p", { class: "mt-ref" }, h("small", { text: "Traduction" }), ref),
-    h("span", { class: "mt-kbd", text: "Comment t'en es-tu sorti ?" }),
+    h("span", { class: "mt-kbd", text: "Comment vous en êtes-vous sorti(e) ?" }),
     h("div", { class: "mt-row" },
       h("button", { class: "mt-btn", type: "button", onclick: self("juste") }, "Je l'avais"),
       h("button", { class: "mt-btn", type: "button", onclick: self("presque") }, "Presque"),
@@ -3158,7 +3160,7 @@ function parseMoules(raw) {
 function renderImport() {
   let parsed = { groups: [], skipped: 0 };
   const file = h("input", { type: "file", id: "m-file", accept: ".txt,text/plain" });
-  const paste = h("textarea", { id: "m-paste", placeholder: "Ou colle ici le contenu du fichier exporté par Moules de phrases…", style: "direction:ltr;text-align:left;font-family:var(--f-ui);font-size:14px;min-height:160px" });
+  const paste = h("textarea", { id: "m-paste", placeholder: "Ou collez ici le contenu du fichier exporté par Moules de phrases…", style: "direction:ltr;text-align:left;font-family:var(--f-ui);font-size:14px;min-height:160px" });
   const source = h("span", { class: "mt-kbd" });
   const summary = h("div", { "aria-live": "polite" });
   const save = h("button", { class: "mt-btn mt-primary", type: "button", disabled: true }, "Importer");
@@ -3186,7 +3188,7 @@ function renderImport() {
   file.addEventListener("change", async () => {
     const f = file.files?.[0]; if (!f) return;
     try { const txt = await f.text(); paste.value = ""; show(txt, "Fichier : " + f.name); }
-    catch { summary.replaceChildren(h("p", { class: "mt-err", text: "Ce fichier n'a pas pu être lu. Essaie de coller son contenu à la place." })); }
+    catch { summary.replaceChildren(h("p", { class: "mt-err", text: "Ce fichier n'a pas pu être lu. Essayez de coller son contenu à la place." })); }
   });
   paste.addEventListener("input", () => { file.value = ""; show(paste.value, paste.value.trim() ? "Texte collé" : ""); });
   save.addEventListener("click", () => {
