@@ -5,12 +5,17 @@
    - 'sample'    : les demandes à l'IA passent par n8n (/webhook/mishpatim),
                    qui vérifie identifiant, code, formule, onglet et quota ;
    - 'downloads' : téléchargement direct par le navigateur ;
-   - 'db', 'user': non fournis → la page garde la progression dans le navigateur.
+   - 'db', 'user': non fournis → la page range sa progression dans le navigateur
+                   (clés mp3.* et mishpatim-*), et ce module la recopie sur le
+                   compte de l'élève (/webhook/mishpatim-progression → Supabase,
+                   table mishpatim_progression) : chargée à la connexion,
+                   enregistrée à chaque changement.
    Inséré en tête de la page, avant tous ses autres scripts.
    ===================================================================== */
 (function () {
   'use strict';
   var WEBHOOK = 'https://n8n.hebreu-zen.cloud/webhook/mishpatim';
+  var WEBHOOK_PROG = 'https://n8n.hebreu-zen.cloud/webhook/mishpatim-progression';
   var CLE = 'hz-mishpatim-acces';
   var ONGLET_DE = { 'tab-w': 'atelier', 'tab-m': 'atelier', 'tab-r': 'reviser', 'tab-q': 'trous',
                     'tab-x': 'confusion', 'tab-c': 'creer', 'tab-t': 'traduire', 'tab-e': 'escalier' };
@@ -29,6 +34,142 @@
       .then(function (r) { return r.json(); });
   }
 
+  /* ---------- progression : navigateur ⇄ compte de l'élève ----------
+     La page lit et écrit localStorage comme avant. Ici :
+     - à la connexion, on lit la progression du compte ; si elle est plus récente
+       que celle du navigateur (ou si un autre élève se connecte), on la recopie
+       dans le navigateur et on recharge la page ;
+     - chaque écriture de la page sur une clé Mishpatim est envoyée au compte
+       (regroupée toutes les 2 s, et tout de suite quand on quitte la page). */
+  var SYNC = 'hz-mishpatim-sync';      // { uid, maj, sale } dans localStorage
+  var ls = null; try { ls = window.localStorage; } catch (e) {}
+  var natifSet = Storage.prototype.setItem, natifDel = Storage.prototype.removeItem;
+  var progActive = false, enAttente = {}, minuteur = null, envoiEnCours = false, etatProg = '';
+
+  function estCle(k) { return /^(mp3\.|mishpatim-)/.test(String(k)); }
+  function syncLire() { try { return JSON.parse(ls.getItem(SYNC) || 'null') || {}; } catch (e) { return {}; } }
+  function syncEcrire(o) { try { natifSet.call(ls, SYNC, JSON.stringify(o)); } catch (e) {} }
+  function clesLocales() {
+    var t = []; try { for (var i = 0; i < ls.length; i++) { var k = ls.key(i); if (estCle(k)) t.push(k); } } catch (e) {}
+    return t;
+  }
+  function valeur(k) {
+    var v = null; try { v = ls.getItem(k); } catch (e) {}
+    if (v === null) return undefined;
+    try { return JSON.parse(v); } catch (e) { return v; }
+  }
+
+  if (ls) {
+    Storage.prototype.setItem = function (k, v) {
+      natifSet.call(this, k, v);
+      if (this === ls && estCle(k)) noter(k);
+    };
+    Storage.prototype.removeItem = function (k) {
+      natifDel.call(this, k);
+      if (this === ls && estCle(k)) noter(k);
+    };
+  }
+
+  function noter(k) {
+    enAttente[k] = 1;
+    var s = syncLire(); if (!s.sale) { s.sale = true; syncEcrire(s); }
+    if (progActive) planifier(2000);
+  }
+  function planifier(ms) { clearTimeout(minuteur); minuteur = setTimeout(function () { envoyer(false); }, ms); }
+
+  function etat(e) {
+    etatProg = e;
+    var p = document.getElementById('hz-prog'); if (!p) return;
+    p.textContent = { ok: '✓ Progression enregistrée', envoi: 'Enregistrement…', charge: 'Chargement de votre progression…',
+                      horsligne: 'Hors ligne : progression gardée sur cet appareil', erreur: 'Progression non enregistrée' }[e] || '';
+    p.className = (e === 'horsligne' || e === 'erreur') ? 'hz-alerte' : '';
+  }
+
+  function posterProg(corps, keepalive) {
+    corps.identifiant = acces.identifiant; corps.code = acces.code;
+    var texte = JSON.stringify(corps);
+    return fetch(WEBHOOK_PROG, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: texte,
+                                 keepalive: !!keepalive && texte.length < 60000 })
+      .then(function (r) { return r.json(); });
+  }
+
+  function refusAcces(r) {
+    var code = r && r.erreur;
+    if (code === 'code_invalide' || code === 'code_expire' || code === 'abonnement_expire' || code === 'pas_abonne') {
+      progActive = false; acces = null; ecrire(null); afficherConnexion(r.message || 'Reconnectez-vous.');
+      return true;
+    }
+    return false;
+  }
+
+  function envoyer(final, toutes, cleServeur) {
+    if (!acces || !progActive) return;
+    if (envoiEnCours && !final) { planifier(1000); return; }
+    var cles = toutes ? clesLocales() : Object.keys(enAttente);
+    var del = [];
+    if (cleServeur) Object.keys(cleServeur).forEach(function (k) { if (cles.indexOf(k) === -1) del.push(k); });
+    if (!cles.length && !del.length) return;
+    var set = {};
+    cles.forEach(function (k) { var v = valeur(k); if (v === undefined) del.push(k); else set[k] = v; });
+    enAttente = {};
+    envoiEnCours = true; etat('envoi');
+    posterProg({ type: 'ecrire', set: set, del: del }, final).then(function (r) {
+      envoiEnCours = false;
+      if (r && r.ok) {
+        var reste = Object.keys(enAttente).length;
+        syncEcrire({ uid: acces.identifiant, maj: r.maj, sale: reste > 0 });
+        etat('ok'); if (reste) planifier(2000);
+        return;
+      }
+      if (refusAcces(r)) return;
+      cles.concat(del).forEach(function (k) { enAttente[k] = 1; });
+      etat('erreur'); toast((r && r.message) || 'Votre progression n’a pas pu être enregistrée.');
+    }, function () {
+      envoiEnCours = false;
+      cles.concat(del).forEach(function (k) { enAttente[k] = 1; });
+      etat('horsligne'); planifier(20000);
+    });
+  }
+
+  function appliquer(donnees) {
+    clesLocales().forEach(function (k) { try { natifDel.call(ls, k); } catch (e) {} });
+    Object.keys(donnees || {}).forEach(function (k) {
+      if (estCle(k)) try { natifSet.call(ls, k, JSON.stringify(donnees[k])); } catch (e) {}
+    });
+  }
+
+  // A la connexion, puis quand l'élève revient sur la page
+  function synchroniser(retour) {
+    if (!ls || !acces) return Promise.resolve();
+    if (!retour) etat('charge');
+    return posterProg({ type: 'lire' }).then(function (r) {
+      if (!r || !r.ok) { if (!refusAcces(r)) etat('erreur'); return; }
+      var s = syncLire(), serveur = r.donnees || {};
+      var majServeur = r.maj ? Date.parse(r.maj) : 0, majLocale = s.maj ? Date.parse(s.maj) : 0;
+      var memeEleve = s.uid === acces.identifiant;
+      var serveurVide = !Object.keys(serveur).length;
+      progActive = true;
+      if ((serveurVide && (memeEleve || !s.uid)) || (memeEleve && s.sale)) {
+        // ce navigateur a la version la plus récente : on l'envoie entière
+        envoyer(false, true, serveur); if (!clesLocales().length) etat('ok');
+        return;
+      }
+      if (memeEleve && majServeur <= majLocale) { etat('ok'); return; }
+      // le compte a une version plus récente (autre appareil) ou un autre élève se connecte
+      progActive = false;
+      appliquer(serveur);
+      syncEcrire({ uid: acces.identifiant, maj: r.maj, sale: false });
+      try { sessionStorage.setItem('hz-mishpatim-recharge', '1'); } catch (e) {}
+      location.reload();
+    }, function () { etat('horsligne'); });
+  }
+
+  window.addEventListener('pagehide', function () { if (Object.keys(enAttente).length) envoyer(true); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') { if (Object.keys(enAttente).length) envoyer(true); }
+    else if (progActive && !Object.keys(enAttente).length && !envoiEnCours) synchroniser(true);
+  });
+
   function ongletActif() {
     var b = document.querySelector('nav.tabs button.on');
     return (b && ONGLET_DE[b.id]) || 'atelier';
@@ -45,6 +186,8 @@
     '#hz-boite button:disabled{opacity:.6}#hz-msg{margin-top:12px;font-size:14px;color:#b3261e;min-height:1em}' +
     '#hz-barre{position:fixed;right:12px;bottom:12px;z-index:9998;background:#fff;border:1px solid #d9dbe3;border-radius:20px;padding:6px 12px;font:13px -apple-system,BlinkMacSystemFont,sans-serif;color:#33489a;box-shadow:0 2px 8px rgba(0,0,0,.1);display:flex;gap:10px;align-items:center}' +
     '#hz-barre a{color:#888;cursor:pointer;text-decoration:underline}' +
+    '#hz-prog{color:#2f7d4f}#hz-prog:empty{display:none}#hz-prog.hz-alerte{color:#b5482c}' +
+    '@media (max-width:560px){#hz-barre{left:12px;flex-wrap:wrap;justify-content:center;row-gap:2px}}' +
     '#hz-toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:10000;max-width:92%;background:#fff4e5;color:#6b3d00;border:1px solid #f0c27b;border-radius:10px;padding:10px 14px;font:14px -apple-system,BlinkMacSystemFont,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.15)}' +
     'nav.tabs button.hz-verrou{opacity:.55}nav.tabs button.hz-verrou::after{content:" \\1F512"}';
 
@@ -70,9 +213,14 @@
     b.innerHTML = '';
     var t = document.createElement('span');
     t.textContent = formule + ' · IA : ' + q.utilises + ' / ' + q.max + ' ce mois-ci';
+    var p = document.createElement('span'); p.id = 'hz-prog';
     var a = document.createElement('a'); a.textContent = 'Se déconnecter';
-    a.onclick = function () { ecrire(null); location.reload(); };
-    b.appendChild(t); b.appendChild(a);
+    a.onclick = function () {
+      if (Object.keys(enAttente).length) envoyer(true);
+      progActive = false; ecrire(null); setTimeout(function () { location.reload(); }, 300);
+    };
+    b.appendChild(t); b.appendChild(p); b.appendChild(a);
+    etat(etatProg);
   }
 
   function verrouillerOnglets() {
@@ -126,6 +274,13 @@
         if (r && r.ok) {
           acces = a; statut = r; ecrire(a);
           majBarre(); verrouillerOnglets(); resoudre(sample);
+          try {
+            if (sessionStorage.getItem('hz-mishpatim-recharge')) {
+              sessionStorage.removeItem('hz-mishpatim-recharge');
+              toast('Votre progression a été chargée depuis votre compte.');
+            }
+          } catch (e) {}
+          synchroniser(false);
           return true;
         }
         ecrire(null);
@@ -192,7 +347,7 @@
     use: function (nom) {
       if (nom === 'sample') return connecte;
       if (nom === 'downloads') return Promise.resolve(downloads);
-      return Promise.resolve(null);   // db, user : progression gardée dans le navigateur
+      return Promise.resolve(null);   // db, user : la page garde sa progression dans le navigateur, recopiée sur le compte (plus haut)
     }
   };
 
@@ -209,6 +364,7 @@
 
 </script></head><body>
 
+<meta name="robots" content="noindex, nofollow">
 <title>Mishpatim</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2599,7 +2755,7 @@ async function attachStore() {
   const uid = user ? await user.id().catch(() => null) : null;
   if (!db || !uid) {
     S.mode = "local"; S.docs = lsGet("mishpatim-docs", {});
-    $("t-save").textContent = "Progression enregistrée dans ce navigateur uniquement.";
+    $("t-save").textContent = "Progression enregistrée sur cet appareil et sur votre compte hébreu-zen.";
     rerender(); return;
   }
   S.db = db; S.base = "data/users/" + uid; S.mode = "db";
