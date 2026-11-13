@@ -1,0 +1,473 @@
+{
+  "name": "Mishpatim progression",
+  "nodes": [
+    {
+      "id": "01ac66ca-4853-4ff2-bea5-0247b6b141ed",
+      "name": "Webhook progression",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "294a7627-7364-400c-80e7-a1195bb172d7",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mishpatim-progression",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      }
+    },
+    {
+      "id": "6d5bcd43-9856-45a2-bdf3-bdbb7c7ee35e",
+      "name": "Élève",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        220,
+        300
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "5c7twO1mBv7RNMds",
+          "name": "Supabase account"
+        }
+      },
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "utilisateurs",
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "identifiant",
+              "condition": "eq",
+              "keyValue": "={{ String($json.body.identifiant || '').trim() }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "bcb8db92-4308-48c9-b874-6c306bd80ab7",
+      "name": "Contrôle accès",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Contrôle d'accès « progression » : mêmes règles que Mishpatim IA, sans onglet ni quota\nconst b = $('Webhook progression').first().json.body || {};\nconst e = $input.all().map(i => i.json).find(x => x && x.id) || null;\nconst FORMULES = ['sectoriel', 'complet'];\nconst CLE = /^(mp3\\.|mishpatim-)[A-Za-z0-9_.-]{1,60}$/;\nconst MAX = 4000000;   // 4 Mo de progression au plus par envoi\nconst type = String(b.type || '');\nconst maintenant = new Date();\nlet erreur = '', message = '';\nlet set = {}, del = [];\n\nif (!b.identifiant || !b.code || !['lire', 'ecrire'].includes(type)) {\n  erreur = 'requete_invalide'; message = 'Demande incomplète.';\n} else if (!e || String(e.code_acces || '') !== String(b.code).trim()) {\n  erreur = 'code_invalide'; message = 'Identifiant ou code incorrect. Reconnectez-vous.';\n} else if (e.code_expire_le && new Date(e.code_expire_le) < maintenant) {\n  erreur = 'code_expire'; message = 'Votre code a expiré. Demandez-en un nouveau depuis la page de connexion.';\n} else if (!FORMULES.includes(e.formule)) {\n  erreur = 'pas_abonne'; message = 'Mishpatim est réservé aux abonnements Sectoriel et Complet.';\n} else if (!e.mishpatim_fin || new Date(e.mishpatim_fin) < maintenant) {\n  erreur = 'abonnement_expire'; message = \"Votre abonnement Mishpatim n'est plus actif. Renouvelez-le pour continuer.\";\n} else if (type === 'ecrire') {\n  set = b.set && typeof b.set === 'object' && !Array.isArray(b.set) ? b.set : {};\n  del = Array.isArray(b.del) ? b.del : [];\n  const cles = Object.keys(set).concat(del);\n  if (!cles.length || cles.length > 200 || !cles.every(k => typeof k === 'string' && CLE.test(k))) {\n    erreur = 'requete_invalide'; message = 'Progression illisible.';\n  } else if (JSON.stringify(set).length > MAX) {\n    erreur = 'trop_gros'; message = 'Progression trop volumineuse pour être enregistrée.';\n  }\n}\n\nreturn [{ json: { ok: !erreur, erreur, message, type, utilisateur_id: e ? e.id : null, set, del } }];"
+      }
+    },
+    {
+      "id": "27a39ad3-5b2a-49dc-8c97-4d70077beb9e",
+      "name": "Accès OK ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        660,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8767479b-06cd-4f74-acdc-2f7969fffd4d",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "37e07176-066f-4cc3-9bc8-5dcf40a67d66",
+      "name": "Refus accès",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        880,
+        480
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: false, erreur: $json.erreur, message: $json.message }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "be87a268-bbaf-4310-82a4-d3f693b4ef67",
+      "name": "Progression actuelle",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        880,
+        280
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "5c7twO1mBv7RNMds",
+          "name": "Supabase account"
+        }
+      },
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "mishpatim_progression",
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "utilisateur_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.utilisateur_id }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "95996dd2-0b63-4cc2-ad0a-54c30c03df94",
+      "name": "Préparer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        280
+      ],
+      "parameters": {
+        "jsCode": "// Fusionne les clés envoyées avec la progression déjà enregistrée\nconst c = $('Contrôle accès').first().json;\nconst ligne = $input.all().map(i => i.json).find(x => x && x.utilisateur_id) || null;\nconst actuel = ligne && ligne.donnees && typeof ligne.donnees === 'object' ? ligne.donnees : {};\n\nif (c.type === 'lire') {\n  return [{ json: { action: 'lire', reponse: { ok: true, donnees: actuel, maj: ligne ? ligne.maj_le : null } } }];\n}\nconst donnees = { ...actuel };\nfor (const [k, v] of Object.entries(c.set)) donnees[k] = v;\nfor (const k of c.del) delete donnees[k];\nconst maj = new Date().toISOString();\nreturn [{ json: {\n  action: ligne ? 'maj' : 'creer',\n  ligne: { utilisateur_id: c.utilisateur_id, donnees, maj_le: maj },\n  reponse: { ok: true, maj }\n} }];"
+      }
+    },
+    {
+      "id": "7dcf51f5-0ea9-434b-b8d0-c8540b2bbbc8",
+      "name": "Lecture ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1320,
+        280
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c803bbf6-ca58-46b2-84d3-059c378214e7",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "lire",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "dd00853c-a0bd-4ec3-8b9b-2d0d86b211fc",
+      "name": "Répondre lecture",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1540,
+        140
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.reponse) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "c881adbf-9f60-4aa8-a182-04d4a2421cb6",
+      "name": "Ligne",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1540,
+        400
+      ],
+      "parameters": {
+        "jsCode": "return [{ json: $input.first().json.ligne }];"
+      }
+    },
+    {
+      "id": "d2bc9193-6639-4be9-aff9-3845892bda16",
+      "name": "Déjà une ligne ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1760,
+        400
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "61ab1499-a7d4-4558-a203-0e9f8ea36d83",
+              "leftValue": "={{ $('Préparer').first().json.action }}",
+              "rightValue": "maj",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "457757b7-89e6-4edb-96d2-d0a8a7289825",
+      "name": "Mettre à jour",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1980,
+        320
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "5c7twO1mBv7RNMds",
+          "name": "Supabase account"
+        }
+      },
+      "parameters": {
+        "operation": "update",
+        "tableId": "mishpatim_progression",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "utilisateur_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.utilisateur_id }}"
+            }
+          ]
+        },
+        "dataToSend": "autoMapInputData"
+      }
+    },
+    {
+      "id": "8cb2335f-922e-4819-80ce-0d0d6d7e643e",
+      "name": "Créer",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1980,
+        500
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "5c7twO1mBv7RNMds",
+          "name": "Supabase account"
+        }
+      },
+      "parameters": {
+        "tableId": "mishpatim_progression",
+        "dataToSend": "autoMapInputData"
+      }
+    },
+    {
+      "id": "77c47e97-046e-4a0d-b584-6cb6063421b9",
+      "name": "Répondre écriture",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2200,
+        400
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($('Préparer').first().json.reponse) }}",
+        "options": {}
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook progression": {
+      "main": [
+        [
+          {
+            "node": "Élève",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Élève": {
+      "main": [
+        [
+          {
+            "node": "Contrôle accès",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contrôle accès": {
+      "main": [
+        [
+          {
+            "node": "Accès OK ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Accès OK ?": {
+      "main": [
+        [
+          {
+            "node": "Progression actuelle",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Refus accès",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Progression actuelle": {
+      "main": [
+        [
+          {
+            "node": "Préparer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer": {
+      "main": [
+        [
+          {
+            "node": "Lecture ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lecture ?": {
+      "main": [
+        [
+          {
+            "node": "Répondre lecture",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ligne",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ligne": {
+      "main": [
+        [
+          {
+            "node": "Déjà une ligne ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Déjà une ligne ?": {
+      "main": [
+        [
+          {
+            "node": "Mettre à jour",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Créer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mettre à jour": {
+      "main": [
+        [
+          {
+            "node": "Répondre écriture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Créer": {
+      "main": [
+        [
+          {
+            "node": "Répondre écriture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
