@@ -93,6 +93,32 @@
   .abo-etat b { color: var(--tekhelet); }
   .btn-mishpatim { width: 100%; margin-top: 10px; padding: 12px; font-size: 1rem; background: var(--tekhelet); color: #fff; border: 1px solid var(--tekhelet); cursor: pointer; }
   .btn-mishpatim:hover { background: var(--encre); border-color: var(--encre); }
+  /* --- offre en deux colonnes : fiches | abonnements --- */
+  :root { --bleu-fond: #EEF4FA; --bleu-trait: #B9D0E6; }
+  .offre { width: min(56rem, calc(100vw - 2rem)); margin: 28px 0 0 50%; transform: translateX(-50%); }
+  .offre-entete { text-align: center; margin-bottom: 14px; }
+  .offre-entete h3 { font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif; font-size: 16pt; font-weight: 600; margin: 0; }
+  .offre-entete p { font-size: 10pt; color: var(--gris); margin: .25rem auto 0; max-width: 36rem; }
+  .offre-colonnes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); gap: 16px; align-items: stretch; }
+  @media (max-width: 760px) { .offre-colonnes { grid-template-columns: 1fr; } }
+  .offre-col { background: var(--bleu-fond); border: 1.5px solid var(--bleu-trait); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; }
+  .offre-col h4 { margin: 0; font-size: 12.5pt; color: var(--tekhelet); }
+  .offre-sous { font-size: 9.5pt; color: var(--gris); margin: .2rem 0 .4rem; }
+  .pack-ligne { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; border: 1px solid var(--bleu-trait); border-radius: 8px; padding: 10px 12px; margin-top: 8px; }
+  .pack-ligne b { font-size: 11pt; }
+  .pack-ligne .prix { color: var(--or); font-weight: 600; margin-left: .4rem; }
+  .pack-ligne .btn-achat { width: auto; margin: 0; padding: 8px 16px; font-size: .95rem; }
+  .offre-pont { font-size: 9.5pt; color: var(--tekhelet); margin: auto 0 0; padding-top: 12px; }
+  .offre .abo-formules { margin-top: 6px; }
+  @media (max-width: 520px) { .offre .abo-formules { grid-template-columns: 1fr; } }
+  .offre .abo-carte { background: #fff; border: 1px solid var(--bleu-trait); border-radius: 8px; }
+  .fiches-incluses { align-self: flex-start; background: var(--bleu-fond); border: 1px solid var(--bleu-trait); color: var(--tekhelet); font-size: 9pt; font-weight: 600; padding: 1px 9px; border-radius: 999px; margin: 0 0 .5rem; }
+  .abo-statut { background: #fff; border: 1px solid var(--bleu-trait); border-radius: 8px; padding: 14px; margin-top: 6px; }
+  .abo-badge { display: inline-block; font-size: 9pt; font-weight: 700; padding: 1px 10px; border-radius: 999px; background: #E3F1E8; color: #2F6B45; }
+  .abo-badge.resilie { background: #FBEBDD; color: #9A4B12; }
+  .offre .abo-note { text-align: center; }
+  .fleche::after { content: " →"; }
+  @media (max-width: 760px) { .fleche::after { content: " ↓"; } }
   .lien-portail { display: inline-block; margin-top: 10px; font-size: 10pt; color: var(--tekhelet); }
   .pack { margin-top: 16px; }
   .pack-titre { display: block; font-weight: 600; margin-bottom: 4px; }
@@ -361,47 +387,52 @@
   <div class="ecran" id="ecran-paiement">
     <h2>Choisissez votre formule</h2>
     <p class="intro">Inscription réussie ! Choisissez un abonnement ou un pack de fiches, et payez par carte bancaire. Votre code d'accès vous arrivera par e-mail dès la validation du paiement.</p>
-    <div class="bloc-mishpatim">
-      <span class="libelle">Abonnements avec Mishpatim</span>
-      <div class="abo-formules">
-        <div class="abo-carte">
-          <strong>Sectoriel</strong>
-          <span class="abo-prix">20 € / mois</span>
-          <ul>
-            <li>Mishpatim : Atelier, Mes phrases, Réviser, Trous, Confusion</li>
-            <li>50 demandes à l’IA par mois</li>
-            <li>6 fiches du site par mois</li>
-          </ul>
-          <button class="btn-achat" onclick="payerAbonnement('sectoriel')">S’abonner</button>
+    <section class="offre">
+      <div class="offre-entete">
+        <h3>Deux façons de travailler</h3>
+        <p>Des fiches à l’unité, sans engagement, ou un abonnement mensuel : l’atelier Mishpatim avec l’IA, avec des fiches incluses chaque mois.</p>
+      </div>
+      <div class="offre-colonnes">
+        <div class="offre-col">
+          <h4>Fiches du site</h4>
+          <p class="offre-sous">Payées une fois, à utiliser quand vous voulez.</p>
+          <div class="pack-ligne"><span><b>6 fiches</b><span class="prix">5 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(6)">Acheter</button></div>
+          <div class="pack-ligne"><span><b>12 fiches</b><span class="prix">10 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(12)">Acheter</button></div>
+          <div class="pack-ligne"><span><b>20 fiches</b><span class="prix">15 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(20)">Acheter</button></div>
+          <p class="offre-pont">Les fiches achetées ne se perdent jamais : elles s’ajoutent à celles d’un abonnement.<span class="fleche"></span></p>
         </div>
-        <div class="abo-carte">
-          <strong>Complet</strong>
-          <span class="abo-prix">30 € / mois</span>
-          <ul>
-            <li>Tout Mishpatim, avec Créer, Traduire et Escalier</li>
-            <li>150 demandes à l’IA par mois</li>
-            <li>12 fiches du site par mois</li>
-          </ul>
-          <button class="btn-achat" onclick="payerAbonnement('complet')">S’abonner</button>
+        <div class="offre-col">
+          <h4>Abonnements avec Mishpatim</h4>
+          <p class="offre-sous">Fabriquez et corrigez vos propres phrases hébraïques avec l’IA, et révisez-les jusqu’à les savoir.</p>
+          <div class="abo-formules">
+            <div class="abo-carte">
+              <strong>Sectoriel</strong>
+              <span class="abo-prix">20 € / mois</span>
+              <span class="fiches-incluses">+ 6 fiches du site par mois</span>
+              <ul>
+                <li>Mishpatim : Atelier, Mes phrases, Réviser, Trous, Confusion</li>
+                <li>50 demandes à l’IA par mois</li>
+              </ul>
+              <button class="btn-achat" onclick="payerAbonnement('sectoriel')">S’abonner</button>
+            </div>
+            <div class="abo-carte">
+              <strong>Complet</strong>
+              <span class="abo-prix">30 € / mois</span>
+              <span class="fiches-incluses">+ 12 fiches du site par mois</span>
+              <ul>
+                <li>Tout Mishpatim, avec Créer, Traduire et Escalier</li>
+                <li>150 demandes à l’IA par mois</li>
+              </ul>
+              <button class="btn-achat" onclick="payerAbonnement('complet')">S’abonner</button>
+            </div>
+          </div>
         </div>
       </div>
-      <p class="abo-note">Sans engagement : résiliable à tout moment, l’accès reste ouvert jusqu’à la fin du mois payé. Les fiches et demandes non utilisées ne se reportent pas d’un mois sur l’autre.</p>
-    </div>
-    <div class="bloc-achat">
-      <span class="libelle">Ou un pack de fiches</span>
-      <div class="pack">
-        <span class="pack-titre">Pack 6 fiches — 5 €</span>
-        <button class="btn-achat" onclick="payerStripe(6)">Payer</button>
-      </div>
-      <div class="pack">
-        <span class="pack-titre">Pack 12 fiches — 10 €</span>
-        <button class="btn-achat" onclick="payerStripe(12)">Payer</button>
-      </div>
-      <div class="pack">
-        <span class="pack-titre">Pack 20 fiches — 15 €</span>
-        <button class="btn-achat" onclick="payerStripe(20)">Payer</button>
-      </div>
-    </div>
+      <p class="abo-note">Abonnements sans engagement : résiliables à tout moment, l’accès reste ouvert jusqu’à la fin du mois payé. Les fiches et demandes à l’IA comprises dans l’abonnement ne se reportent pas d’un mois sur l’autre.</p>
+    </section>
     <button class="lien" data-retour="connexion">J'ai reçu mon code — me connecter</button>
     <div class="message" id="msg-paiement"></div>
   </div>
@@ -566,58 +597,62 @@
     <div id="compteur-lecons" class="compteur-lecons"></div>
     <div id="liste-lecons"></div>
 
-    <div class="bloc-mishpatim" id="bloc-mishpatim">
-      <span class="libelle">Mishpatim — l’atelier de phrases</span>
-      <div id="abo-actif" style="display:none">
-        <p class="abo-etat" id="abo-etat"></p>
-        <p class="abo-etat" id="abo-ia"></p>
-        <button class="btn-mishpatim" onclick="ouvrirMishpatim()">Ouvrir Mishpatim</button>
-        <a class="lien-portail" id="lien-portail" target="_blank" rel="noopener">Gérer mon abonnement (carte, factures, résiliation)</a>
+    <section class="offre" id="bloc-mishpatim">
+      <div class="offre-entete">
+        <h3>Vos fiches et votre abonnement</h3>
+        <p>Des fiches à l’unité, sans engagement, ou un abonnement mensuel : l’atelier Mishpatim avec l’IA, avec des fiches incluses chaque mois.</p>
       </div>
-      <div id="abo-offre">
-        <p class="intro-achat">Fabriquez et corrigez vos propres phrases hébraïques avec l’IA, et révisez-les jusqu’à les savoir.</p>
-      <div class="abo-formules">
-        <div class="abo-carte">
-          <strong>Sectoriel</strong>
-          <span class="abo-prix">20 € / mois</span>
-          <ul>
-            <li>Mishpatim : Atelier, Mes phrases, Réviser, Trous, Confusion</li>
-            <li>50 demandes à l’IA par mois</li>
-            <li>6 fiches du site par mois</li>
-          </ul>
-          <button class="btn-achat" onclick="payerAbonnement('sectoriel')">S’abonner</button>
+      <div class="offre-colonnes">
+        <div class="offre-col">
+          <h4>Fiches du site</h4>
+          <p class="offre-sous">Rechargez à l’unité : vos fiches s’ajoutent tout de suite, vous gardez le même code.</p>
+          <div class="pack-ligne"><span><b>6 fiches</b><span class="prix">5 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(6)">Acheter</button></div>
+          <div class="pack-ligne"><span><b>12 fiches</b><span class="prix">10 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(12)">Acheter</button></div>
+          <div class="pack-ligne"><span><b>20 fiches</b><span class="prix">15 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(20)">Acheter</button></div>
+          <p class="offre-pont">Les fiches achetées ne se perdent jamais : elles s’ajoutent à celles d’un abonnement.<span class="fleche"></span></p>
         </div>
-        <div class="abo-carte">
-          <strong>Complet</strong>
-          <span class="abo-prix">30 € / mois</span>
-          <ul>
-            <li>Tout Mishpatim, avec Créer, Traduire et Escalier</li>
-            <li>150 demandes à l’IA par mois</li>
-            <li>12 fiches du site par mois</li>
-          </ul>
-          <button class="btn-achat" onclick="payerAbonnement('complet')">S’abonner</button>
+        <div class="offre-col">
+          <h4>Abonnements avec Mishpatim</h4>
+          <div id="abo-actif" class="abo-statut" style="display:none">
+            <span class="abo-badge" id="abo-badge">Actif</span>
+            <p class="abo-etat" id="abo-etat"></p>
+            <p class="abo-etat" id="abo-ia"></p>
+            <p class="abo-etat" id="abo-fiches"></p>
+            <button class="btn-mishpatim" onclick="ouvrirMishpatim()">Ouvrir Mishpatim</button>
+            <a class="lien-portail" id="lien-portail" target="_blank" rel="noopener">Gérer mon abonnement (carte, factures, résiliation)</a>
+          </div>
+          <div id="abo-offre">
+            <p class="offre-sous">Fabriquez et corrigez vos propres phrases hébraïques avec l’IA, et révisez-les jusqu’à les savoir.</p>
+          <div class="abo-formules">
+            <div class="abo-carte">
+              <strong>Sectoriel</strong>
+              <span class="abo-prix">20 € / mois</span>
+              <span class="fiches-incluses">+ 6 fiches du site par mois</span>
+              <ul>
+                <li>Mishpatim : Atelier, Mes phrases, Réviser, Trous, Confusion</li>
+                <li>50 demandes à l’IA par mois</li>
+              </ul>
+              <button class="btn-achat" onclick="payerAbonnement('sectoriel')">S’abonner</button>
+            </div>
+            <div class="abo-carte">
+              <strong>Complet</strong>
+              <span class="abo-prix">30 € / mois</span>
+              <span class="fiches-incluses">+ 12 fiches du site par mois</span>
+              <ul>
+                <li>Tout Mishpatim, avec Créer, Traduire et Escalier</li>
+                <li>150 demandes à l’IA par mois</li>
+              </ul>
+              <button class="btn-achat" onclick="payerAbonnement('complet')">S’abonner</button>
+            </div>
+          </div>
+          </div>
         </div>
       </div>
-      <p class="abo-note">Sans engagement : résiliable à tout moment, l’accès reste ouvert jusqu’à la fin du mois payé. Les fiches et demandes non utilisées ne se reportent pas d’un mois sur l’autre.</p>
-      </div>
-    </div>
-
-    <div class="bloc-achat">
-      <span class="libelle">Recharger mes fiches</span>
-      <p class="intro-achat">Payez par carte bancaire. Votre quota se recharge automatiquement après le paiement, et vous gardez le même code.</p>
-      <div class="pack">
-        <span class="pack-titre">Pack 6 fiches — 5 €</span>
-        <button class="btn-achat" onclick="payerStripe(6)">Payer</button>
-      </div>
-      <div class="pack">
-        <span class="pack-titre">Pack 12 fiches — 10 €</span>
-        <button class="btn-achat" onclick="payerStripe(12)">Payer</button>
-      </div>
-      <div class="pack">
-        <span class="pack-titre">Pack 20 fiches — 15 €</span>
-        <button class="btn-achat" onclick="payerStripe(20)">Payer</button>
-      </div>
-    </div>
+      <p class="abo-note">Abonnements sans engagement : résiliables à tout moment, l’accès reste ouvert jusqu’à la fin du mois payé. Les fiches et demandes à l’IA comprises dans l’abonnement ne se reportent pas d’un mois sur l’autre.</p>
+    </section>
 
     <div id="bloc-avis" style="margin-top:24px">
       <h3>Donnez votre avis</h3>
@@ -1065,9 +1100,16 @@ function afficherAbonnement(r) {
   document.getElementById("abo-offre").style.display = actif ? "none" : "";
   if (!actif) return;
   var nom = r.formule === "complet" ? "Complet" : "Sectoriel";
-  document.getElementById("abo-etat").innerHTML = "Votre abonnement : <b>" + nom + "</b>, payé jusqu’au " + dateFr(r.fin, true) + ".";
+  var fin = dateFr(r.fin, true);
+  var badge = document.getElementById("abo-badge");
+  badge.textContent = r.resilie ? "Résilié" : "Actif";
+  badge.className = "abo-badge" + (r.resilie ? " resilie" : "");
+  document.getElementById("abo-etat").innerHTML = r.resilie
+    ? "Abonnement <b>" + nom + "</b> résilié : l’accès reste ouvert jusqu’au " + fin + ". Vous avez changé d’avis ? Réactivez-le depuis « Gérer mon abonnement »."
+    : "Abonnement <b>" + nom + "</b>, payé jusqu’au " + fin + ", renouvelé chaque mois.";
   var q = r.quota || { utilises: 0, max: 0 };
   document.getElementById("abo-ia").textContent = "Demandes à l’IA ce mois-ci : " + q.utilises + " / " + q.max;
+  document.getElementById("abo-fiches").textContent = (r.formule === "complet" ? 12 : 6) + " fiches du site incluses chaque mois (déjà comptées dans votre compteur de fiches).";
   document.getElementById("lien-portail").href = STRIPE_PORTAIL;
 }
 
