@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)https://lecons.hebreu-zen.cloud/jeu-hebreu-20260811-1216-m9ef.html -->
+<html lang="fr" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Thème</title>
+<link href="./Thème_files/css2" rel="stylesheet">
+<style>
+:root{
+  --cream:#fdf8f0;--parch:#ede8d8;--ink:#1a1408;--ink2:#4a3f28;--ink3:#7a6a50;
+  --gold:#c9952a;--gold2:#e8b84b;--blue:#1e5fa8;--blue2:#4a90d9;
+  --green:#2e7d32;--red:#c62828;--orange:#e65100;--purple:#6a1b9a;
+  --shadow:rgba(0,0,0,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 12% 8%,rgba(201,149,42,.09) 0%,transparent 52%),
+             radial-gradient(ellipse at 88% 92%,rgba(30,95,168,.07) 0%,transparent 52%);
+  pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(180,160,100,.06) 28px,rgba(180,160,100,.06) 29px);
+  pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:26px 16px 90px}
+
+.app-header{text-align:center;margin-bottom:18px}
+.app-heb{font-family:'Noto Serif Hebrew',serif;font-size:40px;font-weight:900;color:var(--ink);line-height:1.2;text-shadow:2px 2px 0 rgba(201,149,42,.13)}
+.app-fr{font-size:16px;font-style:italic;color:var(--ink2);margin-top:2px}
+.ornament{display:flex;align-items:center;justify-content:center;gap:14px;color:var(--gold);opacity:.45;margin:10px auto;width:220px}
+.ornament::before,.ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+.reglages{background:rgba(255,251,240,.95);border:1px solid rgba(201,149,42,.2);border-radius:14px;padding:12px 14px;margin-bottom:14px;box-shadow:0 2px 8px var(--shadow)}
+.reglages .titre-mini{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink3);margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid rgba(201,149,42,.3);background:rgba(201,149,42,.06);color:var(--ink2);border-radius:20px;padding:5px 13px;font-family:'Crimson Pro',serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
+.chip.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.chip.tous{border-style:dashed}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink2)}
+.switch .box{width:44px;height:24px;border-radius:14px;background:rgba(0,0,0,.15);position:relative;transition:.2s}
+.switch .box::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.switch.on .box{background:var(--green)}
+.switch.on .box::after{left:22px}
+
+.tabs{display:flex;flex-wrap:wrap;gap:5px;background:rgba(237,232,216,.6);border-radius:16px;padding:5px;margin-bottom:20px;border:1px solid rgba(201,149,42,.15)}
+.tab{flex:1 0 auto;padding:9px 10px;border:none;border-radius:11px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:12.5px;font-weight:700;color:var(--ink3);background:transparent;transition:.2s}
+.tab.active{background:rgba(255,251,240,.98);color:var(--ink);box-shadow:0 2px 12px var(--shadow);border:1px solid rgba(201,149,42,.22)}
+.tab:hover:not(.active){background:rgba(255,251,240,.6)}
+
+.card{background:rgba(255,251,240,.97);border-radius:18px;padding:20px 20px;box-shadow:0 2px 0 rgba(201,149,42,.18),0 8px 28px var(--shadow);border:1px solid rgba(201,149,42,.18);margin-bottom:14px}
+.heb{font-family:'Noto Serif Hebrew',serif;direction:rtl;color:var(--ink)}
+.heb-xl{font-size:40px;font-weight:900;text-align:center;line-height:1.3}
+.heb-lg{font-size:26px;font-weight:700;line-height:1.6}
+.heb-md{font-size:20px;line-height:1.9}
+.fr{font-style:italic}
+.sens{color:var(--ink3);font-size:15px;margin-top:6px}
+.audio-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(201,149,42,.1);border:1.5px solid rgba(201,149,42,.3);color:var(--gold);border-radius:20px;padding:4px 12px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:13px;font-weight:600;transition:.2s}
+.audio-btn:hover{background:rgba(201,149,42,.2)}
+.fr-hidden{filter:blur(7px);opacity:.4;cursor:pointer;user-select:none}
+.reveal{background:rgba(201,149,42,.08);border:1.5px solid rgba(201,149,42,.25);color:var(--gold);border-radius:9px;padding:6px 10px;cursor:pointer;font-size:14px}
+.center{text-align:center}
+.badge{display:inline-block;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.b-noms{background:var(--blue)}.b-verbes{background:var(--green)}.b-adjectifs{background:var(--purple)}.b-autre{background:var(--orange)}
+
+table.lex{width:100%;border-collapse:collapse}
+table.lex th,table.lex td{padding:9px 8px;border-bottom:1px solid rgba(201,149,42,.15);text-align:left}
+table.lex th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)}
+table.lex td.he{font-family:'Noto Serif Hebrew',serif;direction:rtl;font-size:20px;text-align:right;font-weight:700}
+.morpho-row{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:15px;margin-top:8px}
+.morpho-row .k{color:var(--ink3);font-weight:600}
+.morpho-he{font-family:'Noto Serif Hebrew',serif;direction:rtl}
+
+.btn{border:none;border-radius:12px;padding:12px 18px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:15px;font-weight:700;transition:.2s}
+.btn-v{background:var(--green);color:#fff}.btn-f{background:var(--red);color:#fff}
+.btn-g{background:var(--gold);color:#fff}
+.btn-o{background:transparent;border:1.5px solid rgba(201,149,42,.35);color:var(--ink2)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.q-card.correct{background:#edf7ee;border-color:#4caf50}
+.q-card.wrong{background:#fdeaea;border-color:#ef5350}
+
+.tiles{display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center;margin:14px 0;min-height:44px}
+.tile{font-family:'Noto Serif Hebrew',serif;font-size:20px;background:rgba(201,149,42,.12);border:1.5px solid rgba(201,149,42,.35);border-radius:10px;padding:6px 12px;cursor:pointer}
+.tile.used{opacity:.3;pointer-events:none}
+.zone{min-height:48px;border:2px dashed rgba(201,149,42,.3);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center}
+
+.bilan-pct{font-size:56px;font-weight:900;text-align:center;color:var(--gold)}
+.bilan-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(201,149,42,.15);font-size:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="app-header" id="app-header"></div>
+
+  <div class="reglages">
+    <div class="titre-mini">Réglages</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div class="switch" id="sw-nikoud" onclick="toggleNikoud()"><span class="box"></span><span>Sans nikoud</span></div>
+    </div>
+    <div class="titre-mini" style="margin-top:12px">Vitesse audio</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <input type="range" id="vit-slider" min="0" max="3" step="1" value="2" oninput="setVitesse(this.value)" style="flex:1;accent-color:var(--gold)">
+      <span id="vit-lbl" style="min-width:44px;text-align:right;font-weight:700;color:var(--gold)">×1</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);margin-top:2px">
+      <span>×0.5</span><span>×0.75</span><span>×1</span><span>×1.5</span>
+    </div>
+    <div class="titre-mini" style="margin-top:12px">Catégories</div>
+    <div class="chips" id="cat-chips"><button class="chip tous on" onclick="toutesCats()">Toutes</button><button class="chip on" onclick="toggleCat(&#39;noms&#39;)">noms</button><button class="chip on" onclick="toggleCat(&#39;verbes&#39;)">verbes</button></div>
+  </div>
+
+  <div class="tabs" id="tabs"><button class="tab active" onclick="showTab(&#39;mots&#39;)">Mots</button><button class="tab" onclick="showTab(&#39;morpho&#39;)">Morphologie</button><button class="tab" onclick="showTab(&#39;lexique&#39;)">Lexique</button><button class="tab" onclick="showTab(&#39;phrases&#39;)">Phrases</button><button class="tab" onclick="showTab(&#39;textes&#39;)">3 Textes</button><button class="tab" onclick="showTab(&#39;vf&#39;)">Vrai/Faux</button><button class="tab" onclick="showTab(&#39;recon&#39;)">Reconstituer</button><button class="tab" onclick="showTab(&#39;bilan&#39;)">Score</button></div>
+  <div id="content"><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">במה / במות</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;בָּמָה / בָּמוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr0" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">scène / scènes</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr0&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom féminin, pluriel en ות- ; désigne la scène de spectacle.</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">קהל / קהלים</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;קָהָל / קְהָלִים&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr1" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">public / publics</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr1&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom masculin, pluriel en ים- ; désigne l'ensemble des spectateurs.</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">צחק / לצחק</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;צָחַק / לִצְחֹק&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr2" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">rire / rire (infinitif)</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr2&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Verbe פָּעַל ; exprime l'action de rire.</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מסעדה-תאטרון</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִסְעָדָה-תֵּאַטְרוֹן&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr3" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">café-théâtre</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr3&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom composé féminin-masculin ; désigne un lieu alliant restauration et spectacle.</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">שחקן / שחקנית</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;שַׂחְקָן / שַׂחְקָנִית&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr4" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">acteur / actrice</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr4&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom masculin/féminin ; désigne la personne qui joue sur scène, construit sur la racine jouer.</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מיקרופון / מיקרופונים</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִיקְרוֹפוֹן / מִיקְרוֹפוֹנִים&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr5" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">microphone / microphones</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr5&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Emprunt à l'anglais, nom masculin ; au pluriel on ajoute le suffixe ִים.</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">צפה / לצפות</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;צָפָה / לִצְפּוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr6" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">regarder / voir (un spectacle)</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr6&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Verbe de la binyan pa'al, racine ל״ה ; la forme de base est צָפָה (passé, 3e pers. masc. sing.).</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">הצגה / הצגות</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;הַצָּגָה / הַצָּגוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr7" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">spectacle / représentation</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr7&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom féminin dérivé de la racine י-צ-ג via la binyan hif'il ; préfixe הַ indique l'état construit défini.</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מנגינה / מנגינות</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מַנְגִּינָה / מַנְגִּינוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr8" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">mélodie / mélodie (pl.)</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr8&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom féminin de la forme מַפְעִילָה, dérivé de la racine נ-ג-נ (jouer de la musique).</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">כרטיסייה / כרטיסיות</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;כַּרְטִיסִייָה / כַּרְטִיסִיּוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr9" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">billetterie / guichet de billets</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr9&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom féminin formé sur כַּרְטִיס (billet) avec le suffixe יָּה indiquant un lieu ou une fonction.</div></div></div>
+</div>
+
+<script>
+/* ============================================================
+   STRUCTURE "JEU" = LE CONTRAT que l'IA devra remplir à chaque leçon.
+   ============================================================ */
+const JEU = {"titre":"les directions","mots":[{"heb":"יָמִין","translit":"yamín","fr":"droite","sens":"Nom féminin singulier, désigne la direction ou le côté droit.","racine":"י-מ-נ","nature":"nom","genre":"feminin","nombre":"singulier","formes":"יָמִין · לַיָּמִין","cat":"noms","emploi":"Mot très courant pour indiquer la direction à droite, utilisé dans tous les registres."},{"heb":"שְׂמֹאל","translit":"smól","fr":"gauche","sens":"Nom masculin singulier, désigne la direction ou le côté gauche.","racine":"ש-מ-ל","nature":"nom","genre":"masculin","nombre":"singulier","formes":"שְׂמֹאל · לִשְׂמֹאל","cat":"noms","emploi":"Utilisé pour indiquer la direction à gauche, symétrique de יָמִין, registre neutre et quotidien."},{"heb":"יָשָׁר","translit":"yashár","fr":"tout droit","sens":"Adverbe dérivé de la racine signifiant «droit, rectiligne», employé pour indiquer une direction sans détour.","racine":"י-ש-ר","nature":"adverbe","genre":"—","nombre":"—","formes":"יָשָׁר · יָשָׁר קָדִימָה","cat":"autre","emploi":"Très fréquent dans les indications de chemin, registre courant et oral."},{"heb":"קָדִימָה","translit":"kadíma","fr":"en avant","sens":"Adverbe directionnel formé sur la racine indiquant l'antériorité ou l'avancement dans l'espace.","racine":"ק-ד-מ","nature":"adverbe","genre":"—","nombre":"—","formes":"קָדִימָה · יָשָׁר קָדִימָה","cat":"autre","emploi":"Employé pour encourager à avancer ou pour indiquer une direction vers l'avant, aussi bien dans la rue que dans un contexte sportif ou militaire."},{"heb":"אָחוֹר","translit":"achór","fr":"en arrière","sens":"Adverbe directionnel issu d'une racine indiquant ce qui vient derrière ou après.","racine":"א-ח-ר","nature":"adverbe","genre":"—","nombre":"—","formes":"אָחוֹר · לְאָחוֹר","cat":"autre","emploi":"Utilisé pour indiquer le mouvement ou la direction vers l'arrière, courant dans la vie quotidienne et les indications de route."},{"heb":"צָפוֹן","translit":"tsafon","fr":"nord","sens":"Nom masculin singulier, dérivé d'une racine évoquant ce qui est caché ou obscur, référant au point cardinal nord.","racine":"צ-פ-נ","nature":"nom","genre":"masculin","nombre":"singulier","formes":"צָפוֹן · צְפוֹנִי","cat":"noms","emploi":"Utilisé pour indiquer la direction nord, dans un registre courant et neutre, aussi bien à l'oral qu'à l'écrit."},{"heb":"דָּרוֹם","translit":"darom","fr":"sud","sens":"Nom masculin singulier désignant le point cardinal sud, d'usage courant en hébreu moderne.","racine":"ד-ר-מ","nature":"nom","genre":"masculin","nombre":"singulier","formes":"דָּרוֹם · דְּרוֹמִי","cat":"noms","emploi":"Employé pour indiquer la direction ou la région du sud, dans tous les registres de langue."},{"heb":"מִזְרָח","translit":"mizrakh","fr":"est","sens":"Nom masculin singulier formé avec le préfixe מ-, de la racine זרח signifiant « se lever » (le soleil), donc « là où le soleil se lève ».","racine":"ז-ר-ח","nature":"nom","genre":"masculin","nombre":"singulier","formes":"מִזְרָח · מִזְרָחִי","cat":"noms","emploi":"Désigne le point cardinal est ; utilisé aussi dans des expressions culturelles comme « le Moyen-Orient » (הַמִּזְרָח הַתִּיכוֹן)."},{"heb":"מַעֲרָב","translit":"ma'arav","fr":"ouest","sens":"Nom masculin singulier formé avec le préfixe מ-, de la racine ערב signifiant « soir » ou « se coucher », évoquant le coucher du soleil.","racine":"ע-ר-ב","nature":"nom","genre":"masculin","nombre":"singulier","formes":"מַעֲרָב · מַעֲרָבִי","cat":"noms","emploi":"Désigne le point cardinal ouest ; utilisé aussi dans des contextes culturels pour parler de l'Occident."},{"heb":"רְחוֹב / רְחוֹבוֹת","translit":"rekhov / rekhovot","fr":"rue / rues","sens":"Nom masculin singulier et pluriel, dérivé de la racine רחב signifiant « large », désignant un espace large de circulation.","racine":"ר-ח-ב","nature":"nom","genre":"masculin","nombre":"singulier","formes":"רְחוֹב · רְחוֹבוֹת","cat":"noms","emploi":"Mot très courant pour demander son chemin ou donner une adresse ; indispensable pour s'orienter en ville au niveau A1."}],"phrases":[{"heb":"פְּנֵה יָמִין בָּרְחוֹב הַבָּא.","fr":"Tourne à droite dans la prochaine rue."},{"heb":"הַסּוּפֶרְמַרְקֶט נִמְצָא לִשְׂמֹאל.","fr":"Le supermarché se trouve à gauche."},{"heb":"לֵךְ יָשָׁר וְאַחַר כָּךְ פְּנֵה שְׂמֹאל.","fr":"Va tout droit et ensuite tourne à gauche."},{"heb":"תֵּלְכִי קָדִימָה עַד הָאוֹר הָאָדֹם.","fr":"Va en avant jusqu'au feu rouge."},{"heb":"אַל תֵּלֵךְ לְאָחוֹר, הַדֶּרֶךְ סְגוּרָה.","fr":"Ne va pas en arrière, la route est fermée."},{"heb":"הַבַּנְק נִמְצָא בְּצָפוֹן הָעִיר.","fr":"La banque se trouve au nord de la ville."},{"heb":"אֲנַחְנוּ נוֹסְעִים לְדָרוֹם בַּקַּיִץ.","fr":"Nous partons vers le sud en été."},{"heb":"הַשֶּׁמֶשׁ עוֹלָה בַּמִּזְרָח.","fr":"Le soleil se lève à l'est."},{"heb":"הַשֶּׁמֶשׁ שׁוֹקַעַת בַּמַּעֲרָב.","fr":"Le soleil se couche à l'ouest."},{"heb":"תִּפְנֶה יָמִינָה בָּרְחוֹב הַבָּא.","fr":"Tourne à droite dans la prochaine rue."}],"textes":[{"titre":"Quotidien","heb":"הַיּוֹם אֲנִי הוֹלֵךְ לַסּוּפֶּר. אֲנִי גָּר בָּרְחוֹב הָרִאשׁוֹן. הַסּוּפֶּר נִמְצָא בְּצָפוֹן הַשְּׁכוּנָה. אֲנִי הוֹלֵךְ יָשָׁר וְאַחַר כָּךְ פּוֹנֶה יָמִינָה. הָרְחוֹב הַשֵּׁנִי הוּא בִּשְׂמֹאל. הַסּוּפֶּר קָרוֹב, רַק חֲמֵשׁ דַּקּוֹת בְּרֶגֶל. הַשְּׁכוּנָה שֶׁלִּי נִמְצֵאת בִּמְרְכַּז הָעִיר, בֵּין הַמִּזְרָח וְהַמַּעֲרָב.","fr":"Aujourd'hui je vais au supermarché. J'habite dans la première rue. Le supermarché se trouve au nord du quartier. Je marche tout droit puis je tourne à droite. La deuxième rue est à gauche. Le supermarché est proche, seulement cinq minutes à pied. Mon quartier se trouve au centre de la ville, entre l'est et l'ouest."},{"titre":"Familier","heb":"אַח, אֵיפֹה אַתָּה עַכְשָׁיו? אֲנִי אָבוּד לְגַמְרֵי! הָלַכְתִּי יָשָׁר וְאַחַר כָּךְ לֹא יָדַעְתִּי לְאָן. בֶּאֱמֶת, הָעִיר הַזֹּאת שְׁטוּיוֹת! הָרְחוֹב הַזֶּה הוֹלֵךְ לְצָפוֹן אוֹ לְדָרוֹם? אֵין מוּשָׂג לִי. אוֹקֵי אוֹקֵי, אֲנִי מְנַסֶּה לָלֶכֶת לְמִזְרָח. אִם אֲנִי רוֹאֶה אֶת הַיָּם, זֶה מַעֲרָב, בְּסֵדֶר? נוּ, בּוֹא כְּבָר וְתָבִיא אוֹתִי מִפֹּה!","fr":"Mec, t'es où là ? Je suis complètement perdu ! J'ai marché tout droit et ensuite je savais plus où aller. Franchement, cette ville c'est n'importe quoi ! Cette rue elle va au nord ou au sud ? J'ai aucune idée. Ok ok, j'essaie d'aller vers l'est. Si je vois la mer, c'est l'ouest, c'est ça ? Allez, viens me chercher ici !"},{"titre":"Dialogues","heb":"דָּנִי: סְלִיחָה, אֵיפֹה הַתַּחֲנָה?\nמָיָה: אַתָּה הוֹלֵךְ יָשָׁר בָּרְחוֹב הַזֶּה.\nדָּנִי: כַּמָּה זְמַן?\nמָיָה: חָמֵשׁ דַּקּוֹת בְּרֶגֶל, לֹא יוֹתֵר.\nדָּנִי: אֲנִי פּוֹנֶה יָמִינָה אוֹ שְׂמֹאלָה בְּסוֹף הָרְחוֹב?\nמָיָה: שְׂמֹאלָה! הַתַּחֲנָה בְּצָפוֹן, לֹא בְּדָרוֹם.\nדָּנִי: תּוֹדָה רַבָּה, אַתְּ מַצִּילָה אוֹתִי!\nמָיָה: בְּהַצְלָחָה וּבְדֶרֶךְ טוֹבָה!","fr":"Dani : Excusez-moi, où est la station ?\nMaya : Tu vas tout droit dans cette rue.\nDani : Combien de temps ?\nMaya : Cinq minutes à pied, pas plus.\nDani : Je tourne à droite ou à gauche au bout de la rue ?\nMaya : À gauche ! La station est au nord, pas au sud.\nDani : Merci beaucoup, tu me sauves !\nMaya : Bonne chance et bon chemin !"}]};
+/* ↑↑↑  VIDE — l'IA remplit mots[] / phrases[] / textes[] à chaque leçon (voir contrat).  ↑↑↑ */
+
+let sansNikoud = false;
+let selCats = new Set(JEU.mots.map(m=>m.cat));
+let score = {ok:0, ko:0};
+
+const NIKOUD = /[\u0591-\u05C7]/g;
+function strip(s){ return String(s).replace(NIKOUD,''); }
+function H(s){ return sansNikoud ? strip(s) : s; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function motsF(){ return JEU.mots.filter(m=>selCats.has(m.cat)); }
+function badgeClass(c){ return ['noms','verbes','adjectifs'].includes(c) ? 'b-'+c : 'b-autre'; }
+
+const VITESSES = [0.5, 0.75, 1, 1.5];
+let vitesse = 1;
+function setVitesse(idx){
+  vitesse = VITESSES[+idx];
+  document.getElementById('vit-lbl').textContent = '×'+vitesse;
+}
+function say(txt){
+  try{ speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(strip(txt)); u.lang='he-IL'; u.rate=vitesse;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function audioBtn(txt){ return '<button class="audio-btn" onclick="say(\''+String(txt).replace(/'/g,"\\'")+'\')">🔊 Écouter</button>'; }
+
+const TABS = [
+  {id:'mots',lbl:'Mots'},{id:'morpho',lbl:'Morphologie'},{id:'lexique',lbl:'Lexique'},
+  {id:'phrases',lbl:'Phrases'},{id:'textes',lbl:'3 Textes'},{id:'vf',lbl:'Vrai/Faux'},
+  {id:'qcm',lbl:'QCM'},{id:'recon',lbl:'Reconstituer'},{id:'bilan',lbl:'Score'}
+];
+let ongletCourant = 'mots';
+function initTabs(){
+  document.getElementById('tabs').innerHTML = TABS.map(t=>
+    '<button class="tab'+(t.id===ongletCourant?' active':'')+'" onclick="showTab(\''+t.id+'\')">'+t.lbl+'</button>').join('');
+}
+function showTab(id){ ongletCourant=id; initTabs(); render(); }
+
+function initReglages(){
+  const cats = [...new Set(JEU.mots.map(m=>m.cat))];
+  let html = '<button class="chip tous'+(selCats.size===cats.length?' on':'')+'" onclick="toutesCats()">Toutes</button>';
+  html += cats.map(c=>'<button class="chip '+(selCats.has(c)?'on':'')+'" onclick="toggleCat(\''+c+'\')">'+c+'</button>').join('');
+  document.getElementById('cat-chips').innerHTML = html;
+  const sw=document.getElementById('sw-nikoud');
+  sw.className = 'switch'+(sansNikoud?'':' on');
+  sw.querySelector('span:last-child').textContent = sansNikoud ? 'Sans nikoud' : 'Avec nikoud';
+}
+function toggleNikoud(){ sansNikoud=!sansNikoud; initReglages(); render(); }
+function toggleCat(c){ if(selCats.has(c)){ if(selCats.size>1) selCats.delete(c);} else selCats.add(c); vfList=[]; qcmList=[]; initReglages(); render(); }
+function toutesCats(){ selCats = new Set(JEU.mots.map(m=>m.cat)); vfList=[]; qcmList=[]; initReglages(); render(); }
+
+function render(){
+  if(!JEU.mots || JEU.mots.length===0){
+    document.getElementById('content').innerHTML = '<div class="card center" style="padding:44px 20px;color:var(--ink3)"><div style="font-size:40px;margin-bottom:12px;color:var(--gold)">✦</div>En attente des mots de la leçon.<br>Le jeu se remplit automatiquement dès que l\'élève fait sa demande.</div>';
+    return;
+  }
+  const map = {mots:rMots,morpho:rMorpho,lexique:rLexique,phrases:rPhrases,textes:rTextes,vf:rVF,qcm:rQCM,recon:rRecon,bilan:rBilan};
+  document.getElementById('content').innerHTML = (map[ongletCourant]||(()=> ''))();
+}
+
+function rMots(){
+  return motsF().map((m,i)=>
+    '<div class="card center">'
+    + '<span class="badge '+badgeClass(m.cat)+'">'+m.cat+'</span>'
+    + '<div class="heb heb-xl">'+H(m.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(m.heb)+'</div>'
+    + '<div class="fr fr-hidden" id="fr'+i+'" onclick="this.classList.remove(\'fr-hidden\')" style="font-size:20px">'+esc(m.fr)+'</div>'
+    + '<div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(\'fr'+i+'\').classList.remove(\'fr-hidden\')">Révéler la traduction</div>'
+    + '<div class="sens">Sens : '+esc(m.sens)+'</div>'
+    + '</div>').join('');
+}
+function rMorpho(){
+  return motsF().map(m=>
+    '<div class="card">'
+    + '<div class="heb heb-lg center">'+H(m.heb)+'</div>'
+    + '<div class="morpho-row">'
+    +   '<span class="k">Racine</span><span class="morpho-he">'+m.racine+'</span>'
+    +   '<span class="k">Nature</span><span>'+esc(m.nature)+'</span>'
+    +   '<span class="k">Genre / Nombre</span><span>'+esc(m.genre)+' · '+esc(m.nombre)+'</span>'
+    +   '<span class="k">Formes</span><span class="morpho-he">'+H(m.formes)+'</span>'
+    +   '<span class="k">Emploi</span><span>'+esc(m.emploi)+'</span>'
+    + '</div></div>').join('');
+}
+function rLexique(){
+  return '<div class="card"><table class="lex"><tr><th>Hébreu</th><th>Translit.</th><th>Français</th><th>Audio</th></tr>'
+    + motsF().map(m=>'<tr><td class="he">'+H(m.heb)+'</td><td>'+esc(m.translit)+'</td><td class="fr">'+esc(m.fr)+'</td><td style="text-align:center">'+audioBtn(m.heb)+'</td></tr>').join('')
+    + '</table></div>';
+}
+function rPhrases(){
+  return JEU.phrases.map((p,i)=>
+    '<div class="card">'
+    + '<div class="heb heb-md" style="text-align:right">'+H(p.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(p.heb)+'</div>'
+    + '<button class="btn btn-o" onclick="var t=document.getElementById(\'ph-'+i+'\');t.style.display=t.style.display===\'none\'?\'block\':\'none\';">Révéler la traduction</button>'
+    + '<div id="ph-'+i+'" class="fr" style="display:none;margin-top:8px">'+esc(p.fr)+'</div>'
+    + '</div>').join('');
+}
+function rTextes(){
+  return JEU.textes.map(t=>
+    '<div class="card">'
+    + '<span class="badge b-autre">'+esc(t.titre)+'</span>'
+    + '<div class="heb heb-md" style="text-align:right">'+H(t.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(t.heb)+'</div>'
+    + '<div class="fr">'+esc(t.fr)+'</div>'
+    + '</div>').join('');
+}
+
+let vfList=[], vfIdx=0;
+function rVF(){
+  if(!vfList.length) buildVF();
+  if(vfIdx>=vfList.length){
+    return '<div class="card center"><h3>Quiz terminé</h3><p style="font-size:18px;margin:10px 0">'+score.ok+' justes · '+score.ko+' erreurs</p><button class="btn btn-g" onclick="resetVF()">Recommencer</button></div>';
+  }
+  const q=vfList[vfIdx];
+  return '<div class="card q-card center" id="qc">'
+    + '<div class="heb heb-xl">'+H(q.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(q.heb)+'</div>'
+    + '<div style="font-size:12px;color:#bbb;text-transform:uppercase;letter-spacing:.8px;margin:8px 0 2px">Traduction proposée</div>'
+    + '<div class="fr" style="font-size:22px;margin-bottom:16px">'+esc(q.propose)+'</div>'
+    + '<div class="row" style="justify-content:center">'
+    +   '<button class="btn btn-v" onclick="ansVF(true)">✓ Vrai</button>'
+    +   '<button class="btn btn-f" onclick="ansVF(false)">✗ Faux</button>'
+    + '</div></div>';
+}
+function buildVF(){
+  const mots=motsF(); vfList=[]; vfIdx=0;
+  mots.forEach(m=>{
+    const vrai = Math.random()<0.5;
+    let propose = m.fr;
+    if(!vrai){ const autres=mots.filter(x=>x.fr!==m.fr); propose=(autres[Math.floor(Math.random()*autres.length)]||m).fr; }
+    vfList.push({heb:m.heb, propose, vrai: propose===m.fr});
+  });
+  vfList.sort(()=>Math.random()-0.5);
+}
+function ansVF(rep){
+  const q=vfList[vfIdx]; const bon=(rep===q.vrai);
+  bon?score.ok++:score.ko++;
+  const qc=document.getElementById('qc'); if(qc) qc.classList.add(bon?'correct':'wrong');
+  setTimeout(()=>{ vfIdx++; render(); },650);
+}
+function resetVF(){ vfList=[]; vfIdx=0; render(); }
+
+let qcmList=[], qcmIdx=0, qcmRepondu=false;
+function buildQCM(){
+  const mots=motsF(); qcmList=[]; qcmIdx=0; qcmRepondu=false;
+  mots.forEach(m=>{
+    const autres=mots.filter(x=>x.fr!==m.fr).map(x=>x.fr).sort(()=>Math.random()-0.5).slice(0,3);
+    const opts=[m.fr,...autres].sort(()=>Math.random()-0.5);
+    qcmList.push({heb:m.heb, bon:m.fr, opts});
+  });
+  qcmList.sort(()=>Math.random()-0.5);
+}
+function rQCM(){
+  if(!qcmList.length) buildQCM();
+  if(qcmIdx>=qcmList.length){
+    return '<div class="card center"><h3>QCM terminé</h3><p style="font-size:18px;margin:10px 0">'+score.ok+' justes · '+score.ko+' erreurs</p><button class="btn btn-g" onclick="resetQCM()">Recommencer</button></div>';
+  }
+  const q=qcmList[qcmIdx];
+  return '<div class="card center" id="qcmc">'
+    + '<div class="titre-mini">Question '+(qcmIdx+1)+' / '+qcmList.length+'</div>'
+    + '<div class="heb heb-xl">'+H(q.heb)+'</div>'
+    + '<div style="margin:8px 0 14px">'+audioBtn(q.heb)+'</div>'
+    + '<div class="titre-mini">Quelle est la traduction ?</div>'
+    + '<div id="qcm-opts" style="display:flex;flex-direction:column;gap:8px;margin-top:10px">'
+    +   q.opts.map(o=>'<button class="btn btn-o" onclick="ansQCM(this,\''+String(o).replace(/'/g,"\\'")+'\')">'+esc(o)+'</button>').join('')
+    + '</div></div>';
+}
+function ansQCM(btn, choix){
+  if(qcmRepondu) return; qcmRepondu=true;
+  const q=qcmList[qcmIdx]; const bon=(choix===q.bon);
+  bon?score.ok++:score.ko++;
+  [...document.getElementById('qcm-opts').children].forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===q.bon){ b.style.background='var(--green)'; b.style.color='#fff'; b.style.borderColor='var(--green)'; }
+    else if(b===btn){ b.style.background='var(--red)'; b.style.color='#fff'; b.style.borderColor='var(--red)'; }
+  });
+  setTimeout(()=>{ qcmIdx++; qcmRepondu=false; render(); }, 900);
+}
+function resetQCM(){ qcmList=[]; qcmIdx=0; qcmRepondu=false; render(); }
+
+let reconIdx=0, reconChoix=[], reconBank=null, reconMsg="", reconCompte=false;
+function rRecon(){
+  const p=JEU.phrases[reconIdx];
+  const mots=strip(p.heb).split(/\s+/).filter(Boolean);
+  if(!reconBank){ reconBank = mots.map((w,i)=>({w,i})).slice().sort(()=>Math.random()-0.5); }
+  const zone = reconChoix.map(c=>'<span class="tile" onclick="reconRetire('+c.i+')">'+c.w+'</span>').join('');
+  const tiles = reconBank.map(b=>'<span class="tile'+(reconChoix.find(c=>c.i===b.i)?' used':'')+'" onclick="reconAjoute('+b.i+')">'+b.w+'</span>').join('');
+  const fini = reconChoix.length===mots.length;
+  return '<div class="card">'
+    + '<div class="fr center" style="margin-bottom:6px">'+esc(p.fr)+'</div>'
+    + '<div class="center" style="margin-bottom:8px">'+audioBtn(p.heb)+'</div>'
+    + '<div class="titre-mini center">Remets les mots dans l\'ordre (droite → gauche)</div>'
+    + '<div class="zone">'+ (zone||'<span style="color:#bbb">…</span>') +'</div>'
+    + '<div class="tiles">'+tiles+'</div>'
+    + '<div id="recon-msg" class="center" style="font-size:18px;min-height:24px;margin-top:6px">'+reconMsg+'</div>'
+    + '<div class="row" style="justify-content:center;margin-top:12px">'
+    +   '<button class="btn btn-v" onclick="reconVerifie()"'+(fini?'':' disabled')+'>Vérifier</button>'
+    +   '<button class="btn btn-o" onclick="reconReset()">Effacer</button>'
+    +   '<button class="btn btn-g" onclick="reconNext()">Phrase suivante</button>'
+    + '</div></div>';
+}
+function reconVerifie(){
+  const p=JEU.phrases[reconIdx];
+  const mots=strip(p.heb).split(/\s+/).filter(Boolean);
+  if(reconChoix.length!==mots.length) return;
+  if(reconCompte) return;
+  const ok = reconChoix.map(c=>c.w).join(' ')===mots.join(' ');
+  ok?score.ok++:score.ko++;
+  reconCompte=true;
+  reconMsg = ok ? '<span style="color:var(--green)">✓ Correct !</span>' : '<span style="color:var(--red)">✗ Incorrect</span>';
+  render();
+}
+function reconAjoute(i){ const m=strip(JEU.phrases[reconIdx].heb).split(/\s+/)[i]; if(!reconChoix.find(c=>c.i===i)){ reconChoix.push({w:m,i}); render(); } }
+function reconRetire(i){ reconChoix=reconChoix.filter(c=>c.i!==i); render(); }
+function reconReset(){ reconChoix=[]; reconBank=null; reconMsg=""; reconCompte=false; render(); }
+function reconNext(){ reconIdx=(reconIdx+1)%JEU.phrases.length; reconChoix=[]; reconBank=null; reconMsg=""; reconCompte=false; render(); }
+
+function rBilan(){
+  const tot=score.ok+score.ko; const pct=tot?Math.round(score.ok/tot*100):0;
+  return '<div class="card">'
+    + '<div class="bilan-pct">'+pct+'%</div>'
+    + '<div class="center titre-mini" style="margin-bottom:14px">taux de réussite</div>'
+    + '<div class="bilan-line"><span>Réponses justes</span><b style="color:var(--green)">'+score.ok+'</b></div>'
+    + '<div class="bilan-line"><span>Erreurs</span><b style="color:var(--red)">'+score.ko+'</b></div>'
+    + '<div class="bilan-line"><span>Total</span><b>'+tot+'</b></div>'
+    + '<div class="row" style="justify-content:center;margin-top:16px"><button class="btn btn-o" onclick="score={ok:0,ko:0};render()">Remettre à zéro</button></div>'
+    + '</div>';
+}
+
+function renderHeader(){
+  const h=document.getElementById('app-header'); if(!h) return;
+  h.innerHTML='<div class="app-heb">'+esc(JEU.titre||'Thème')+'</div>'
+    +'<div class="app-fr">FICHE INTERACTIVE</div>'
+    +'<div class="ornament">✦</div>';
+}
+renderHeader(); initReglages(); initTabs(); render();
+</script>
+<style>.copyright-hz{margin:34px auto 10px;padding-top:14px;max-width:900px;border-top:1px solid rgba(201,149,42,.3);text-align:center;font-size:12px;color:var(--ink3);font-family:'Crimson Pro',serif;direction:ltr}</style>
+<div class="copyright-hz">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>
+
+
+</body></html>
