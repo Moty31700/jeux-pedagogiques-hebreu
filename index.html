@@ -120,6 +120,10 @@
   .fleche::after { content: " →"; }
   @media (max-width: 760px) { .fleche::after { content: " ↓"; } }
   .lien-portail { display: inline-block; margin-top: 10px; font-size: 10pt; color: var(--tekhelet); }
+  .abo-changer { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--bleu-trait); }
+  .btn-changer { display: inline-block; margin-top: 6px; padding: 8px 14px; border: 1px solid var(--tekhelet); border-radius: 6px; color: var(--tekhelet); text-decoration: none; font-size: 10pt; font-weight: 600; }
+  .btn-changer:hover { background: var(--tekhelet); color: #fff; }
+  .abo-aide { font-size: 9pt; color: var(--gris); margin: 4px 0 0; }
   .pack { margin-top: 16px; }
   .pack-titre { display: block; font-weight: 600; margin-bottom: 4px; }
 
@@ -621,6 +625,11 @@
             <p class="abo-etat" id="abo-etat"></p>
             <p class="abo-etat" id="abo-ia"></p>
             <p class="abo-etat" id="abo-fiches"></p>
+            <div class="abo-changer" id="abo-changer" style="display:none">
+              <p class="abo-etat" id="abo-changer-texte"></p>
+              <a class="btn-changer" id="btn-changer" target="_blank" rel="noopener"></a>
+              <p class="abo-aide">Dans la page qui s’ouvre, indiquez votre adresse e-mail, ouvrez le lien reçu, puis choisissez « Mettre à jour l’abonnement ».</p>
+            </div>
             <button class="btn-mishpatim" onclick="ouvrirMishpatim()">Ouvrir Mishpatim</button>
             <a class="lien-portail" id="lien-portail" target="_blank" rel="noopener">Gérer mon abonnement (carte, factures, résiliation)</a>
           </div>
@@ -1111,6 +1120,19 @@ function afficherAbonnement(r) {
   document.getElementById("abo-ia").textContent = "Demandes à l’IA ce mois-ci : " + q.utilises + " / " + q.max;
   document.getElementById("abo-fiches").textContent = (r.formule === "complet" ? 12 : 6) + " fiches du site incluses chaque mois (déjà comptées dans votre compteur de fiches).";
   document.getElementById("lien-portail").href = STRIPE_PORTAIL;
+  var zone = document.getElementById("abo-changer");
+  zone.style.display = r.resilie ? "none" : "";
+  var btn = document.getElementById("btn-changer");
+  btn.href = STRIPE_PORTAIL;
+  if (r.formule === "complet") {
+    document.getElementById("abo-changer-texte").innerHTML =
+      "Revenir au <b>Sectoriel</b> (20 € par mois, 50 demandes à l’IA, 6 fiches) : le changement prendra effet au prochain renouvellement, le " + fin + ".";
+    btn.textContent = "Revenir au Sectoriel";
+  } else {
+    document.getElementById("abo-changer-texte").innerHTML =
+      "Passer au <b>Complet</b> (30 € par mois, 150 demandes à l’IA, 12 fiches) : le changement est immédiat. Vous payez seulement la différence pour les jours qui restent, et vous recevez tout de suite la part correspondante de demandes et de fiches.";
+    btn.textContent = "Passer au Complet";
+  }
 }
 
 function chargerAbonnement() {
