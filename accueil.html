@@ -79,6 +79,51 @@
     background: #F4F2ED; color: var(--encre); border: 1px solid var(--encre);
     border-radius: 8px; cursor: pointer; font-weight: 600; }
   .btn-achat:hover { background: var(--encre); color: #fff; }
+  /* --- bloc Mishpatim (abonnements) --- */
+  .bloc-mishpatim { margin-top: 22px; padding: 16px; border: 1px solid var(--tekhelet); border-radius: 2px; background: #fff; }
+  .bloc-mishpatim .libelle { color: var(--tekhelet); }
+  .abo-formules { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+  @media (max-width: 560px) { .abo-formules { grid-template-columns: 1fr; } }
+  .abo-carte { border: 1px solid var(--trait); padding: 12px; display: flex; flex-direction: column; }
+  .abo-carte strong { font-size: 11.5pt; }
+  .abo-prix { color: var(--or); font-weight: 600; margin: .2rem 0 .4rem; }
+  .abo-carte ul { margin: 0 0 .4rem 1.1rem; padding: 0; font-size: 10pt; color: var(--encre); flex: 1; }
+  .abo-note { font-size: 9.5pt; color: var(--gris); margin-top: 8px; }
+  .abo-etat { font-size: 10.5pt; margin: .4rem 0 .2rem; }
+  .abo-etat b { color: var(--tekhelet); }
+  .btn-mishpatim { width: 100%; margin-top: 10px; padding: 12px; font-size: 1rem; background: var(--tekhelet); color: #fff; border: 1px solid var(--tekhelet); cursor: pointer; }
+  .btn-mishpatim:hover { background: var(--encre); border-color: var(--encre); }
+  /* --- offre en deux colonnes : fiches | abonnements --- */
+  :root { --bleu-fond: #EEF4FA; --bleu-trait: #B9D0E6; }
+  .offre { width: min(56rem, calc(100vw - 2rem)); margin: 28px 0 0 50%; transform: translateX(-50%); }
+  .offre-entete { text-align: center; margin-bottom: 14px; }
+  .offre-entete h3 { font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif; font-size: 16pt; font-weight: 600; margin: 0; }
+  .offre-entete p { font-size: 10pt; color: var(--gris); margin: .25rem auto 0; max-width: 36rem; }
+  .offre-colonnes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); gap: 16px; align-items: stretch; }
+  @media (max-width: 760px) { .offre-colonnes { grid-template-columns: 1fr; } }
+  .offre-col { background: var(--bleu-fond); border: 1.5px solid var(--bleu-trait); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; }
+  .offre-col h4 { margin: 0; font-size: 12.5pt; color: var(--tekhelet); }
+  .offre-sous { font-size: 9.5pt; color: var(--gris); margin: .2rem 0 .4rem; }
+  .pack-ligne { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; border: 1px solid var(--bleu-trait); border-radius: 8px; padding: 10px 12px; margin-top: 8px; }
+  .pack-ligne b { font-size: 11pt; }
+  .pack-ligne .prix { color: var(--or); font-weight: 600; margin-left: .4rem; }
+  .pack-ligne .btn-achat { width: auto; margin: 0; padding: 8px 16px; font-size: .95rem; }
+  .offre-pont { font-size: 9.5pt; color: var(--tekhelet); margin: auto 0 0; padding-top: 12px; }
+  .offre .abo-formules { margin-top: 6px; }
+  @media (max-width: 520px) { .offre .abo-formules { grid-template-columns: 1fr; } }
+  .offre .abo-carte { background: #fff; border: 1px solid var(--bleu-trait); border-radius: 8px; }
+  .fiches-incluses { align-self: flex-start; background: var(--bleu-fond); border: 1px solid var(--bleu-trait); color: var(--tekhelet); font-size: 9pt; font-weight: 600; padding: 1px 9px; border-radius: 999px; margin: 0 0 .5rem; }
+  .abo-statut { background: #fff; border: 1px solid var(--bleu-trait); border-radius: 8px; padding: 14px; margin-top: 6px; }
+  .abo-badge { display: inline-block; font-size: 9pt; font-weight: 700; padding: 1px 10px; border-radius: 999px; background: #E3F1E8; color: #2F6B45; }
+  .abo-badge.resilie { background: #FBEBDD; color: #9A4B12; }
+  .offre .abo-note { text-align: center; }
+  .fleche::after { content: " →"; }
+  @media (max-width: 760px) { .fleche::after { content: " ↓"; } }
+  .lien-portail { display: inline-block; margin-top: 10px; font-size: 10pt; color: var(--tekhelet); }
+  .abo-changer { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--bleu-trait); }
+  .btn-changer { display: inline-block; margin-top: 6px; padding: 8px 14px; border: 1px solid var(--tekhelet); border-radius: 6px; color: var(--tekhelet); text-decoration: none; font-size: 10pt; font-weight: 600; }
+  .btn-changer:hover { background: var(--tekhelet); color: #fff; }
+  .abo-aide { font-size: 9pt; color: var(--gris); margin: 4px 0 0; }
   .pack { margin-top: 16px; }
   .pack-titre { display: block; font-weight: 600; margin-bottom: 4px; }
 
@@ -244,60 +289,29 @@
     border: none; margin: 1.5rem 0 1.2rem;
   }
 </style>
-<style id="shell-css">
-  html,body{height:100%;}
-  body{margin:0;background:#eef2f7;}
-  .titre,.sous-titre,.etapes{display:none !important;}
-  .cadre{max-width:none;margin:0;padding:0;background:transparent;box-shadow:none;border:0;border-radius:0;}
-  .app{display:flex;height:100vh;background:#fbfcfe;font-family:inherit;}
-  .side{width:236px;flex-shrink:0;border-right:1px solid #e3e8ef;background:#f6f9fc;padding:16px 12px;display:flex;flex-direction:column;gap:2px;box-sizing:border-box;}
-  .brand{display:flex;align-items:center;gap:10px;padding:2px 8px 16px;}
-  .brand img{height:40px;width:auto;display:block;}
-  .brand span{font-size:18px;font-weight:600;color:#0c447c;}
-  .navbtn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:none;background:transparent;border-radius:9px;font-size:14px;color:#3a4a5e;cursor:pointer;text-align:left;font-family:inherit;}
-  .navbtn:hover{background:#eaf1f9;}
-  .navbtn.on{background:#e3f0fc;color:#0c447c;font-weight:600;}
-  .navsub{font-size:13px;padding:8px 12px 8px 20px;}
-  .navsep{height:1px;background:#e3e8ef;margin:8px 6px;}
-  .navlabel{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#8a97a8;padding:6px 10px 2px;}
-  .pane{flex:1;min-width:0;overflow:auto;padding:26px 30px;box-sizing:border-box;}
-  #grp-espace{display:none;flex-direction:column;gap:2px;}
-  #me-recharge{margin-top:8px;}
-</style>
 </head>
 <body>
 
-<div class="app">
-  <nav class="side">
-    <div class="brand"><img src="logo-zen-bleu-nuit.png" alt="hébreu-zen" onerror="this.style.display='none'"><span>hébreu-zen</span></div>
+<div class="cadre">
 
-    <div id="grp-public">
-      <button class="navbtn" data-nav="accueil"    onclick="montrer('accueil')">Comment ça marche</button>
-      <button class="navbtn" data-nav="inscription" onclick="montrer('inscription')">S'inscrire</button>
-      <button class="navbtn" data-nav="paiement"    onclick="montrer('paiement')">Payer</button>
-      <button class="navbtn" data-nav="connexion"   onclick="montrer('connexion')">Se connecter</button>
-    </div>
+  <h1 class="titre">לימוד עברית</h1>
+  <p class="sous-titre">Étude de l'hébreu — espace personnel</p>
 
-    <div id="grp-espace">
-      <div class="navlabel">Mon espace</div>
-      <button class="navbtn navsub" data-sub="fiche"    onclick="ouvrirEspace('fiche')">Demander une fiche</button>
-      <button class="navbtn navsub" data-sub="lecons"   onclick="ouvrirEspace('lecons')">Mes leçons</button>
-      <button class="navbtn navsub" data-sub="recharge" onclick="ouvrirEspace('recharge')">Recharger</button>
-      <button class="navbtn navsub" data-sub="avis"     onclick="ouvrirEspace('avis')">Votre avis &amp; FAQ</button>
-      <div class="navsep"></div>
-      <button class="navbtn" onclick="seDeconnecter()">Se déconnecter</button>
-    </div>
-  </nav>
+  <div class="etapes" id="etapes">
+    <span class="etape" data-etape="1">א</span>
+    <span class="filet"></span>
+    <span class="etape" data-etape="2">ב</span>
+    <span class="filet"></span>
+    <span class="etape" data-etape="3">ג</span>
+  </div>
 
-  <section class="pane">
-  <div class="cadre">
-    <h1 class="titre">לימוד עברית</h1>
-    <p class="sous-titre">Étude de l'hébreu — espace personnel</p>
-    <div class="etapes" id="etapes"><span class="etape" data-etape="1">א</span><span class="filet"></span><span class="etape" data-etape="2">ב</span><span class="filet"></span><span class="etape" data-etape="3">ג</span></div>
-
+  <!-- ÉCRAN 0 — accueil -->
   <div class="ecran visible" id="ecran-accueil">
     <h2>Bienvenue</h2>
     <p class="intro">Ce site est réservé aux personnes majeures. Votre code d'accès vous est envoyé par e-mail après votre paiement.</p>
+    <button id="vers-inscription">Première visite — créer mon accès</button>
+    <button id="vers-connexion" style="background: none; color: var(--encre); border: 1px solid var(--trait);">J'ai déjà un accès</button>
+
     <details class="guide">
       <summary>Comment ça marche</summary>
       <div class="guide-corps">
@@ -369,27 +383,61 @@
         <select id="i-annee" class="annee"><option value="">Année</option></select>
       </div></label>
     <button id="btn-inscrire">Créer mon accès</button>
+    <button class="lien" data-retour="accueil">Retour</button>
     <div class="message" id="msg-inscription"></div>
   </div>
 
   <!-- ÉCRAN paiement — après inscription -->
   <div class="ecran" id="ecran-paiement">
     <h2>Choisissez votre formule</h2>
-    <p class="intro">Inscription réussie ! Choisissez un pack et payez par carte bancaire. Votre code d'accès vous arrivera par e-mail dès la validation du paiement.</p>
-    <div class="bloc-achat">
-      <div class="pack">
-        <span class="pack-titre">Pack 6 fiches — 5 €</span>
-        <button class="btn-achat" onclick="payerStripe(6)">Payer</button>
+    <p class="intro">Inscription réussie ! Choisissez un abonnement ou un pack de fiches, et payez par carte bancaire. Votre code d'accès vous arrivera par e-mail dès la validation du paiement.</p>
+    <section class="offre">
+      <div class="offre-entete">
+        <h3>Deux façons de travailler</h3>
+        <p>Des fiches à l’unité, sans engagement, ou un abonnement mensuel : l’atelier Mishpatim avec l’IA, avec des fiches incluses chaque mois.</p>
       </div>
-      <div class="pack">
-        <span class="pack-titre">Pack 12 fiches — 10 €</span>
-        <button class="btn-achat" onclick="payerStripe(12)">Payer</button>
+      <div class="offre-colonnes">
+        <div class="offre-col">
+          <h4>Fiches du site</h4>
+          <p class="offre-sous">Payées une fois, à utiliser quand vous voulez.</p>
+          <div class="pack-ligne"><span><b>6 fiches</b><span class="prix">5 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(6)">Acheter</button></div>
+          <div class="pack-ligne"><span><b>12 fiches</b><span class="prix">10 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(12)">Acheter</button></div>
+          <div class="pack-ligne"><span><b>20 fiches</b><span class="prix">15 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(20)">Acheter</button></div>
+          <p class="offre-pont">Les fiches achetées ne se perdent jamais : elles s’ajoutent à celles d’un abonnement.<span class="fleche"></span></p>
+        </div>
+        <div class="offre-col">
+          <h4>Abonnements avec Mishpatim</h4>
+          <p class="offre-sous">Fabriquez et corrigez vos propres phrases hébraïques avec l’IA, et révisez-les jusqu’à les savoir.</p>
+          <div class="abo-formules">
+            <div class="abo-carte">
+              <strong>Sectoriel</strong>
+              <span class="abo-prix">20 € / mois</span>
+              <span class="fiches-incluses">+ 6 fiches du site par mois</span>
+              <ul>
+                <li>Mishpatim : Atelier, Mes phrases, Réviser, Trous, Confusion</li>
+                <li>50 demandes à l’IA par mois</li>
+              </ul>
+              <button class="btn-achat" onclick="payerAbonnement('sectoriel')">S’abonner</button>
+            </div>
+            <div class="abo-carte">
+              <strong>Complet</strong>
+              <span class="abo-prix">30 € / mois</span>
+              <span class="fiches-incluses">+ 12 fiches du site par mois</span>
+              <ul>
+                <li>Tout Mishpatim, avec Créer, Traduire et Escalier</li>
+                <li>150 demandes à l’IA par mois</li>
+              </ul>
+              <button class="btn-achat" onclick="payerAbonnement('complet')">S’abonner</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="pack">
-        <span class="pack-titre">Pack 20 fiches — 15 €</span>
-        <button class="btn-achat" onclick="payerStripe(20)">Payer</button>
-      </div>
-    </div>
+      <p class="abo-note">Abonnements sans engagement : résiliables à tout moment, l’accès reste ouvert jusqu’à la fin du mois payé. Les fiches et demandes à l’IA comprises dans l’abonnement ne se reportent pas d’un mois sur l’autre.</p>
+    </section>
+    <button class="lien" data-retour="connexion">J'ai reçu mon code — me connecter</button>
     <div class="message" id="msg-paiement"></div>
   </div>
 
@@ -404,15 +452,14 @@
       <input id="code" maxlength="6" autocomplete="one-time-code"></label>
 
     <button id="btn-connecter">Entrer</button>
-    <button class="lien" onclick="renvoyerCode()">Code perdu — me le renvoyer par e-mail</button>
-    <button class="lien" onclick="montrer('paiement')">Pas encore de code — choisir ma formule</button>
+    <button class="lien" id="btn-demander">Code perdu ou expiré — m'en envoyer un</button>
+    <button class="lien" data-retour="accueil">Retour</button>
     <div class="message" id="msg-connexion"></div>
   </div>
 
   <!-- ÉCRAN 3 — demander une leçon -->
   <div class="ecran" id="ecran-menu">
     <p class="accueil-nom" id="menu-nom">Shalom</p>
-    <div id="me-fiche">
     <div id="msg-formule" class="formule" style="display:none"></div>
 
     <div id="zone-lecon">
@@ -430,7 +477,6 @@
     <div class="choix" id="choix-sortie">
       <button data-sortie="jeu" class="actif">Une fiche interactive</button>
       <button data-sortie="doc">Une fiche rédigée</button>
-      <button data-sortie="duo" id="sortie-duo" style="display:none">Fiche interactive et rédigée</button>
     </div>
 
     <div class="bascules">
@@ -486,6 +532,25 @@
         <span class="compte-mots" id="ch-compte">0 / 250 mots</span></label>
     </div>
 
+    <!-- entrée : poème -->
+    <div class="bloc" id="bloc-poesie">
+      <label><span class="libelle">Titre du poème</span>
+        <input id="po-titre" dir="rtl" placeholder="&#1500;&#1493; &#1497;&#1492;&#1497;"></label>
+
+      <label><span class="libelle">Poète</span>
+        <input id="po-auteur" dir="rtl" placeholder="&#1504;&#1506;&#1502;&#1497; &#1513;&#1502;&#1512;"></label>
+
+      <span class="libelle">Type de poésie</span>
+      <div class="choix" id="choix-ptype">
+        <button data-ptype="biblique">Biblique / médiévale</button>
+        <button data-ptype="moderne" class="actif">Moderne métrée</button>
+      </div>
+
+      <label><span class="libelle">Le poème — à copier vous-même (jusqu'à 4 quatrains)</span>
+        <textarea id="po-poeme" dir="rtl"></textarea>
+        <span class="compte-mots" id="po-compte">0 / 150 mots</span></label>
+    </div>
+
     <!-- entrée : mes choix personnels -->
     <div class="bloc" id="bloc-perso">
       <label><span class="libelle">Mes mots — de 1 à 10 (séparés par des espaces ou retours à la ligne)</span>
@@ -523,25 +588,6 @@
       </div>
     </div>
 
-    <!-- entrée : poème -->
-    <div class="bloc" id="bloc-poesie">
-      <label><span class="libelle">Titre du poème</span>
-        <input id="po-titre" dir="rtl" placeholder="&#1500;&#1493; &#1497;&#1492;&#1497;"></label>
-
-      <label><span class="libelle">Poète</span>
-        <input id="po-auteur" dir="rtl" placeholder="&#1504;&#1506;&#1502;&#1497; &#1513;&#1502;&#1512;"></label>
-
-      <span class="libelle">Type de poésie</span>
-      <div class="choix" id="choix-ptype" style="margin-bottom:1rem">
-        <button data-ptype="biblique">Biblique / médiévale</button>
-        <button data-ptype="moderne" class="actif">Moderne métrée</button>
-      </div>
-
-      <label><span class="libelle">Le poème — à copier vous-même (jusqu'à 4 quatrains)</span>
-        <textarea id="po-poeme" dir="rtl"></textarea>
-        <span class="compte-mots" id="po-compte">0 / 150 mots</span></label>
-    </div>
-
     <button id="btn-envoyer">Demander ma leçon</button>
 
     <div class="message" id="msg-lecon"></div>
@@ -550,29 +596,72 @@
       La création de votre fiche prend quelques minutes, puis sa mise en ligne demande encore quelques minutes avant que vous puissiez l'ouvrir. Le lien vous arrive par e-mail dès qu'elle est prête.
     </div>
     </div><!-- fin zone-lecon -->
-    </div><!-- fin me-fiche -->
 
-    <div id="me-lecons">
+    <button id="btn-mes-lecons">Mes leçons</button>
     <div id="compteur-lecons" class="compteur-lecons"></div>
     <div id="liste-lecons"></div>
-    </div>
 
-    <div class="bloc-achat" id="me-recharge">
-      <span class="libelle">Recharger mes fiches</span>
-      <p class="intro-achat">Payez par carte bancaire. Votre quota se recharge automatiquement après le paiement, et vous gardez le même code.</p>
-      <div class="pack">
-        <span class="pack-titre">Pack 6 fiches — 5 €</span>
-        <button class="btn-achat" onclick="payerStripe(6)">Payer</button>
+    <section class="offre" id="bloc-mishpatim">
+      <div class="offre-entete">
+        <h3>Vos fiches et votre abonnement</h3>
+        <p>Des fiches à l’unité, sans engagement, ou un abonnement mensuel : l’atelier Mishpatim avec l’IA, avec des fiches incluses chaque mois.</p>
       </div>
-      <div class="pack">
-        <span class="pack-titre">Pack 12 fiches — 10 €</span>
-        <button class="btn-achat" onclick="payerStripe(12)">Payer</button>
+      <div class="offre-colonnes">
+        <div class="offre-col">
+          <h4>Fiches du site</h4>
+          <p class="offre-sous">Rechargez à l’unité : vos fiches s’ajoutent tout de suite, vous gardez le même code.</p>
+          <div class="pack-ligne"><span><b>6 fiches</b><span class="prix">5 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(6)">Acheter</button></div>
+          <div class="pack-ligne"><span><b>12 fiches</b><span class="prix">10 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(12)">Acheter</button></div>
+          <div class="pack-ligne"><span><b>20 fiches</b><span class="prix">15 €</span></span>
+            <button class="btn-achat" onclick="payerStripe(20)">Acheter</button></div>
+          <p class="offre-pont">Les fiches achetées ne se perdent jamais : elles s’ajoutent à celles d’un abonnement.<span class="fleche"></span></p>
+        </div>
+        <div class="offre-col">
+          <h4>Abonnements avec Mishpatim</h4>
+          <div id="abo-actif" class="abo-statut" style="display:none">
+            <span class="abo-badge" id="abo-badge">Actif</span>
+            <p class="abo-etat" id="abo-etat"></p>
+            <p class="abo-etat" id="abo-ia"></p>
+            <p class="abo-etat" id="abo-fiches"></p>
+            <div class="abo-changer" id="abo-changer" style="display:none">
+              <p class="abo-etat" id="abo-changer-texte"></p>
+              <a class="btn-changer" id="btn-changer" target="_blank" rel="noopener"></a>
+              <p class="abo-aide">Dans la page qui s’ouvre, indiquez votre adresse e-mail, ouvrez le lien reçu, puis choisissez « Mettre à jour l’abonnement ».</p>
+            </div>
+            <button class="btn-mishpatim" onclick="ouvrirMishpatim()">Ouvrir Mishpatim</button>
+            <a class="lien-portail" id="lien-portail" target="_blank" rel="noopener">Gérer mon abonnement (carte, factures, résiliation)</a>
+          </div>
+          <div id="abo-offre">
+            <p class="offre-sous">Fabriquez et corrigez vos propres phrases hébraïques avec l’IA, et révisez-les jusqu’à les savoir.</p>
+          <div class="abo-formules">
+            <div class="abo-carte">
+              <strong>Sectoriel</strong>
+              <span class="abo-prix">20 € / mois</span>
+              <span class="fiches-incluses">+ 6 fiches du site par mois</span>
+              <ul>
+                <li>Mishpatim : Atelier, Mes phrases, Réviser, Trous, Confusion</li>
+                <li>50 demandes à l’IA par mois</li>
+              </ul>
+              <button class="btn-achat" onclick="payerAbonnement('sectoriel')">S’abonner</button>
+            </div>
+            <div class="abo-carte">
+              <strong>Complet</strong>
+              <span class="abo-prix">30 € / mois</span>
+              <span class="fiches-incluses">+ 12 fiches du site par mois</span>
+              <ul>
+                <li>Tout Mishpatim, avec Créer, Traduire et Escalier</li>
+                <li>150 demandes à l’IA par mois</li>
+              </ul>
+              <button class="btn-achat" onclick="payerAbonnement('complet')">S’abonner</button>
+            </div>
+          </div>
+          </div>
+        </div>
       </div>
-      <div class="pack">
-        <span class="pack-titre">Pack 20 fiches — 15 €</span>
-        <button class="btn-achat" onclick="payerStripe(20)">Payer</button>
-      </div>
-    </div>
+      <p class="abo-note">Abonnements sans engagement : résiliables à tout moment, l’accès reste ouvert jusqu’à la fin du mois payé. Les fiches et demandes à l’IA comprises dans l’abonnement ne se reportent pas d’un mois sur l’autre.</p>
+    </section>
 
     <div id="bloc-avis" style="margin-top:24px">
       <h3>Donnez votre avis</h3>
@@ -582,9 +671,10 @@
       <button id="avis-envoi" onclick="envoyerAvis()">Envoyer</button>
       <div class="message" id="avis-msg"></div>
     </div>
+
+    <button class="lien" id="btn-sortir">Sortir</button>
   </div>
-  </div>
-  </section>
+
 </div>
 
 <script>
@@ -605,7 +695,6 @@ var CHEMINS = {
   "chanson|jeu":   "/chanson-jeu",
   "chanson|doc":   "/chanson-doc",
   "perso|doc":     "/perso-doc",
-  "poesie|duo":    "/poesie-jeu",
   "poesie|jeu":    "/poesie-jeu",
   "poesie|doc":    "/poesie-jeu"
 };
@@ -613,15 +702,13 @@ var CHEMINS = {
 var MAX_PAROLES = 250;
 
 var identifiantCourant = "";
-var connecte = false;       /* vrai UNIQUEMENT après connexion validée (code reçu = payé) */
-var sousCourant = "fiche";  /* sous-onglet courant de l'espace */
+var codeCourant = "";        /* gardé en mémoire seulement, jamais enregistré */
 var entreeCourante = "theme";
 var sortieCourante = "jeu";
 var poesieType = "moderne";
 var envoiEnCours = false;   /* verrou anti-double-envoi */
 
-/* bas niveau : bascule seulement l'écran de droite (jamais de nav, jamais de boucle) */
-function afficherEcran(nom) {
+function montrer(nom) {
   for (var cle in ECRANS) {
     document.getElementById(ECRANS[cle].el).classList.remove("visible");
   }
@@ -634,14 +721,6 @@ function afficherEcran(nom) {
     puces[i].className = "etape" + (n < courante ? " faite" : (n === courante ? " active" : ""));
   }
   window.scrollTo(0, 0);
-}
-
-/* aiguilleur UNIQUE : écran de droite + colonne de gauche synchronisés */
-function montrer(nom) {
-  if (nom === "menu" && !connecte) { nom = "connexion"; }
-  afficherEcran(nom);
-  majNav(nom);
-  if (nom === "menu") { ouvrirEspace(sousCourant); }
 }
 
 function dire(id, texte, type) {
@@ -681,6 +760,9 @@ function appeler(chemin, donnees, bouton, idMsg, onSucces) {
     }, 6000);
   });
 }
+
+document.getElementById("vers-inscription").addEventListener("click", function () { montrer("inscription"); });
+document.getElementById("vers-connexion").addEventListener("click", function () { montrer("connexion"); });
 
 var retours = document.querySelectorAll("[data-retour]");
 for (var i = 0; i < retours.length; i++) {
@@ -729,8 +811,7 @@ document.getElementById("btn-inscrire").addEventListener("click", function () {
 
   appeler("/inscription", donnees, this, "msg-inscription", function (r) {
     if (r.statut === "inscrit") {
-      identifiantCourant = donnees.identifiant;  /* pour rattacher le paiement Stripe */
-      connecte = false;                          /* pas de code encore -> espace verrouillé */
+      identifiantCourant = donnees.identifiant;
       document.getElementById("c-identifiant").value = donnees.identifiant;
       montrer("paiement");
     } else if (r.statut === "refuse") {
@@ -756,10 +837,11 @@ document.getElementById("btn-connecter").addEventListener("click", function () {
   appeler("/connexion", donnees, this, "msg-connexion", function (r) {
     if (r.acces === "autorise") {
       identifiantCourant = donnees.identifiant;
-      connecte = true;                           /* code validé -> espace déverrouillé */
+      codeCourant = donnees.code;
       document.getElementById("menu-nom").textContent = "Shalom " + (r.prenom || "");
       montrer("menu");
       chargerCompteur();
+      chargerAbonnement();
     } else {
       dire("msg-connexion", r.message || "Identifiant ou code incorrect, ou code expiré.", "erreur");
     }
@@ -767,6 +849,17 @@ document.getElementById("btn-connecter").addEventListener("click", function () {
 });
 
 /* --- demande de code --- */
+document.getElementById("btn-demander").addEventListener("click", function () {
+  var identifiant = document.getElementById("c-identifiant").value.trim();
+  if (!identifiant) {
+    dire("msg-connexion", "Saisissez d'abord votre identifiant.", "erreur");
+    return;
+  }
+  appeler("/demande-code", { identifiant: identifiant }, this, "msg-connexion", function (r) {
+    dire("msg-connexion", r.message || "Votre code vous a été envoyé par e-mail.", "ok");
+  });
+});
+
 /* --- les deux choix segmentés --- */
 function brancherChoix(idGroupe, attribut, onChange) {
   var groupe = document.getElementById(idGroupe);
@@ -788,32 +881,18 @@ brancherChoix("choix-entree", "data-entree", function (valeur) {
   document.getElementById("bloc-perso").className   = "bloc" + (valeur === "perso"   ? " visible" : "");
   document.getElementById("bloc-poesie").className  = "bloc" + (valeur === "poesie"  ? " visible" : "");
 
+  /* Mes choix personnels ne donne qu'une fiche */
   var btnJeu   = document.querySelector("[data-sortie='jeu']");
   var btnFiche = document.querySelector("[data-sortie='doc']");
-  var btnDuo   = document.getElementById("sortie-duo");
   if (valeur === "perso") {
-    /* Mes choix personnels ne donne qu'une fiche rédigée */
-    btnJeu.style.display = ""; btnFiche.style.display = ""; btnDuo.style.display = "none";
     btnJeu.disabled = true;
     btnJeu.classList.remove("actif");
     btnFiche.classList.add("actif");
-    btnDuo.classList.remove("actif");
     sortieCourante = "doc";
-  } else if (valeur === "poesie") {
-    /* Un poème donne toujours les deux : un seul bouton combiné */
-    btnJeu.style.display = "none"; btnFiche.style.display = "none"; btnDuo.style.display = "";
-    btnJeu.classList.remove("actif");
-    btnFiche.classList.remove("actif");
-    btnDuo.classList.add("actif");
-    btnJeu.disabled = false;
-    sortieCourante = "duo";
   } else {
-    /* thème / chanson : les deux boutons normaux, fiche interactive rallumée */
-    btnJeu.style.display = ""; btnFiche.style.display = ""; btnDuo.style.display = "none";
     btnJeu.disabled = false;
     btnJeu.classList.add("actif");
     btnFiche.classList.remove("actif");
-    btnDuo.classList.remove("actif");
     sortieCourante = "jeu";
   }
 });
@@ -825,18 +904,6 @@ brancherChoix("choix-sortie", "data-sortie", function (valeur) {
 brancherChoix("choix-ptype", "data-ptype", function (valeur) {
   poesieType = valeur;
 });
-
-(function () {
-  var champ = document.getElementById("po-poeme");
-  var compte = document.getElementById("po-compte");
-  if (champ && compte) {
-    champ.addEventListener("input", function () {
-      var n = compterMots(champ.value);
-      compte.textContent = n + " / 150 mots";
-      compte.className = "compte-mots" + (n > 150 ? " trop" : "");
-    });
-  }
-})();
 
 /* --- compteur de mots de la zone Paroles --- */
 function compterMots(t) {
@@ -851,6 +918,16 @@ function compterMots(t) {
     var n = compterMots(champ.value);
     compte.textContent = n + " / " + MAX_PAROLES + " mots";
     compte.className = "compte-mots" + (n > MAX_PAROLES ? " trop" : "");
+  });
+})();
+
+(function brancherCompteurPoeme() {
+  var champ  = document.getElementById("po-poeme");
+  var compte = document.getElementById("po-compte");
+  champ.addEventListener("input", function () {
+    var n = compterMots(champ.value);
+    compte.textContent = n + " / 150 mots";
+    compte.className = "compte-mots" + (n > 150 ? " trop" : "");
   });
 })();
 
@@ -965,22 +1042,16 @@ document.getElementById("btn-envoyer").addEventListener("click", function () {
   }
 
   var chemin = CHEMINS[entreeCourante + "|" + sortieCourante];
-  var forme  = (sortieCourante === "jeu") ? "Votre jeu sur " : (sortieCourante === "duo" ? "Vos fiches sur " : "Votre fiche sur ");
+  var forme  = (sortieCourante === "jeu") ? "Votre jeu sur " : "Votre fiche sur ";
 
   appeler(chemin, donnees, this, "msg-lecon", function () {
     dire("msg-lecon",
       forme + quoi + " est en préparation. Sa création prend quelques minutes, puis sa mise en ligne encore quelques minutes ; le lien arrive par e-mail dès qu'elle est prête.",
       "ok");
-    /* décompte immédiat côté page : grise la demande quand le quota est atteint */
-    if (dernierCompteur) {
-      dernierCompteur.utilisees = (dernierCompteur.utilisees || 0) + 1;
-      majCompteur(dernierCompteur);
-    }
   });
 });
 
 /* --- compteur « utilisées / quota » --- */
-var dernierCompteur = null;   /* mémorise {utilisees, quota} pour griser après une demande */
 function majCompteur(reponse) {
   var el = document.getElementById("compteur-lecons");
   if (!reponse || typeof reponse.quota === "undefined") {
@@ -990,7 +1061,6 @@ function majCompteur(reponse) {
   }
   var u = reponse.utilisees || 0;
   var q = reponse.quota || 0;
-  dernierCompteur = { utilisees: u, quota: q };
   el.textContent = u + " / " + q + " fiches utilisées";
   el.className = "compteur-lecons" + (u >= q ? " plein" : "");
 
@@ -1009,6 +1079,84 @@ function majCompteur(reponse) {
   }
 }
 
+/* --- abonnements Mishpatim (Sectoriel / Complet) --- */
+/* Liens RÉELS (passage en réel le 14 nov. 2026) */
+var STRIPE_ABO = {
+  sectoriel: "https://buy.stripe.com/4gM6oH0qpaqN8b8d4S57W05",
+  complet:   "https://buy.stripe.com/3cI4gz2yxgPbfDAaWK57W06"
+};
+var STRIPE_PORTAIL = "https://billing.stripe.com/p/login/aFa3cv3CBdCZezw5Cq57W00";
+var MISHPATIM_URL  = "mishpatim-essai-e2c239.html";
+
+function payerAbonnement(formule) {
+  if (!identifiantCourant) {
+    dire("msg-lecon", "Connectez-vous d'abord.", "erreur");
+    return;
+  }
+  var url = STRIPE_ABO[formule] + "?client_reference_id=" + encodeURIComponent(identifiantCourant);
+  window.open(url, "_blank");
+}
+
+function dateFr(iso, moinsUnJour) {
+  var d = new Date(iso); if (isNaN(d)) return "";
+  if (moinsUnJour) d.setDate(d.getDate() - 1);   /* la date de fin inclut un jour de marge */
+  return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+}
+
+function afficherAbonnement(r) {
+  var actif = !!(r && r.ok);
+  document.getElementById("abo-actif").style.display = actif ? "" : "none";
+  document.getElementById("abo-offre").style.display = actif ? "none" : "";
+  if (!actif) return;
+  var nom = r.formule === "complet" ? "Complet" : "Sectoriel";
+  var fin = dateFr(r.fin, true);
+  var badge = document.getElementById("abo-badge");
+  badge.textContent = r.resilie ? "Résilié" : "Actif";
+  badge.className = "abo-badge" + (r.resilie ? " resilie" : "");
+  document.getElementById("abo-etat").innerHTML = r.resilie
+    ? "Abonnement <b>" + nom + "</b> résilié : l’accès reste ouvert jusqu’au " + fin + ". Vous avez changé d’avis ? Réactivez-le depuis « Gérer mon abonnement »."
+    : "Abonnement <b>" + nom + "</b>, payé jusqu’au " + fin + ", renouvelé chaque mois.";
+  var q = r.quota || { utilises: 0, max: 0 };
+  document.getElementById("abo-ia").textContent = "Demandes à l’IA ce mois-ci : " + q.utilises + " / " + q.max;
+  document.getElementById("abo-fiches").textContent = (r.formule === "complet" ? 12 : 6) + " fiches du site incluses chaque mois (déjà comptées dans votre compteur de fiches).";
+  document.getElementById("lien-portail").href = STRIPE_PORTAIL;
+  var zone = document.getElementById("abo-changer");
+  zone.style.display = r.resilie ? "none" : "";
+  var btn = document.getElementById("btn-changer");
+  btn.href = STRIPE_PORTAIL;
+  if (r.formule === "complet") {
+    document.getElementById("abo-changer-texte").innerHTML =
+      "Revenir au <b>Sectoriel</b> (20 € par mois, 50 demandes à l’IA, 6 fiches) : le changement prendra effet au prochain renouvellement, le " + fin + ".";
+    btn.textContent = "Revenir au Sectoriel";
+  } else {
+    document.getElementById("abo-changer-texte").innerHTML =
+      "Passer au <b>Complet</b> (30 € par mois, 150 demandes à l’IA, 12 fiches) : le changement est immédiat. Vous payez seulement la différence pour les jours qui restent, et vous recevez tout de suite la part correspondante de demandes et de fiches.";
+    btn.textContent = "Passer au Complet";
+  }
+}
+
+function chargerAbonnement() {
+  afficherAbonnement(null);
+  if (!identifiantCourant || !codeCourant) return;
+  fetch(BASE + "/mishpatim", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ identifiant: identifiantCourant, code: codeCourant, type: "statut" })
+  })
+  .then(function (r) { return r.json(); })
+  .then(afficherAbonnement)
+  .catch(function () {});
+}
+
+/* ouvre Mishpatim dans le même onglet, déjà connecté (même site : la session passe) */
+function ouvrirMishpatim() {
+  try {
+    sessionStorage.setItem("hz-mishpatim-acces", JSON.stringify({ identifiant: identifiantCourant, code: codeCourant }));
+    sessionStorage.setItem("hz-mishpatim-activite", String(Date.now()));
+  } catch (e) {}
+  location.href = MISHPATIM_URL;
+}
+
 /* --- achat d'un pack par CARTE : ouvre le lien Stripe avec l'identifiant --- */
 /* ✓ Liens LIVE — 15 août 2026 */
 var STRIPE_LINKS = {
@@ -1025,31 +1173,6 @@ function payerStripe(pack) {
   window.open(url, "_blank");
 }
 
-/* --- renvoi du code pour un élève déjà payé (contrôlé serveur : seulement si quota > 0) --- */
-function renvoyerCode() {
-  var identifiant = document.getElementById("c-identifiant").value.trim();
-  if (!identifiant) {
-    dire("msg-connexion", "Saisissez d'abord votre identifiant.", "erreur");
-    return;
-  }
-  fetch(BASE + "/renvoyer-code", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ identifiant: identifiant })
-  })
-  .then(function (r) { return r.json().catch(function () { return {}; }); })
-  .then(function (r) {
-    if (r && r.statut === "envoye") {
-      dire("msg-connexion", "Votre code vient de vous être renvoyé par e-mail.", "ok");
-    } else {
-      dire("msg-connexion", (r && r.message) || "Aucun code actif pour cet identifiant. Choisissez une formule.", "erreur");
-    }
-  })
-  .catch(function () {
-    dire("msg-connexion", "Le serveur ne répond pas. Réessayez dans un instant.", "erreur");
-  });
-}
-
 function chargerCompteur() {
   fetch(BASE + "/mes-lecons", {
     method: "POST",
@@ -1061,10 +1184,14 @@ function chargerCompteur() {
   .catch(function () {});
 }
 
-/* --- mes leçons (chargées quand on ouvre l'onglet de gauche) --- */
-function chargerLecons() {
+/* --- mes leçons --- */
+document.getElementById("btn-mes-lecons").addEventListener("click", function () {
+  var bouton = this;
   var liste = document.getElementById("liste-lecons");
-  liste.innerHTML = '<div class="lecon-vide">Chargement…</div>';
+  var libelle = bouton.textContent;
+  bouton.disabled = true;
+  bouton.textContent = "…";
+  liste.innerHTML = "";
 
   fetch(BASE + "/mes-lecons", {
     method: "POST",
@@ -1092,11 +1219,15 @@ function chargerLecons() {
   })
   .catch(function () {
     liste.innerHTML = '<div class="lecon-vide">Le serveur ne répond pas. Réessayez dans un instant.</div>';
+  })
+  .then(function () {
+    bouton.disabled = false;
+    bouton.textContent = libelle;
   });
-}
+});
 
-/* --- se déconnecter (appelé par la colonne de gauche) --- */
-function seDeconnecter() {
+/* --- sortir --- */
+document.getElementById("btn-sortir").addEventListener("click", function () {
   document.getElementById("code").value = "";
   document.getElementById("ch-paroles").value = "";
   document.getElementById("ch-compte").textContent = "0 / " + MAX_PAROLES + " mots";
@@ -1106,10 +1237,10 @@ function seDeconnecter() {
   document.getElementById("compteur-lecons").textContent = "";
   document.getElementById("compteur-lecons").className = "compteur-lecons";
   identifiantCourant = "";
-  connecte = false;
-  sousCourant = "fiche";
+  codeCourant = "";
+  afficherAbonnement(null);
   montrer("accueil");
-}
+});
 
 /* --- remplissage des trois listes de date --- */
 (function remplirDate() {
@@ -1126,6 +1257,8 @@ function seDeconnecter() {
   for (var a = actuelle - 18; a >= 1925; a--) { annee.appendChild(new Option(a, a)); }
 })();
 
+montrer("accueil");
+
 async function envoyerAvis(){
   var t = document.getElementById('avis-texte').value.trim();
   if(!t) return;
@@ -1139,162 +1272,11 @@ async function envoyerAvis(){
     document.getElementById('avis-msg').textContent = "Merci, votre avis a été envoyé.";
     document.getElementById('avis-texte').value = "";
   }catch(e){
-    document.getElementById('avis-msg').textContent = "Erreur, réessaie.";
+    document.getElementById('avis-msg').textContent = "Erreur, réessayez.";
   }
   b.disabled = false;
 }
 </script>
 
-<script>
-/* --- contrôleur du nouveau shell (n'altère pas la logique existante) --- */
-var SUBS = { fiche:'me-fiche', lecons:'me-lecons', recharge:'me-recharge', avis:'bloc-avis' };
-
-/* ouvre un sous-onglet de l'espace — appelle afficherEcran, JAMAIS montrer -> pas de boucle */
-function ouvrirEspace(k){
-  if (!connecte) { montrer('connexion'); return; }
-  sousCourant = k;
-  afficherEcran('menu');
-  majNav('menu');
-  for (var key in SUBS){ var el=document.getElementById(SUBS[key]); if(el) el.style.display = (key===k)?'block':'none'; }
-  document.querySelectorAll('.navbtn[data-sub]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-sub')===k); });
-  if (k==='lecons') chargerLecons();
-  if (k==='avis')   chargerFAQEspace();
-}
-
-/* bascule colonne publique <-> espace + surbrillance du bouton actif */
-function majNav(nom){
-  var pub=document.getElementById('grp-public'), esp=document.getElementById('grp-espace');
-  if(nom==='menu'){ pub.style.display='none'; esp.style.display='flex'; }
-  else { pub.style.display='block'; esp.style.display='none'; }
-  document.querySelectorAll('.navbtn[data-nav]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-nav')===nom); });
-}
-/* FAQ dans Mon espace */
-async function chargerFAQEspace(){
-  var c=document.getElementById('faq-liste-espace'); if(!c) return;
-  c.innerHTML='<p style="color:#889">Chargement…</p>';
-  try{
-    var r=await fetch(BASE + "/faq-liste"); var data=await r.json();
-    if(!Array.isArray(data)||data.length===0){ c.innerHTML='<p style="color:#889">Aucune réponse publiée pour le moment.</p>'; return; }
-    c.innerHTML='';
-    data.forEach(function(row){
-      var d=document.createElement('div'); d.style.cssText='border-top:1px solid #e5e7eb;padding:10px 0;';
-      var q=document.createElement('div'); q.style.cssText='font-weight:600;font-size:10.5pt'; q.textContent=(row.question||'').trim();
-      var a=document.createElement('div'); a.style.cssText='font-size:10pt;color:#445;white-space:pre-wrap;margin-top:3px'; a.textContent=(row.reponse||'').trim();
-      d.appendChild(q); d.appendChild(a); c.appendChild(d);
-    });
-  }catch(e){ c.innerHTML='<p style="color:#b23">Impossible de charger les réponses.</p>'; }
-}
-/* état initial : écran d'accueil + colonne publique */
-montrer('accueil');
-
-/* ===================================================================
-   ADMIN + MAINTENANCE (v2) — état stocké dans Supabase, basculable ici
-   Webhooks : GET /etat-maintenance · POST /verif-admin · POST /set-maintenance
-   =================================================================== */
-var passAdmin = "";  /* pass gardé en mémoire volatile pendant la session admin (jamais stocké) */
-
-function estAdmin() { return localStorage.getItem('admin_ok') === '1'; }
-
-function afficherBanniere() {
-  if (document.getElementById('overlay-maintenance')) return;
-  var ov = document.createElement('div');
-  ov.id = 'overlay-maintenance';
-  ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#0f172a;color:#f8fafc;'
-    + 'display:flex;flex-direction:column;align-items:center;justify-content:center;'
-    + 'text-align:center;padding:24px;font-family:inherit;';
-  ov.innerHTML = '<div style="font-size:20pt;font-weight:700;margin-bottom:12px;">Site en maintenance</div>'
-    + '<div style="font-size:12pt;max-width:520px;line-height:1.5;opacity:.9;">'
-    + 'Le site est momentanément indisponible pendant une mise à jour. Merci de revenir un peu plus tard.</div>';
-  var b = document.createElement('button');
-  b.textContent = 'Admin';
-  b.style.cssText = 'position:fixed;left:14px;bottom:12px;z-index:100000;background:transparent;'
-    + 'border:none;color:#94a3b8;font-size:9pt;cursor:pointer;opacity:.6;padding:4px;';
-  b.onclick = ouvrirAdmin;
-  ov.appendChild(b);
-  document.body.appendChild(ov);
-}
-function retirerBanniere() { var o = document.getElementById('overlay-maintenance'); if (o) o.remove(); }
-
-/* au chargement : lire l'état serveur ; si maintenance et pas admin -> bannière */
-fetch(BASE + '/etat-maintenance')
-  .then(function (r) { return r.json().catch(function () { return {}; }); })
-  .then(function (x) { if (x && x.maintenance === true && !estAdmin()) afficherBanniere(); })
-  .catch(function () {});
-
-/* ouvrir l'espace admin : demande le pass une fois par session */
-function ouvrirAdmin() {
-  if (passAdmin) { panneauAdmin(); return; }
-  var p = prompt('Mot de passe admin :');
-  if (!p) return;
-  fetch(BASE + '/verif-admin', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ pass: p })
-  })
-  .then(function (r) { return r.json().catch(function () { return {}; }); })
-  .then(function (x) {
-    if (x && x.acces === 'autorise') {
-      passAdmin = p;
-      localStorage.setItem('admin_ok', '1');
-      retirerBanniere();
-      panneauAdmin();
-    } else { alert('Mot de passe incorrect.'); }
-  })
-  .catch(function () { alert('Le serveur ne répond pas. Réessayez.'); });
-}
-
-/* petit panneau flottant : état + bouton activer/désactiver */
-function panneauAdmin() {
-  var anc = document.getElementById('panneau-admin'); if (anc) anc.remove();
-  fetch(BASE + '/etat-maintenance')
-    .then(function (r) { return r.json().catch(function () { return {}; }); })
-    .then(function (x) {
-      var actif = !!(x && x.maintenance);
-      var pan = document.createElement('div');
-      pan.id = 'panneau-admin';
-      pan.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:100001;background:#fff;'
-        + 'border:1px solid #d0d7de;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.15);'
-        + 'padding:14px 16px;font-family:inherit;font-size:10.5pt;color:#1f2937;min-width:230px;';
-      pan.innerHTML = '<div style="font-weight:700;margin-bottom:8px;">Espace admin</div>'
-        + '<div style="margin-bottom:10px;">Maintenance : <strong>' + (actif ? 'ACTIVÉE' : 'désactivée') + '</strong></div>';
-      var btn = document.createElement('button');
-      btn.textContent = actif ? 'Désactiver la maintenance' : 'Activer la maintenance';
-      btn.style.cssText = 'display:block;width:100%;padding:8px;border:none;border-radius:6px;cursor:pointer;'
-        + 'color:#fff;font-size:10pt;margin-bottom:8px;background:' + (actif ? '#16a34a' : '#dc2626') + ';';
-      btn.onclick = function () {
-        btn.disabled = true; btn.textContent = '…';
-        fetch(BASE + '/set-maintenance', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pass: passAdmin, actif: !actif })
-        })
-        .then(function (r) { return r.json().catch(function () { return {}; }); })
-        .then(function (y) {
-          if (y && y.ok) { retirerBanniere(); panneauAdmin(); }
-          else { alert('Échec de la mise à jour.'); btn.disabled = false; }
-        })
-        .catch(function () { alert('Le serveur ne répond pas.'); btn.disabled = false; });
-      };
-      var fer = document.createElement('button');
-      fer.textContent = 'Fermer';
-      fer.style.cssText = 'display:block;width:100%;padding:6px;border:1px solid #d0d7de;border-radius:6px;'
-        + 'cursor:pointer;background:#f6f8fa;font-size:9.5pt;';
-      fer.onclick = function () { pan.remove(); };
-      pan.appendChild(btn); pan.appendChild(fer);
-      document.body.appendChild(pan);
-    });
-}
-
-/* bouton "Admin" toujours visible (indépendant des vues), coin bas gauche discret */
-(function () {
-  if (document.getElementById('btn-admin-fixe')) return;
-  var b = document.createElement('button');
-  b.id = 'btn-admin-fixe';
-  b.textContent = 'Admin';
-  b.style.cssText = 'position:fixed;left:14px;bottom:12px;z-index:100000;background:#fff;'
-    + 'border:1px solid #d0d7de;border-radius:6px;color:#475569;font-size:9.5pt;cursor:pointer;'
-    + 'opacity:.85;padding:5px 10px;box-shadow:0 1px 4px rgba(0,0,0,.08);';
-  b.onclick = ouvrirAdmin;
-  document.body.appendChild(b);
-})();
-</script>
 </body>
 </html>
