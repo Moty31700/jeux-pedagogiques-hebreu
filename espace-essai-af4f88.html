@@ -120,6 +120,10 @@
   .fleche::after { content: " →"; }
   @media (max-width: 760px) { .fleche::after { content: " ↓"; } }
   .lien-portail { display: inline-block; margin-top: 10px; font-size: 10pt; color: var(--tekhelet); }
+  .abo-changer { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--bleu-trait); }
+  .btn-changer { display: inline-block; margin-top: 6px; padding: 8px 14px; border: 1px solid var(--tekhelet); border-radius: 6px; color: var(--tekhelet); text-decoration: none; font-size: 10pt; font-weight: 600; }
+  .btn-changer:hover { background: var(--tekhelet); color: #fff; }
+  .abo-aide { font-size: 9pt; color: var(--gris); margin: 4px 0 0; }
   .pack { margin-top: 16px; }
   .pack-titre { display: block; font-weight: 600; margin-bottom: 4px; }
 
@@ -313,8 +317,9 @@
       <div class="guide-corps">
 
         <h3>À quoi sert ce site</h3>
-        <p>Ce site s'adresse à un élève ou à un étudiant adulte qui cherche du matériel pédagogique pour son étude de l'hébreu.</p>
-        <p>Il ne vous dispense pas de la présence d'un professeur dans votre apprentissage : il fabrique pour vous, à la demande, du matériel complémentaire — une leçon d'hébreu sur le thème de votre choix, à partir d'une chanson, ou sur les mots précis que vous lui donnez. Chaque leçon est unique : elle est écrite au moment où vous la demandez.</p>
+        <p>Ce site s'adresse aux élèves et aux étudiants adultes qui cherchent du matériel pédagogique pour leur étude de l'hébreu.</p>
+        <p>Il ne remplace pas un professeur : il fabrique pour vous, à la demande, du matériel complémentaire. C'est une leçon d'hébreu sur le thème de votre choix, à partir d'une chanson, ou sur les mots précis que vous lui donnez. Chaque leçon est unique : elle est écrite au moment où vous la demandez.</p>
+        <p>Avec un abonnement, vous avez aussi accès à <strong>Mishpatim</strong>, l'atelier de phrases en hébreu avec l'IA.</p>
 
         <hr class="filet-guide">
 
@@ -323,7 +328,13 @@
         <p>Le site est réservé aux personnes majeures.</p>
 
         <h3><span class="rang">2</span>Choisir une formule et payer</h3>
-        <p>Juste après l'inscription, vous choisissez une formule (6, 12 ou 20 fiches) et vous la réglez par carte bancaire. Dès que le paiement est validé, votre code d'accès de 6 caractères vous est envoyé par e-mail. Pensez à regarder vos courriers indésirables la première fois. Quand votre quota est épuisé, vous reprenez une formule : votre quota se recharge et vous gardez le même code.</p>
+        <p>Juste après l'inscription, vous choisissez entre deux façons de travailler :</p>
+        <ul>
+          <li><strong>des fiches à l'unité</strong>, payées une fois et à utiliser quand vous voulez : 6 fiches pour 5 €, 12 fiches pour 10 €, 20 fiches pour 15 € ;</li>
+          <li><strong>un abonnement mensuel</strong>, Sectoriel (20 € par mois) ou Complet (30 € par mois), qui donne accès à l'atelier Mishpatim et inclut des fiches chaque mois.</li>
+        </ul>
+        <p>Vous payez par carte bancaire, sur la page sécurisée de Stripe. Dès que le paiement est validé, vous recevez par e-mail votre facture et votre code d'accès de 6 caractères. Pensez à regarder vos courriers indésirables la première fois.</p>
+        <p>Quand vos fiches sont épuisées, vous reprenez une formule : votre quota se recharge et vous gardez le même code. Les fiches achetées à l'unité ne se perdent jamais : elles s'ajoutent à celles d'un abonnement.</p>
 
         <h3><span class="rang">3</span>Se connecter</h3>
         <p>À chaque visite, vous donnez votre identifiant et votre code. Il n'y a pas de connexion automatique, c'est voulu.</p>
@@ -338,13 +349,17 @@
               <li><strong>Mes choix personnels</strong> — vous donnez vous-même de un à cinq mots, et vous cochez ce que vous voulez qu'on vous en dise : morphologie, racine, synonymes, registre, phrases d'exemple, texte de situation. Peu de mots, mais traités en profondeur, et seulement sur ce que vous avez coché.</li>
             </ul>
           </li>
-          <li><strong>Une fiche interactive</strong> ou <strong>une fiche rédigée</strong> — sauf pour vos choix personnels, qui donnent toujours une fiche ;</li>
+          <li>la forme : <strong>une fiche interactive</strong> ou <strong>une fiche rédigée</strong> (vos choix personnels donnent toujours une fiche rédigée) ;</li>
           <li>avec ou sans <strong>voyelles</strong> (nikoud), avec ou sans <strong>translittération</strong>.</li>
         </ul>
 
         <h3><span class="rang">5</span>Recevoir votre leçon</h3>
         <p>Fermez la page, vous n'avez rien à attendre à l'écran. <strong>Le lien arrive dans votre boîte e-mail au bout de plusieurs minutes</strong> — le temps que la leçon soit écrite. Pensez à regarder vos courriers indésirables la première fois.</p>
-        <p>Pour un <strong>jeu</strong>, laissez-lui encore une minute ou deux après réception du message : le jeu doit d'abord être mis en ligne. Si le lien affiche une page d'erreur, attendez un instant et rechargez — il finira par s'ouvrir.</p>
+        <p>Pour une <strong>fiche interactive</strong>, attendez encore une minute ou deux après avoir reçu le message : elle doit d'abord être mise en ligne. Si le lien affiche une page d'erreur, patientez un instant puis rechargez la page : elle finira par s'ouvrir.</p>
+
+        <h3><span class="rang">6</span>Travailler avec Mishpatim (abonnés)</h3>
+        <p>Après la connexion, le bouton <strong>Ouvrir Mishpatim</strong> vous mène à l'atelier. Vous choisissez une racine et un modèle de phrase : Mishpatim vous propose des phrases vocalisées, avec leur traduction et leur analyse. Vous les transformez, vous créez les vôtres, et l'IA vous corrige. Les phrases que vous ne savez pas encore reviennent en révision jusqu'à ce qu'elles soient acquises.</p>
+        <p>Le Sectoriel donne 50 demandes à l'IA et 6 fiches par mois ; le Complet, 150 demandes, 12 fiches, et en plus Créer, Traduire et l'Escalier lexical.</p>
 
         <hr class="filet-guide">
 
@@ -353,6 +368,8 @@
           <li>Les mots que vous avez déjà rencontrés ne reviennent pas : chaque leçon tient compte des précédentes.</li>
           <li>Les paroles de chanson que vous copiez ne sont pas conservées.</li>
           <li>Une seule demande à la fois : ne cliquez qu'une fois sur le bouton.</li>
+          <li>L'abonnement est sans engagement : vous le résiliez quand vous voulez depuis votre espace, et l'accès reste ouvert jusqu'à la fin du mois payé.</li>
+          <li>Vous pouvez passer du Sectoriel au Complet à tout moment : vous ne payez que la différence pour les jours qui restent. Le retour au Sectoriel se fait au renouvellement suivant.</li>
         </ul>
 
       </div>
@@ -621,6 +638,11 @@
             <p class="abo-etat" id="abo-etat"></p>
             <p class="abo-etat" id="abo-ia"></p>
             <p class="abo-etat" id="abo-fiches"></p>
+            <div class="abo-changer" id="abo-changer" style="display:none">
+              <p class="abo-etat" id="abo-changer-texte"></p>
+              <a class="btn-changer" id="btn-changer" target="_blank" rel="noopener"></a>
+              <p class="abo-aide">Dans la page qui s’ouvre, indiquez votre adresse e-mail, ouvrez le lien reçu, puis choisissez « Mettre à jour l’abonnement ».</p>
+            </div>
             <button class="btn-mishpatim" onclick="ouvrirMishpatim()">Ouvrir Mishpatim</button>
             <a class="lien-portail" id="lien-portail" target="_blank" rel="noopener">Gérer mon abonnement (carte, factures, résiliation)</a>
           </div>
@@ -1111,6 +1133,19 @@ function afficherAbonnement(r) {
   document.getElementById("abo-ia").textContent = "Demandes à l’IA ce mois-ci : " + q.utilises + " / " + q.max;
   document.getElementById("abo-fiches").textContent = (r.formule === "complet" ? 12 : 6) + " fiches du site incluses chaque mois (déjà comptées dans votre compteur de fiches).";
   document.getElementById("lien-portail").href = STRIPE_PORTAIL;
+  var zone = document.getElementById("abo-changer");
+  zone.style.display = r.resilie ? "none" : "";
+  var btn = document.getElementById("btn-changer");
+  btn.href = STRIPE_PORTAIL;
+  if (r.formule === "complet") {
+    document.getElementById("abo-changer-texte").innerHTML =
+      "Revenir au <b>Sectoriel</b> (20 € par mois, 50 demandes à l’IA, 6 fiches) : le changement prendra effet au prochain renouvellement, le " + fin + ".";
+    btn.textContent = "Revenir au Sectoriel";
+  } else {
+    document.getElementById("abo-changer-texte").innerHTML =
+      "Passer au <b>Complet</b> (30 € par mois, 150 demandes à l’IA, 12 fiches) : le changement est immédiat. Vous payez seulement la différence pour les jours qui restent, et vous recevez tout de suite la part correspondante de demandes et de fiches.";
+    btn.textContent = "Passer au Complet";
+  }
 }
 
 function chargerAbonnement() {
@@ -1250,7 +1285,7 @@ async function envoyerAvis(){
     document.getElementById('avis-msg').textContent = "Merci, votre avis a été envoyé.";
     document.getElementById('avis-texte').value = "";
   }catch(e){
-    document.getElementById('avis-msg').textContent = "Erreur, réessaie.";
+    document.getElementById('avis-msg').textContent = "Erreur, réessayez.";
   }
   b.disabled = false;
 }
