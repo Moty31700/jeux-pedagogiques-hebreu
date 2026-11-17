@@ -1167,6 +1167,15 @@ function ouvrirMishpatim() {
     sessionStorage.setItem("hz-mishpatim-acces", JSON.stringify({ identifiant: identifiantCourant, code: codeCourant }));
     sessionStorage.setItem("hz-mishpatim-activite", String(Date.now()));
   } catch (e) {}
+  /* Dans le cadre de « Mon compte » (site principal), Mishpatim s'ouvrait dans le cadre :
+     sur téléphone, deux pages défilaient l'une dans l'autre et le menu devenait inaccessible.
+     On l'ouvre donc en pleine page, dans un nouvel onglet (la session y est recopiée). */
+  var dansCadre = false;
+  try { dansCadre = window.top !== window.self; } catch (e) { dansCadre = true; }
+  if (dansCadre) {
+    var w = window.open(new URL(MISHPATIM_URL, location.href).href, "_blank");
+    if (w) return;
+  }
   location.href = MISHPATIM_URL;
 }
 
