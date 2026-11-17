@@ -279,6 +279,7 @@
     '#hz-boite button:disabled{opacity:.6}#hz-msg{margin-top:12px;font-size:14px;color:#b3261e;min-height:1em}' +
     '#hz-barre{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9998;background:#fff;border:1px solid #d9dbe3;border-radius:20px;padding:6px 12px;font:13px -apple-system,BlinkMacSystemFont,sans-serif;color:#33489a;box-shadow:0 2px 8px rgba(0,0,0,.1);display:flex;gap:10px;align-items:center}' +
     '#hz-barre a{color:#b3261e;font-weight:600;cursor:pointer;text-decoration:underline}' +
+    '#hz-barre a.hz-menu{color:#33489a;text-decoration:none;border:1px solid #33489a;border-radius:12px;padding:2px 10px}' +
     '#hz-prog{color:#2f7d4f}#hz-prog:empty{display:none}#hz-prog.hz-alerte{color:#b5482c}' +
     '@media (max-width:560px){#hz-barre{left:12px;flex-wrap:wrap;justify-content:center;row-gap:2px}}' +
     '#hz-toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:10000;max-width:92%;background:#fff4e5;color:#6b3d00;border:1px solid #f0c27b;border-radius:10px;padding:10px 14px;font:14px -apple-system,BlinkMacSystemFont,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.15)}' +
@@ -313,7 +314,13 @@
     var p = document.createElement('span'); p.id = 'hz-prog';
     var a = document.createElement('a'); a.textContent = 'Se déconnecter';
     a.onclick = function () { deconnecter(''); };
-    b.appendChild(t); b.appendChild(p); b.appendChild(a);
+    /* sur téléphone, après une longue réponse, le menu des onglets est loin en haut */
+    var m = document.createElement('a'); m.className = 'hz-menu'; m.textContent = '↑ Menu';
+    m.onclick = function () {
+      var n = document.querySelector('nav.tabs');
+      if (n && n.scrollIntoView) n.scrollIntoView({ behavior: 'smooth', block: 'start' }); else window.scrollTo(0, 0);
+    };
+    b.appendChild(t); b.appendChild(p); b.appendChild(m); b.appendChild(a);
     etat(etatProg);
   }
 
