@@ -26,7 +26,9 @@
     line-height: 1.55;
   }
 
-  .cadre { max-width: 30rem; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+  /* 30rem rendait le texte trop étroit sur iPad et dans le cadre de « Mon compte » */
+  .cadre { max-width: 46rem; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+  @media (max-width: 560px) { .cadre { padding: 2rem .85rem 3rem; } }
 
   .titre {
     font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
