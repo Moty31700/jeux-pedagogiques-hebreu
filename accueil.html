@@ -1299,6 +1299,23 @@ document.getElementById("btn-sortir").addEventListener("click", function () {
 
 montrer("accueil");
 
+/* --- 18 nov. 2026 : retour depuis Mishpatim (« ← Mes fiches ») ---
+   Mishpatim a gardé l'identifiant et le code dans la session de cet onglet ;
+   on se reconnecte avec, uniquement quand l'élève revient par ce bouton. */
+(function repriseDepuisMishpatim() {
+  var retour = false, acces = null;
+  try {
+    retour = sessionStorage.getItem("hz-retour-fiches") === "1";
+    sessionStorage.removeItem("hz-retour-fiches");
+    acces = JSON.parse(sessionStorage.getItem("hz-mishpatim-acces") || "null");
+  } catch (e) {}
+  if (!retour || !acces || !acces.identifiant || !acces.code) return;
+  document.getElementById("c-identifiant").value = acces.identifiant;
+  document.getElementById("code").value = acces.code;
+  montrer("connexion");
+  document.getElementById("btn-connecter").click();
+})();
+
 async function envoyerAvis(){
   var t = document.getElementById('avis-texte').value.trim();
   if(!t) return;
