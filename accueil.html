@@ -389,7 +389,7 @@
       <input id="i-prenom" autocomplete="given-name"></label>
     <label><span class="libelle">Adresse e-mail (votre leçon y sera envoyée)</span>
       <input id="i-email" type="email" inputmode="email" autocomplete="email" placeholder="prenom@exemple.com"></label>
-    <label><span class="libelle">Téléphone (format +33…)</span>
+    <label><span class="libelle">Téléphone avec l'indicatif du pays (+33 France, +972 Israël…)</span>
       <input id="i-telephone" inputmode="tel" placeholder="+33612345678"></label>
     <label><span class="libelle">Date de naissance</span>
       <div class="trio">
@@ -821,7 +821,7 @@ document.getElementById("btn-inscrire").addEventListener("click", function () {
     return;
   }
   if (donnees.telephone.charAt(0) !== "+") {
-    dire("msg-inscription", "Le téléphone doit commencer par + et l'indicatif du pays.", "erreur");
+    dire("msg-inscription", "Le téléphone doit commencer par + et l'indicatif du pays (par exemple +33 ou +972).", "erreur");
     return;
   }
 
