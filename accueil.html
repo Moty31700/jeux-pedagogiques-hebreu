@@ -485,7 +485,7 @@
       <button data-entree="theme" class="actif">Un thème</button>
       <button data-entree="chanson">Une chanson</button>
       <button data-entree="perso">Mes choix personnels</button>
-      <button data-entree="poesie">Un poème</button>
+      <button data-entree="poesie">Poème / presse</button>
     </div>
 
     <span class="libelle">Sous quelle forme</span>
@@ -549,19 +549,20 @@
 
     <!-- entrée : poème -->
     <div class="bloc" id="bloc-poesie">
-      <label><span class="libelle">Titre du poème</span>
+      <label><span class="libelle">Titre (poème ou extrait)</span>
         <input id="po-titre" dir="rtl" placeholder="&#1500;&#1493; &#1497;&#1492;&#1497;"></label>
 
-      <label><span class="libelle">Poète</span>
+      <label><span class="libelle">Auteur</span>
         <input id="po-auteur" dir="rtl" placeholder="&#1504;&#1506;&#1502;&#1497; &#1513;&#1502;&#1512;"></label>
 
-      <span class="libelle">Type de poésie</span>
+      <span class="libelle">Type de texte</span>
       <div class="choix" id="choix-ptype">
-        <button data-ptype="biblique">Biblique / médiévale</button>
-        <button data-ptype="moderne" class="actif">Moderne métrée</button>
+        <button data-ptype="biblique">Poésie biblique / médiévale</button>
+        <button data-ptype="moderne" class="actif">Poésie moderne</button>
+        <button data-ptype="presse">Extrait de presse</button>
       </div>
 
-      <label><span class="libelle">Le poème — à copier vous-même (jusqu'à 4 quatrains)</span>
+      <label><span class="libelle">Texte du poème ou de l'extrait — à copier vous-même (150 mots max)</span>
         <textarea id="po-poeme" dir="rtl"></textarea>
         <span class="compte-mots" id="po-compte">0 / 150 mots</span></label>
     </div>
@@ -896,6 +897,9 @@ brancherChoix("choix-entree", "data-entree", function (valeur) {
   document.getElementById("bloc-perso").className   = "bloc" + (valeur === "perso"   ? " visible" : "");
   document.getElementById("bloc-poesie").className  = "bloc" + (valeur === "poesie"  ? " visible" : "");
 
+  /* le compteur « Mes choix personnels » ne doit bloquer le bouton QUE dans cette entrée */
+  etatBoutonEnvoyer();
+
   /* Mes choix personnels ne donne qu'une fiche */
   var btnJeu   = document.querySelector("[data-sortie='jeu']");
   var btnFiche = document.querySelector("[data-sortie='doc']");
@@ -945,6 +949,18 @@ function compterMots(t) {
     compte.className = "compte-mots" + (n > 150 ? " trop" : "");
   });
 })();
+
+/* --- état du bouton « Demander ma leçon » --- */
+function etatBoutonEnvoyer() {
+  var bouton = document.getElementById("btn-envoyer");
+  var trop = false;
+  if (entreeCourante === "perso") {
+    trop = document.getElementById("p-mots").value.trim().split(/\s+/)
+             .filter(function (m) { return m.length; }).length > 10;
+  }
+  bouton.disabled = trop;
+  bouton.style.opacity = trop ? "0.5" : "1";
+}
 
 /* --- compteur pour mots personnels --- */
 (function brancherCompteurPerso() {
@@ -1042,11 +1058,11 @@ document.getElementById("btn-envoyer").addEventListener("click", function () {
     var potitre = document.getElementById("po-titre").value.trim();
     var poeme   = document.getElementById("po-poeme").value.trim();
     if (!potitre || !poeme) {
-      dire("msg-lecon", "Le titre et le poème sont nécessaires.", "erreur");
+      dire("msg-lecon", "Le titre et le texte sont nécessaires.", "erreur");
       return;
     }
     if (compterMots(poeme) > 150) {
-      dire("msg-lecon", "Le poème dépasse 150 mots. Raccourcissez-le (4 quatrains max).", "erreur");
+      dire("msg-lecon", "Le texte dépasse 150 mots. Raccourcissez-le.", "erreur");
       return;
     }
     donnees.titre       = potitre;
