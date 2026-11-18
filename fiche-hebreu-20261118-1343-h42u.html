@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"גוש השינוי","auteur":"Ynet","youtube":"","shironet":"","mots":[{"heb":"גּוּשׁ","translit":"goush","fr":"bloc (politique)","sens":"nom masculin singulier construit","racine":"ג-ו-שׁ","nature":"nom","genre":"m","nombre":"s","formes":"גּוּשִׁים","cat":"noms","emploi":"Le bloc d'opposition cherche à maintenir son unité face aux manœuvres de Netanyahou."},{"heb":"מֵעַל רֹאשׁוֹ","translit":"me'al rosho","fr":"dans son dos, à son insu, par-dessus sa tête","sens":"expression prépositionnelle figée","racine":"ר-א-שׁ","nature":"expression","genre":"—","nombre":"—","formes":"מֵעַל רֹאשֵׁינוּ","cat":"autre","emploi":"La réunion s'est tenue dans le dos d'Eisenkot, sans qu'il en soit informé."},{"heb":"נוֹעַד","translit":"no'ad","fr":"s'est réuni, a tenu une réunion","sens":"nifal, passé, 3e personne masculin singulier","racine":"י-ע-ד","nature":"verbe","genre":"m","nombre":"s","formes":"נוֹעֲדִים · לְהִוָּעֵד","cat":"verbes","emploi":"Le président de Yachad s'est réuni longuement avec le Premier ministre."},{"heb":"תַּדְרוּךְ בִּטְחוֹנִי","translit":"tadroukh bitkhoni","fr":"briefing sécuritaire","sens":"syntagme nominal masculin singulier","racine":"ד-ר-כ / ב-ט-ח","nature":"expression","genre":"m","nombre":"s","formes":"תַּדְרוּכִים בִּטְחוֹנִיִּים","cat":"autre","emploi":"La réunion a été officiellement qualifiée de briefing sécuritaire pour masquer son caractère politique."},{"heb":"לְפוֹרֵר","translit":"lefourer","fr":"désagréger, émietter, faire éclater","sens":"piel, infinitif","racine":"פ-ר-ר","nature":"verbe","genre":"—","nombre":"—","formes":"מְפוֹרֵר · פּוֹרֵר","cat":"verbes","emploi":"Netanyahou tente de désagréger le bloc d'opposition en approchant ses membres séparément."},{"heb":"הִתְחַמֵּק","translit":"hitchamek","fr":"esquiver, se dérober, éluder","sens":"hitpael, passé, 3e personne masculin singulier","racine":"ח-מ-ק","nature":"verbe","genre":"m","nombre":"s","formes":"מִתְחַמֵּק · לְהִתְחַמֵּק","cat":"verbes","emploi":"Bennett a esquivé les questions des journalistes lors de la conférence de presse."},{"heb":"מְקוֹרָבוֹ","translit":"mekoravo","fr":"son entourage proche, ses proches","sens":"nom masculin singulier avec pronom possessif 3ms","racine":"ק-ר-ב","nature":"nom","genre":"m","nombre":"s","formes":"מְקוֹרָבִים · מְקוֹרָבֵיהֶם","cat":"noms","emploi":"Selon un proche de Bennett, le chef du parti a délibérément choisi de ne pas répondre à ces attaques."},{"heb":"נֶחְרֶצֶת","translit":"nekhretzet","fr":"catégorique, tranchée, déterminée","sens":"nifal participe féminin singulier, utilisé comme adjectif","racine":"ח-ר-צ","nature":"adjectif","genre":"f","nombre":"s","formes":"נֶחְרָץ · נֶחְרָצִים","cat":"adjectifs","emploi":"Sa déclaration catégorique a surpris tous les observateurs politiques."},{"heb":"לָלֶכֶת הַבַּיְתָה","translit":"lalechet habayta","fr":"rentrer chez soi, quitter le pouvoir, démissionner","sens":"expression verbale figée, registre familier-politique","racine":"ה-ל-כ / ב-י-ת","nature":"expression","genre":"—","nombre":"—","formes":"לֵךְ הַבַּיְתָה","cat":"autre","emploi":"Dans le discours politique israélien, envoyer quelqu'un rentrer chez lui signifie exiger sa démission ou sa défaite électorale."},{"heb":"לִשְׁכָּה","translit":"lishka","fr":"bureau officiel","sens":"nom féminin singulier","racine":"ל-שׁ-כ","nature":"nom","genre":"f","nombre":"s","formes":"לִשְׁכּוֹת","cat":"noms","emploi":"Le Premier ministre a reçu son interlocuteur dans son bureau officiel à la Knesset."},{"heb":"הַמַּתְקָפָה","translit":"hamataka","fr":"l'attaque, l'offensive (politique ou médiatique)","sens":"nom féminin singulier défini","racine":"ת-ק-פ","nature":"nom","genre":"f","nombre":"s","formes":"מַתְקָפוֹת · מַתְקֶפֶת","cat":"noms","emploi":"L'attaque médiatique contre Bennett a visé ses ambiguïtés programmatiques."},{"heb":"הַבְּחִירוֹת","translit":"habkhirot","fr":"les élections","sens":"nom féminin pluriel défini","racine":"ב-ח-ר","nature":"nom","genre":"f","nombre":"p","formes":"בְּחִירָה","cat":"noms","emploi":"À trois jours des élections, chaque déclaration prend une résonance particulière."},{"heb":"הֻגְדְּרָה","translit":"hugdra","fr":"a été définie, a été qualifiée","sens":"pual, passé, 3e personne féminin singulier","racine":"ג-ד-ר","nature":"verbe","genre":"f","nombre":"s","formes":"הוּגְדַּר · לְהַגְדִּיר","cat":"verbes","emploi":"La réunion a été officiellement définie comme un briefing sécuritaire, mais en réalité c'était une rencontre politique."},{"heb":"אֶעֱנֶה","translit":"e'ene","fr":"je répondrai","sens":"kal, futur, 1e personne singulier","racine":"ע-נ-ה","nature":"verbe","genre":"—","nombre":"s","formes":"עָנָה · לַעֲנוֹת · עוֹנֶה","cat":"verbes","emploi":"Je ne répondrai pas à ses appels téléphoniques, quelle que soit la situation."},{"heb":"חַיָּב","translit":"khayav","fr":"doit, est obligé de","sens":"adjectif-modal masculin singulier, valeur déontique forte","racine":"ח-י-ב","nature":"adjectif","genre":"m","nombre":"s","formes":"חַיֶּבֶת · חַיָּבִים","cat":"adjectifs","emploi":"Il doit absolument quitter le pouvoir, c'est une nécessité politique incontournable."}],"phrases":[{"heb":"נְתַנְיָהוּ מְנַסֶּה לְפוֹרֵר אֶת הַגּוּשׁ","fr":"Netanyahou essaie de faire éclater le bloc"},{"heb":"מֵעַל רֹאשׁוֹ שֶׁל אֵיזֶנְקוֹט","fr":"dans le dos d'Eisenkot"},{"heb":"יוּ\"ר בְּיַחַד נוֹעַד לִפְגִישָׁה אֲרֻכָּה בְּמִיּוּחָד עִם רֹה\"מ","fr":"le président de Yachad a tenu une réunion particulièrement longue avec le Premier ministre"},{"heb":"פְּגִישָׁה שֶׁהֻגְדְּרָה כְּ'תַּדְרוּךְ בִּטְחוֹנִי'","fr":"une réunion officiellement qualifiée de briefing sécuritaire"},{"heb":"נְתַנְיָהוּ מְנַסֶּה לְפוֹרֵר אֶת הַגּוּשׁ","fr":"Netanyahou essaie de faire éclater le bloc"},{"heb":"בֶּנֶּט שֶׁהִתְחַמֵּק מִשְּׁאֵלוֹת","fr":"Bennett qui a esquivé les questions"},{"heb":"הַתְּגוּבָה שֶׁל מְקוֹרָבוֹ","fr":"la réaction de son entourage proche"},{"heb":"הַהַצְהָרָה הַנֶּחְרֶצֶת שֶׁלּוֹ","fr":"sa déclaration catégorique"},{"heb":"הוּא חַיָּב לָלֶכֶת הַבַּיְתָה","fr":"il doit rentrer chez lui"},{"heb":"הַשְּׁנַיִם יָשְׁבוּ בַּלִּשְׁכָּה בַּכְּנֶסֶת","fr":"les deux hommes se sont réunis dans le bureau de la Knesset"},{"heb":"הַמַּתְקָפָה עַל בֶּנֶּט","fr":"l'attaque contre Bennett"},{"heb":"3 יָמִים לִפְנֵי הַבְּחִירוֹת","fr":"trois jours avant les élections"},{"heb":"פְּגִישָׁה שֶׁהֻגְדְּרָה כְּ'תַּדְרוּךְ בִּטְחוֹנִי'","fr":"une réunion qui a été qualifiée de briefing sécuritaire"},{"heb":"לֹא אֶעֱנֶה לוֹ לַטֶּלֶפוֹן","fr":"je ne répondrai pas à ses appels téléphoniques"},{"heb":"הוּא חַיָּב לָלֶכֶת הַבַּיְתָה","fr":"il doit rentrer chez lui"}],"quatrains":[{"heb":"מֵעַל רֹאשׁוֹ שֶׁל אֵיזֶנְקוֹט, יוּ\"ר בְּיַחַד נוֹעַד לִפְגִישָׁה אֲרֻכָּה בְּמִיּוּחָד עִם רֹה\"מ.","fr":"Dans le dos d'Eisenkot, le président de Yachad a tenu une réunion particulièrement longue avec le Premier ministre.","an":"La formule 'מֵעַל רֹאשׁוֹ' (littéralement 'au-dessus de sa tête') est une expression figée hébraïque signifiant 'à son insu' ou 'par-dessus sa tête', équivalent du français 'dans son dos'. Elle installe immédiatement un climat de trahison interne. Le titre 'יוּ\"ר' (président de parti) et l'abréviation 'רֹה\"מ' (Premier ministre) sont des marques typiques du style journalistique israélien, dense et elliptique. L'adjectif 'אֲרֻכָּה בְּמִיּוּחָד' (particulièrement longue) dramatise la durée de la réunion, suggérant son importance politique. Le lecteur comprend que cette rencontre secrète, tenue sans en informer Eisenkot, constitue un acte politique majeur au sein du bloc d'opposition."},{"heb":"הַשְּׁנַיִם יָשְׁבוּ בַּלִּשְׁכָּה בַּכְּנֶסֶת, בִּפְגִישָׁה שֶׁהֻגְדְּרָה כְּ'תַּדְרוּךְ בִּטְחוֹנִי': 'נְתַנְיָהוּ מְנַסֶּה לְפוֹרֵר אֶת הַגּוּשׁ'.","fr":"Les deux hommes se sont réunis dans le bureau de la Knesset, lors d'une réunion officiellement qualifiée de 'briefing sécuritaire' : 'Netanyahou essaie de faire éclater le bloc.'","an":"Le mot 'לִשְׁכָּה' désigne le bureau officiel à la Knesset, ancrant la scène dans un cadre institutionnel. La mise entre guillemets de 'תַּדְרוּךְ בִּטְחוֹנִי' (briefing sécuritaire) est une distanciation ironique classique du journalisme politique : le journaliste signale que cette définition officielle cache en réalité une réunion politique. Le verbe 'לְפוֹרֵר' (désagréger, émietter) est fort et imagé, évoquant une action destructrice et délibérée de Netanyahou contre le bloc d'opposition. La citation directe finale introduit la voix des acteurs politiques, procédé rhétorique courant pour dynamiser le récit journalistique et donner une impression de révélation."},{"heb":"הַמַּתְקָפָה עַל בֶּנֶּט שֶׁהִתְחַמֵּק מִשְּׁאֵלוֹת, הַתְּגוּבָה שֶׁל מְקוֹרָבוֹ - וְהַהַצְהָרָה הַנֶּחְרֶצֶת שֶׁלּוֹ 3 יָמִים לִפְנֵי הַבְּחִירוֹת.","fr":"L'attaque contre Bennett qui a esquivé les questions, la réaction de son entourage proche - et sa déclaration catégorique trois jours avant les élections.","an":"Cette phrase fonctionne comme un titre ou un sous-titre interne de l'article, typique du style Ynet et des sites d'information israéliens qui décomposent l'article en séquences narratives annoncées. Le verbe 'הִתְחַמֵּק' (esquiver, se dérober) est péjoratif et chargé politiquement : il insinue la mauvaise foi ou la lâcheté de Bennett. L'expression 'מְקוֹרָבוֹ' (son proche, son entourage) est un terme journalistique classique désignant une source anonyme liée au personnage concerné. L'adjectif 'נֶחְרֶצֶת' (catégorique, déterminée, tranchée) renforce le poids de la déclaration à venir. La structure en trois temps (attaque, réaction, déclaration) crée une tension narrative crescendo typique du journalisme de flux."},{"heb":"לֹא אֶעֱנֶה לוֹ לַטֶּלֶפוֹן, הוּא חַיָּב לָלֶכֶת הַבַּיְתָה.","fr":"Je ne répondrai pas à ses appels, il doit rentrer chez lui.","an":"Cette citation directe finale est le climax de l'extrait. 'לֹא אֶעֱנֶה לוֹ לַטֶּלֶפוֹן' (je ne répondrai pas au téléphone pour lui) est une formule de rupture personnelle et politique forte, inhabituellement directe dans le discours politique. L'expression 'לָלֶכֶת הַבַּיְתָה' (rentrer chez soi, littéralement 'aller à la maison') est une expression figée israélienne signifiant 'quitter le pouvoir, démissionner, partir'. Elle appartient au registre populaire et oral, ce qui donne un effet de spontanéité et de franchise brutale. Prononcée trois jours avant les élections, elle constitue une déclaration électorale majeure et un rejet total de Netanyahou. Le journaliste choisit de terminer sur cette formule lapidaire pour maximiser l'impact sur le lecteur."}],"analyse":"Cet extrait provient de Ynet, grand portail d'information israélien, dans la rubrique politique 'Goush HaShinouï' (le bloc du changement). Le texte traite des tensions internes à l'opposition israélienne à l'approche d'élections, notamment les manœuvres de Netanyahou pour fragmenter l'alliance anti-gouvernementale, les tensions entre Eisenkot et Bennett, et les déclarations fracassantes de ce dernier refusant de répondre aux appels de Netanyahou. L'angle est celui d'une couverture politique à chaud, à trois jours du scrutin. Le registre est journalistique israélien contemporain, mêlant style direct, expressions familières et formules dramatisantes typiques de la presse populaire en ligne."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le texte, paragraphe par paragraphe</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Paragraphe '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
