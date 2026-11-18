@@ -320,7 +320,26 @@
       var n = document.querySelector('nav.tabs');
       if (n && n.scrollIntoView) n.scrollIntoView({ behavior: 'smooth', block: 'start' }); else window.scrollTo(0, 0);
     };
-    b.appendChild(t); b.appendChild(p); b.appendChild(m); b.appendChild(a);
+    /* 18 nov. 2026 : revenir aux fiches (espace élève) sans se déconnecter */
+    var f = document.createElement('a'); f.className = 'hz-menu'; f.textContent = '← Mes fiches';
+    f.onclick = function () {
+      if (Object.keys(enAttente).length) envoyer(true);
+      function allerEspace() {
+        try { sessionStorage.setItem('hz-retour-fiches', '1'); } catch (e) {}
+        location.href = 'accueil.html';
+      }
+      // ouvert dans un nouvel onglet depuis « Mon compte » : on ferme cet onglet, l'espace y est resté connecté
+      try {
+        if (window.opener && !window.opener.closed) {
+          try { window.opener.focus(); } catch (e) {}
+          window.close();
+          setTimeout(allerEspace, 400); // si le navigateur refuse de fermer l'onglet
+          return;
+        }
+      } catch (e) {}
+      allerEspace();
+    };
+    b.appendChild(t); b.appendChild(p); b.appendChild(f); b.appendChild(m); b.appendChild(a);
     etat(etatProg);
   }
 
