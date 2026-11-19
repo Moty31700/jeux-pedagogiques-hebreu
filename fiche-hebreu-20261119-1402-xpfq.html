@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"רודיארד קיפלינג","auteur":"ספר","youtube":"","shironet":"","mots":[{"heb":"מְשׁוֹרֵר","translit":"meshorér","fr":"poète","sens":"substantif masculin singulier, pattern mְXoXéX (intensif-métier)","racine":"ש-י-ר","nature":"nom","genre":"m","nombre":"sg","formes":"מְשׁוֹרְרִים · שִׁיר","cat":"noms","emploi":"Désigne un auteur de poésie, ici dans un contexte de glorification nationale"},{"heb":"לְאוּמִי","translit":"le'umí","fr":"national","sens":"adjectif masculin singulier, dérivé de לְאוֹם (peuple, nation)","racine":"ל-א-מ","nature":"adjectif","genre":"m","nombre":"sg","formes":"לְאוּמִית · לְאוּמִיִּים","cat":"adjectifs","emploi":"Qualifie Kipling comme représentant de l'identité nationale britannique"},{"heb":"אִימְפֶּרְיָה","translit":"imperiyá","fr":"empire","sens":"substantif féminin singulier, emprunt","racine":"emprunt latin imperium","nature":"nom","genre":"f","nombre":"sg","formes":"אִימְפֶּרְיָאלִיזְם","cat":"noms","emploi":"Renvoie à l'Empire britannique dans toute son étendue coloniale au début du XXe siècle"},{"heb":"חֲתַן פְּרַס נוֹבֶל","translit":"khatan prás nóbel","fr":"lauréat du prix Nobel","sens":"expression figée : état construit חֲתַן + nom propre, littéralement époux/gendre du prix Nobel","racine":"ח-ת-נ","nature":"expression","genre":"m","nombre":"sg","formes":"חֲתַן פְּרַס יִשְׂרָאֵל","cat":"autre","emploi":"Formule hébraïque standard pour désigner un lauréat de prix prestigieux"},{"heb":"סַפְרוּת","translit":"sifrút","fr":"littérature","sens":"substantif féminin singulier, pattern XaXXút (abstrait)","racine":"ס-פ-ר","nature":"nom","genre":"f","nombre":"sg","formes":"סֵפֶר · סוֹפֵר · סִפְרִיָּה","cat":"noms","emploi":"Désigne le domaine littéraire dans la formule du prix Nobel"},{"heb":"לְהִתְגַּיֵּס","translit":"lehitgayés","fr":"s'enrôler, se faire recruter","sens":"infinitif hitpa'el, verbe à sens réflexif-passif : rejoindre l'armée volontairement","racine":"ג-י-ס","nature":"verbe","genre":"—","nombre":"—","formes":"גִּיּוּס · גַּיָּס","cat":"verbes","emploi":"Exprime l'acte de s'engager militairement, avec une connotation volontaire et patriotique"},{"heb":"בְּנוֹ הַיָּחִיד","translit":"benó hayakhíd","fr":"son fils unique","sens":"groupe nominal : בֵּן (fils) en état construit + suffixe possessif 3ms + adjectif הַיָּחִיד (l'unique)","racine":"י-ח-ד","nature":"expression","genre":"m","nombre":"sg","formes":"יְחִידַת הָעֵילִית · יַחַד","cat":"autre","emploi":"Souligne la tragédie en insistant sur l'unicité de l'enfant perdu"},{"heb":"חֲזִית","translit":"khazít","fr":"front (militaire)","sens":"substantif féminin singulier, pattern XaXíX, sens militaire dominant en hébreu moderne","racine":"ח-ז-ה","nature":"nom","genre":"f","nombre":"sg","formes":"חֲזִית הַקְּרָב · חֲזִיתִי","cat":"noms","emploi":"Désigne la ligne de front de la Première Guerre mondiale"},{"heb":"נֶעֱלַם","translit":"ne'elám","fr":"disparut, fut porté disparu","sens":"nifal passé 3ms : il fut dissimulé, il disparut ; connotation d'absence sans mort confirmée","racine":"ע-ל-מ","nature":"verbe","genre":"—","nombre":"—","formes":"נֶעֱלָם · הֶעֱלִים","cat":"verbes","emploi":"Reflète l'incertitude historique sur le sort de John Kipling, porté disparu à Loos"},{"heb":"שּׁוּחוֹת","translit":"shukhót","fr":"tranchées","sens":"substantif féminin pluriel de שׁוּחָה (fosse, tranchée)","racine":"ש-ו-ח","nature":"nom","genre":"f","nombre":"pl","formes":"שׁוּחָה","cat":"noms","emploi":"Évoque les tranchées de la Première Guerre mondiale, symbole de la guerre industrielle"},{"heb":"יֵּחָרְטוּ","translit":"yeikharetú","fr":"seraient gravés","sens":"nifal futur 3mp : forme passive indiquant une gravure sur pierre, action pérenne","racine":"ח-ר-ט","nature":"verbe","genre":"—","nombre":"pl","formes":"חָרַט · חֲרִיטָה","cat":"verbes","emploi":"Désigne l'acte de graver des inscriptions sur les stèles funéraires de guerre"},{"heb":"מַצֵּבוֹת","translit":"matsevót","fr":"stèles, pierres tombales","sens":"substantif féminin pluriel de מַצֵּבָה (stèle, monument funéraire)","racine":"נ-צ-ב","nature":"nom","genre":"f","nombre":"pl","formes":"מַצֵּבָה · נִצָּב","cat":"noms","emploi":"Désigne les pierres tombales des cimetières militaires du Commonwealth"},{"heb":"חֲלָלִים","translit":"khalалím","fr":"soldats tombés, morts au combat","sens":"substantif masculin pluriel de חָלָל (tué, victime de guerre) ; registre formel et solennel","racine":"ח-ל-ל","nature":"nom","genre":"m","nombre":"pl","formes":"חָלָל · חִלֵּל","cat":"noms","emploi":"Terme spécifique au vocabulaire du deuil militaire, plus solennel que מֵת (mort)"},{"heb":"קִבְרֵיהֶם","translit":"kivreihém","fr":"leurs tombes","sens":"substantif masculin pluriel en état construit + suffixe possessif 3mp : קֶבֶר > קִבְרֵי + הֶם","racine":"ק-ב-ר","nature":"nom","genre":"m","nombre":"pl","formes":"קֶבֶר · קְבוּרָה","cat":"noms","emploi":"Renvoie aux tombes des soldats du Commonwealth en Palestine mandataire"},{"heb":"אֶרֶץ יִשְׂרָאֵל","translit":"érets yisra'él","fr":"Terre d'Israël, Palestine","sens":"syntagme nominal propre féminin : אֶרֶץ (pays, terre) + יִשְׂרָאֵל (Israël) ; terme historique et nationaliste pour la Palestine","racine":"א-ר-ץ / י-ש-ר-א-ל","nature":"expression","genre":"f","nombre":"sg","formes":"מְדִינַת יִשְׂרָאֵל · פַּלֶסְטִינָה","cat":"autre","emploi":"Désigne le territoire de l'actuel Israël/Palestine, ancrant le récit dans une perspective hébraïque"}],"phrases":[{"heb":"הוּא הָיָה הַמְּשׁוֹרֵר הַלְּאוּמִי שֶׁל הָאִימְפֶּרְיָה הַבְּרִיטִית","fr":"Il était le poète national de l'Empire britannique"},{"heb":"הַמְּשׁוֹרֵר הַלְּאוּמִי שֶׁל הָאִימְפֶּרְיָה הַבְּרִיטִית","fr":"le poète national de l'Empire britannique"},{"heb":"הַמְּשׁוֹרֵר הַלְּאוּמִי שֶׁל הָאִימְפֶּרְיָה הַבְּרִיטִית","fr":"le poète national de l'Empire britannique"},{"heb":"חֲתַן פְּרַס נוֹבֶל לְסַפְרוּת","fr":"lauréat du prix Nobel de littérature"},{"heb":"חֲתַן פְּרַס נוֹבֶל לְסַפְרוּת","fr":"lauréat du prix Nobel de littérature"},{"heb":"שִׁירִים שֶׁקָּרְאוּ לְצַעִירֵי בְּרִיטַנְיָה לְהִתְגַּיֵּס","fr":"des poèmes qui appelaient les jeunes de Grande-Bretagne à s'enrôler"},{"heb":"וְשָׁלַח אֶת בְּנוֹ הַיָּחִיד לַחֲזִית","fr":"et envoya son fils unique au front"},{"heb":"וְשָׁלַח אֶת בְּנוֹ הַיָּחִיד לַחֲזִית","fr":"et envoya son fils unique au front"},{"heb":"כְּשֶׁהַבֵּן נֶעֱלַם בַּשּׁוּחוֹת שֶׁל לוּס","fr":"lorsque le fils disparut dans les tranchées de Loos"},{"heb":"נֶעֱלַם בַּשּׁוּחוֹת שֶׁל לוּס","fr":"disparut dans les tranchées de Loos"},{"heb":"הַמִּלִּים שֶׁיֵּחָרְטוּ עַל מַצֵּבוֹת שֶׁל מִילְיוֹנֵי חֲלָלִים","fr":"les mots qui seraient gravés sur les stèles de millions de soldats tombés"},{"heb":"הַמִּלִּים שֶׁיֵּחָרְטוּ עַל מַצֵּבוֹת שֶׁל מִילְיוֹנֵי חֲלָלִים","fr":"les mots qui seraient gravés sur les stèles de millions de soldats tombés"},{"heb":"מַצֵּבוֹת שֶׁל מִילְיוֹנֵי חֲלָלִים","fr":"les stèles de millions de soldats tombés"},{"heb":"הִגִּיעַ לְבַקֵּר אֶת קִבְרֵיהֶם בְּאֶרֶץ יִשְׂרָאֵל","fr":"alla visiter leurs tombes en Terre d'Israël"},{"heb":"הִגִּיעַ לְבַקֵּר אֶת קִבְרֵיהֶם בְּאֶרֶץ יִשְׂרָאֵל","fr":"alla visiter leurs tombes en Terre d'Israël"}],"quatrains":[{"heb":"רוּדְיָארְד קִיפְּלִינְג: הָאָב שֶׁשָּׁלַח אֶת בְּנוֹ לַמִּלְחָמָה – וּבָחַר אֶת הַמִּלִּים לַמַּצֵּבוֹת שֶׁל מִילְיוֹנִים","fr":"Rudyard Kipling : le père qui envoya son fils à la guerre – et choisit les mots pour les stèles de millions","an":"Le titre fonctionne comme une accroche choc en deux temps, séparés par un tiret rhétorique. La première partie installe le personnage dans son rôle familial (האב, le père) plutôt que dans sa gloire littéraire, ce qui est un choix éditorial fort : on humanise d'emblée l'icône. Le verbe שָׁלַח (il envoya) au passé simple hébraïque confère une responsabilité directe, presque accusatrice. La deuxième partie, introduite par וּבָחַר (et il choisit), crée un parallélisme poignant entre l'acte d'envoyer à la mort et l'acte de donner des mots aux morts. L'expression מַצֵּבוֹת שֶׁל מִילְיוֹנִים (stèles de millions) évoque à la fois l'échelle industrielle du deuil de la Première Guerre mondiale et le rôle institutionnel qu'a joué Kipling auprès de la Commission des sépultures de guerre du Commonwealth. Le registre est celui du grand reportage littéraire."},{"heb":"הוּא הָיָה הַמְּשׁוֹרֵר הַלְּאוּמִי שֶׁל הָאִימְפֶּרְיָה הַבְּרִיטִית, חֲתַן פְּרַס נוֹבֶל לְסַפְרוּת, שֶׁכָּתַב שִׁירִים שֶׁקָּרְאוּ לְצַעִירֵי בְּרִיטַנְיָה לְהִתְגַּיֵּס,","fr":"Il était le poète national de l'Empire britannique, lauréat du prix Nobel de littérature, qui écrivit des poèmes appelant les jeunes de Grande-Bretagne à s'enrôler,","an":"Cette phrase d'exposition adopte la structure cumulative classique du portrait journalistique : appositions nominales enchaînées (המשורר הלאומי... חתן פרס נובל...) suivies d'une relative déterminative (שֶׁכָּתַב שִׁירִים שֶׁקָּרְאוּ). Le choix du verbe קָרְאוּ (ils appelaient, ils incitaient) pour qualifier les poèmes est crucial : il ne dit pas simplement que Kipling écrivait sur la guerre, mais qu'il en faisait un instrument de recrutement. L'expression חֲתַן פְּרַס נוֹבֶל לְסַפְרוּת (littéralement : gendre/époux du prix Nobel de littérature) est la formule hébraïque figée pour dire lauréat, calquée sur l'arabe زوج, réminiscence sémitique commune. Le mot לְהִתְגַּיֵּס (s'enrôler, se mobiliser) appartient au registre militaire et civique. La virgule finale signale que la phrase continue : on est dans une montée en tension narrative."},{"heb":"וְשָׁלַח אֶת בְּנוֹ הַיָּחִיד לַחֲזִית. כְּשֶׁהַבֵּן נֶעֱלַם בַּשּׁוּחוֹת שֶׁל לוּס, בָּחַר קִיפְּלִינְג אֶת הַמִּלִּים שֶׁיֵּחָרְטוּ עַל מַצֵּבוֹת שֶׁל מִילְיוֹנֵי חֲלָלִים","fr":"et envoya son fils unique au front. Lorsque le fils disparut dans les tranchées de Loos, Kipling choisit les mots qui seraient gravés sur les stèles de millions de soldats tombés","an":"Le point après לַחֲזִית isole la phrase et lui donne un poids maximal : l'acte d'envoyer le fils unique (הַיָּחִיד, insistance sur l'unicité) est présenté comme un fait brut, sans commentaire, laissant au lecteur le soin de ressentir. Le verbe נֶעֱלַם (il disparut, litt. il fut caché) au nifal est particulièrement fort : il ne dit pas que John Kipling fut tué, mais qu'il disparut — reflétant l'incertitude historique réelle sur sa mort à la bataille de Loos (1915). שּׁוּחוֹת (tranchées) ancre le texte dans l'imaginaire collectif de la Grande Guerre. Le verbe יֵּחָרְטוּ (seraient gravés) au futur nifal introduit la dimension monumentale et pérenne de l'action de Kipling. L'expression מִילְיוֹנֵי חֲלָלִים (millions de soldats tombés) est une hyperbole factuelle qui souligne l'ampleur du travail de la Commission impériale des sépultures de guerre."},{"heb":"וְאַף הִגִּיעַ לְבַקֵּר אֶת קִבְרֵיהֶם בְּאֶרֶץ יִשְׂרָאֵל","fr":"et alla même visiter leurs tombes en Terre d'Israël","an":"Cette courte clause finale fonctionne comme une chute inattendue (pointe), réservant une information géographique surprenante pour la fin. L'adverbe אַף (même, aussi) marque l'extension, l'élargissement : non seulement Kipling s'impliqua dans la rédaction des épitaphes, mais il visita physiquement les cimetières, y compris en Palestine mandataire — territoire lié à la Première Guerre mondiale via la campagne du Sinaï et de Palestine. L'expression אֶרֶץ יִשְׂרָאֵל (Terre d'Israël) est le terme hébreu traditionnel et nationaliste désignant la Palestine historique : son emploi par un journal hébreu est naturel, mais il ancre le récit dans une perspective israélienne qui s'approprie une part de cette mémoire de guerre. La brièveté de la clause crée un effet de suspension narrative invitant le lecteur à poursuivre l'article."}],"analyse":"Cet extrait est un chapeau d'article (ou sous-titre développé) issu d'un ouvrage ou d'un magazine hébreu consacré à Rudyard Kipling. L'angle choisi est biographique et émotionnel : il ne s'agit pas d'une analyse littéraire classique, mais d'un portrait humain centré sur la tragédie personnelle du père-écrivain qui envoie son fils à la guerre. Le registre est journalistique de qualité, avec une syntaxe rythmée, des relatives enchaînées et une montée dramatique calculée. L'article met en tension la gloire publique de Kipling (prix Nobel, poète impérial) et sa douleur privée (perte du fils), soulignant l'ironie tragique de l'homme qui choisit les mots gravés sur les tombes de millions de soldats après avoir lui-même contribué à les envoyer mourir."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — presse en hébreu</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le texte, paragraphe par paragraphe</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Paragraphe '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
