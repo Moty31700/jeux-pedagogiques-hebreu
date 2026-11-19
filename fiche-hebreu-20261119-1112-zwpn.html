@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"טראפ","auteur":"Ynet","youtube":"","shironet":"","mots":[{"heb":"חִיכּוּךְ","translit":"hikkukh","fr":"friction, frottement, tension","sens":"nom masculin singulier, mishkal CiCCuC","racine":"ח-כ-כ","nature":"nom","genre":"m","nombre":"sg","formes":"חִיכּוּכִים · חִיכּוּךְ גּוֹבֵר","cat":"noms","emploi":"Employé en contexte sécuritaire pour désigner une montée des tensions sans conflit ouvert"},{"heb":"גּוֹבֵר","translit":"gover","fr":"s'intensifie, croît, augmente","sens":"participe présent pa'al, masculin singulier","racine":"ג-ב-ר","nature":"verbe","genre":"m","nombre":"sg","formes":"גָּבַר · יִגְבַּר · גּוֹבֶרֶת","cat":"verbes","emploi":"Indique une progression continue d'un phénomène"},{"heb":"פְּעִילוּת חֲרִיגָה","translit":"pe'ilut hariga","fr":"activité inhabituelle, activité anormale","sens":"syntagme nominal féminin singulier","racine":"פ-ע-ל / ח-ר-ג","nature":"expression","genre":"f","nombre":"sg","formes":"פְּעִילוּת · חֲרִיגָה","cat":"autre","emploi":"Terme technique militaire et journalistique désignant une action sortant de la norme établie"},{"heb":"אַזְהָרָה","translit":"azhara","fr":"avertissement, mise en garde","sens":"nom féminin singulier, mishkal aCCaCa","racine":"ז-ה-ר","nature":"nom","genre":"f","nombre":"sg","formes":"אַזְהָרוֹת · לְהַזְהִיר","cat":"noms","emploi":"Désigne une mise en garde officielle émanant d'une instance politique ou militaire"},{"heb":"הֵקִים","translit":"hekim","fr":"a institué, a fondé, a établi","sens":"passé hif'il, 3ms","racine":"ק-ו-מ","nature":"verbe","genre":"m","nombre":"sg","formes":"לְהָקִים · מֵקִים · יָקִים","cat":"verbes","emploi":"Indique la création formelle d'une institution par une autorité"},{"heb":"הִשְׁמִידוּ","translit":"hishmidu","fr":"ont détruit, ont anéanti","sens":"passé hif'il, 3mp","racine":"ש-מ-ד","nature":"verbe","genre":"—","nombre":"pl","formes":"לְהַשְׁמִיד · מַשְׁמִיד · יַשְׁמִיד","cat":"verbes","emploi":"Exprime une destruction totale et définitive dans le registre militaire"},{"heb":"מְנַהֵרָה","translit":"menahera","fr":"tunnel","sens":"nom féminin singulier, forme meCaCeCa","racine":"נ-ה-ר","nature":"nom","genre":"f","nombre":"sg","formes":"מְנַהֲרוֹת · מַנְהֲרָה","cat":"noms","emploi":"Terme central du vocabulaire stratégique gazaoui, désignant les tunnels offensifs ou de contrebande"},{"heb":"הִתְגַּלְּתָה","translit":"hitgaleta","fr":"a été découverte, s'est révélée","sens":"passé hitpa'el, 3fs","racine":"ג-ל-ה","nature":"verbe","genre":"f","nombre":"sg","formes":"לְהִתְגַּלּוֹת · מִתְגַּלָּה · יִתְגַּלֶּה","cat":"verbes","emploi":"Implique une découverte progressive ou fortuite plutôt qu'une révélation délibérée"},{"heb":"קַּו הַצָּהֹב","translit":"kav ha-tsahov","fr":"ligne jaune","sens":"syntagme nominal masculin singulier","racine":"ק-ו-י / צ-ה-ב","nature":"expression","genre":"m","nombre":"sg","formes":"קַּו אָדֹם · מֵעֵבֶר לַקַּו","cat":"autre","emploi":"Désigne la limite géopolitique ou sécuritaire dont le franchissement constitue une violation grave"},{"heb":"כְּנִיסָה קַרְקָעִית","translit":"knisa karkaït","fr":"entrée terrestre, opération terrestre","sens":"syntagme nominal féminin singulier","racine":"כ-נ-ס / ק-ר-ק","nature":"expression","genre":"f","nombre":"sg","formes":"פְּלִישָׁה · מִבְצָע קַרְקָעִי","cat":"autre","emploi":"Terme technique militaire désignant le début de l'offensive terrestre, en référence à octobre 2023"},{"heb":"מְשַׁקֵּם","translit":"meshakem","fr":"reconstruit, réhabilite, rétablit","sens":"participe présent pi'el, masculin singulier","racine":"ש-ק-מ","nature":"verbe","genre":"m","nombre":"sg","formes":"לְשַׁקֵּם · שִׁקֵּם · שִׁקּוּם","cat":"verbes","emploi":"Implique une reconstruction organisée de capacités perdues ou affaiblies"},{"heb":"יְכֹלוֹת","translit":"yekholot","fr":"capacités, aptitudes","sens":"nom féminin pluriel","racine":"י-כ-ל","nature":"nom","genre":"f","nombre":"pl","formes":"יְכֹלוֹתָיו · יְכֹלֶת","cat":"noms","emploi":"Désigne l'ensemble des moyens opérationnels d'un acteur militaire ou terroriste"},{"heb":"מַבְהִירִים","translit":"mavhirim","fr":"clarifient, précisent, font savoir","sens":"participe présent hif'il, masculin pluriel","racine":"ב-ה-ר","nature":"verbe","genre":"m","nombre":"pl","formes":"לְהַבְהִיר · הִבְהִיר · הַבְהָרָה","cat":"verbes","emploi":"Formule journalistique pour citer une source institutionnelle de façon impersonnelle"},{"heb":"לֹא נִיתָן לְהַמְתִּין","translit":"lo nitan lehamtin","fr":"il n'est pas possible d'attendre","sens":"expression figée : nif'al impersonnel + infinitif","racine":"נ-ת-נ / מ-ת-נ","nature":"expression","genre":"—","nombre":"—","formes":"אֵין אֶפְשָׁרוּת לְהַמְתִּין · הַזְּמַן לָחוּץ","cat":"autre","emploi":"Formule de légitimation de l'action préventive dans le discours militaire et politique israélien"},{"heb":"יִתְעַצֵּם","translit":"yit'atsem","fr":"s'intensifiera, se renforcera","sens":"futur hitpa'el, 3ms","racine":"ע-צ-מ","nature":"verbe","genre":"m","nombre":"sg","formes":"הִתְעַצֵּם · מִתְעַצֵּם · עָצוּם","cat":"verbes","emploi":"Exprime une aggravation future anticipée pour justifier une action immédiate"}],"phrases":[{"heb":"הַחִיכּוּךְ גּוֹבֵר","fr":"les frictions s'intensifient"},{"heb":"הַחִיכּוּךְ גּוֹבֵר","fr":"les frictions s'intensifient"},{"heb":"הַפְּעִילוּת הַחֲרִיגָה בְּמֶרְכַּז הָרְצוּעָה","fr":"l'activité inhabituelle au centre de la bande de Gaza"},{"heb":"אַזְהָרַת הַמּוֹעֵצָה שֶׁהֵקִים טְרָאמְפּ","fr":"l'avertissement du Conseil institué par Trump"},{"heb":"הַמּוֹעֵצָה שֶׁהֵקִים טְרָאמְפּ","fr":"le Conseil qu'a institué Trump"},{"heb":"צְבָא הַהֲגָנָה לְיִשְׂרָאֵל וְשַׁבָּ\"כּ הִשְׁמִידוּ אֶת הַמְּנַהֵרָה","fr":"Tsahal et le Shin Bet ont détruit le tunnel"},{"heb":"הִשְׁמִידוּ אֶת הַמְּנַהֵרָה שֶׁהִתְגַּלְּתָה","fr":"ont détruit le tunnel qui avait été découvert"},{"heb":"הַמְּנַהֵרָה שֶׁהִתְגַּלְּתָה מֵעֵבֶר לַקַּו הַצָּהֹב","fr":"le tunnel découvert au-delà de la ligne jaune"},{"heb":"מֵעֵבֶר לַקַּו הַצָּהֹב","fr":"au-delà de la ligne jaune"},{"heb":"יוֹתֵר מִ-3 שָׁנִים מֵהַכְּנִיסָה הַקַּרְקָעִית","fr":"plus de trois ans depuis l'entrée terrestre"},{"heb":"חָמָאס מְמַשִּׁיךְ לְשַׁקֵּם אֶת יְכֹלוֹתָיו","fr":"le Hamas continue de reconstituer ses capacités"},{"heb":"מְמַשִּׁיךְ לְשַׁקֵּם אֶת יְכֹלוֹתָיו","fr":"continue de reconstituer ses capacités"},{"heb":"בְּצְבָא הַהֲגָנָה לְיִשְׂרָאֵל מַבְהִירִים שֶׁלֹּא נִיתָן לְהַמְתִּין","fr":"à Tsahal on précise qu'il n'est pas possible d'attendre"},{"heb":"מַבְהִירִים שֶׁלֹּא נִיתָן לְהַמְתִּין עַד שֶׁהָאִיּוּם יִתְעַצֵּם","fr":"on précise qu'il n'est pas possible d'attendre que la menace s'intensifie"},{"heb":"עַד שֶׁהָאִיּוּם יִתְעַצֵּם","fr":"jusqu'à ce que la menace s'intensifie"}],"quatrains":[{"heb":"הַחִיכּוּךְ גּוֹבֵר: הַפְּעִילוּת הַחֲרִיגָה בְּמֶרְכַּז הָרְצוּעָה - וְאַזְהָרַת הַמּוֹעֵצָה שֶׁהֵקִים טְרָאמְפּ","fr":"Les frictions s'intensifient : l'activité inhabituelle au centre de la bande de Gaza — et l'avertissement du Conseil institué par Trump","an":"Ce titre-accroche joue sur la structure binaire classique du journalisme israélien : une affirmation nominale percutante suivie du signe deux-points, puis une double information reliée par un tiret long. Le mot הַחִיכּוּךְ (ha-hikkukh) désigne littéralement le frottement, la friction, terme métaphorique courant dans le discours sécuritaire israélien pour évoquer une montée des tensions sans rupture ouverte. גּוֹבֵר (gover) est un participe présent actif signifiant 's'intensifie, croît', conférant au titre une dynamique de progression continue. הַפְּעִילוּת הַחֲרִיגָה (ha-pe'ilut ha-hariga) désigne une activité anormale ou déviante par rapport à une norme établie — terme technique souvent employé dans les briefings militaires. La mention du Conseil créé par Trump ancre l'information dans la diplomatie américaine post-accords, signalant que la surveillance internationale est activée. L'ensemble du titre condense deux niveaux : terrain militaire et pression diplomatique."},{"heb":"אַחֲרֵי יוֹתֵר מִ-12 שָׁעוֹת, צְבָא הַהֲגָנָה לְיִשְׂרָאֵל וְשַׁבָּ\"כּ הִשְׁמִידוּ אֶת הַמְּנַהֵרָה שֶׁהִתְגַּלְּתָה מֵעֵבֶר לַקַּו הַצָּהֹב - יוֹתֵר מִ-3 שָׁנִים מֵהַכְּנִיסָה הַקַּרְקָעִית.","fr":"Après plus de 12 heures, Tsahal et le Shin Bet ont détruit le tunnel découvert au-delà de la ligne jaune — plus de trois ans après l'entrée terrestre.","an":"Ce premier segment informatif établit les faits bruts avec une précision temporelle double : la durée de l'opération (plus de 12 heures) et l'ancrage historique (plus de trois ans depuis l'entrée terrestre d'octobre 2023). הִשְׁמִידוּ (hishmidu) au passé accompli (binyan hif'il) exprime une action définitive — détruire, anéantir — marquant une réussite opérationnelle. הַמְּנַהֵרָה שֶׁהִתְגַּלְּתָה (ha-menahera she-hitgaleta) emploie la forme réfléchie hitpa'el pour le verbe découvrir, suggérant une découverte progressive plutôt qu'une révélation soudaine. לַקַּו הַצָּהֹב (la-kav ha-tsahov) : la ligne jaune est une notion géopolitique précise désignant la limite de déploiement établie dans les accords ou arrangements sécuritaires ; son franchissement constitue une violation grave. L'association de Tsahal et du Shin Bet souligne la dimension double (militaire et renseignement) de l'opération, procédé récurrent dans le journalisme sécuritaire israélien pour légitimer l'action."},{"heb":"חָמָאס מְמַשִּׁיךְ לְשַׁקֵּם אֶת יְכֹלוֹתָיו, וּבְצְבָא הַהֲגָנָה לְיִשְׂרָאֵל מַבְהִירִים שֶׁלֹּא נִיתָן לְהַמְתִּין עַד שֶׁהָאִיּוּם יִתְעַצֵּם.","fr":"Le Hamas continue de reconstituer ses capacités, et à Tsahal on précise qu'il n'est pas possible d'attendre que la menace s'intensifie.","an":"Ce segment central livre la justification doctrinale de l'action israélienne. מְמַשִּׁיךְ לְשַׁקֵּם (memasheikh leshakem) : le participe présent de מְמַשִּׁיךְ exprime une continuité délibérée, tandis que שַׁקֵּם (shakem, binyan pi'el) signifie réhabiliter, reconstruire — terme employé aussi bien en contexte médical que militaire, ce qui lui confère une connotation de résilience organisée. יְכֹלוֹתָיו (yekholotav) désigne ses capacités au sens large : militaires, logistiques, tunnelières. La tournure וּבְצְבָא הַהֲגָנָה מַבְהִירִים (uv-Tsva ha-hagana mavhirim) est une formule journalistique classique permettant de citer une source institutionnelle sans individualiser le porte-parole : 'à Tsahal, on clarifie'. לֹּא נִיתָן לְהַמְתִּין (lo nitan lehamtin) est une expression figée signifiant 'il n'est pas possible d'attendre', formule de légitimation de l'action préventive. יִתְעַצֵּם (yit'atsem, hitpa'el futur) : s'intensifiera, se renforcera — le futur ici projette le danger à venir pour justifier l'urgence présente."},{"heb":"בְּמוֹעֵצַת הַשָּׁלוֹם מְנַסִּים לִשְׁמֹר עַל הַמַּצָּב בְּשְׁלִיטָה, דִּוּוּחַ: זֶה הַדּוּחַ שֶׁהֻגַּשׁ לְמוֹעֵצַת הַבִּטָּחוֹן שֶׁל הָאֻמּוֹת הַמְּאֻחָדוֹת","fr":"Au sein du Conseil de paix, on tente de maintenir la situation sous contrôle ; rapport : voici le document soumis au Conseil de sécurité des Nations Unies.","an":"Ce segment final introduit la dimension diplomatique internationale et renvoie à un document source, procédé éditorial typique du journalisme d'investigation à mi-chemin entre l'info et l'enquête. בְּמוֹעֵצַת הַשָּׁלוֹם מְנַסִּים (be-mo'etset ha-shalom menasim) reprend la même construction impersonnelle collective que le segment précédent : 'au conseil de paix, on essaie'. מְנַסִּים לִשְׁמֹר עַל הַמַּצָּב בְּשְׁלִיטָה (menasim lishmor al ha-matsav be-shilita) est une expression figée du discours politique signifiant maintenir la situation sous contrôle. La virgule suivie de דִּוּוּחַ (divuah, rapport) fonctionne comme un pivot éditorial : le journal signale l'existence d'un document et en propose l'accès, ce qui ancre l'article dans une démarche de journalisme sourcé. מוֹעֵצַת הַבִּטָּחוֹן שֶׁל הָאֻמּוֹת הַמְּאֻחָדוֹת est la traduction hébraïque standard du Conseil de sécurité de l'ONU. L'ensemble signale une internationalisation du dossier et une tentative de contrôle diplomatique face à l'escalade sur le terrain."}],"analyse":"Article de Ynet, grand média israélien en ligne à audience large, au registre journalistique factuel et alarmiste. Le sujet central est l'escalade des frictions sécuritaires dans la bande de Gaza, notamment la destruction d'un tunnel découvert au-delà de la ligne jaune, plus de trois ans après l'entrée terrestre israelienne. L'angle éditorial insiste sur la résurgence des capacités du Hamas et sur la pression exercée par le Conseil de paix institué par Trump pour maintenir la situation sous contrôle, tout en signalant un rapport soumis au Conseil de sécurité de l'ONU. Le registre est informatif et urgent, typique du journalisme sécuritaire israélien contemporain."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — presse en hébreu</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le texte, paragraphe par paragraphe</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Paragraphe '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
