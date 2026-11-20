@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poème — Fiche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f1e4;      /* parchemin clair */
+  --paper2:#fdfaf3;     /* carte plus claire */
+  --ink:#2c2621;        /* encre chaude */
+  --ink2:#5c5348;       /* gris chaud */
+  --ink3:#8a7f70;
+  --line:#d9cdb4;       /* filet */
+  --gold:#a9803e;       /* bronze */
+  --gold2:#c19a5b;
+  --accent:#7a2e2e;     /* bordeaux discret pour titres de section */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Spectral',Georgia,serif;
+  background:
+    radial-gradient(ellipse at 12% 6%,rgba(169,128,62,.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 96%,rgba(122,46,46,.05) 0%,transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  font-size:13pt;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:820px;margin:0 auto;padding:48px 40px 90px}
+
+/* En-tête */
+.head{text-align:center;margin-bottom:14px}
+.kicker{font-family:'Spectral',serif;font-style:italic;color:var(--gold);font-size:12pt;letter-spacing:.5px;margin-bottom:6px}
+.title-he{font-family:'Frank Ruhl Libre',serif;direction:rtl;font-weight:700;font-size:34pt;line-height:1.25;color:var(--ink)}
+.title-fr{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22pt;color:var(--accent);margin-top:2px}
+.author{font-family:'Spectral',serif;font-style:italic;color:var(--ink2);font-size:13pt;margin-top:4px}
+.rule{display:flex;align-items:center;justify-content:center;gap:16px;color:var(--gold);margin:22px auto;max-width:340px}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+.rule span{font-size:14pt;opacity:.7}
+
+/* Analyse globale */
+.intro{font-family:'Spectral',serif;font-size:13.5pt;line-height:1.85;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:4px;padding:22px 26px;margin:8px 0 38px}
+.intro .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:15pt;
+  color:var(--accent);letter-spacing:.5px;display:block;margin-bottom:8px}
+
+/* Quatrains */
+.section-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:20pt;
+  color:var(--accent);margin:34px 0 4px;text-align:center}
+.section-sub{text-align:center;color:var(--ink3);font-style:italic;font-size:11.5pt;margin-bottom:22px}
+
+.quatrain{margin:0 0 40px;padding:0 0 34px;border-bottom:1px solid var(--line)}
+.quatrain:last-of-type{border-bottom:none}
+.q-num{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);
+  font-size:15pt;text-align:center;margin-bottom:14px}
+.q-num::before,.q-num::after{content:'·';margin:0 10px;color:var(--gold2)}
+
+.verse{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:22pt;line-height:2.05;font-weight:500;color:var(--ink);
+  background:var(--paper2);border:1px solid var(--line);border-radius:4px;
+  padding:20px 24px}
+
+/* deux lignes vides entre hébreu et traduction (demande de Moty) */
+.gap{height:2.4em}
+
+.trans{font-family:'Spectral',serif;font-style:italic;direction:ltr;text-align:left;
+  color:var(--ink2);font-size:13pt;line-height:1.7;padding:0 4px}
+
+.analysis{font-family:'Spectral',serif;direction:ltr;text-align:left;
+  font-size:13pt;line-height:1.85;color:var(--ink);margin-top:18px}
+.analysis .lbl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13.5pt;
+  color:var(--gold);letter-spacing:.4px;display:block;margin-bottom:4px}
+
+/* Lexique */
+.lex-wrap{margin-top:26px}
+table.lex{width:100%;border-collapse:collapse;background:var(--paper2);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden}
+table.lex caption{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;
+  color:var(--accent);text-align:center;padding:14px 0 4px;caption-side:top}
+table.lex th,table.lex td{padding:10px 14px;border-bottom:1px solid var(--line);font-size:12.5pt}
+table.lex th{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.6px;font-size:11pt;text-align:left}
+table.lex td.he{font-family:'Frank Ruhl Libre',serif;direction:rtl;text-align:right;
+  font-size:17pt;font-weight:500;white-space:nowrap}
+table.lex td.tr{font-style:italic;color:var(--ink2)}
+table.lex tr:last-child td{border-bottom:none}
+
+.copyright{margin:44px auto 0;padding-top:16px;border-top:1px solid var(--line);
+  text-align:center;font-family:'Spectral',serif;font-size:10.5pt;color:var(--ink3);font-style:italic}
+
+.empty{text-align:center;color:var(--ink3);padding:60px 20px;font-style:italic;font-size:13pt}
+.empty .mark{font-size:34pt;color:var(--gold);display:block;margin-bottom:10px}
+
+@media print{
+  body{background:#fff}
+  .sheet{max-width:none;padding:0}
+  .intro,.verse,table.lex{background:#fff}
+  .quatrain{page-break-inside:avoid}
+}
+@media(max-width:560px){
+  .sheet{padding:30px 18px 70px}
+  .title-he{font-size:27pt}.title-fr{font-size:18pt}
+  .verse{font-size:19pt}
+  body{font-size:12.5pt}
+}
+.argot{margin-top:30px}.argot .argot-note{text-align:center;color:var(--ink3);font-style:italic;font-size:11pt;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet"></div>
+
+<script>
+/* ===========================================================
+   const JEU = LE CONTRAT rempli par l'IA a chaque poeme.
+   Meme structure que le JEU interactif -> correspondance.
+   (Ici : echantillon pour valider le design.)
+   =========================================================== */
+const JEU = {"titre":"יום רגיל","auteur":"","youtube":"","shironet":"","mots":[{"heb":"יַאלְלָה","translit":"yalla","fr":"allez / on y va","sens":"interjection invariable, emprunt à l'arabe dialectal","racine":"emprunt-arabe","nature":"expression","genre":"—","nombre":"—","formes":"יַאלְלָה","cat":"autre","emploi":"יַאלְלָה, קָמִים — allez, on se lève."},{"heb":"קָמִים","translit":"qamim","fr":"on se lève / ils se lèvent","sens":"qal participe présent, masculin pluriel, valeur d'impératif collectif ou de présent habituel","racine":"ק-ו-מ","nature":"verbe","genre":"m","nombre":"pl","formes":"קָם · קָמִים · קָמָה · קָמוֹת","cat":"verbes","emploi":"קָמִים בַּבֹּקֶר — on se lève chaque matin."},{"heb":"בַּבֹּקֶר","translit":"ba-boqer","fr":"le matin / au matin","sens":"préposition בְּ + article + nom masculin singulier","racine":"ב-ק-ר","nature":"préposition","genre":"m","nombre":"sg","formes":"בֹּקֶר · בַּבֹּקֶר · בְּבָקָרִים","cat":"autre","emploi":"קָמִים בַּבֹּקֶר — on se lève le matin."},{"heb":"הַבַּלָּגָן","translit":"ha-balagan","fr":"le bazar / le désordre","sens":"nom masculin singulier, emprunt du russe via le yiddish, avec article défini","racine":"emprunt-russe-yiddish","nature":"nom","genre":"m","nombre":"sg","formes":"בַּלָּגָן · הַבַּלָּגָן","cat":"noms","emploi":"הַבַּלָּגָן בַּמִּטְבָּח — le bazar règne dans la cuisine."},{"heb":"בַּמִּטְבָּח","translit":"ba-mitbach","fr":"dans la cuisine","sens":"préposition בְּ + article + nom masculin singulier","racine":"ט-ב-ח","nature":"préposition","genre":"m","nombre":"sg","formes":"מִטְבָּח · בַּמִּטְבָּח · מִטְבָּחִים","cat":"autre","emploi":"הַבַּלָּגָן בַּמִּטְבָּח — le désordre est dans la cuisine."},{"heb":"אַבָּא","translit":"abba","fr":"papa","sens":"nom masculin singulier, terme affectif pour père, d'origine araméenne","racine":"א-ב","nature":"nom","genre":"m","nombre":"sg","formes":"אַבָּא · אָב · אָבוֹת","cat":"noms","emploi":"אַבָּא מְקַטֵּר — papa râle."},{"heb":"מְקַטֵּר","translit":"meqatter","fr":"râle / grogne / se plaint","sens":"piel participe présent masculin singulier, sens figuré : émettre de la fumée > râler","racine":"ק-ט-ר","nature":"verbe","genre":"m","nombre":"sg","formes":"מְקַטֵּר · מְקַטֶּרֶת · קִטֵּר · לְקַטֵּר","cat":"verbes","emploi":"אַבָּא מְקַטֵּר בַּבֹּקֶר — papa râle le matin."},{"heb":"אִמָּא","translit":"ima","fr":"maman","sens":"nom féminin singulier, terme affectif pour mère, d'origine araméenne","racine":"א-מ","nature":"nom","genre":"f","nombre":"sg","formes":"אִמָּא · אֵם · אִמָּהוֹת","cat":"noms","emploi":"אִמָּא אוֹמֶרֶת — maman dit."},{"heb":"אוֹמֶרֶת","translit":"omeret","fr":"dit / elle dit","sens":"qal participe présent féminin singulier, valeur de présent habituel","racine":"א-מ-ר","nature":"verbe","genre":"f","nombre":"sg","formes":"אוֹמֵר · אוֹמֶרֶת · אָמַר · לוֹמַר","cat":"verbes","emploi":"אִמָּא אוֹמֶרֶת תַּכְלֶ'ס — maman dit franchement."},{"heb":"תַּכְלֶ'ס","translit":"takhless","fr":"concrètement / franchement / au fond","sens":"adverbe invariable, emprunt à l'araméen תַּכְלִית (but, finalité), argot israélien courant","racine":"emprunt-araméen","nature":"adverbe","genre":"—","nombre":"—","formes":"תַּכְלֶ'ס","cat":"autre","emploi":"תַּכְלֶ'ס, הכל בסדר — franchement, tout va bien."},{"heb":"סַבָּבָּה","translit":"sababa","fr":"super / cool / génial","sens":"adjectif-interjection invariable, emprunt à l'arabe dialectal, registre très familier","racine":"emprunt-arabe","nature":"expression","genre":"—","nombre":"—","formes":"סַבָּבָּה","cat":"autre","emploi":"הכל סַבָּבָּה — tout est super."},{"heb":"הָאָח הַקָּטָן","translit":"ha-ach ha-qatan","fr":"le petit frère","sens":"syntagme nominal : nom masculin singulier + adjectif masculin singulier, tous deux définis","racine":"א-ח / ק-ט-נ","nature":"nom","genre":"m","nombre":"sg","formes":"אָח · אַחִים · קָטָן · קְטַנָּה","cat":"noms","emploi":"הָאָח הַקָּטָן נוּדְנִיק — le petit frère est casse-pieds."},{"heb":"נוּדְנִיק","translit":"nudnik","fr":"casse-pieds / raseur / importun","sens":"nom masculin singulier, emprunt au yiddish, désigne une personne ennuyeuse et persistante","racine":"emprunt-yiddish","nature":"nom","genre":"m","nombre":"sg","formes":"נוּדְנִיק · נוּדְנִיקִית · נוּדְנִיקִים","cat":"noms","emploi":"הוּא נוּדְנִיק אֲבָל אָהוּב — il est casse-pieds mais adoré."},{"heb":"אֲבָל","translit":"aval","fr":"mais","sens":"conjonction de coordination adversative","racine":"א-ב-ל","nature":"conjonction","genre":"—","nombre":"—","formes":"אֲבָל","cat":"autre","emploi":"הוּא נוּדְנִיק אֲבָל מֶנְטְשׁ — il est casse-pieds mais c'est un homme bien."},{"heb":"מֶנְטְשׁ","translit":"mentsh","fr":"un homme bien / une personne de valeur / un chic type","sens":"nom masculin singulier, emprunt au yiddish מענטש (être humain digne), connotation élogieuse forte","racine":"emprunt-yiddish","nature":"nom","genre":"m","nombre":"sg","formes":"מֶנְטְשׁ","cat":"noms","emploi":"הוּא מֶנְטְשׁ אֲמִתִּי — c'est un vrai homme bien."},{"heb":"בָּעֶרֶב","translit":"ba-erev","fr":"le soir / au soir","sens":"préposition בְּ + article + nom masculin singulier","racine":"ע-ר-ב","nature":"préposition","genre":"m","nombre":"sg","formes":"עֶרֶב · בָּעֶרֶב · עֲרָבִים","cat":"autre","emploi":"בָּעֶרֶב כֻּלָּם יַחַד — le soir tout le monde est ensemble."},{"heb":"כֻּלָּם","translit":"kullam","fr":"tous / tout le monde","sens":"pronom indéfini masculin pluriel, כֹּל + suffixe pronominal troisième personne masculin pluriel","racine":"כ-ל","nature":"nom","genre":"m","nombre":"pl","formes":"כֻּלָּם · כֻּלָּן · כֻּלּוֹ","cat":"noms","emploi":"כֻּלָּם יַחַד בָּעֶרֶב — tous ensemble le soir."},{"heb":"יַחַד","translit":"yakhad","fr":"ensemble","sens":"adverbe invariable exprimant la réunion collective","racine":"י-ח-ד","nature":"adverbe","genre":"—","nombre":"—","formes":"יַחַד","cat":"autre","emploi":"כֻּלָּם יַחַד — tout le monde ensemble."},{"heb":"אַחְלָה","translit":"achla","fr":"super / génial / excellent","sens":"adjectif invariable, emprunt à l'arabe dialectal أحلى (le plus beau/doux), argot israélien courant","racine":"emprunt-arabe","nature":"adjectif","genre":"—","nombre":"—","formes":"אַחְלָה","cat":"adjectifs","emploi":"אַחְלָה יוֹם עבר היום — c'est une super journée."},{"heb":"יוֹם","translit":"yom","fr":"jour / journée","sens":"nom masculin singulier","racine":"י-ו-מ","nature":"nom","genre":"m","nombre":"sg","formes":"יוֹם · יָמִים · יוֹמִי","cat":"noms","emploi":"אַחְלָה יוֹם — une super journée."}],"phrases":[{"heb":"יַאלְלָה, קָמִים בַּבֹּקֶר, הַבַּלָּגָן בַּמִּטְבָּח.","fr":"Allez, on se lève le matin, le bazar dans la cuisine."},{"heb":"יַאלְלָה, קָמִים בַּבֹּקֶר, הַבַּלָּגָן בַּמִּטְבָּח.","fr":"Allez, on se lève le matin, le bazar dans la cuisine."},{"heb":"יַאלְלָה, קָמִים בַּבֹּקֶר, הַבַּלָּגָן בַּמִּטְבָּח.","fr":"Allez, on se lève le matin, le bazar dans la cuisine."},{"heb":"יַאלְלָה, קָמִים בַּבֹּקֶר, הַבַּלָּגָן בַּמִּטְבָּח.","fr":"Allez, on se lève le matin, le bazar dans la cuisine."},{"heb":"יַאלְלָה, קָמִים בַּבֹּקֶר, הַבַּלָּגָן בַּמִּטְבָּח.","fr":"Allez, on se lève le matin, le bazar dans la cuisine."},{"heb":"אַבָּא מְקַטֵּר, אִמָּא אוֹמֶרֶת: תַּכְלֶ'ס, סַבָּבָּה.","fr":"Papa râle, maman dit : concrètement, c'est cool."},{"heb":"אַבָּא מְקַטֵּר, אִמָּא אוֹמֶרֶת: תַּכְלֶ'ס, סַבָּבָּה.","fr":"Papa râle, maman dit : concrètement, c'est cool."},{"heb":"אַבָּא מְקַטֵּר, אִמָּא אוֹמֶרֶת: תַּכְלֶ'ס, סַבָּבָּה.","fr":"Papa râle, maman dit : concrètement, c'est cool."},{"heb":"אַבָּא מְקַטֵּר, אִמָּא אוֹמֶרֶת: תַּכְלֶ'ס, סַבָּבָּה.","fr":"Papa râle, maman dit : concrètement, c'est cool."},{"heb":"אַבָּא מְקַטֵּר, אִמָּא אוֹמֶרֶת: תַּכְלֶ'ס, סַבָּבָּה.","fr":"Papa râle, maman dit : concrètement, c'est cool."},{"heb":"אַבָּא מְקַטֵּר, אִמָּא אוֹמֶרֶת: תַּכְלֶ'ס, סַבָּבָּה.","fr":"Papa râle, maman dit : concrètement, c'est cool."},{"heb":"הָאָח הַקָּטָן נוּדְנִיק, אֲבָל הוּא מֶנְטְשׁ.","fr":"Le petit frère est casse-pieds, mais c'est un chic type."},{"heb":"הָאָח הַקָּטָן נוּדְנִיק, אֲבָל הוּא מֶנְטְשׁ.","fr":"Le petit frère est casse-pieds, mais c'est un chic type."},{"heb":"הָאָח הַקָּטָן נוּדְנִיק, אֲבָל הוּא מֶנְטְשׁ.","fr":"Le petit frère est casse-pieds, mais c'est un chic type."},{"heb":"הָאָח הַקָּטָן נוּדְנִיק, אֲבָל הוּא מֶנְטְשׁ.","fr":"Le petit frère est casse-pieds, mais c'est un chic type."},{"heb":"בָּעֶרֶב כֻּלָּם יַחַד — אַחְלָה יוֹם.","fr":"Le soir tout le monde ensemble — super journée."},{"heb":"בָּעֶרֶב כֻּלָּם יַחַד — אַחְלָה יוֹם.","fr":"Le soir tout le monde ensemble — super journée."},{"heb":"בָּעֶרֶב כֻּלָּם יַחַד — אַחְלָה יוֹם.","fr":"Le soir tout le monde ensemble — super journée."},{"heb":"בָּעֶרֶב כֻּלָּם יַחַד — אַחְלָה יוֹם.","fr":"Le soir tout le monde ensemble — super journée."},{"heb":"בָּעֶרֶב כֻּלָּם יַחַד — אַחְלָה יוֹם.","fr":"Le soir tout le monde ensemble — super journée."}],"quatrains":[{"heb":"יַאלְלָה, קָמִים בַּבֹּקֶר, הַבַּלָּגָן בַּמִּטְבָּח.\nאַבָּא מְקַטֵּר, אִמָּא אוֹמֶרֶת: תַּכְלֶ'ס, סַבָּבָּה.\nהָאָח הַקָּטָן נוּדְנִיק, אֲבָל הוּא מֶנְטְשׁ.\nבָּעֶרֶב כֻּלָּם יַחַד — אַחְלָה יוֹם.","fr":"Allez, on se lève le matin, le bazar dans la cuisine. / Papa râle, maman dit : concrètement, c'est cool. / Le petit frère est casse-pieds, mais c'est un chic type. / Le soir tout le monde ensemble — super journée.","an":"Ce quatrain unique constitue la totalité du poème et déploie une scène domestique en quatre moments enchaînés avec fluidité. Le premier vers s'ouvre par 'יַאלְלָה' (yalla), interjection arabe totalement intégrée à l'hébreu parlé israélien, qui propulse le lecteur dans le mouvement du matin sans préambule. Le 'בַּלָּגָן' (balagan, le bazar, d'origine russe via le yiddish) peint le chaos affectueux de la cuisine familiale. Le deuxième vers oppose deux réactions parentales : le père 'מְקַטֵּר' (râle, grogne, verbe formé sur une image de fumée) et la mère tempère par un 'תַּכְלֶ'ס' (takhless, au fond, concrètement, de l'araméen) suivi de 'סַבָּבָּה' (sababa, super, de l'arabe). Cette alternance crée une tension domestique immédiatement résolue par le pragmatisme maternel. Le troisième vers introduit le petit frère qualifié de 'נוּדְנִיק' (nudnik, casse-pieds, du yiddish) mais aussitôt réhabilité par 'מֶנְטְשׁ' (mensch, homme bien, du yiddish), créant une antithèse tendre. Le dernier vers, bref et conclusif, synthétise tout : la réunion vespérale transforme le désordre quotidien en 'אַחְלָה יוֹם' (journée géniale, de l'arabe). La syntaxe paratactique, sans connecteurs élaborés, mime la réalité orale et familière. Le registre est délibérément populaire et polyglotte, célébrant l'hébreu israélien dans sa richesse d'emprunt comme langue vivante et métissée. La chute optimiste confère au poème une structure de mini-récit à résolution heureuse."}],"analyse":"Ce poème bref, intitulé 'יוֹם רָגִיל' (Un jour ordinaire), est un quatrain unique écrit dans un hébreu moderne vivant, mêlant registre familier, argot israélien contemporain et emprunts à l'arabe dialectal. Le poète dresse un tableau intime et chaleureux de la vie de famille quotidienne, depuis le réveil matinal jusqu'au soir partagé. La forme est libre, sans schéma rimique régulier, mais le rythme oral et les exclamations créent une musicalité propre au langage parlé. Le thème central est la banalité élevée au rang de bonheur simple et authentique."};
+/* ↑ VIDE en production — l'IA remplit titre/auteur/analyse/quatrains/mots. */
+
+const NIKOUD=/[\u0591-\u05C7]/g;
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function br(s){return esc(s).split('\n').join('<br>');}
+
+function render(){
+  const el=document.getElementById('sheet');
+  if(!JEU.quatrains || !JEU.quatrains.length){
+    el.innerHTML='<div class="empty"><span class="mark">✦</span>En attente du poème.<br>La fiche se remplit dès que la leçon est générée.</div>';
+    return;
+  }
+  let h='';
+  h+='<div class="head">';
+  h+='<div class="kicker">Fiche de lecture — poésie hébraïque</div>';
+  h+='<div class="title-he">'+esc(JEU.titre||'שיר')+'</div>';
+  if(JEU.auteur) h+='<div class="author">'+esc(JEU.auteur)+'</div>';
+  h+='</div>';
+  h+='<div class="rule"><span>✦</span></div>';
+
+  if(JEU.analyse){
+    h+='<div class="intro"><span class="lbl">Vue d\u2019ensemble</span>'+br(JEU.analyse)+'</div>';
+  }
+
+  h+='<div class="section-title">Le poème, quatrain par quatrain</div>';
+  h+='<div class="section-sub">texte · traduction · analyse</div>';
+
+  JEU.quatrains.forEach(function(q,i){
+    h+='<div class="quatrain">';
+    h+='<div class="q-num">Quatrain '+(i+1)+'</div>';
+    h+='<div class="verse">'+br(q.heb)+'</div>';
+    h+='<div class="gap"></div>';
+    h+='<div class="trans">'+br(q.fr)+'</div>';
+    if(q.an){ h+='<div class="analysis"><span class="lbl">Analyse</span>'+br(q.an)+'</div>'; }
+    h+='</div>';
+  });
+
+  if(JEU.mots && JEU.mots.length){
+    h+='<div class="lex-wrap"><table class="lex"><caption>Lexique</caption>';
+    h+='<tr><th>Hébreu</th><th>Translittération</th><th>Français</th></tr>';
+    JEU.mots.forEach(function(m){
+      h+='<tr><td class="he">'+esc(m.heb||m.h||'')+'</td><td class="tr">'+esc(m.translit||m.t||'')+'</td><td>'+esc(m.fr||m.f||'')+'</td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  h+="<div class=\"lex-wrap argot\"><table class=\"lex\"><caption>Le coin argot<\/caption><tr><th>Argot<\/th><th>Sens<\/th><th>Hébreu standard<\/th><th>Origine<\/th><\/tr><tr><td class=\"he\">יַאלְלָה<\/td><td>allez ! on y va !<\/td><td class=\"he\">בּוֹאוּ, קָדִימָה<\/td><td class=\"tr\">arabe<\/td><\/tr><tr><td class=\"he\">סַבָּבָּה<\/td><td>d&#39;accord, ça marche, super<\/td><td class=\"he\">בְּסֵדֶר, טוֹב<\/td><td class=\"tr\">arabe<\/td><\/tr><tr><td class=\"he\">אַחְלָה<\/td><td>super, génial<\/td><td class=\"he\">מְצֻיָּן<\/td><td class=\"tr\">arabe<\/td><\/tr><tr><td class=\"he\">בַּלָּגָן<\/td><td>désordre, pagaille<\/td><td class=\"he\">אִי סֵדֶר<\/td><td class=\"tr\">russe<\/td><\/tr><tr><td class=\"he\">נוּדְנִיק<\/td><td>casse-pieds<\/td><td class=\"he\">טַרְחָן<\/td><td class=\"tr\">yiddish<\/td><\/tr><tr><td class=\"he\">תַּכְלֶ&#39;ס<\/td><td>concrètement, au fond<\/td><td class=\"he\">לְמַעֲשֶׂה<\/td><td class=\"tr\">yiddish (de l&#39;hébreu תַּכְלִית)<\/td><\/tr><tr><td class=\"he\">מֶנְטְשׁ<\/td><td>un homme bien, un mensch<\/td><td class=\"he\">אָדָם הָגוּן<\/td><td class=\"tr\">yiddish<\/td><\/tr><\/table><p class=\"argot-note\">Mots familiers repérés dans le texte : à comprendre, à employer entre amis.<\/p><\/div>";h+='<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>';
+  el.innerHTML=h;
+}
+render();
+</script>
+</body></html>
