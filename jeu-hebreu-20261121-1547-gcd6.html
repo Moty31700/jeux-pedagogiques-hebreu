@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)https://lecons.hebreu-zen.cloud/jeu-hebreu-20260811-1216-m9ef.html -->
+<html lang="fr" dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Thème</title>
+<link href="./Thème_files/css2" rel="stylesheet">
+<style>
+:root{
+  --cream:#fdf8f0;--parch:#ede8d8;--ink:#1a1408;--ink2:#4a3f28;--ink3:#7a6a50;
+  --gold:#c9952a;--gold2:#e8b84b;--blue:#1e5fa8;--blue2:#4a90d9;
+  --green:#2e7d32;--red:#c62828;--orange:#e65100;--purple:#6a1b9a;
+  --shadow:rgba(0,0,0,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'Crimson Pro',Georgia,serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 12% 8%,rgba(201,149,42,.09) 0%,transparent 52%),
+             radial-gradient(ellipse at 88% 92%,rgba(30,95,168,.07) 0%,transparent 52%);
+  pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 28px,rgba(180,160,100,.06) 28px,rgba(180,160,100,.06) 29px);
+  pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:660px;margin:0 auto;padding:26px 16px 90px}
+
+.app-header{text-align:center;margin-bottom:18px}
+.app-heb{font-family:'Noto Serif Hebrew',serif;font-size:40px;font-weight:900;color:var(--ink);line-height:1.2;text-shadow:2px 2px 0 rgba(201,149,42,.13)}
+.app-fr{font-size:16px;font-style:italic;color:var(--ink2);margin-top:2px}
+.ornament{display:flex;align-items:center;justify-content:center;gap:14px;color:var(--gold);opacity:.45;margin:10px auto;width:220px}
+.ornament::before,.ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+.reglages{background:rgba(255,251,240,.95);border:1px solid rgba(201,149,42,.2);border-radius:14px;padding:12px 14px;margin-bottom:14px;box-shadow:0 2px 8px var(--shadow)}
+.reglages .titre-mini{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink3);margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid rgba(201,149,42,.3);background:rgba(201,149,42,.06);color:var(--ink2);border-radius:20px;padding:5px 13px;font-family:'Crimson Pro',serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s}
+.chip.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.chip.tous{border-style:dashed}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink2)}
+.switch .box{width:44px;height:24px;border-radius:14px;background:rgba(0,0,0,.15);position:relative;transition:.2s}
+.switch .box::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.switch.on .box{background:var(--green)}
+.switch.on .box::after{left:22px}
+
+.tabs{display:flex;flex-wrap:wrap;gap:5px;background:rgba(237,232,216,.6);border-radius:16px;padding:5px;margin-bottom:20px;border:1px solid rgba(201,149,42,.15)}
+.tab{flex:1 0 auto;padding:9px 10px;border:none;border-radius:11px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:12.5px;font-weight:700;color:var(--ink3);background:transparent;transition:.2s}
+.tab.active{background:rgba(255,251,240,.98);color:var(--ink);box-shadow:0 2px 12px var(--shadow);border:1px solid rgba(201,149,42,.22)}
+.tab:hover:not(.active){background:rgba(255,251,240,.6)}
+
+.card{background:rgba(255,251,240,.97);border-radius:18px;padding:20px 20px;box-shadow:0 2px 0 rgba(201,149,42,.18),0 8px 28px var(--shadow);border:1px solid rgba(201,149,42,.18);margin-bottom:14px}
+.heb{font-family:'Noto Serif Hebrew',serif;direction:rtl;color:var(--ink)}
+.heb-xl{font-size:40px;font-weight:900;text-align:center;line-height:1.3}
+.heb-lg{font-size:26px;font-weight:700;line-height:1.6}
+.heb-md{font-size:20px;line-height:1.9}
+.fr{font-style:italic}
+.sens{color:var(--ink3);font-size:15px;margin-top:6px}
+.audio-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(201,149,42,.1);border:1.5px solid rgba(201,149,42,.3);color:var(--gold);border-radius:20px;padding:4px 12px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:13px;font-weight:600;transition:.2s}
+.audio-btn:hover{background:rgba(201,149,42,.2)}
+.fr-hidden{filter:blur(7px);opacity:.4;cursor:pointer;user-select:none}
+.reveal{background:rgba(201,149,42,.08);border:1.5px solid rgba(201,149,42,.25);color:var(--gold);border-radius:9px;padding:6px 10px;cursor:pointer;font-size:14px}
+.center{text-align:center}
+.badge{display:inline-block;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.b-noms{background:var(--blue)}.b-verbes{background:var(--green)}.b-adjectifs{background:var(--purple)}.b-autre{background:var(--orange)}
+
+table.lex{width:100%;border-collapse:collapse}
+table.lex th,table.lex td{padding:9px 8px;border-bottom:1px solid rgba(201,149,42,.15);text-align:left}
+table.lex th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)}
+table.lex td.he{font-family:'Noto Serif Hebrew',serif;direction:rtl;font-size:20px;text-align:right;font-weight:700}
+.morpho-row{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:15px;margin-top:8px}
+.morpho-row .k{color:var(--ink3);font-weight:600}
+.morpho-he{font-family:'Noto Serif Hebrew',serif;direction:rtl}
+
+.btn{border:none;border-radius:12px;padding:12px 18px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:15px;font-weight:700;transition:.2s}
+.btn-v{background:var(--green);color:#fff}.btn-f{background:var(--red);color:#fff}
+.btn-g{background:var(--gold);color:#fff}
+.btn-o{background:transparent;border:1.5px solid rgba(201,149,42,.35);color:var(--ink2)}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.q-card.correct{background:#edf7ee;border-color:#4caf50}
+.q-card.wrong{background:#fdeaea;border-color:#ef5350}
+
+.tiles{display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center;margin:14px 0;min-height:44px}
+.tile{font-family:'Noto Serif Hebrew',serif;font-size:20px;background:rgba(201,149,42,.12);border:1.5px solid rgba(201,149,42,.35);border-radius:10px;padding:6px 12px;cursor:pointer}
+.tile.used{opacity:.3;pointer-events:none}
+.zone{min-height:48px;border:2px dashed rgba(201,149,42,.3);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;direction:rtl;justify-content:center}
+
+.bilan-pct{font-size:56px;font-weight:900;text-align:center;color:var(--gold)}
+.bilan-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(201,149,42,.15);font-size:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="app-header" id="app-header"></div>
+
+  <div class="reglages">
+    <div class="titre-mini">Réglages</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div class="switch" id="sw-nikoud" onclick="toggleNikoud()"><span class="box"></span><span>Sans nikoud</span></div>
+    </div>
+    <div class="titre-mini" style="margin-top:12px">Vitesse audio</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <input type="range" id="vit-slider" min="0" max="3" step="1" value="2" oninput="setVitesse(this.value)" style="flex:1;accent-color:var(--gold)">
+      <span id="vit-lbl" style="min-width:44px;text-align:right;font-weight:700;color:var(--gold)">×1</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);margin-top:2px">
+      <span>×0.5</span><span>×0.75</span><span>×1</span><span>×1.5</span>
+    </div>
+    <div class="titre-mini" style="margin-top:12px">Catégories</div>
+    <div class="chips" id="cat-chips"><button class="chip tous on" onclick="toutesCats()">Toutes</button><button class="chip on" onclick="toggleCat(&#39;noms&#39;)">noms</button><button class="chip on" onclick="toggleCat(&#39;verbes&#39;)">verbes</button></div>
+  </div>
+
+  <div class="tabs" id="tabs"><button class="tab active" onclick="showTab(&#39;mots&#39;)">Mots</button><button class="tab" onclick="showTab(&#39;morpho&#39;)">Morphologie</button><button class="tab" onclick="showTab(&#39;lexique&#39;)">Lexique</button><button class="tab" onclick="showTab(&#39;phrases&#39;)">Phrases</button><button class="tab" onclick="showTab(&#39;textes&#39;)">3 Textes</button><button class="tab" onclick="showTab(&#39;vf&#39;)">Vrai/Faux</button><button class="tab" onclick="showTab(&#39;recon&#39;)">Reconstituer</button><button class="tab" onclick="showTab(&#39;bilan&#39;)">Score</button></div>
+  <div id="content"><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">במה / במות</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;בָּמָה / בָּמוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr0" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">scène / scènes</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr0&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom féminin, pluriel en ות- ; désigne la scène de spectacle.</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">קהל / קהלים</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;קָהָל / קְהָלִים&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr1" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">public / publics</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr1&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom masculin, pluriel en ים- ; désigne l'ensemble des spectateurs.</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">צחק / לצחק</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;צָחַק / לִצְחֹק&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr2" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">rire / rire (infinitif)</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr2&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Verbe פָּעַל ; exprime l'action de rire.</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מסעדה-תאטרון</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִסְעָדָה-תֵּאַטְרוֹן&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr3" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">café-théâtre</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr3&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom composé féminin-masculin ; désigne un lieu alliant restauration et spectacle.</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">שחקן / שחקנית</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;שַׂחְקָן / שַׂחְקָנִית&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr4" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">acteur / actrice</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr4&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom masculin/féminin ; désigne la personne qui joue sur scène, construit sur la racine jouer.</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מיקרופון / מיקרופונים</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מִיקְרוֹפוֹן / מִיקְרוֹפוֹנִים&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr5" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">microphone / microphones</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr5&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Emprunt à l'anglais, nom masculin ; au pluriel on ajoute le suffixe ִים.</div></div><div class="card center"><span class="badge b-verbes">verbes</span><div class="heb heb-xl">צפה / לצפות</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;צָפָה / לִצְפּוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr6" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">regarder / voir (un spectacle)</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr6&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Verbe de la binyan pa'al, racine ל״ה ; la forme de base est צָפָה (passé, 3e pers. masc. sing.).</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">הצגה / הצגות</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;הַצָּגָה / הַצָּגוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr7" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">spectacle / représentation</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr7&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom féminin dérivé de la racine י-צ-ג via la binyan hif'il ; préfixe הַ indique l'état construit défini.</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">מנגינה / מנגינות</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;מַנְגִּינָה / מַנְגִּינוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr8" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">mélodie / mélodie (pl.)</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr8&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom féminin de la forme מַפְעִילָה, dérivé de la racine נ-ג-נ (jouer de la musique).</div></div><div class="card center"><span class="badge b-noms">noms</span><div class="heb heb-xl">כרטיסייה / כרטיסיות</div><div style="margin:8px 0"><button class="audio-btn" onclick="say(&#39;כַּרְטִיסִייָה / כַּרְטִיסִיּוֹת&#39;)">🔊 Écouter</button></div><div class="fr fr-hidden" id="fr9" onclick="this.classList.remove(&#39;fr-hidden&#39;)" style="font-size:20px">billetterie / guichet de billets</div><div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(&#39;fr9&#39;).classList.remove(&#39;fr-hidden&#39;)">Révéler la traduction</div><div class="sens">Sens : Nom féminin formé sur כַּרְטִיס (billet) avec le suffixe יָּה indiquant un lieu ou une fonction.</div></div></div>
+</div>
+
+<script>
+/* ============================================================
+   STRUCTURE "JEU" = LE CONTRAT que l'IA devra remplir à chaque leçon.
+   ============================================================ */
+const JEU = {"titre":"cuisine","mots":[{"heb":"מִטְבָּח","translit":"mitbakh","fr":"cuisine (pièce)","sens":"Nom masculin singulier de la racine ט-ב-ח, liée à la cuisson et à l'abattage, formé avec le préfixe מ- indiquant un lieu.","racine":"ט-ב-ח","nature":"nom","genre":"masculin","nombre":"singulier","formes":"מִטְבָּח · מִטְבָּחִים","cat":"noms","emploi":"Désigne la pièce où l'on cuisine, utilisé dans tous les registres du quotidien."},{"heb":"לְבַשֵּׁל","translit":"levashel","fr":"cuisiner, faire cuire","sens":"Verbe à la forme פִּיעֵל (intensif) de la racine ב-ש-ל, exprimant l'action de cuire ou de préparer un plat.","racine":"ב-ש-ל","nature":"verbe","genre":"—","nombre":"—","formes":"מְבַשֵּׁל · מְבַשֶּׁלֶת · בִּישֵּׁל · יְבַשֵּׁל","cat":"verbes","emploi":"Verbe très courant pour parler de la préparation des repas, neutre et utilisable dans tous les contextes."},{"heb":"מַצְרֵכִים","translit":"matrekhim","fr":"ingrédients","sens":"Nom masculin pluriel dérivé de la racine צ-ר-כ signifiant le besoin ou la nécessité, désignant ce dont on a besoin pour préparer un plat.","racine":"צ-ר-כ","nature":"nom","genre":"masculin","nombre":"pluriel","formes":"מַצְרֵך · מַצְרֵכִים","cat":"noms","emploi":"Mot standard utilisé dans les recettes de cuisine et les conversations sur la préparation des repas, registre neutre."},{"heb":"מַחֲבַת","translit":"makhavat","fr":"poêle (à frire)","sens":"Nom féminin singulier formé sur la racine ח-ב-ת avec le préfixe מ-, désignant un ustensile de cuisine plat utilisé pour frire.","racine":"ח-ב-ת","nature":"nom","genre":"feminin","nombre":"singulier","formes":"מַחֲבַת · מַחֲבָתוֹת","cat":"noms","emploi":"Désigne la poêle à frire, terme concret et très fréquent dans les conversations quotidiennes sur la cuisine."},{"heb":"מַתְכּוֹן","translit":"matkon","fr":"recette","sens":"Nom masculin singulier de la racine ת-כ-נ liée à la planification et à la mesure, signifiant littéralement un plan ou une formule établie.","racine":"ת-כ-נ","nature":"nom","genre":"masculin","nombre":"singulier","formes":"מַתְכּוֹן · מַתְכּוֹנִים","cat":"noms","emploi":"Mot central dans le domaine culinaire, utilisé pour parler de recettes écrites ou transmises oralement, registre neutre."},{"heb":"תַּנּוּר","translit":"tanur","fr":"four","sens":"Nom masculin singulier de la racine נ-ו-ר liée à la chaleur et au feu, avec le préfixe ת caractéristique de certains noms d'instruments.","racine":"נ-ו-ר","nature":"nom","genre":"masculin","nombre":"singulier","formes":"תַּנּוּר · תַּנּוּרִים","cat":"noms","emploi":"Désigne le four de cuisine domestique ; utilisé dans un registre neutre et courant pour parler de la cuisson au four."},{"heb":"לִטְעוֹם","translit":"lit'om","fr":"goûter, déguster","sens":"Verbe à l'infinitif de la binyan קַל (pa'al), exprimant l'action de goûter ou tester la saveur d'un aliment.","racine":"ט-ע-מ","nature":"verbe","genre":"—","nombre":"—","formes":"לִטְעוֹם · טָעַמְתִּי · טוֹעֵם · יִטְעַם","cat":"verbes","emploi":"Très courant en cuisine pour indiquer qu'on vérifie l'assaisonnement ou qu'on découvre un plat ; registre neutre à familier."},{"heb":"תַּבְלִין / תַּבְלִינִים","translit":"tavlin / tavlinim","fr":"épice, condiment / épices","sens":"Nom masculin dérivé de la racine ב-ל-ל signifiant mélanger, avec le préfixe ת ; désigne ce qui est mélangé à la nourriture pour la parfumer.","racine":"ב-ל-ל","nature":"nom","genre":"masculin","nombre":"singulier","formes":"תַּבְלִין · תַּבְלִינִים","cat":"noms","emploi":"Mot très usuel en cuisine israélienne pour désigner les épices et aromates ; employé au singulier ou au pluriel selon le contexte."},{"heb":"לְהָגִישׁ","translit":"lehagish","fr":"servir (un plat), présenter","sens":"Verbe à l'infinitif de la binyan הִפְעִיל, formé sur la racine נ-ג-שׁ qui exprime l'idée d'approcher ou de présenter quelque chose à quelqu'un.","racine":"נ-ג-שׁ","nature":"verbe","genre":"—","nombre":"—","formes":"לְהָגִישׁ · הִגַּשְׁתִּי · מַגִּישׁ · יַגִּישׁ","cat":"verbes","emploi":"Utilisé pour décrire le fait de servir un plat à table ou de le présenter aux convives ; registre courant et légèrement formel."},{"heb":"קֶרֶשׁ חִיתּוּךְ","translit":"keresh khitukh","fr":"planche à découper","sens":"Expression nominale composée de קֶרֶשׁ (planche, masc. sg.) et du nom d'action חִיתּוּךְ (découpage) issu de la racine ח-ת-כ ; fonctionne comme un nom composé.","racine":"כ-ת-כ","nature":"nom","genre":"masculin","nombre":"singulier","formes":"קֶרֶשׁ חִיתּוּךְ · קְרָשִׁים לַחִיתּוּךְ","cat":"noms","emploi":"Désigne l'ustensile de cuisine indispensable pour couper légumes et viandes ; expression usuelle dans le registre quotidien et culinaire."}],"phrases":[{"heb":"הַמִּטְבָּח שֶׁלָּנוּ גָּדוֹל וּמְסוּדָּר מְאֹד.","fr":"Notre cuisine est très grande et bien rangée."},{"heb":"אֲנִי אוֹהֵב לְבַשֵּׁל אֲרוּחוֹת מְיֻחָדוֹת בְּסוֹף הַשָּׁבוּעַ.","fr":"J'aime cuisiner des repas spéciaux le week-end."},{"heb":"קָנִיתִי אֶת כָּל הַמַּצְרֵכִים לְמַתְכּוֹן הֶחָדָשׁ.","fr":"J'ai acheté tous les ingrédients pour la nouvelle recette."},{"heb":"חִמַּמְתִּי שֶׁמֶן בַּמַּחֲבַת לִפְנֵי שֶׁהוֹסַפְתִּי אֶת הַבָּצָל.","fr":"J'ai chauffé de l'huile dans la poêle avant d'ajouter l'oignon."},{"heb":"הַמַּתְכּוֹן הַזֶּה שֶׁל סָבְתָּא שֶׁלִּי פָּשׁוּט אֲבָל טָעִים מְאֹד.","fr":"Cette recette de ma grand-mère est simple mais très délicieuse."},{"heb":"שַׂמְתִּי אֶת הָעוּגָה בַּתַּנּוּר לְחֶצִי שָׁעָה.","fr":"J'ai mis le gâteau dans le four pendant une demi-heure."},{"heb":"תָּמִיד חָשׁוּב לִטְעוֹם אֶת הָרֹטֶב לִפְנֵי הַהַגָּשָׁה.","fr":"Il est toujours important de goûter la sauce avant de servir."},{"heb":"הַתַּבְלִינִים בַּשּׁוּק הָיוּ צְבַעוֹנִיִּים וְרֵיחָנִיִּים מְאוֹד.","fr":"Les épices au marché étaient très colorées et très parfumées."},{"heb":"הִיא הִגִּישָׁה אֶת הַמָּרָק חַם עִם לֶחֶם טָרִי.","fr":"Elle a servi la soupe chaude avec du pain frais."},{"heb":"קָנִיתִי קֶרֶשׁ חִיתּוּךְ חָדָשׁ מֵעֵץ לַמִּטְבָּח שֶׁלִּי.","fr":"J'ai acheté une nouvelle planche à découper en bois pour ma cuisine."}],"textes":[{"titre":"Quotidien","heb":"בְּכָל יוֹם שִׁשִּׁי אֲנִי מְבַשֶּׁלֶת לַשַּׁבָּת. אֲנִי קוֹנָה יְרָקוֹת טְרִיִּים בַּשּׁוּק הַקָּרוֹב לַבַּיִת. הַיּוֹם הַחֲלַטְתִּי לַעֲשׂוֹת מָרָק עוֹף עִם תַּבְלִינִים. חִתַּכְתִּי גְּזָרִים וּבְצָלִים עַל קֶרֶשׁ הַחִיתּוּךְ. אַחַר כָּךְ שַׂמְתִּי הַכֹּל בַּסִּיר עִם מַיִם וּמֶלַח. הַמָּרָק בִּשֵּׁל לְאַט עַל אֵשׁ קְטַנָּה כְּשָׁעָה שְׁלֵמָה. טָעַמְתִּי וְהוֹסַפְתִּי עוֹד קְצָת פִּלְפֵּל שָׁחוֹר. לְבַסּוֹף הִגַּשְׁתִּי אֶת הַמָּרָק לְכָל הַמִּשְׁפָּחָה וְכֻלָּם אָהֲבוּ אוֹתוֹ.","fr":"Chaque vendredi je cuisine pour le Shabbat. J'achète des légumes frais au marché proche de chez moi. Aujourd'hui j'ai décidé de faire une soupe de poulet avec des épices. J'ai coupé des carottes et des oignons sur la planche à découper. Ensuite j'ai tout mis dans la casserole avec de l'eau et du sel. La soupe a mijoté doucement à feu doux pendant une bonne heure. J'ai goûté et j'ai ajouté encore un peu de poivre noir. Finalement j'ai servi la soupe à toute la famille et tout le monde l'a aimée."},{"titre":"Familier","heb":"אַחִי, הַתַּנּוּר שֶׁלִּי עָשָׂה לִי כָּאוֹס מַמָּשׁ! שָׂרַפְתִּי אֶת הַפִּיצָּה כִּי שָׁכַחְתִּי אוֹתָהּ שָׁם. נוּ, זֶה קָרָה לְכֻלָּם, אַל תִּהְיֶה דְּרָמָטִי. בִּסְדֶר, אֲבָל הַתַּבְלִינִים שֶׁלִּי גַּם נִגְמְרוּ וְזֶה מְעַצְבֵּן בָּאֱמֶת. תִּקְנֶה עוֹד, זֶה לֹא סוֹף הָעוֹלָם. אֱמֶת, אֲבָל אֲנִי בֶּאֱמֶת שׂוֹנֵא לִטְעוֹם אוֹכֶל תָּפֵל. בְּלִי תַּבְלִינִים, חַיִּים זֶה לֹא חַיִּים בַּמִּטְבָּח. טוֹטָלִי נָכוֹן, בְּסוֹף הִזְמַנְתִּי פִיצָּה מִבַּחוּץ וְזֶה הִצִּיל אֶת הָעֶרֶב.","fr":"Mon vieux, mon four m'a vraiment foutu le chaos ! J'ai brûlé la pizza parce que je l'avais oubliée là-dedans. Bah, ça arrive à tout le monde, fais pas le dramatique. OK, mais mes épices sont aussi épuisées et c'est vraiment chiant. T'en achètes d'autres, c'est pas la fin du monde. C'est vrai, mais je déteste vraiment goûter une bouffe fade. Sans épices, la vie c'est pas la vie en cuisine. Totalement vrai, finalement j'ai commandé une pizza de dehors et ça a sauvé la soirée."},{"titre":"Dialogues","heb":"דָּנִי: נוֹעָה, אַתְּ יוֹדַעַת אֵיךְ לְהָגִישׁ חוּמוּס בְּצוּרָה יָפָה? נוֹעָה: כֵּן! חָשׁוּב לָשִׂים אוֹתוֹ בְּקַעֲרָה שְׁטוּחָה עִם שֶׁמֶן זַיִת מְעַל. דָּנִי: וְאֵיזֶה תַּבְלִינִים אַתְּ מוֹסֶפֶת עָלָיו? נוֹעָה: פַּפְּרִיקָה וּקְמוֹן, וְלִפְעָמִים גַּם פֶּטְרוֹזִיל קָצוּץ. דָּנִי: נִשְׁמַע טָעִים! אֲנִי רוֹצֶה לִטְעוֹם. נוֹעָה: כְּשֶׁהוּא יוֹצֵא מֵהַתַּנּוּר אַחֲרֵי הַחִמּוּם, הוּא הֲכִי טוֹב. דָּנִי: אַתְּ חוֹשֶׁבֶת שֶׁאֲנִי יָכוֹל לַחְתֹּךְ פִּיתָּה עַל קֶרֶשׁ הַחִיתּוּךְ שֶׁלָּךְ? נוֹעָה: כְּמוּבָן! בּוֹא נֵשֵׁב יַחַד וְנֹאכַל, הָאוֹכֶל מוּכָן.","fr":"Dani : Noa, tu sais comment servir le houmous de façon jolie ? Noa : Oui ! Il est important de le mettre dans un bol plat avec de l'huile d'olive dessus. Dani : Et quelles épices tu ajoutes par-dessus ? Noa : Du paprika et du cumin, et parfois aussi du persil haché. Dani : Ça a l'air délicieux ! Je veux goûter. Noa : Quand il sort du four après le réchauffage, il est le meilleur. Dani : Tu penses que je peux couper un pita sur ta planche à découper ? Noa : Bien sûr ! Viens on s'assied ensemble et on mange, le repas est prêt."}]};
+/* ↑↑↑  VIDE — l'IA remplit mots[] / phrases[] / textes[] à chaque leçon (voir contrat).  ↑↑↑ */
+
+let sansNikoud = false;
+let selCats = new Set(JEU.mots.map(m=>m.cat));
+let score = {ok:0, ko:0};
+
+const NIKOUD = /[\u0591-\u05C7]/g;
+function strip(s){ return String(s).replace(NIKOUD,''); }
+function H(s){ return sansNikoud ? strip(s) : s; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function motsF(){ return JEU.mots.filter(m=>selCats.has(m.cat)); }
+function badgeClass(c){ return ['noms','verbes','adjectifs'].includes(c) ? 'b-'+c : 'b-autre'; }
+
+const VITESSES = [0.5, 0.75, 1, 1.5];
+let vitesse = 1;
+function setVitesse(idx){
+  vitesse = VITESSES[+idx];
+  document.getElementById('vit-lbl').textContent = '×'+vitesse;
+}
+function say(txt){
+  try{ speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(strip(txt)); u.lang='he-IL'; u.rate=vitesse;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function audioBtn(txt){ return '<button class="audio-btn" onclick="say(\''+String(txt).replace(/'/g,"\\'")+'\')">🔊 Écouter</button>'; }
+
+const TABS = [
+  {id:'mots',lbl:'Mots'},{id:'morpho',lbl:'Morphologie'},{id:'lexique',lbl:'Lexique'},
+  {id:'phrases',lbl:'Phrases'},{id:'textes',lbl:'3 Textes'},{id:'vf',lbl:'Vrai/Faux'},
+  {id:'qcm',lbl:'QCM'},{id:'recon',lbl:'Reconstituer'},{id:'bilan',lbl:'Score'}
+];
+let ongletCourant = 'mots';
+function initTabs(){
+  document.getElementById('tabs').innerHTML = TABS.map(t=>
+    '<button class="tab'+(t.id===ongletCourant?' active':'')+'" onclick="showTab(\''+t.id+'\')">'+t.lbl+'</button>').join('');
+}
+function showTab(id){ ongletCourant=id; initTabs(); render(); }
+
+function initReglages(){
+  const cats = [...new Set(JEU.mots.map(m=>m.cat))];
+  let html = '<button class="chip tous'+(selCats.size===cats.length?' on':'')+'" onclick="toutesCats()">Toutes</button>';
+  html += cats.map(c=>'<button class="chip '+(selCats.has(c)?'on':'')+'" onclick="toggleCat(\''+c+'\')">'+c+'</button>').join('');
+  document.getElementById('cat-chips').innerHTML = html;
+  const sw=document.getElementById('sw-nikoud');
+  sw.className = 'switch'+(sansNikoud?'':' on');
+  sw.querySelector('span:last-child').textContent = sansNikoud ? 'Sans nikoud' : 'Avec nikoud';
+}
+function toggleNikoud(){ sansNikoud=!sansNikoud; initReglages(); render(); }
+function toggleCat(c){ if(selCats.has(c)){ if(selCats.size>1) selCats.delete(c);} else selCats.add(c); vfList=[]; qcmList=[]; initReglages(); render(); }
+function toutesCats(){ selCats = new Set(JEU.mots.map(m=>m.cat)); vfList=[]; qcmList=[]; initReglages(); render(); }
+
+function render(){
+  if(!JEU.mots || JEU.mots.length===0){
+    document.getElementById('content').innerHTML = '<div class="card center" style="padding:44px 20px;color:var(--ink3)"><div style="font-size:40px;margin-bottom:12px;color:var(--gold)">✦</div>En attente des mots de la leçon.<br>Le jeu se remplit automatiquement dès que l\'élève fait sa demande.</div>';
+    return;
+  }
+  const map = {mots:rMots,morpho:rMorpho,lexique:rLexique,phrases:rPhrases,textes:rTextes,vf:rVF,qcm:rQCM,recon:rRecon,bilan:rBilan};
+  document.getElementById('content').innerHTML = (map[ongletCourant]||(()=> ''))();
+}
+
+function rMots(){
+  return motsF().map((m,i)=>
+    '<div class="card center">'
+    + '<span class="badge '+badgeClass(m.cat)+'">'+m.cat+'</span>'
+    + '<div class="heb heb-xl">'+H(m.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(m.heb)+'</div>'
+    + '<div class="fr fr-hidden" id="fr'+i+'" onclick="this.classList.remove(\'fr-hidden\')" style="font-size:20px">'+esc(m.fr)+'</div>'
+    + '<div class="reveal" style="display:inline-block;margin-top:8px" onclick="document.getElementById(\'fr'+i+'\').classList.remove(\'fr-hidden\')">Révéler la traduction</div>'
+    + '<div class="sens">Sens : '+esc(m.sens)+'</div>'
+    + '</div>').join('');
+}
+function rMorpho(){
+  return motsF().map(m=>
+    '<div class="card">'
+    + '<div class="heb heb-lg center">'+H(m.heb)+'</div>'
+    + '<div class="morpho-row">'
+    +   '<span class="k">Racine</span><span class="morpho-he">'+m.racine+'</span>'
+    +   '<span class="k">Nature</span><span>'+esc(m.nature)+'</span>'
+    +   '<span class="k">Genre / Nombre</span><span>'+esc(m.genre)+' · '+esc(m.nombre)+'</span>'
+    +   '<span class="k">Formes</span><span class="morpho-he">'+H(m.formes)+'</span>'
+    +   '<span class="k">Emploi</span><span>'+esc(m.emploi)+'</span>'
+    + '</div></div>').join('');
+}
+function rLexique(){
+  return '<div class="card"><table class="lex"><tr><th>Hébreu</th><th>Translit.</th><th>Français</th><th>Audio</th></tr>'
+    + motsF().map(m=>'<tr><td class="he">'+H(m.heb)+'</td><td>'+esc(m.translit)+'</td><td class="fr">'+esc(m.fr)+'</td><td style="text-align:center">'+audioBtn(m.heb)+'</td></tr>').join('')
+    + '</table></div>';
+}
+function rPhrases(){
+  return JEU.phrases.map((p,i)=>
+    '<div class="card">'
+    + '<div class="heb heb-md" style="text-align:right">'+H(p.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(p.heb)+'</div>'
+    + '<button class="btn btn-o" onclick="var t=document.getElementById(\'ph-'+i+'\');t.style.display=t.style.display===\'none\'?\'block\':\'none\';">Révéler la traduction</button>'
+    + '<div id="ph-'+i+'" class="fr" style="display:none;margin-top:8px">'+esc(p.fr)+'</div>'
+    + '</div>').join('');
+}
+function rTextes(){
+  return JEU.textes.map(t=>
+    '<div class="card">'
+    + '<span class="badge b-autre">'+esc(t.titre)+'</span>'
+    + '<div class="heb heb-md" style="text-align:right">'+H(t.heb)+'</div>'
+    + '<div style="margin:6px 0">'+audioBtn(t.heb)+'</div>'
+    + '<div class="fr">'+esc(t.fr)+'</div>'
+    + '</div>').join('');
+}
+
+let vfList=[], vfIdx=0;
+function rVF(){
+  if(!vfList.length) buildVF();
+  if(vfIdx>=vfList.length){
+    return '<div class="card center"><h3>Quiz terminé</h3><p style="font-size:18px;margin:10px 0">'+score.ok+' justes · '+score.ko+' erreurs</p><button class="btn btn-g" onclick="resetVF()">Recommencer</button></div>';
+  }
+  const q=vfList[vfIdx];
+  return '<div class="card q-card center" id="qc">'
+    + '<div class="heb heb-xl">'+H(q.heb)+'</div>'
+    + '<div style="margin:8px 0">'+audioBtn(q.heb)+'</div>'
+    + '<div style="font-size:12px;color:#bbb;text-transform:uppercase;letter-spacing:.8px;margin:8px 0 2px">Traduction proposée</div>'
+    + '<div class="fr" style="font-size:22px;margin-bottom:16px">'+esc(q.propose)+'</div>'
+    + '<div class="row" style="justify-content:center">'
+    +   '<button class="btn btn-v" onclick="ansVF(true)">✓ Vrai</button>'
+    +   '<button class="btn btn-f" onclick="ansVF(false)">✗ Faux</button>'
+    + '</div></div>';
+}
+function buildVF(){
+  const mots=motsF(); vfList=[]; vfIdx=0;
+  mots.forEach(m=>{
+    const vrai = Math.random()<0.5;
+    let propose = m.fr;
+    if(!vrai){ const autres=mots.filter(x=>x.fr!==m.fr); propose=(autres[Math.floor(Math.random()*autres.length)]||m).fr; }
+    vfList.push({heb:m.heb, propose, vrai: propose===m.fr});
+  });
+  vfList.sort(()=>Math.random()-0.5);
+}
+function ansVF(rep){
+  const q=vfList[vfIdx]; const bon=(rep===q.vrai);
+  bon?score.ok++:score.ko++;
+  const qc=document.getElementById('qc'); if(qc) qc.classList.add(bon?'correct':'wrong');
+  setTimeout(()=>{ vfIdx++; render(); },650);
+}
+function resetVF(){ vfList=[]; vfIdx=0; render(); }
+
+let qcmList=[], qcmIdx=0, qcmRepondu=false;
+function buildQCM(){
+  const mots=motsF(); qcmList=[]; qcmIdx=0; qcmRepondu=false;
+  mots.forEach(m=>{
+    const autres=mots.filter(x=>x.fr!==m.fr).map(x=>x.fr).sort(()=>Math.random()-0.5).slice(0,3);
+    const opts=[m.fr,...autres].sort(()=>Math.random()-0.5);
+    qcmList.push({heb:m.heb, bon:m.fr, opts});
+  });
+  qcmList.sort(()=>Math.random()-0.5);
+}
+function rQCM(){
+  if(!qcmList.length) buildQCM();
+  if(qcmIdx>=qcmList.length){
+    return '<div class="card center"><h3>QCM terminé</h3><p style="font-size:18px;margin:10px 0">'+score.ok+' justes · '+score.ko+' erreurs</p><button class="btn btn-g" onclick="resetQCM()">Recommencer</button></div>';
+  }
+  const q=qcmList[qcmIdx];
+  return '<div class="card center" id="qcmc">'
+    + '<div class="titre-mini">Question '+(qcmIdx+1)+' / '+qcmList.length+'</div>'
+    + '<div class="heb heb-xl">'+H(q.heb)+'</div>'
+    + '<div style="margin:8px 0 14px">'+audioBtn(q.heb)+'</div>'
+    + '<div class="titre-mini">Quelle est la traduction ?</div>'
+    + '<div id="qcm-opts" style="display:flex;flex-direction:column;gap:8px;margin-top:10px">'
+    +   q.opts.map(o=>'<button class="btn btn-o" onclick="ansQCM(this,\''+String(o).replace(/'/g,"\\'")+'\')">'+esc(o)+'</button>').join('')
+    + '</div></div>';
+}
+function ansQCM(btn, choix){
+  if(qcmRepondu) return; qcmRepondu=true;
+  const q=qcmList[qcmIdx]; const bon=(choix===q.bon);
+  bon?score.ok++:score.ko++;
+  [...document.getElementById('qcm-opts').children].forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===q.bon){ b.style.background='var(--green)'; b.style.color='#fff'; b.style.borderColor='var(--green)'; }
+    else if(b===btn){ b.style.background='var(--red)'; b.style.color='#fff'; b.style.borderColor='var(--red)'; }
+  });
+  setTimeout(()=>{ qcmIdx++; qcmRepondu=false; render(); }, 900);
+}
+function resetQCM(){ qcmList=[]; qcmIdx=0; qcmRepondu=false; render(); }
+
+let reconIdx=0, reconChoix=[], reconBank=null, reconMsg="", reconCompte=false;
+function rRecon(){
+  const p=JEU.phrases[reconIdx];
+  const mots=strip(p.heb).split(/\s+/).filter(Boolean);
+  if(!reconBank){ reconBank = mots.map((w,i)=>({w,i})).slice().sort(()=>Math.random()-0.5); }
+  const zone = reconChoix.map(c=>'<span class="tile" onclick="reconRetire('+c.i+')">'+c.w+'</span>').join('');
+  const tiles = reconBank.map(b=>'<span class="tile'+(reconChoix.find(c=>c.i===b.i)?' used':'')+'" onclick="reconAjoute('+b.i+')">'+b.w+'</span>').join('');
+  const fini = reconChoix.length===mots.length;
+  return '<div class="card">'
+    + '<div class="fr center" style="margin-bottom:6px">'+esc(p.fr)+'</div>'
+    + '<div class="center" style="margin-bottom:8px">'+audioBtn(p.heb)+'</div>'
+    + '<div class="titre-mini center">Remets les mots dans l\'ordre (droite → gauche)</div>'
+    + '<div class="zone">'+ (zone||'<span style="color:#bbb">…</span>') +'</div>'
+    + '<div class="tiles">'+tiles+'</div>'
+    + '<div id="recon-msg" class="center" style="font-size:18px;min-height:24px;margin-top:6px">'+reconMsg+'</div>'
+    + '<div class="row" style="justify-content:center;margin-top:12px">'
+    +   '<button class="btn btn-v" onclick="reconVerifie()"'+(fini?'':' disabled')+'>Vérifier</button>'
+    +   '<button class="btn btn-o" onclick="reconReset()">Effacer</button>'
+    +   '<button class="btn btn-g" onclick="reconNext()">Phrase suivante</button>'
+    + '</div></div>';
+}
+function reconVerifie(){
+  const p=JEU.phrases[reconIdx];
+  const mots=strip(p.heb).split(/\s+/).filter(Boolean);
+  if(reconChoix.length!==mots.length) return;
+  if(reconCompte) return;
+  const ok = reconChoix.map(c=>c.w).join(' ')===mots.join(' ');
+  ok?score.ok++:score.ko++;
+  reconCompte=true;
+  reconMsg = ok ? '<span style="color:var(--green)">✓ Correct !</span>' : '<span style="color:var(--red)">✗ Incorrect</span>';
+  render();
+}
+function reconAjoute(i){ const m=strip(JEU.phrases[reconIdx].heb).split(/\s+/)[i]; if(!reconChoix.find(c=>c.i===i)){ reconChoix.push({w:m,i}); render(); } }
+function reconRetire(i){ reconChoix=reconChoix.filter(c=>c.i!==i); render(); }
+function reconReset(){ reconChoix=[]; reconBank=null; reconMsg=""; reconCompte=false; render(); }
+function reconNext(){ reconIdx=(reconIdx+1)%JEU.phrases.length; reconChoix=[]; reconBank=null; reconMsg=""; reconCompte=false; render(); }
+
+function rBilan(){
+  const tot=score.ok+score.ko; const pct=tot?Math.round(score.ok/tot*100):0;
+  return '<div class="card">'
+    + '<div class="bilan-pct">'+pct+'%</div>'
+    + '<div class="center titre-mini" style="margin-bottom:14px">taux de réussite</div>'
+    + '<div class="bilan-line"><span>Réponses justes</span><b style="color:var(--green)">'+score.ok+'</b></div>'
+    + '<div class="bilan-line"><span>Erreurs</span><b style="color:var(--red)">'+score.ko+'</b></div>'
+    + '<div class="bilan-line"><span>Total</span><b>'+tot+'</b></div>'
+    + '<div class="row" style="justify-content:center;margin-top:16px"><button class="btn btn-o" onclick="score={ok:0,ko:0};render()">Remettre à zéro</button></div>'
+    + '</div>';
+}
+
+function renderHeader(){
+  const h=document.getElementById('app-header'); if(!h) return;
+  h.innerHTML='<div class="app-heb">'+esc(JEU.titre||'Thème')+'</div>'
+    +'<div class="app-fr">FICHE INTERACTIVE</div>'
+    +'<div class="ornament">✦</div>';
+}
+renderHeader(); initReglages(); initTabs(); render();
+</script>
+<style>.copyright-hz{margin:34px auto 10px;padding-top:14px;max-width:900px;border-top:1px solid rgba(201,149,42,.3);text-align:center;font-size:12px;color:var(--ink3);font-family:'Crimson Pro',serif;direction:ltr}</style>
+<div class="copyright-hz">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>
+
+
+</body></html>
