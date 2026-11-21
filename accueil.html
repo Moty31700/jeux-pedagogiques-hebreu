@@ -180,6 +180,17 @@
   .message.ok     { border-left-color: var(--tekhelet); }
   .message.erreur { border-left-color: var(--alerte); color: var(--alerte); }
 
+  /* contrôle de l'adresse e-mail (21 nov. 2026) */
+  .suggestion { display: none; margin: -.5rem 0 1rem; padding: .55rem .8rem;
+    font-size: 10.5pt; background: #fff; border-left: 3px solid var(--alerte); }
+  .suggestion.visible { display: block; }
+  .suggestion button { display: inline; width: auto; margin: .4rem .5rem 0 0;
+    padding: .35rem .8rem; font-size: 10.5pt; }
+  .suggestion button.non { background: none; color: var(--tekhelet); text-decoration: underline; }
+  .rappel-email { padding: .6rem .9rem; background: #fff; border-left: 3px solid var(--tekhelet);
+    font-size: 11pt; overflow-wrap: anywhere; }
+  .rappel-email:empty { display: none; }
+
   .note {
     margin-top: 2rem; padding-top: 1rem;
     border-top: 1px solid var(--trait);
@@ -389,6 +400,9 @@
       <input id="i-prenom" autocomplete="given-name"></label>
     <label><span class="libelle">Adresse e-mail (votre leçon y sera envoyée)</span>
       <input id="i-email" type="email" inputmode="email" autocomplete="email" placeholder="prenom@exemple.com"></label>
+    <div class="suggestion" id="sugg-email"></div>
+    <label><span class="libelle">Confirmez l'adresse e-mail (tapez-la une seconde fois)</span>
+      <input id="i-email2" type="email" inputmode="email" autocomplete="off" placeholder="prenom@exemple.com"></label>
     <label><span class="libelle">Téléphone avec l'indicatif du pays (+33 France, +972 Israël…)</span>
       <input id="i-telephone" inputmode="tel" placeholder="+33612345678"></label>
     <label><span class="libelle">Date de naissance</span>
@@ -406,6 +420,7 @@
   <div class="ecran" id="ecran-paiement">
     <h2>Choisissez votre formule</h2>
     <p class="intro">Inscription réussie ! Choisissez un abonnement ou un pack de fiches, et payez par carte bancaire. Votre code d'accès vous arrivera par e-mail dès la validation du paiement.</p>
+    <p class="rappel-email" id="rappel-email"></p>
     <section class="offre">
       <div class="offre-entete">
         <h3>Deux façons de travailler</h3>
@@ -795,6 +810,76 @@ function dateExiste(a, m, j) {
       && d.getDate() === Number(j);
 }
 
+/* --- contrôle de l'adresse e-mail : fautes de frappe dans le domaine (21 nov. 2026) --- */
+var emailCourant = "";
+var emailRefuse = "";      /* adresse gardée telle quelle par l'élève malgré la proposition */
+var DOMAINES = ["gmail.com", "hotmail.com", "hotmail.fr", "outlook.com", "outlook.fr", "live.fr",
+  "live.com", "yahoo.com", "yahoo.fr", "icloud.com", "me.com", "orange.fr", "wanadoo.fr", "free.fr",
+  "sfr.fr", "laposte.net", "bbox.fr", "neuf.fr", "aol.com", "protonmail.com", "proton.me",
+  "walla.co.il", "walla.com", "012.net.il", "bezeqint.net", "netvision.net.il"];
+var FAUX_DOMAINES = { "gmail.fr": "gmail.com", "gmail.co.il": "gmail.com", "gmail.co": "gmail.com",
+  "gmail.net": "gmail.com", "icloud.fr": "icloud.com" };
+
+function distance(a, b) {
+  var d = [], i, j;
+  for (i = 0; i <= a.length; i++) { d[i] = [i]; }
+  for (j = 0; j <= b.length; j++) { d[0][j] = j; }
+  for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++) {
+    d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+    if (i > 1 && j > 1 && a[i-1] === b[j-2] && a[i-2] === b[j-1]) d[i][j] = Math.min(d[i][j], d[i-2][j-2] + 1);
+  }
+  return d[a.length][b.length];
+}
+
+function proposerEmail(email) {
+  var at = email.lastIndexOf("@");
+  if (at < 1) return "";
+  var nom = email.slice(0, at), dom = email.slice(at + 1).replace(/\.+$/, "");
+  if (DOMAINES.indexOf(dom) !== -1) return "";
+  if (FAUX_DOMAINES[dom]) return nom + "@" + FAUX_DOMAINES[dom];
+  var meilleur = "", score = 3;
+  for (var i = 0; i < DOMAINES.length; i++) {
+    var s = distance(dom, DOMAINES[i]);
+    if (s < score) { score = s; meilleur = DOMAINES[i]; }
+  }
+  /* .con, .cm, .frr… sur un domaine inconnu */
+  if (!meilleur) {
+    var fin = dom.replace(/\.(con|cpm|cim|vom|om|cm|comm|co)$/, ".com").replace(/\.(frr|fe|ft|dr)$/, ".fr");
+    if (fin !== dom) meilleur = fin;
+  }
+  return meilleur ? nom + "@" + meilleur : "";
+}
+
+/* affiche la proposition ; renvoie true s'il y en a une */
+function verifierEmail() {
+  var champ = document.getElementById("i-email");
+  var boite = document.getElementById("sugg-email");
+  var email = champ.value.trim().toLowerCase();
+  var p = proposerEmail(email);
+  if (!p || emailRefuse === email) { boite.className = "suggestion"; return false; }
+  boite.innerHTML = "Vouliez-vous dire <b></b> ?<br>";
+  boite.querySelector("b").textContent = p;
+  var oui = document.createElement("button");
+  oui.type = "button"; oui.textContent = "Oui, corriger";
+  oui.onclick = function () {
+    champ.value = p;
+    var c2 = document.getElementById("i-email2");
+    if (c2.value.trim()) c2.value = p;
+    boite.className = "suggestion"; taire("msg-inscription");
+  };
+  var non = document.createElement("button");
+  non.type = "button"; non.className = "non"; non.textContent = "Non, mon adresse est juste";
+  non.onclick = function () { emailRefuse = email; boite.className = "suggestion"; taire("msg-inscription"); };
+  boite.appendChild(oui); boite.appendChild(non);
+  boite.className = "suggestion visible";
+  return true;
+}
+document.getElementById("i-email").addEventListener("blur", verifierEmail);
+document.getElementById("i-email2").addEventListener("paste", function (e) {
+  e.preventDefault();
+  dire("msg-inscription", "Merci de taper l'adresse une seconde fois (sans copier-coller) : c'est ce qui permet de repérer une faute.", "erreur");
+});
+
 document.getElementById("btn-inscrire").addEventListener("click", function () {
   var j = document.getElementById("i-jour").value;
   var m = document.getElementById("i-mois").value;
@@ -812,8 +897,17 @@ document.getElementById("btn-inscrire").addEventListener("click", function () {
     dire("msg-inscription", "Tous les champs sont nécessaires.", "erreur");
     return;
   }
-  if (donnees.email.indexOf("@") === -1 || donnees.email.indexOf(".") === -1) {
+  donnees.email = donnees.email.toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(donnees.email)) {
     dire("msg-inscription", "L'adresse e-mail ne semble pas valide.", "erreur");
+    return;
+  }
+  if (donnees.email !== document.getElementById("i-email2").value.trim().toLowerCase()) {
+    dire("msg-inscription", "Les deux adresses e-mail ne sont pas identiques. Vérifiez-les : votre code y sera envoyé.", "erreur");
+    return;
+  }
+  if (verifierEmail() && emailRefuse !== donnees.email) {
+    dire("msg-inscription", "Vérifiez votre adresse e-mail : voyez la proposition sous le champ.", "erreur");
     return;
   }
   if (!dateExiste(a, m, j)) {
@@ -828,6 +922,10 @@ document.getElementById("btn-inscrire").addEventListener("click", function () {
   appeler("/inscription", donnees, this, "msg-inscription", function (r) {
     if (r.statut === "inscrit") {
       identifiantCourant = donnees.identifiant;
+      emailCourant = donnees.email;
+      document.getElementById("rappel-email").innerHTML =
+        "Votre code sera envoyé à : <b></b><br>Si cette adresse est fausse, écrivez à contact@hebreu-zen.cloud <u>avant de payer</u>.";
+      document.querySelector("#rappel-email b").textContent = donnees.email;
       document.getElementById("c-identifiant").value = donnees.identifiant;
       montrer("paiement");
     } else if (r.statut === "refuse") {
@@ -1125,6 +1223,7 @@ function payerAbonnement(formule) {
     return;
   }
   var url = STRIPE_ABO[formule] + "?client_reference_id=" + encodeURIComponent(identifiantCourant);
+  if (emailCourant) url += "&prefilled_email=" + encodeURIComponent(emailCourant);
   window.open(url, "_blank");
 }
 
@@ -1210,6 +1309,7 @@ function payerStripe(pack) {
     return;
   }
   var url = STRIPE_LINKS[pack] + "?client_reference_id=" + encodeURIComponent(identifiantCourant);
+  if (emailCourant) url += "&prefilled_email=" + encodeURIComponent(emailCourant);
   window.open(url, "_blank");
 }
 
