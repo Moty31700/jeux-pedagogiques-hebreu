@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiche d'hébreu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  /* Style « crème » (20 nov. 2026) : fond crème de l'espace élève, cartes et indigo de Mishpatim */
+  :root { --bg:#f4f1ea; --carte:#fffdf9; --encre:#1d2430; --doux:#5d6678; --filet:#e7e0d2;
+    --indigo:#33489a; --indigo-doux:#e8ebf7; --creme:#f8eed9; --brun:#9c5c12;
+    --heb:"Frank Ruhl Libre","Noto Serif Hebrew","Arial Hebrew",serif;
+    --sans:"IBM Plex Sans",-apple-system,"Segoe UI",sans-serif; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--encre); font:16px/1.65 var(--sans);
+    direction:rtl; -webkit-font-smoothing:antialiased; }
+  .sheet { max-width:860px; margin:28px auto 60px; padding:36px 40px 28px; background:var(--carte);
+    border:1px solid var(--filet); border-radius:18px; box-shadow:0 1px 2px rgba(40,30,10,.04),0 8px 28px rgba(40,30,10,.06); }
+  .marque { direction:ltr; text-align:left; font-size:12px; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--brun); margin-bottom:6px; }
+  h1 { font-family:var(--heb); font-weight:700; font-size:2rem; line-height:1.3; color:var(--encre);
+    text-align:center; margin:.2em 0 .3em; }
+  h1 + h3 { text-align:center; direction:ltr; font-family:var(--sans); font-weight:400; font-style:italic;
+    color:var(--doux); font-size:1.05rem; margin:0 0 1.4em; }
+  h2 { font-family:var(--sans); font-weight:600; font-size:1.3rem; color:var(--indigo);
+    margin:2.2em 0 .8em; padding-bottom:.35em; border-bottom:1px solid var(--filet); }
+  h3 { font-family:var(--sans); font-weight:600; font-size:1.05rem; color:var(--encre); margin:1.6em 0 .6em; }
+  h2, h3, li, td, th { unicode-bidi:plaintext; }
+  h2, h3 { text-align:start; }
+  hr { border:none; border-top:1px solid var(--filet); margin:1.8em 0; }
+  p.he { font-family:var(--heb); font-size:1.25rem; line-height:1.9; direction:rtl; text-align:right; margin:.8em 0; }
+  p.fr { direction:ltr; text-align:left; margin:.9em 0; }
+  a { color:var(--indigo); text-decoration:none; border-bottom:1px solid rgba(51,72,154,.3); }
+  ul, ol { direction:ltr; text-align:left; padding-left:1.4em; padding-right:0; }
+  li { margin:.35em 0; }
+  li .he, li p.he { direction:rtl; text-align:right; }
+  table { width:100%; border-collapse:separate; border-spacing:0; margin:1em 0 1.6em;
+    border:1px solid var(--filet); border-radius:12px; overflow:hidden; background:#fff; }
+  th, td { padding:10px 14px; text-align:center; vertical-align:middle; border-bottom:1px solid var(--filet);
+    font-weight:400; overflow-wrap:break-word; }
+  tr:last-child td { border-bottom:none; }
+  th { background:var(--indigo-doux); color:var(--indigo); font-weight:600; font-size:.88rem; }
+  tr:nth-child(even) td { background:#fbf9f4; }
+  td.h { font-family:var(--heb); font-size:1.3rem; font-weight:500; direction:rtl; }
+  table.argot th { background:var(--creme); color:var(--brun); }
+  blockquote { margin:1em 0; padding:.6em 1em; background:var(--creme); border-radius:10px; border:none; }
+  .copyright { margin-top:2.6em; padding-top:1em; border-top:1px solid var(--filet);
+    text-align:center; font-size:12px; color:var(--doux); direction:ltr; }
+  @media (max-width:600px) { .sheet { margin:0; border-radius:0; border:none; padding:24px 16px; }
+    h1 { font-size:1.6rem; } th, td { padding:8px 9px; } td.h { font-size:1.15rem; } }
+  @media print { body { background:#fff; } .sheet { box-shadow:none; border:none; margin:0; max-width:none; padding:0; }
+    h2 { break-after:avoid; } table, tr { break-inside:avoid; } }
+</style>
+</head>
+<body>
+<main class="sheet">
+<div class="marque">hébreu-zen · fiche chanson</div>
+<h1 id="rencontresansfin">🎵 פְּגִישָׁה לְאֵין קֵץ — Rencontre sans fin</h1>
+<p class="fr"><strong>Paroles & musique : נָתָן אַלְתֶּרְמָן (Natan Alterman)</strong></p>
+<p class="fr">🎧 <a href="https://www.youtube.com/watch?v=7T8wbdYlAbQ">Écouter sur YouTube</a> 📜 <a href="https://shironet.mako.co.il/artist?type=lyrics&lang=1&prfid=383&wrkid=2606">Paroles sur Shironet</a></p>
+<hr />
+<h2 id="contextelittraire">📖 Contexte littéraire</h2>
+<p class="fr"><strong>נתן אלתרמן</strong> (1910–1970) est l'un des plus grands poètes hébreux du XXᵉ siècle. Ce poème appartient à son recueil <strong>כּוֹכְבֵי חוּץ</strong> (<em>Étoiles du dehors</em>, 1938), chef-d'œuvre du modernisme hébreu, marqué par un symbolisme urbain intense, une langue dense et charnelle, et une tension permanente entre désir et douleur.</p>
+<hr />
+<h2 id="lexiquedesmotscls">📚 Lexique des mots-clés</h2>
+<p class="fr"><em>(avec נִיקּוּד, translittération et traduction)</em></p>
+<table>
+<thead>
+<tr>
+<th>הֶבְרָאִית</th>
+<th>Translittération</th>
+<th>Traduction</th>
+<th>Thème</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="h">סְעָרָה</td>
+<td><em>se'ará</em></td>
+<td>tempête, assaut</td>
+<td>Émotion</td>
+</tr>
+<tr>
+<td class="h">לָנֶצַח</td>
+<td><em>lánetsakh</em></td>
+<td>pour toujours, à jamais</td>
+<td>Temps</td>
+</tr>
+<tr>
+<td class="h">אֲנַגֵּנְךָ</td>
+<td><em>anagnékha</em></td>
+<td>je te jouerai (de la musique)</td>
+<td>Art</td>
+</tr>
+<tr>
+<td class="h">תְּשׁוּקָה</td>
+<td><em>teshukáh</em></td>
+<td>désir, passion</td>
+<td>Émotion</td>
+</tr>
+<tr>
+<td class="h">סַחְרַחַר</td>
+<td><em>sakhrakhar</em></td>
+<td>étourdi, vertigineux</td>
+<td>Corps</td>
+</tr>
+<tr>
+<td class="h">אוֹבֵד יָדַיִם</td>
+<td><em>ovéd yadáyim</em></td>
+<td>démuni, sans ressources</td>
+<td>Corps/Expr.</td>
+</tr>
+<tr>
+<td class="h">פְּתָאוֹמִית</td>
+<td><em>peta'omít</em></td>
+<td>soudainement</td>
+<td>Temps</td>
+</tr>
+<tr>
+<td class="h">הֲלוּמוֹת</td>
+<td><em>halumót</em></td>
+<td>éblouies, frappées</td>
+<td>Sensations</td>
+</tr>
+<tr>
+<td class="h">שׁוֹתֵת</td>
+<td><em>shotét</em></td>
+<td>ruisselant, saignant</td>
+<td>Corps</td>
+</tr>
+<tr>
+<td class="h">שְׁקִיעָה</td>
+<td><em>shkiá</em></td>
+<td>coucher de soleil, couchant</td>
+<td>Nature</td>
+</tr>
+<tr>
+<td class="h">אֲלֻמּוֹת</td>
+<td><em>alumót</em></td>
+<td>gerbes, faisceaux</td>
+<td>Nature</td>
+</tr>
+<tr>
+<td class="h">נְסוֹגִים</td>
+<td><em>nesogím</em></td>
+<td>ceux qui reculent/se retirent</td>
+<td>Mouvement</td>
+</tr>
+<tr>
+<td class="h">תְּפִילָּה</td>
+<td><em>tefiláh</em></td>
+<td>prière</td>
+<td>Spirituel</td>
+</tr>
+<tr>
+<td class="h">עֲיֵפוּת</td>
+<td><em>ayefút</em></td>
+<td>fatigue</td>
+<td>Corps</td>
+</tr>
+<tr>
+<td class="h">לוֹהֵט</td>
+<td><em>lohét</em></td>
+<td>brûlant, ardent</td>
+<td>Sensations</td>
+</tr>
+<tr>
+<td class="h">רָקִיעַ</td>
+<td><em>rakía</em></td>
+<td>firmament, ciel</td>
+<td>Nature</td>
+</tr>
+<tr>
+<td class="h">שִׁקְמָה</td>
+<td><em>shikmáh</em></td>
+<td>sycomore (arbre)</td>
+<td>Nature</td>
+</tr>
+<tr>
+<td class="h">מִטְפַּחַת</td>
+<td><em>mitpákhat</em></td>
+<td>mouchoir, foulard</td>
+<td>Objet</td>
+</tr>
+<tr>
+<td class="h">אָקוּד</td>
+<td><em>akúd</em></td>
+<td>je m'inclinerai</td>
+<td>Mouvement</td>
+</tr>
+<tr>
+<td class="h">תּוּף</td>
+<td><em>tuf</em></td>
+<td>tambour</td>
+<td>Musique</td>
+</tr>
+<tr>
+<td class="h">חִיּוּךְ</td>
+<td><em>khiyúkh</em></td>
+<td>sourire</td>
+<td>Émotion</td>
+</tr>
+<tr>
+<td class="h">מֶרְכָּבָה</td>
+<td><em>merkavá</em></td>
+<td>chariot, voiture</td>
+<td>Transport</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="analysemorphologique8formescls">🔬 Analyse morphologique — 8 formes clés</h2>
+<h3 id="1saartalytuasdferlsurmoi">1. סָעַרְתְּ עָלַי — <em>sa'art aláy</em> — « tu as déferlé sur moi »</h3>
+<ul>
+<li><strong>Racine :</strong> ס–ע–ר (<em>s-ʿ-r</em>) → tempête, agitation</li>
+<li><strong>Binyan :</strong> פָּעַל (<em>Paʿal</em>), passé, 2ᵉ pers. féminin singulier</li>
+<li><strong>Remarque :</strong> le poète s'adresse à une femme (ou à une force) qui l'envahit comme une tempête</li>
+</ul>
+<hr />
+<h3 id="2anagnkhajetejouerai">2. אֲנַגֵּנְךָ — <em>anagnékha</em> — « je te jouerai »</h3>
+<ul>
+<li><strong>Racine :</strong> נ–ג–ן (<em>n-g-n</em>) → jouer d'un instrument</li>
+<li><strong>Binyan :</strong> פִּיעֵל (<em>Piʿel</em>), futur, 1ʳᵉ pers. singulier + suffixe pronominal 2ᵉ pers. masc.</li>
+<li><strong>Note poétique :</strong> fusionner "jouer de la musique" et "te jouer pour toi" est un effet stylistique altermanien typique</li>
+</ul>
+<hr />
+<h3 id="3atsvjrigerai">3. אָצִיב — <em>atsív</em> — « j'érigerai »</h3>
+<ul>
+<li><strong>Racine :</strong> י–צ–ב (<em>y-ts-b</em>) → se tenir, ériger, fixer</li>
+<li><strong>Binyan :</strong> הִפְעִיל (<em>Hifʿil</em>), futur, 1ʳᵉ pers. singulier</li>
+<li><strong>Contexte :</strong> שָׁוְא אָצִיב דְּלָתַיִם — <em>vainement j'érigerai des portes</em> → inutilité de toute résistance au désir</li>
+</ul>
+<hr />
+<h3 id="4halumtblouiesfrappes">4. הַלּוּמוֹת — <em>halumót</em> — « éblouies / frappées »</h3>
+<ul>
+<li><strong>Racine :</strong> ה–ל–מ (<em>h-l-m</em>) → frapper, heurter</li>
+<li><strong>Binyan :</strong> פָּעוּל (<em>Paʿul</em>, participe passif), féminin pluriel</li>
+<li><strong>Image :</strong> les yeux <em>frappés</em> par la vision de l'aimée — synesthésie violente</li>
+</ul>
+<hr />
+<h3 id="5shottruisselant">5. שׁוֹתֵת — <em>shotét</em> — « ruisselant »</h3>
+<ul>
+<li><strong>Racine :</strong> ש–ת–ת (<em>sh-t-t</em>) → suinter, ruisseler</li>
+<li><strong>Binyan :</strong> פָּעַל (<em>Paʿal</em>), participe actif masculin singulier</li>
+<li><strong>Image :</strong> שׁוֹתֵת שְׁקִיעוֹת שֶׁל פֶּטֶל — <em>ruisselant de couchers de soleil de framboise</em> — métaphore coloriste saisissante</li>
+</ul>
+<hr />
+<h3 id="6tealmtumerendrasmuet">6. תֵּאָלְמִי — <em>te'almí</em> — « tu me rendras muet »</h3>
+<ul>
+<li><strong>Racine :</strong> א–ל–מ (<em>ʾ-l-m</em>) → être muet, réduire au silence</li>
+<li><strong>Binyan :</strong> פִּיעֵל (<em>Piʿel</em>), futur, 2ᵉ pers. féminin singulier</li>
+<li><strong>Note :</strong> אָלַם en hébreu biblique ; ici forme causative : <em>elle le réduit au silence</em></li>
+</ul>
+<hr />
+<h3 id="7lokhedetellecapture">7. לוֹכֶדֶת — <em>lokhedet</em> — « elle capture »</h3>
+<ul>
+<li><strong>Racine :</strong> ל–כ–ד (<em>l-k-d</em>) → capturer, attraper</li>
+<li><strong>Binyan :</strong> פָּעַל (<em>Paʿal</em>), participe actif féminin singulier → sens de présent continu</li>
+<li><strong>Contexte :</strong> עוֹד יָדֵךְ לוֹכֶדֶת — <em>ta main capture encore</em> → le désir comme emprise permanente</li>
+</ul>
+<hr />
+<h3 id="8akdjeminclinerai">8. אָקוּד — <em>akúd</em> — « je m'inclinerai »</h3>
+<ul>
+<li><strong>Racine :</strong> ק–ד–ד (<em>k-d-d</em>) → se courber, s'incliner (révérence)</li>
+<li><strong>Binyan :</strong> פָּעַל (<em>Paʿal</em>), futur, 1ʳᵉ pers. singulier</li>
+<li><strong>Poésie :</strong> s'incliner devant le sycomore comme devant une dame — ironie tendre et mélancolique</li>
+</ul>
+<hr />
+<h2 id="thmespotiques">🌿 Thèmes poétiques</h2>
+<table>
+<thead>
+<tr>
+<th>Thème</th>
+<th>Manifestation dans le texte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Désir irrépressible</strong></td>
+<td>La tempête intérieure, l'étourdissement du corps</td>
+</tr>
+<tr>
+<td><strong>Prière profane</strong></td>
+<td>La תְּפִילָּה qui ne demande rien mais s'offre</td>
+</tr>
+<tr>
+<td><strong>Ville nocturne</strong></td>
+<td>Rues de fer, lune brûlante, marchés assoupis</td>
+</tr>
+<tr>
+<td><strong>Nature urbaine</strong></td>
+<td>Sycomore, framboise, firmament humide</td>
+</tr>
+<tr>
+<td><strong>Fatalité de l'amour</strong></td>
+<td>La chute annoncée, la blessure inévitable</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="exercicesdecomprhension">✍️ Exercices de compréhension</h2>
+<h3 id="exercice1vraioufaux">Exercice 1 — Vrai ou Faux</h3>
+<p class="fr">Lisez cet extrait :</p>
+<blockquote>
+  <p class="he">תְּפִילָּתִי דָּבָר אֵינֶנָּה מְבַקֶּשֶׁת — <em>tefilatí davár eynéna mevakéshet</em></p>
+</blockquote>
+<p class="fr">Répondez Vrai (V) ou Faux (F) :</p>
+<ol>
+<li>Le poète formule une demande précise dans sa prière.</li>
+<li>La prière est décrite comme ne réclamant rien.</li>
+<li>Le mot תְּפִילָּה appartient au registre spirituel.</li>
+<li>La structure de la phrase est affirmative.</li>
+</ol>
+<hr />
+<h3 id="exercice2identificationderacines">Exercice 2 — Identification de racines</h3>
+<p class="fr">Retrouvez la racine hébraïque de chacun de ces mots et indiquez le champ sémantique :</p>
+<table>
+<thead>
+<tr>
+<th>Mot</th>
+<th>Racine</th>
+<th>Champ sémantique</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="h">סְעָרָה</td>
+<td>?</td>
+<td>?</td>
+</tr>
+<tr>
+<td class="h">תְּשׁוּקָה</td>
+<td>?</td>
+<td>?</td>
+</tr>
+<tr>
+<td class="h">לוֹהֵט</td>
+<td>?</td>
+<td>?</td>
+</tr>
+<tr>
+<td class="h">אֲלֻמּוֹת</td>
+<td>?</td>
+<td>?</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="exercice3traductionguide">Exercice 3 — Traduction guidée</h3>
+<p class="fr">Traduisez en français cet extrait en vous aidant du lexique :</p>
+<blockquote>
+  <p class="he">לְבַדִּי אֶהְיֶה בְּאַרְצוֹתַיִךְ הָלַךְ</p>
+</blockquote>
+<p class="fr"><em>(Indices : לְבַדִּי = seul ; אֶהְיֶה = je serai ; אַרְצוֹתַיִךְ = tes terres/contrées ; הָלַךְ = voyageur/passant)</em></p>
+<hr />
+<h2 id="quizcomprhensionetlangue">🧩 Quiz — Compréhension et langue</h2>
+<p class="fr"><em>(Répondez sans regarder le lexique)</em></p>
+<p class="fr"><strong>1.</strong> Le mot שׁוֹתֵת dans l'expression <em>שׁוֹתֵת שְׁקִיעוֹת שֶׁל פֶּטֶל</em> signifie : a) brûlant b) ruisselant c) murmurant</p>
+<p class="fr"><strong>2.</strong> Dans quel binyan est conjuguée la forme אֲנַגֵּנְךָ ?</p><p class="he">a) פָּעַל b) הִפְעִיל c) פִּיעֵל</p>
+<p class="fr"><strong>3.</strong> Le titre פְּגִישָׁה לְאֵין קֵץ signifie : a) Une séparation sans fin b) Une rencontre sans fin c) Un désir sans limite</p>
+<p class="fr"><strong>4.</strong> La racine ל–כ–ד évoque : a) La lumière b) La capture c) Le mouvement</p>
+<p class="fr"><strong>5.</strong> L'arbre mentionné dans le poème comme geste de tendresse est : a) Un olivier — זַיִת b) Un cèdre — אֶרֶז c) Un sycomore — שִׁקְמָה</p>
+<p class="fr"><strong>6.</strong> La תְּפִילָּה du poète : a) Demande pardon b) Réclame un miracle c) Ne demande rien, mais s'offre</p>
+<p class="fr"><strong>7.</strong> Le poème est extrait du recueil :</p><p class="he">a) שִׁירֵי מַכּוֹת מִצְרַיִם b) כּוֹכְבֵי חוּץ c) עִיר הַיּוֹנָה</p>
+<hr />
+<h2 id="rponses">✅ Réponses</h2>
+<p class="fr"><strong>Exercice 1 :</strong> 1 – F / 2 – V / 3 – V / 4 – F</p>
+<p class="fr"><strong>Exercice 2 :</strong></p>
+<ul>
+<li>סְעָרָה → ס–ע–ר (tempête, agitation)</li>
+<li>תְּשׁוּקָה → ש–ו–ק (désirer, aspirer)</li>
+<li>לוֹהֵט → ל–ה–ט (brûler, être ardent)</li>
+<li>אֲלֻמּוֹת → א–ל–מ (lier en gerbes — racine distincte de אָלַם !)</li>
+</ul>
+<p class="fr"><strong>Exercice 3 :</strong> <em>« Seul je serai dans tes contrées, en voyageur »</em></p>
+<p class="fr"><strong>Quiz :</strong> 1-b / 2-c / 3-b / 4-b / 5-c / 6-c / 7-b</p>
+<hr />
+<p class="fr"><em>📝 Niveau estimé : C1 — Poésie moderniste hébraïque, registre littéraire soutenu</em></p>
+
+<div class="copyright">© 2026 hebreu-zen — Toutes reproductions interdites et réservées</div>
+</main>
+</body>
+</html>
