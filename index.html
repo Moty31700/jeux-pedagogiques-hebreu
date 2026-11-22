@@ -1,1306 +1,924 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="he" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Étude de l'hébreu</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שַׁלְוָוָה — משחק לימוד</title>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --encre:    #101F38;
-    --tekhelet: #2C5F8D;
-    --papier:   #FBFAF7;
-    --or:       #A8813C;
-    --alerte:   #9E3B2C;
-    --gris:     #6B7280;
-    --trait:    #DDD8CC;
-  }
+:root{
+  --night:#0d1117;--deep:#161b22;--card:#1c2330;--border:#30363d;
+  --moon:#e8d5a3;--star:#f0e6c8;--olive:#6a9955;--rust:#c9614a;
+  --sky:#4a90a4;--gold:#d4a853;--muted:#8b949e;--text:#e6edf3;
+  --accent:#58a6ff;--success:#3fb950;--danger:#f85149;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Heebo',sans-serif;background:var(--night);color:var(--text);min-height:100vh;direction:rtl;overflow-x:hidden;}
+.starfield{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.starfield::before,.starfield::after{content:'';position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;
+  box-shadow:120px 45px 0 rgba(255,255,255,.6),320px 90px 0 rgba(255,255,255,.4),540px 30px 0 rgba(255,255,255,.8),760px 180px 0 rgba(255,255,255,.3),980px 60px 0 rgba(255,255,255,.7),1100px 130px 0 rgba(255,255,255,.5),200px 200px 0 rgba(255,255,255,.4),450px 140px 0 rgba(255,255,255,.6),650px 220px 0 rgba(255,255,255,.3),850px 280px 0 rgba(255,255,255,.7),70px 320px 0 rgba(255,255,255,.5),390px 350px 0 rgba(255,255,255,.4),700px 380px 0 rgba(255,255,255,.6),900px 420px 0 rgba(255,255,255,.3),1200px 50px 0 rgba(255,255,255,.5),1350px 200px 0 rgba(255,255,255,.7);
+  animation:twinkle 4s ease-in-out infinite alternate;}
+.starfield::after{width:1px;height:1px;box-shadow:180px 70px 0 rgba(255,255,255,.5),400px 30px 0 rgba(255,255,255,.7),600px 150px 0 rgba(255,255,255,.4),800px 90px 0 rgba(255,255,255,.6),250px 280px 0 rgba(255,255,255,.5),500px 300px 0 rgba(255,255,255,.4),750px 340px 0 rgba(255,255,255,.6),1050px 380px 0 rgba(255,255,255,.7),1300px 150px 0 rgba(255,255,255,.4);animation-delay:2s;}
+@keyframes twinkle{from{opacity:.4}to{opacity:1}}
+.moon{position:fixed;top:40px;left:80px;width:70px;height:70px;background:radial-gradient(circle at 35% 35%,var(--moon),#c4a96e);border-radius:50%;box-shadow:0 0 30px rgba(232,213,163,.3),0 0 60px rgba(232,213,163,.1);animation:moonFloat 8s ease-in-out infinite;z-index:0;}
+@keyframes moonFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
-  * { box-sizing: border-box; }
+.app{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 20px 60px;}
+header{text-align:center;padding:50px 0 30px;border-bottom:1px solid var(--border);margin-bottom:30px;}
+.song-title{font-family:'Frank Ruhl Libre',serif;font-size:clamp(3rem,8vw,5.5rem);font-weight:900;color:var(--moon);letter-spacing:-2px;line-height:1;text-shadow:0 0 40px rgba(232,213,163,.3);}
+.song-meta{margin-top:10px;font-size:13px;color:var(--muted);}
+.song-meta span{color:var(--gold);}
 
-  body {
-    margin: 0;
-    background: var(--papier);
-    color: var(--encre);
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-size: 12pt;
-    line-height: 1.55;
-  }
+/* NAV */
+.nav-tabs{display:flex;gap:4px;background:var(--deep);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:30px;overflow-x:auto;}
+.nav-tab{flex:1;min-width:80px;padding:10px 12px;border:none;border-radius:8px;background:transparent;color:var(--muted);font-family:'Heebo',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.nav-tab:hover{color:var(--text);background:var(--card);}
+.nav-tab.active{background:var(--card);color:var(--moon);box-shadow:0 1px 3px rgba(0,0,0,.5);}
+.nav-tab .ti{display:block;font-size:18px;margin-bottom:2px;}
+.section{display:none;}.section.active{display:block;}
 
-  /* 30rem rendait le texte trop étroit sur iPad et dans le cadre de « Mon compte » */
-  .cadre { max-width: 46rem; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
-  @media (max-width: 560px) { .cadre { padding: 2rem .85rem 3rem; } }
+/* ── PAROLES ── */
+.lyrics-container{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:600px){.lyrics-container{grid-template-columns:1fr;}}
+.lyrics-panel{background:var(--deep);border:1px solid var(--border);border-radius:12px;padding:24px;}
+.lyrics-panel h3{font-size:12px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.verse-block{margin-bottom:24px;}
+.verse-label{font-size:11px;color:var(--gold);letter-spacing:.08em;margin-bottom:8px;}
+.verse-line{font-family:'Frank Ruhl Libre',serif;font-size:17px;line-height:1.9;color:var(--star);padding:2px 0;display:flex;align-items:center;gap:6px;cursor:pointer;}
+.verse-line:hover{color:var(--moon);}
+.verse-line.refrain{color:var(--gold);font-weight:700;}
+.verse-line .sp-btn{background:none;border:none;cursor:pointer;font-size:13px;opacity:.5;transition:opacity .15s;padding:0 2px;flex-shrink:0;}
+.verse-line:hover .sp-btn{opacity:1;}
+.fr-line{font-size:13px;line-height:1.8;color:var(--muted);font-style:italic;direction:ltr;text-align:left;}
+.audio-section{background:var(--deep);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.audio-icon{font-size:28px;}
+.audio-info{flex:1;min-width:120px;}
+.audio-info h3{font-size:15px;color:var(--moon);}
+.audio-info p{font-size:12px;color:var(--muted);margin-top:2px;}
+.audio-link{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--accent);text-decoration:none;font-size:13px;transition:all .2s;margin:2px;}
+.audio-link:hover{background:var(--accent);color:var(--night);border-color:var(--accent);}
 
-  .titre {
-    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
-    font-size: 22pt;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    margin: 0;
-  }
-  .sous-titre { color: var(--gris); font-size: 11pt; margin: .3rem 0 2.5rem; }
+/* ── LEXIQUE ── */
+.lexique-controls{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.lex-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--deep);color:var(--muted);font-family:'Heebo',sans-serif;font-size:12px;cursor:pointer;transition:all .15s;}
+.lex-btn:hover{color:var(--text);border-color:var(--muted);}
+.lex-btn.active{background:var(--card);color:var(--moon);border-color:var(--gold);}
+.lex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.lex-card{background:var(--deep);border:1px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .2s;position:relative;}
+.lex-card:hover{border-color:var(--gold);transform:translateY(-2px);}
+.lex-card.flipped{border-color:var(--gold);background:var(--card);}
+.lex-card .heb-word{font-family:'Frank Ruhl Libre',serif;font-size:22px;font-weight:700;color:var(--moon);display:flex;align-items:center;gap:6px;}
+.lex-card .root{font-size:11px;color:var(--sky);margin:4px 0 2px;}
+.cat-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500;margin-bottom:6px;}
+.cat-nom{background:rgba(74,144,164,.2);color:var(--sky);}
+.cat-verbe{background:rgba(63,185,80,.15);color:var(--olive);}
+.cat-adj{background:rgba(88,166,255,.15);color:var(--accent);}
+.cat-expr{background:rgba(212,168,83,.15);color:var(--gold);}
+.cat-adv{background:rgba(201,97,74,.15);color:var(--rust);}
+.cat-prep{background:rgba(139,73,168,.2);color:#c678dd;}
+.lex-card .translation{font-size:13px;color:var(--text);margin-bottom:4px;direction:ltr;text-align:left;}
+.lex-card .morpho{font-size:11px;color:var(--muted);direction:rtl;display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);line-height:1.6;}
+.lex-card.flipped .morpho{display:block;}
+.flip-hint{position:absolute;top:10px;left:12px;font-size:10px;color:var(--border);}
+.lex-card.flipped .flip-hint{color:var(--gold);}
+/* audio btn inside card */
+.sp-icon{background:none;border:none;cursor:pointer;font-size:14px;color:var(--muted);transition:color .15s;padding:0;}
+.sp-icon:hover{color:var(--gold);}
 
-  .etapes {
-    display: flex; gap: .5rem; align-items: center;
-    margin-bottom: 2rem; border-bottom: 1px solid var(--trait); padding-bottom: 1rem;
-  }
-  .etape {
-    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
-    font-size: 15pt; color: var(--trait);
-    width: 1.6rem; text-align: center; transition: color .25s;
-  }
-  .etape.active { color: var(--or); }
-  .etape.faite  { color: var(--tekhelet); }
-  .etapes .filet { flex: 1; height: 1px; background: var(--trait); }
+/* ── QUIZ ── */
+.quiz-mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;}
+@media(max-width:600px){.quiz-mode-grid{grid-template-columns:1fr 1fr;}}
+.qmode-card{background:var(--deep);border:1px solid var(--border);border-radius:12px;padding:16px 12px;text-align:center;cursor:pointer;transition:all .2s;}
+.qmode-card:hover{border-color:var(--gold);transform:translateY(-2px);}
+.qmode-card .qm-icon{font-size:26px;display:block;margin-bottom:6px;}
+.qmode-card .qm-name{font-size:13px;font-weight:500;color:var(--moon);margin-bottom:4px;}
+.qmode-card .qm-desc{font-size:11px;color:var(--muted);}
+.quiz-area{background:var(--deep);border:1px solid var(--border);border-radius:14px;padding:28px;}
+.quiz-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.quiz-score-label{font-size:13px;color:var(--muted);}
+.quiz-score-label span{color:var(--gold);font-weight:700;font-size:18px;}
+.progress-bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:24px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--moon));border-radius:2px;transition:width .4s ease;}
+.quiz-question{font-family:'Frank Ruhl Libre',serif;font-size:clamp(22px,5vw,36px);color:var(--moon);margin-bottom:8px;direction:rtl;text-align:center;}
+.quiz-sub{font-size:13px;color:var(--muted);margin-bottom:20px;text-align:center;direction:rtl;}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.quiz-opt{padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-family:'Heebo',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;direction:ltr;text-align:left;}
+.quiz-opt:hover:not(:disabled){border-color:var(--gold);color:var(--moon);}
+.quiz-opt.correct{border-color:var(--success);background:rgba(63,185,80,.15);color:var(--success);}
+.quiz-opt.wrong{border-color:var(--danger);background:rgba(248,81,73,.15);color:var(--danger);}
+.quiz-opt:disabled{cursor:default;}
+.type-input-wrap{margin:16px 0;}
+.type-input{width:100%;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Heebo',sans-serif;font-size:18px;direction:ltr;text-align:center;outline:none;transition:border-color .2s;}
+.type-input:focus{border-color:var(--gold);}
+.btn-submit{padding:10px 28px;background:var(--gold);color:var(--night);border:none;border-radius:8px;font-family:'Heebo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px;}
+.btn-submit:hover{transform:scale(1.03);}
+.match-area{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.match-area h4{font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:10px;text-align:center;}
+.match-item{padding:11px 14px;border-radius:8px;border:1px solid var(--border);background:var(--card);margin-bottom:8px;cursor:pointer;font-size:14px;transition:all .2s;text-align:center;}
+.match-item.selected{border-color:var(--gold);background:rgba(212,168,83,.12);color:var(--moon);}
+.match-item.matched-ok{border-color:var(--success);background:rgba(63,185,80,.12);color:var(--success);cursor:default;}
+.match-item.matched-ko{border-color:var(--danger);background:rgba(248,81,73,.12);color:var(--danger);cursor:default;animation:shake .3s;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.match-item.heb-item{font-family:'Frank Ruhl Libre',serif;font-size:18px;direction:rtl;}
+.tf-statement{font-family:'Frank Ruhl Libre',serif;font-size:22px;color:var(--moon);text-align:center;line-height:1.5;margin-bottom:8px;direction:rtl;}
+.tf-claim{font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;direction:ltr;}
+.tf-btns{display:flex;gap:16px;justify-content:center;}
+.tf-btn{padding:14px 40px;border-radius:10px;border:2px solid var(--border);background:var(--card);color:var(--text);font-family:'Heebo',sans-serif;font-size:18px;font-weight:700;cursor:pointer;transition:all .2s;min-width:120px;}
+.tf-btn:hover:not(:disabled){transform:scale(1.05);}
+.tf-btn.true-btn:hover:not(:disabled){border-color:var(--success);color:var(--success);}
+.tf-btn.false-btn:hover:not(:disabled){border-color:var(--danger);color:var(--danger);}
+.tf-btn.correct{border-color:var(--success);background:rgba(63,185,80,.15);color:var(--success);}
+.tf-btn.wrong{border-color:var(--danger);background:rgba(248,81,73,.15);color:var(--danger);}
+.tf-btn:disabled{cursor:default;}
+.quiz-feedback{margin-top:14px;padding:12px;border-radius:8px;font-size:13px;line-height:1.6;display:none;}
+.quiz-feedback.show{display:block;}
+.quiz-feedback.ok{background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.3);color:var(--success);}
+.quiz-feedback.ko{background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.3);color:var(--danger);}
+.btn-next{margin-top:16px;padding:10px 28px;background:var(--gold);color:var(--night);border:none;border-radius:8px;font-family:'Heebo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;display:none;}
+.btn-next.show{display:inline-block;}
+.btn-next:hover{transform:scale(1.03);}
+.result-screen{text-align:center;padding:30px 20px;}
+.result-emoji{font-size:60px;display:block;margin-bottom:12px;}
+.result-pts{font-family:'Frank Ruhl Libre',serif;font-size:36px;color:var(--moon);margin-bottom:6px;}
+.result-msg{font-size:15px;color:var(--muted);margin-bottom:20px;}
+.btn-restart{padding:10px 24px;background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:8px;font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer;transition:all .2s;}
+.btn-restart:hover{background:var(--gold);color:var(--night);}
 
-  /* --- liste « Mes leçons » --- */
-  #liste-lecons { margin-top: .8rem; }
-  .lecon-item {
-    display: block;
-    padding: .9rem 1rem; margin-bottom: .8rem;
-    background: #fff; border: 1px solid var(--trait); border-radius: 2px;
-    text-decoration: none; color: var(--encre);
-    line-height: 1.5;
-  }
-  .lecon-item:hover { border-color: var(--tekhelet); background: #F4F2ED; }
-  .lecon-titre { font-size: 11pt; font-weight: 600; }
-  .lecon-detail { font-size: 9.5pt; color: var(--gris); margin-top: .35rem; }
-  .lecon-vide { font-size: 10pt; color: var(--gris); padding: .6rem 0; }
+/* ── RECONSTRUCTION v3 ── */
+.recon-container{max-width:740px;margin:0 auto;}
+/* Score banner */
+.recon-scorebar{display:flex;gap:16px;align-items:center;background:var(--deep);border:1px solid var(--border);border-radius:10px;padding:12px 18px;margin-bottom:18px;flex-wrap:wrap;}
+.recon-score-item{font-size:13px;color:var(--muted);}
+.recon-score-item strong{font-size:18px;font-weight:700;}
+.recon-score-item.s-ok strong{color:var(--success);}
+.recon-score-item.s-ko strong{color:var(--danger);}
+.recon-score-item.s-total strong{color:var(--gold);}
+.recon-score-sep{color:var(--border);font-size:18px;}
+/* Progress dots */
+.recon-dots{display:flex;gap:6px;margin-left:auto;}
+.rdot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background .3s;}
+.rdot.done-ok{background:var(--success);}
+.rdot.done-ko{background:var(--danger);}
+.rdot.current{background:var(--gold);}
+/* Phrase block */
+.recon-phrase-header{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.recon-num{font-size:11px;color:var(--gold);font-weight:700;letter-spacing:.1em;}
+.recon-fr{background:var(--deep);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:15px;color:var(--star);margin-bottom:16px;direction:ltr;font-style:italic;line-height:1.6;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.recon-fr .fr-text-inner{flex:1;}
+/* Drop zone */
+.drop-zone{min-height:60px;background:var(--deep);border:2px dashed var(--border);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;transition:border-color .3s,background .3s;direction:rtl;}
+.drop-zone.drag-over{border-color:var(--gold);}
+.drop-zone.correct-zone{border-color:var(--success);background:rgba(63,185,80,.06);}
+.drop-zone.wrong-zone{border-color:var(--danger);background:rgba(248,81,73,.06);}
+.drop-zone-hint{font-size:12px;color:var(--border);direction:rtl;}
+/* Pool */
+.tiles-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;direction:rtl;min-height:50px;padding:12px;background:var(--night);border-radius:10px;border:1px solid var(--border);}
+/* Tiles */
+.tile{padding:8px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-family:'Frank Ruhl Libre',serif;font-size:18px;color:var(--star);cursor:grab;user-select:none;transition:all .15s;direction:rtl;display:flex;align-items:center;gap:5px;}
+.tile:hover{border-color:var(--gold);color:var(--moon);transform:translateY(-2px);}
+.tile.placed{background:rgba(212,168,83,.15);border-color:var(--gold);}
+.tile.correct-tile{background:rgba(63,185,80,.15);border-color:var(--success);color:var(--success);}
+.tile.wrong-tile{background:rgba(248,81,73,.15);border-color:var(--danger);color:var(--danger);}
+.tile .tile-sp{background:none;border:none;cursor:pointer;font-size:12px;opacity:.5;padding:0;transition:opacity .15s;}
+.tile:hover .tile-sp{opacity:1;}
+/* Actions */
+.recon-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
+.btn-check{padding:10px 24px;background:var(--gold);color:var(--night);border:none;border-radius:8px;font-family:'Heebo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-check:hover:not(:disabled){transform:scale(1.03);}
+.btn-check:disabled{opacity:.5;cursor:default;}
+.btn-reset{padding:10px 20px;background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:8px;font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer;transition:all .2s;}
+.btn-reset:hover{color:var(--text);border-color:var(--muted);}
+.recon-result{margin-top:10px;padding:12px 16px;border-radius:8px;font-size:13px;display:none;line-height:1.6;}
+.recon-result.show{display:block;}
+.recon-result.ok{background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.3);color:var(--success);}
+.recon-result.ko{background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.3);color:var(--danger);}
+/* Auto-advance overlay on top of drop zone */
+.advance-bar{height:3px;background:var(--gold);width:0%;border-radius:2px;transition:width 2s linear;margin-bottom:14px;}
+/* Final recon result */
+.recon-final{text-align:center;padding:30px;background:var(--deep);border:1px solid var(--border);border-radius:14px;margin-top:10px;display:none;}
+.recon-final.show{display:block;}
+.recon-final .rf-emoji{font-size:56px;display:block;margin-bottom:10px;}
+.recon-final .rf-pts{font-family:'Frank Ruhl Libre',serif;font-size:34px;color:var(--moon);margin-bottom:6px;}
+.recon-final .rf-msg{font-size:14px;color:var(--muted);}
 
-  /* --- compteur « utilisées / quota » --- */
-  .compteur-lecons {
-    text-align: center; font-size: 10pt; color: var(--gris);
-    margin-top: .6rem; min-height: 1.2em;
-  }
-  .compteur-lecons.plein { color: var(--alerte); font-weight: 600; }
-  /* --- bloc acheter des fiches --- */
-  .bloc-achat { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--trait); }
-  .formule { background: #FBF3E0; border: 1px solid var(--encre); color: var(--encre);
-    padding: 14px; border-radius: 8px; font-weight: 600; margin: 6px 0 14px; }
-  .intro-achat { font-size: .9rem; color: #555; margin: 4px 0 12px; }
-  .btn-achat { width: 100%; margin-top: 8px; padding: 12px; font-size: 1rem;
-    background: #F4F2ED; color: var(--encre); border: 1px solid var(--encre);
-    border-radius: 8px; cursor: pointer; font-weight: 600; }
-  .btn-achat:hover { background: var(--encre); color: #fff; }
-  /* --- bloc Mishpatim (abonnements) --- */
-  .bloc-mishpatim { margin-top: 22px; padding: 16px; border: 1px solid var(--tekhelet); border-radius: 2px; background: #fff; }
-  .bloc-mishpatim .libelle { color: var(--tekhelet); }
-  .abo-formules { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-  @media (max-width: 560px) { .abo-formules { grid-template-columns: 1fr; } }
-  .abo-carte { border: 1px solid var(--trait); padding: 12px; display: flex; flex-direction: column; }
-  .abo-carte strong { font-size: 11.5pt; }
-  .abo-prix { color: var(--or); font-weight: 600; margin: .2rem 0 .4rem; }
-  .abo-carte ul { margin: 0 0 .4rem 1.1rem; padding: 0; font-size: 10pt; color: var(--encre); flex: 1; }
-  .abo-note { font-size: 9.5pt; color: var(--gris); margin-top: 8px; }
-  .abo-etat { font-size: 10.5pt; margin: .4rem 0 .2rem; }
-  .abo-etat b { color: var(--tekhelet); }
-  .btn-mishpatim { width: 100%; margin-top: 10px; padding: 12px; font-size: 1rem; background: var(--tekhelet); color: #fff; border: 1px solid var(--tekhelet); cursor: pointer; }
-  .btn-mishpatim:hover { background: var(--encre); border-color: var(--encre); }
-  /* --- offre en deux colonnes : fiches | abonnements --- */
-  :root { --bleu-fond: #EEF4FA; --bleu-trait: #B9D0E6; }
-  .offre { width: min(56rem, calc(100vw - 2rem)); margin: 28px 0 0 50%; transform: translateX(-50%); }
-  .offre-entete { text-align: center; margin-bottom: 14px; }
-  .offre-entete h3 { font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif; font-size: 16pt; font-weight: 600; margin: 0; }
-  .offre-entete p { font-size: 10pt; color: var(--gris); margin: .25rem auto 0; max-width: 36rem; }
-  .offre-colonnes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); gap: 16px; align-items: stretch; }
-  @media (max-width: 760px) { .offre-colonnes { grid-template-columns: 1fr; } }
-  .offre-col { background: var(--bleu-fond); border: 1.5px solid var(--bleu-trait); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; }
-  .offre-col h4 { margin: 0; font-size: 12.5pt; color: var(--tekhelet); }
-  .offre-sous { font-size: 9.5pt; color: var(--gris); margin: .2rem 0 .4rem; }
-  .pack-ligne { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; border: 1px solid var(--bleu-trait); border-radius: 8px; padding: 10px 12px; margin-top: 8px; }
-  .pack-ligne b { font-size: 11pt; }
-  .pack-ligne .prix { color: var(--or); font-weight: 600; margin-left: .4rem; }
-  .pack-ligne .btn-achat { width: auto; margin: 0; padding: 8px 16px; font-size: .95rem; }
-  .offre-pont { font-size: 9.5pt; color: var(--tekhelet); margin: auto 0 0; padding-top: 12px; }
-  .offre .abo-formules { margin-top: 6px; }
-  @media (max-width: 520px) { .offre .abo-formules { grid-template-columns: 1fr; } }
-  .offre .abo-carte { background: #fff; border: 1px solid var(--bleu-trait); border-radius: 8px; }
-  .fiches-incluses { align-self: flex-start; background: var(--bleu-fond); border: 1px solid var(--bleu-trait); color: var(--tekhelet); font-size: 9pt; font-weight: 600; padding: 1px 9px; border-radius: 999px; margin: 0 0 .5rem; }
-  .abo-statut { background: #fff; border: 1px solid var(--bleu-trait); border-radius: 8px; padding: 14px; margin-top: 6px; }
-  .abo-badge { display: inline-block; font-size: 9pt; font-weight: 700; padding: 1px 10px; border-radius: 999px; background: #E3F1E8; color: #2F6B45; }
-  .abo-badge.resilie { background: #FBEBDD; color: #9A4B12; }
-  .offre .abo-note { text-align: center; }
-  .fleche::after { content: " →"; }
-  @media (max-width: 760px) { .fleche::after { content: " ↓"; } }
-  .lien-portail { display: inline-block; margin-top: 10px; font-size: 10pt; color: var(--tekhelet); }
-  .abo-changer { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--bleu-trait); }
-  .btn-changer { display: inline-block; margin-top: 6px; padding: 8px 14px; border: 1px solid var(--tekhelet); border-radius: 6px; color: var(--tekhelet); text-decoration: none; font-size: 10pt; font-weight: 600; }
-  .btn-changer:hover { background: var(--tekhelet); color: #fff; }
-  .abo-aide { font-size: 9pt; color: var(--gris); margin: 4px 0 0; }
-  .pack { margin-top: 16px; }
-  .pack-titre { display: block; font-weight: 600; margin-bottom: 4px; }
+/* ── ISRIM ── */
+.isrim-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:600px){.isrim-grid{grid-template-columns:1fr;}}
+.isrim-card{background:var(--deep);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.isrim-letter{font-family:'Frank Ruhl Libre',serif;font-size:48px;font-weight:900;color:var(--moon);line-height:1;margin-bottom:4px;}
+.isrim-label{font-size:11px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;direction:ltr;}
+.isrim-title{font-size:14px;font-weight:700;color:var(--star);margin-bottom:8px;}
+.isrim-body{font-size:13px;color:var(--muted);line-height:1.7;}
+.isrim-body strong{color:var(--text);}
+.isrim-full{grid-column:1/-1;background:var(--deep);border:1px solid var(--border);border-radius:12px;padding:20px;}
 
-  .ecran { display: none; }
-  .ecran.visible { display: block; }
-
-  h2 {
-    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
-    font-size: 16pt; font-weight: 600; margin: 0 0 .4rem;
-  }
-  .intro { color: var(--gris); font-size: 11pt; margin: 0 0 1.8rem; }
-
-  label { display: block; margin-bottom: 1rem; }
-  .libelle { display: block; font-size: 10pt; color: var(--gris); margin-bottom: .25rem; }
-
-  input, select, textarea {
-    width: 100%; padding: .6rem .7rem;
-    font-size: 12pt; font-family: inherit; color: var(--encre);
-    background: #fff; border: 1px solid var(--trait); border-radius: 2px;
-  }
-  textarea { min-height: 9rem; resize: vertical; line-height: 1.5; }
-  input:focus, select:focus, textarea:focus {
-    outline: 2px solid var(--tekhelet); outline-offset: 1px; border-color: transparent;
-  }
-  #code {
-    font-family: ui-monospace, "SF Mono", monospace;
-    font-size: 16pt; letter-spacing: .25em;
-    text-transform: uppercase; text-align: center;
-  }
-
-  button {
-    width: 100%; padding: .75rem; margin-top: .6rem;
-    font-family: inherit; font-size: 12pt;
-    color: #fff; background: var(--encre);
-    border: none; border-radius: 2px; cursor: pointer;
-  }
-  button:hover { background: var(--tekhelet); }
-  button:disabled { background: var(--gris); cursor: wait; }
-
-  .lien {
-    display: block; width: 100%; margin-top: .9rem; padding: .5rem;
-    background: none; border: none; color: var(--tekhelet);
-    font-size: 10pt; text-decoration: underline; cursor: pointer;
-  }
-  .lien:hover { background: none; color: var(--encre); }
-
-  .message {
-    margin-top: 1.2rem; padding: .7rem .9rem; font-size: 10.5pt;
-    border-left: 3px solid var(--gris); background: #fff; display: none;
-  }
-  .message.visible { display: block; }
-  .message.ok     { border-left-color: var(--tekhelet); }
-  .message.erreur { border-left-color: var(--alerte); color: var(--alerte); }
-
-  .note {
-    margin-top: 2rem; padding-top: 1rem;
-    border-top: 1px solid var(--trait);
-    font-size: 9.5pt; color: var(--gris);
-  }
-
-  .accueil-nom {
-    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
-    font-size: 20pt; margin: 0 0 .3rem;
-  }
-
-  /* --- choix segmenté --- */
-  .choix {
-    display: flex; gap: 0; margin-bottom: 1.4rem;
-    border: 1px solid var(--trait); border-radius: 2px; background: #fff;
-    overflow: hidden;
-  }
-  .choix button {
-    flex: 1; margin: 0; padding: .55rem .4rem;
-    background: none; color: var(--gris);
-    font-size: 11pt; border: none; border-radius: 0;
-    transition: background .15s, color .15s;
-  }
-  .choix button + button { border-left: 1px solid var(--trait); }
-  .choix button:hover { background: #F4F2ED; color: var(--encre); }
-  .choix button.actif { background: var(--encre); color: #fff; }
-  .choix button.actif:hover { background: var(--encre); }
-
-  /* --- familles non choisies : estompées, mais cliquables pour switcher --- */
-  #choix-entree button:not(.actif) { opacity: .4; }
-  #choix-entree button:not(.actif):hover { opacity: 1; }
-
-  /* --- interrupteurs --- */
-  .bascules {
-    border: 1px solid var(--trait); border-radius: 2px; background: #fff;
-    padding: .2rem .8rem; margin-bottom: 1.4rem;
-  }
-  .bascule {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: .55rem 0; margin: 0; cursor: pointer;
-  }
-  .bascule + .bascule { border-top: 1px solid var(--trait); }
-  .bascule span { font-size: 11pt; }
-  .bascule small { display: block; font-size: 9.5pt; color: var(--gris); }
-  .bascule input { width: auto; margin: 0 0 0 1rem; flex: none; transform: scale(1.3); }
-
-  .bloc { display: none; }
-  .bloc.visible { display: block; }
-
-  .famille { border: 1px solid var(--trait); border-radius: 6px;
-             padding: .8rem 1rem; margin: 1rem 0; }
-  .famille > .titre-famille { display: block; font-weight: 600;
-             font-size: .95rem; margin-bottom: .5rem; }
-  .cases { display: flex; flex-wrap: wrap; gap: .4rem .9rem; }
-  .cases label { display: flex; align-items: center; gap: .4rem;
-             font-size: .95rem; font-weight: 400; margin: 0; cursor: pointer; }
-  .cases input { width: auto; margin: 0; }
-  .choix button:disabled { opacity: .35; cursor: not-allowed; }
-
-  /* --- compteur de mots (Paroles) --- */
-  .compte-mots { display: block; font-size: 9.5pt; color: var(--gris);
-             text-align: left; margin-top: .3rem; }
-  .compte-mots.trop { color: var(--alerte); font-weight: 600; }
-
-  /* --- date de naissance : trois listes --- */
-  .trio { display: flex; gap: .5rem; }
-  .trio select { padding: .6rem .3rem; }
-  .trio .jour  { flex: 1; }
-  .trio .mois  { flex: 1.7; }
-  .trio .annee { flex: 1.2; }
-
-  /* --- bloc déroulant « Comment ça marche » --- */
-  .guide {
-    margin-top: 1.8rem;
-    border-top: 1px solid var(--trait);
-    border-bottom: 1px solid var(--trait);
-  }
-  .guide summary {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: .8rem .1rem;
-    font-size: 11pt; color: var(--tekhelet);
-    cursor: pointer; list-style: none;
-  }
-  .guide summary::-webkit-details-marker { display: none; }
-  .guide summary::after {
-    content: "+"; color: var(--or);
-    font-size: 15pt; line-height: 1; margin-left: 1rem;
-  }
-  .guide[open] summary::after { content: "–"; }
-  .guide summary:hover { color: var(--encre); }
-
-  .guide-corps { padding: .2rem .1rem 1.4rem; font-size: 10.5pt; line-height: 1.6; }
-  .guide-corps h3 {
-    font-family: "Frank Ruhl Libre", "David", "Times New Roman", serif;
-    font-size: 12pt; font-weight: 600; color: var(--encre);
-    margin: 1.5rem 0 .35rem;
-  }
-  .guide-corps h3:first-child { margin-top: 0; }
-  .guide-corps h3 .rang {
-    color: var(--or); font-size: 10.5pt;
-    margin-right: .4rem;
-  }
-  .guide-corps p  { margin: 0 0 .6rem; }
-  .guide-corps ul { margin: .2rem 0 .6rem; padding-left: 1.1rem; }
-  .guide-corps li { margin-bottom: .35rem; }
-  .guide-corps strong { font-weight: 600; }
-  .guide-corps .filet-guide {
-    height: 1px; background: var(--trait);
-    border: none; margin: 1.5rem 0 1.2rem;
-  }
+/* ── TRADUCTION FRANÇAISE ── */
+.fr{display:block;direction:ltr;unicode-bidi:isolate;font-family:'Heebo',sans-serif;font-size:.82em;font-style:normal;font-weight:400;color:var(--muted);letter-spacing:0;text-transform:none;line-height:1.5;}
+.fr-in{display:inline;direction:ltr;unicode-bidi:isolate;font-family:'Heebo',sans-serif;font-size:.85em;font-weight:400;color:var(--muted);}
+.fr-in::before{content:' · ';}
+.isrim-body .fr{margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);text-align:left;font-size:12.5px;}
+.isrim-body .fr strong{color:var(--star);}
+.nav-tab .fr{font-size:10.5px;margin-top:1px;text-align:center;overflow:hidden;text-overflow:ellipsis;}
+.quiz-score-label span.fr-in{color:var(--muted);font-size:12px;font-weight:400;}
+body.no-fr .fr,body.no-fr .fr-in{display:none !important;}
+.fr-toggle{position:absolute;top:16px;right:20px;z-index:2;padding:6px 12px;border-radius:20px;border:1px solid var(--gold);background:var(--deep);color:var(--gold);font-family:'Heebo',sans-serif;font-size:12px;cursor:pointer;direction:ltr;}
+.fr-toggle:hover{background:var(--gold);color:var(--night);}
+header{position:relative;}
 </style>
 </head>
 <body>
+<div class="starfield"></div>
+<div class="moon"></div>
+<div class="app">
 
-<div class="cadre">
+<header>
+  <div class="song-title">שַׁלְוָוָה</div>
+  <div class="song-meta">מילים: <span>אבי קורן</span> &nbsp;|&nbsp; לחן: <span>יאיר רוזנבלום</span> &nbsp;|&nbsp; ביצוע: <span>להקת הנח"ל</span>
+    <span class="fr">« Shalva » (Quiétude) — paroles : Avi Koren · musique : Yaïr Rosenblum · interprétation : Troupe du Nahal</span></div>
+  <button class="fr-toggle" id="fr-toggle" onclick="toggleFr()">🇫🇷 FR : oui</button>
+</header>
 
-  <h1 class="titre">לימוד עברית</h1>
-  <p class="sous-titre">Étude de l'hébreu — espace personnel</p>
+<nav class="nav-tabs">
+  <button class="nav-tab active" onclick="showSection('paroles',this)"><span class="ti">📜</span>מילות השיר<span class="fr">Paroles</span></button>
+  <button class="nav-tab" onclick="showSection('lexique',this)"><span class="ti">📖</span>לקסיקון<span class="fr">Lexique</span></button>
+  <button class="nav-tab" onclick="showSection('quiz',this)"><span class="ti">🎯</span>חידון<span class="fr">Quiz</span></button>
+  <button class="nav-tab" onclick="showSection('recon',this)"><span class="ti">🧩</span>בניית משפטים<span class="fr">Phrases</span></button>
+  <button class="nav-tab" onclick="showSection('isrim',this)"><span class="ti">💡</span>ISRIM<span class="fr">Analyse</span></button>
+</nav>
 
-  <div class="etapes" id="etapes">
-    <span class="etape" data-etape="1">א</span>
-    <span class="filet"></span>
-    <span class="etape" data-etape="2">ב</span>
-    <span class="filet"></span>
-    <span class="etape" data-etape="3">ג</span>
+<!-- ══ PAROLES ══ -->
+<div id="sec-paroles" class="section active">
+  <div class="audio-section">
+    <div class="audio-icon">🎵</div>
+    <div class="audio-info"><h3>הקשיבו לשיר<span class="fr">Écoutez la chanson</span></h3><p>חפשו ביוטיוב או שירונט — ולחצו 🔊 על כל שורה לשמוע את המילים<span class="fr">Cherchez-la sur YouTube ou Shironet — et cliquez 🔊 sur chaque ligne pour entendre les paroles</span></p></div>
+    <a class="audio-link" href="https://www.youtube.com/results?search_query=שלווה+להקת+הנחל" target="_blank">▶ YouTube</a>
+    <a class="audio-link" href="https://shironet.mako.co.il/artist?type=lyrics&lang=1&prfid=578&wrkid=3064" target="_blank">🎼 שירונט</a>
   </div>
-
-  <!-- ÉCRAN 0 — accueil -->
-  <div class="ecran visible" id="ecran-accueil">
-    <h2>Bienvenue</h2>
-    <p class="intro">Ce site est réservé aux personnes majeures. Votre code d'accès vous est envoyé par e-mail après votre paiement.</p>
-    <button id="vers-inscription">Première visite — créer mon accès</button>
-    <button id="vers-connexion" style="background: none; color: var(--encre); border: 1px solid var(--trait);">J'ai déjà un accès</button>
-
-    <details class="guide">
-      <summary>Comment ça marche</summary>
-      <div class="guide-corps">
-
-        <h3>À quoi sert ce site</h3>
-        <p>Ce site s'adresse aux élèves et aux étudiants adultes qui cherchent du matériel pédagogique pour leur étude de l'hébreu.</p>
-        <p>Il fabrique pour vous, à la demande, du matériel complémentaire : une leçon d'hébreu sur le thème de votre choix, à partir d'une chanson, ou sur les mots précis que vous lui donnez. Chaque leçon est unique : elle est écrite au moment où vous la demandez.</p>
-        <p>Avec un abonnement, vous avez aussi accès à <strong>Mishpatim</strong>, l'atelier de phrases en hébreu avec l'IA.</p>
-
-        <hr class="filet-guide">
-
-        <h3><span class="rang">1</span>S'inscrire (une seule fois)</h3>
-        <p>Vous choisissez un identifiant et vous donnez votre prénom, votre date de naissance, votre <strong>adresse e-mail</strong> et votre <strong>numéro de téléphone</strong>. Tous ces champs sont obligatoires. C'est par e-mail que tout arrive : votre code d'accès comme vos leçons.</p>
-        <p>Le site est réservé aux personnes majeures.</p>
-
-        <h3><span class="rang">2</span>Choisir une formule et payer</h3>
-        <p>Juste après l'inscription, vous choisissez entre deux façons de travailler :</p>
-        <ul>
-          <li><strong>des fiches à l'unité</strong>, payées une fois et à utiliser quand vous voulez : 6 fiches pour 5 €, 12 fiches pour 10 €, 20 fiches pour 15 € ;</li>
-          <li><strong>un abonnement mensuel</strong>, Sectoriel (20 € par mois) ou Complet (30 € par mois), qui donne accès à l'atelier Mishpatim et inclut des fiches chaque mois.</li>
-        </ul>
-        <p>Vous payez par carte bancaire, sur la page sécurisée de Stripe. Dès que le paiement est validé, vous recevez par e-mail votre facture et votre code d'accès de 6 caractères. Pensez à regarder vos courriers indésirables la première fois.</p>
-        <p>Quand vos fiches sont épuisées, vous reprenez une formule : votre quota se recharge et vous gardez le même code. Les fiches achetées à l'unité ne se perdent jamais : elles s'ajoutent à celles d'un abonnement.</p>
-
-        <h3><span class="rang">3</span>Se connecter</h3>
-        <p>À chaque visite, vous donnez votre identifiant et votre code. Il n'y a pas de connexion automatique, c'est voulu.</p>
-
-        <h3><span class="rang">4</span>Demander une leçon</h3>
-        <p>Vous choisissez :</p>
-        <ul>
-          <li>ce sur quoi travailler :
-            <ul>
-              <li><strong>Un thème</strong> — ce que vous voulez : la cuisine, l'aviation, le cinéma…</li>
-              <li><strong>Une chanson</strong> — vous donnez le titre, l'artiste, les liens, et vous copiez l'extrait des paroles de votre choix.</li>
-              <li><strong>Mes choix personnels</strong> — vous donnez vous-même de un à cinq mots, et vous cochez ce que vous voulez qu'on vous en dise : morphologie, racine, synonymes, registre, phrases d'exemple, texte de situation. Peu de mots, mais traités en profondeur, et seulement sur ce que vous avez coché.</li>
-            </ul>
-          </li>
-          <li>la forme : <strong>une fiche interactive</strong> ou <strong>une fiche rédigée</strong> (vos choix personnels donnent toujours une fiche rédigée) ;</li>
-          <li>avec ou sans <strong>voyelles</strong> (nikoud), avec ou sans <strong>translittération</strong>.</li>
-        </ul>
-
-        <h3><span class="rang">5</span>Recevoir votre leçon</h3>
-        <p>Fermez la page, vous n'avez rien à attendre à l'écran. <strong>Le lien arrive dans votre boîte e-mail au bout de plusieurs minutes</strong> — le temps que la leçon soit écrite. Pensez à regarder vos courriers indésirables la première fois.</p>
-        <p>Pour une <strong>fiche interactive</strong>, attendez encore une minute ou deux après avoir reçu le message : elle doit d'abord être mise en ligne. Si le lien affiche une page d'erreur, patientez un instant puis rechargez la page : elle finira par s'ouvrir.</p>
-
-        <h3><span class="rang">6</span>Travailler avec Mishpatim (abonnés)</h3>
-        <p>Après la connexion, le bouton <strong>Ouvrir Mishpatim</strong> vous mène à l'atelier. Vous choisissez une racine et un modèle de phrase : Mishpatim vous propose des phrases vocalisées, avec leur traduction et leur analyse. Vous les transformez, vous créez les vôtres, et l'IA vous corrige. Les phrases que vous ne savez pas encore reviennent en révision jusqu'à ce qu'elles soient acquises.</p>
-        <p>Le Sectoriel donne 50 demandes à l'IA et 6 fiches par mois ; le Complet, 150 demandes, 12 fiches, et en plus Créer, Traduire et l'Escalier lexical.</p>
-
-        <hr class="filet-guide">
-
-        <h3>Bon à savoir</h3>
-        <ul>
-          <li>Les mots que vous avez déjà rencontrés ne reviennent pas : chaque leçon tient compte des précédentes.</li>
-          <li>Les paroles de chanson que vous copiez ne sont pas conservées.</li>
-          <li>Une seule demande à la fois : ne cliquez qu'une fois sur le bouton.</li>
-          <li>L'abonnement est sans engagement : vous le résiliez quand vous voulez depuis votre espace, et l'accès reste ouvert jusqu'à la fin du mois payé.</li>
-          <li>Vous pouvez passer du Sectoriel au Complet à tout moment : vous ne payez que la différence pour les jours qui restent. Le retour au Sectoriel se fait au renouvellement suivant.</li>
-        </ul>
-
+  <div class="lyrics-container">
+    <div class="lyrics-panel">
+      <h3>עברית — לחץ 🔊 לשמיעה<span class="fr">Hébreu — cliquez 🔊 pour écouter</span></h3>
+      <div class="verse-block"><div class="verse-label">בית א׳</div>
+        <div class="verse-line" onclick="sp('על המחנה נדלק ירח')"><button class="sp-btn">🔊</button>עַל הַמַּחֲנֶה נִדְלַק יָרֵחַ</div>
+        <div class="verse-line" onclick="sp('על המאהל כוכב זורח')"><button class="sp-btn">🔊</button>עַל הַמַּאֲהָל כּוֹכָב זוֹרֵחַ</div>
+        <div class="verse-line" onclick="sp('והזמן כמו גומי מתמרח')"><button class="sp-btn">🔊</button>וְהַזְּמַן כְּמוֹ גוּמִי מִתְמָרֵחַ</div>
+        <div class="verse-line" onclick="sp('ליל שבת בלי טעם ובלי ריח')"><button class="sp-btn">🔊</button>לֵיל שַׁבָּת בְּלִי טַעַם וּבְלִי רֵיחַ</div>
+        <div class="verse-line" onclick="sp('והשקט את הלב קורע')"><button class="sp-btn">🔊</button>וְהַשֶּׁקֶט אֶת הַלֵּב קוֹרֵעַ</div>
       </div>
-    </details>
+      <div class="verse-block"><div class="verse-label">פזמון</div>
+        <div class="verse-line refrain" onclick="sp('איזו מין שלווה ולא עושים שום דבר')"><button class="sp-btn">🔊</button>אֵיזוֹ מִין שַׁלְוָוָה וְלֹא עוֹשִׂים שׁוּם דָּבָר</div>
+        <div class="verse-line refrain" onclick="sp('איזו מין שלווה ועוד שבוע עבר')"><button class="sp-btn">🔊</button>אֵיזוֹ מִין שַׁלְוָוָה וְעוֹד שָׁבוּעַ עָבַר</div>
+      </div>
+      <div class="verse-block"><div class="verse-label">בית ב׳</div>
+        <div class="verse-line" onclick="sp('השבת בכלל אינה עוברת')"><button class="sp-btn">🔊</button>הַשַּׁבָּת בִּכְלָל אֵינָהּ עוֹבֶרֶת</div>
+        <div class="verse-line" onclick="sp('כבר קראנו את עיתון הערב')"><button class="sp-btn">🔊</button>כְּבָר קָרָאנוּ אֶת עִיתוֹן הָעֶרֶב</div>
+        <div class="verse-line" onclick="sp('שרנו כבר שירי מגל וחרב')"><button class="sp-btn">🔊</button>שַׁרְנוּ כְּבָר שִׁירֵי מַגָּל וָחֶרֶב</div>
+        <div class="verse-line" onclick="sp('כבר תפרנו את החור בגרב')"><button class="sp-btn">🔊</button>כְּבָר תָּפַרְנוּ אֶת הַחוֹר בַּגֶּרֶב</div>
+        <div class="verse-line" onclick="sp('ופתרנו תשבצים בלי הרף')"><button class="sp-btn">🔊</button>וּפָתַרְנוּ תַּשְׁבְּצִים בְּלִי הֶרֶף</div>
+      </div>
+      <div class="verse-block"><div class="verse-label">בית ג׳</div>
+        <div class="verse-line" onclick="sp('אף מכתב ממך עוד לא הגיע')"><button class="sp-btn">🔊</button>אַף מִכְתָּב מִמֵּךְ עוֹד לֹא הִגִּיעַ</div>
+        <div class="verse-line" onclick="sp('עוד מעט המפקד יופיע')"><button class="sp-btn">🔊</button>עוֹד מְעַט הַמְּפַקֵּד יוֹפִיעַ</div>
+        <div class="verse-line" onclick="sp('ויחזור ודאי שוב להבטיח')"><button class="sp-btn">🔊</button>וְיַחְזֹר וַדַּאי שׁוּב לְהַבְטִיחַ</div>
+        <div class="verse-line" onclick="sp('בקרוב לרגילה אגיע')"><button class="sp-btn">🔊</button>בְּקָרוֹב לִרְגִילָה אַגִּיעַ</div>
+        <div class="verse-line" onclick="sp('שתקני שוב שניים ביציע')"><button class="sp-btn">🔊</button>שֶׁתִּקְנִי שׁוּב שְׁנַיִם בַּיָּצִיעַ</div>
+      </div>
+    </div>
+    <div class="lyrics-panel">
+      <h3>תרגום לצרפתית<span class="fr">Traduction française</span></h3>
+      <div class="verse-block"><div class="verse-label">Couplet 1</div>
+        <div class="fr-line">Sur le camp, la lune s'est allumée</div>
+        <div class="fr-line">Sur la tente, une étoile brille</div>
+        <div class="fr-line">Et le temps s'étale comme du caoutchouc</div>
+        <div class="fr-line">Une nuit de shabbat sans goût et sans odeur</div>
+        <div class="fr-line">Et le silence déchire le cœur</div>
+      </div>
+      <div class="verse-block"><div class="verse-label">Refrain</div>
+        <div class="fr-line" style="color:var(--gold);font-style:normal;">Quelle sorte de quiétude — on ne fait absolument rien</div>
+        <div class="fr-line" style="color:var(--gold);font-style:normal;">Quelle sorte de quiétude — et encore une semaine est passée</div>
+      </div>
+      <div class="verse-block"><div class="verse-label">Couplet 2</div>
+        <div class="fr-line">Le shabbat ne passe absolument pas</div>
+        <div class="fr-line">On a déjà lu le journal du soir</div>
+        <div class="fr-line">On a déjà chanté les chansons de faucille et d'épée</div>
+        <div class="fr-line">On a déjà cousu le trou dans la chaussette</div>
+        <div class="fr-line">Et résolu des mots-croisés sans arrêt</div>
+      </div>
+      <div class="verse-block"><div class="verse-label">Couplet 3</div>
+        <div class="fr-line">Pas même une lettre de toi n'est arrivée</div>
+        <div class="fr-line">Dans un instant le commandant apparaîtra</div>
+        <div class="fr-line">Et reviendra certainement promettre encore</div>
+        <div class="fr-line">« Bientôt j'arriverai en permission »</div>
+        <div class="fr-line">Pour que tu achètes encore deux places au balcon</div>
+      </div>
+    </div>
   </div>
-
-  <!-- ÉCRAN 1 — inscription -->
-  <div class="ecran" id="ecran-inscription">
-    <h2>Créer mon accès</h2>
-    <p class="intro">Après l'inscription, vous choisirez votre formule et la réglerez : votre code vous sera envoyé à l'adresse e-mail indiquée dès la validation du paiement.</p>
-
-    <label><span class="libelle">Identifiant (celui que vous saisirez à chaque visite)</span>
-      <input id="i-identifiant" autocomplete="username"></label>
-    <label><span class="libelle">Prénom</span>
-      <input id="i-prenom" autocomplete="given-name"></label>
-    <label><span class="libelle">Adresse e-mail (votre leçon y sera envoyée)</span>
-      <input id="i-email" type="email" inputmode="email" autocomplete="email" placeholder="prenom@exemple.com"></label>
-    <label><span class="libelle">Téléphone (format +33…)</span>
-      <input id="i-telephone" inputmode="tel" placeholder="+33612345678"></label>
-    <label><span class="libelle">Date de naissance</span>
-      <div class="trio">
-        <select id="i-jour"  class="jour"><option value="">Jour</option></select>
-        <select id="i-mois"  class="mois"><option value="">Mois</option></select>
-        <select id="i-annee" class="annee"><option value="">Année</option></select>
-      </div></label>
-    <button id="btn-inscrire">Créer mon accès</button>
-    <button class="lien" data-retour="accueil">Retour</button>
-    <div class="message" id="msg-inscription"></div>
-  </div>
-
-  <!-- ÉCRAN paiement — après inscription -->
-  <div class="ecran" id="ecran-paiement">
-    <h2>Choisissez votre formule</h2>
-    <p class="intro">Inscription réussie ! Choisissez un abonnement ou un pack de fiches, et payez par carte bancaire. Votre code d'accès vous arrivera par e-mail dès la validation du paiement.</p>
-    <section class="offre">
-      <div class="offre-entete">
-        <h3>Deux façons de travailler</h3>
-        <p>Des fiches à l’unité, sans engagement, ou un abonnement mensuel : l’atelier Mishpatim avec l’IA, avec des fiches incluses chaque mois.</p>
-      </div>
-      <div class="offre-colonnes">
-        <div class="offre-col">
-          <h4>Fiches du site</h4>
-          <p class="offre-sous">Payées une fois, à utiliser quand vous voulez.</p>
-          <div class="pack-ligne"><span><b>6 fiches</b><span class="prix">5 €</span></span>
-            <button class="btn-achat" onclick="payerStripe(6)">Acheter</button></div>
-          <div class="pack-ligne"><span><b>12 fiches</b><span class="prix">10 €</span></span>
-            <button class="btn-achat" onclick="payerStripe(12)">Acheter</button></div>
-          <div class="pack-ligne"><span><b>20 fiches</b><span class="prix">15 €</span></span>
-            <button class="btn-achat" onclick="payerStripe(20)">Acheter</button></div>
-          <p class="offre-pont">Les fiches achetées ne se perdent jamais : elles s’ajoutent à celles d’un abonnement.<span class="fleche"></span></p>
-        </div>
-        <div class="offre-col">
-          <h4>Abonnements avec Mishpatim</h4>
-          <p class="offre-sous">Fabriquez et corrigez vos propres phrases hébraïques avec l’IA, et révisez-les jusqu’à les savoir.</p>
-          <div class="abo-formules">
-            <div class="abo-carte">
-              <strong>Sectoriel</strong>
-              <span class="abo-prix">20 € / mois</span>
-              <span class="fiches-incluses">+ 6 fiches du site par mois</span>
-              <ul>
-                <li>Mishpatim : Atelier, Mes phrases, Réviser, Trous, Confusion</li>
-                <li>50 demandes à l’IA par mois</li>
-              </ul>
-              <button class="btn-achat" onclick="payerAbonnement('sectoriel')">S’abonner</button>
-            </div>
-            <div class="abo-carte">
-              <strong>Complet</strong>
-              <span class="abo-prix">30 € / mois</span>
-              <span class="fiches-incluses">+ 12 fiches du site par mois</span>
-              <ul>
-                <li>Tout Mishpatim, avec Créer, Traduire et Escalier</li>
-                <li>150 demandes à l’IA par mois</li>
-              </ul>
-              <button class="btn-achat" onclick="payerAbonnement('complet')">S’abonner</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="abo-note">Abonnements sans engagement : résiliables à tout moment, l’accès reste ouvert jusqu’à la fin du mois payé. Les fiches et demandes à l’IA comprises dans l’abonnement ne se reportent pas d’un mois sur l’autre.</p>
-    </section>
-    <button class="lien" data-retour="connexion">J'ai reçu mon code — me connecter</button>
-    <div class="message" id="msg-paiement"></div>
-  </div>
-
-  <!-- ÉCRAN 2 — connexion -->
-  <div class="ecran" id="ecran-connexion">
-    <h2>Entrer</h2>
-    <p class="intro">Saisissez votre identifiant et le code reçu par e-mail.</p>
-
-    <label><span class="libelle">Identifiant</span>
-      <input id="c-identifiant" autocomplete="username"></label>
-    <label><span class="libelle">Code d'accès</span>
-      <input id="code" maxlength="6" autocomplete="one-time-code"></label>
-
-    <button id="btn-connecter">Entrer</button>
-    <button class="lien" id="btn-demander">Code perdu ou expiré — m'en envoyer un</button>
-    <button class="lien" data-retour="accueil">Retour</button>
-    <div class="message" id="msg-connexion"></div>
-  </div>
-
-  <!-- ÉCRAN 3 — demander une leçon -->
-  <div class="ecran" id="ecran-menu">
-    <p class="accueil-nom" id="menu-nom">Shalom</p>
-    <div id="msg-formule" class="formule" style="display:none"></div>
-
-    <div id="zone-lecon">
-    <p class="intro">Choisissez sur quoi travailler et sous quelle forme. Le lien vous arrivera par e-mail.</p>
-
-    <span class="libelle">Sur quoi travailler</span>
-    <div class="choix" id="choix-entree">
-      <button data-entree="theme" class="actif">Un thème</button>
-      <button data-entree="chanson">Une chanson</button>
-      <button data-entree="perso">Mes choix personnels</button>
-      <button data-entree="poesie">Un poème</button>
-    </div>
-
-    <span class="libelle">Sous quelle forme</span>
-    <div class="choix" id="choix-sortie">
-      <button data-sortie="jeu" class="actif">Une fiche interactive</button>
-      <button data-sortie="doc">Une fiche rédigée</button>
-    </div>
-
-    <div class="bascules">
-      <label class="bascule">
-        <span>Nikoud
-          <small>Les voyelles sous les lettres</small></span>
-        <input type="checkbox" id="o-nikoud" checked>
-      </label>
-      <label class="bascule">
-        <span>Translittération
-          <small>L'hébreu écrit en lettres latines</small></span>
-        <input type="checkbox" id="o-translitteration" checked>
-      </label>
-    </div>
-
-    <!-- entrée : thème -->
-    <div class="bloc visible" id="bloc-theme">
-      <label><span class="libelle">Thème</span>
-        <input id="l-theme" placeholder="cuisine, voyage, famille…"></label>
-
-      <label><span class="libelle">Niveau</span>
-        <select id="l-niveau">
-          <option>A1</option>
-          <option>A2</option>
-          <option selected>B1</option>
-          <option>B2</option>
-          <option>C1</option>
-        </select></label>
-
-      <label><span class="libelle">Nombre de mots</span>
-        <select id="l-n">
-          <option>5</option>
-          <option selected>10</option>
-        </select></label>
-    </div>
-
-    <!-- entrée : chanson -->
-    <div class="bloc" id="bloc-chanson">
-      <label><span class="libelle">Titre de la chanson</span>
-        <input id="ch-titre" dir="rtl" placeholder="לו הייתי רוטשילד"></label>
-
-      <label><span class="libelle">Artiste</span>
-        <input id="ch-artiste" dir="rtl"></label>
-
-      <label><span class="libelle">Lien YouTube ou Spotify</span>
-        <input id="ch-youtube" inputmode="url" placeholder="https://…"></label>
-
-      <label><span class="libelle">Lien Shironet</span>
-        <input id="ch-shironet" inputmode="url" placeholder="https://shironet.mako.co.il/…"></label>
-
-      <label><span class="libelle">Paroles — à copier vous-même, elles ne sont pas conservées</span>
-        <textarea id="ch-paroles" dir="rtl"></textarea>
-        <span class="compte-mots" id="ch-compte">0 / 250 mots</span></label>
-    </div>
-
-    <!-- entrée : poème -->
-    <div class="bloc" id="bloc-poesie">
-      <label><span class="libelle">Titre du poème</span>
-        <input id="po-titre" dir="rtl" placeholder="&#1500;&#1493; &#1497;&#1492;&#1497;"></label>
-
-      <label><span class="libelle">Poète</span>
-        <input id="po-auteur" dir="rtl" placeholder="&#1504;&#1506;&#1502;&#1497; &#1513;&#1502;&#1512;"></label>
-
-      <span class="libelle">Type de poésie</span>
-      <div class="choix" id="choix-ptype">
-        <button data-ptype="biblique">Biblique / médiévale</button>
-        <button data-ptype="moderne" class="actif">Moderne métrée</button>
-      </div>
-
-      <label><span class="libelle">Le poème — à copier vous-même (jusqu'à 4 quatrains)</span>
-        <textarea id="po-poeme" dir="rtl"></textarea>
-        <span class="compte-mots" id="po-compte">0 / 150 mots</span></label>
-    </div>
-
-    <!-- entrée : mes choix personnels -->
-    <div class="bloc" id="bloc-perso">
-      <label><span class="libelle">Mes mots — de 1 à 10 (séparés par des espaces ou retours à la ligne)</span>
-        <textarea id="p-mots" dir="rtl" rows="10"
-          placeholder="&#1513;&#1493;&#1511;&#10;&#1497;&#1512;&#1511;"></textarea></label>
-      <div style="font-size: 10pt; color: var(--gris); margin-top: 0.4rem; margin-bottom: 1rem;">
-        <span id="p-compteur">0/10</span> mots
-      </div>
-
-      <div class="famille">
-        <span class="titre-famille">Analyse</span>
-        <div class="cases">
-          <label><input type="checkbox" class="p-opt" value="morphologie" checked> Morphologie</label>
-          <label><input type="checkbox" class="p-opt" value="racine"> Racine et sens général</label>
-          <label><input type="checkbox" class="p-opt" value="synonymes"> Synonymes et homonymes</label>
-        </div>
-      </div>
-
-      <div class="famille">
-        <span class="titre-famille">Registre</span>
-        <div class="cases">
-          <label><input type="checkbox" class="p-opt" value="biblique"> Biblique</label>
-          <label><input type="checkbox" class="p-opt" value="rabbinique"> Rabbinique</label>
-          <label><input type="checkbox" class="p-opt" value="moderne" checked> Moderne</label>
-          <label><input type="checkbox" class="p-opt" value="argot"> Argot</label>
-        </div>
-      </div>
-
-      <div class="famille">
-        <span class="titre-famille">Création</span>
-        <div class="cases">
-          <label><input type="checkbox" class="p-opt" value="phrases" checked> Phrases d'exemple</label>
-          <label><input type="checkbox" class="p-opt" value="situation"> Texte de situation</label>
-        </div>
-      </div>
-    </div>
-
-    <button id="btn-envoyer">Demander ma leçon</button>
-
-    <div class="message" id="msg-lecon"></div>
-
-    <div class="note">
-      La création de votre fiche prend quelques minutes, puis sa mise en ligne demande encore quelques minutes avant que vous puissiez l'ouvrir. Le lien vous arrive par e-mail dès qu'elle est prête.
-    </div>
-    </div><!-- fin zone-lecon -->
-
-    <button id="btn-mes-lecons">Mes leçons</button>
-    <div id="compteur-lecons" class="compteur-lecons"></div>
-    <div id="liste-lecons"></div>
-
-    <section class="offre" id="bloc-mishpatim">
-      <div class="offre-entete">
-        <h3>Vos fiches et votre abonnement</h3>
-        <p>Des fiches à l’unité, sans engagement, ou un abonnement mensuel : l’atelier Mishpatim avec l’IA, avec des fiches incluses chaque mois.</p>
-      </div>
-      <div class="offre-colonnes">
-        <div class="offre-col">
-          <h4>Fiches du site</h4>
-          <p class="offre-sous">Rechargez à l’unité : vos fiches s’ajoutent tout de suite, vous gardez le même code.</p>
-          <div class="pack-ligne"><span><b>6 fiches</b><span class="prix">5 €</span></span>
-            <button class="btn-achat" onclick="payerStripe(6)">Acheter</button></div>
-          <div class="pack-ligne"><span><b>12 fiches</b><span class="prix">10 €</span></span>
-            <button class="btn-achat" onclick="payerStripe(12)">Acheter</button></div>
-          <div class="pack-ligne"><span><b>20 fiches</b><span class="prix">15 €</span></span>
-            <button class="btn-achat" onclick="payerStripe(20)">Acheter</button></div>
-          <p class="offre-pont">Les fiches achetées ne se perdent jamais : elles s’ajoutent à celles d’un abonnement.<span class="fleche"></span></p>
-        </div>
-        <div class="offre-col">
-          <h4>Abonnements avec Mishpatim</h4>
-          <div id="abo-actif" class="abo-statut" style="display:none">
-            <span class="abo-badge" id="abo-badge">Actif</span>
-            <p class="abo-etat" id="abo-etat"></p>
-            <p class="abo-etat" id="abo-ia"></p>
-            <p class="abo-etat" id="abo-fiches"></p>
-            <div class="abo-changer" id="abo-changer" style="display:none">
-              <p class="abo-etat" id="abo-changer-texte"></p>
-              <a class="btn-changer" id="btn-changer" target="_blank" rel="noopener"></a>
-              <p class="abo-aide">Dans la page qui s’ouvre, indiquez votre adresse e-mail, ouvrez le lien reçu, puis choisissez « Mettre à jour l’abonnement ».</p>
-            </div>
-            <button class="btn-mishpatim" onclick="ouvrirMishpatim()">Ouvrir Mishpatim</button>
-            <a class="lien-portail" id="lien-portail" target="_blank" rel="noopener">Gérer mon abonnement (carte, factures, résiliation)</a>
-          </div>
-          <div id="abo-offre">
-            <p class="offre-sous">Fabriquez et corrigez vos propres phrases hébraïques avec l’IA, et révisez-les jusqu’à les savoir.</p>
-          <div class="abo-formules">
-            <div class="abo-carte">
-              <strong>Sectoriel</strong>
-              <span class="abo-prix">20 € / mois</span>
-              <span class="fiches-incluses">+ 6 fiches du site par mois</span>
-              <ul>
-                <li>Mishpatim : Atelier, Mes phrases, Réviser, Trous, Confusion</li>
-                <li>50 demandes à l’IA par mois</li>
-              </ul>
-              <button class="btn-achat" onclick="payerAbonnement('sectoriel')">S’abonner</button>
-            </div>
-            <div class="abo-carte">
-              <strong>Complet</strong>
-              <span class="abo-prix">30 € / mois</span>
-              <span class="fiches-incluses">+ 12 fiches du site par mois</span>
-              <ul>
-                <li>Tout Mishpatim, avec Créer, Traduire et Escalier</li>
-                <li>150 demandes à l’IA par mois</li>
-              </ul>
-              <button class="btn-achat" onclick="payerAbonnement('complet')">S’abonner</button>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
-      <p class="abo-note">Abonnements sans engagement : résiliables à tout moment, l’accès reste ouvert jusqu’à la fin du mois payé. Les fiches et demandes à l’IA comprises dans l’abonnement ne se reportent pas d’un mois sur l’autre.</p>
-    </section>
-
-    <div id="bloc-avis" style="margin-top:24px">
-      <h3>Donnez votre avis</h3>
-      <textarea id="avis-texte" rows="3" maxlength="300"
-        style="width:100%;max-width:480px;resize:none"
-        placeholder="Votre avis ou votre question (3 lignes max)"></textarea><br>
-      <button id="avis-envoi" onclick="envoyerAvis()">Envoyer</button>
-      <div class="message" id="avis-msg"></div>
-    </div>
-
-    <button class="lien" id="btn-sortir">Sortir</button>
-  </div>
-
 </div>
 
+<!-- ══ LEXIQUE ══ -->
+<div id="sec-lexique" class="section">
+  <div class="lexique-controls">
+    <button class="lex-btn active" onclick="filterLex('all',this)">הכל<span class="fr-in">Tout</span></button>
+    <button class="lex-btn" onclick="filterLex('nom',this)">שמות<span class="fr-in">Noms</span></button>
+    <button class="lex-btn" onclick="filterLex('verbe',this)">פעלים<span class="fr-in">Verbes</span></button>
+    <button class="lex-btn" onclick="filterLex('expr',this)">ביטויים<span class="fr-in">Expressions</span></button>
+    <button class="lex-btn" onclick="filterLex('adv',this)">תוארים<span class="fr-in">Adverbes</span></button>
+  </div>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">לחץ על כרטיס לפרטים מלאים — 🔊 לשמיעה<span class="fr" style="font-size:12px;">Cliquez sur une carte pour tous les détails — 🔊 pour écouter</span></p>
+  <div class="lex-grid" id="lex-grid"></div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="sec-quiz" class="section">
+  <div id="quiz-mode-select">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;direction:ltr;">Choisissez un mode d'entraînement :</p>
+    <div class="quiz-mode-grid">
+      <div class="qmode-card" onclick="startQuiz('qcm')"><span class="qm-icon">🔤</span><div class="qm-name">QCM</div><div class="qm-desc">עברית ← צרפתית<span class="fr">Hébreu → français</span></div></div>
+      <div class="qmode-card" onclick="startQuiz('fr2heb')"><span class="qm-icon">🔁</span><div class="qm-name">Sens inverse</div><div class="qm-desc">צרפתית ← עברית<span class="fr">Français → hébreu</span></div></div>
+      <div class="qmode-card" onclick="startQuiz('type')"><span class="qm-icon">⌨️</span><div class="qm-name">Saisie libre</div><div class="qm-desc">כתבו את התרגום<span class="fr">Écrivez la traduction</span></div></div>
+      <div class="qmode-card" onclick="startQuiz('match')"><span class="qm-icon">🔗</span><div class="qm-name">Appariement</div><div class="qm-desc">חברו עברית ↔ צרפתית<span class="fr">Reliez hébreu ↔ français</span></div></div>
+      <div class="qmode-card" onclick="startQuiz('tf')"><span class="qm-icon">✅</span><div class="qm-name">Vrai / Faux</div><div class="qm-desc">נכון או שגוי?<span class="fr">Vrai ou faux ?</span></div></div>
+      <div class="qmode-card" onclick="startQuiz('root')"><span class="qm-icon">🌿</span><div class="qm-name">Racines</div><div class="qm-desc">זיהוי השורש<span class="fr">Trouvez la racine</span></div></div>
+    </div>
+  </div>
+  <div id="quiz-play" style="display:none;">
+    <div class="quiz-area">
+      <div class="quiz-topbar">
+        <div class="quiz-score-label">ניקוד<span class="fr-in">Score</span> : <span id="q-score">0</span></div>
+        <div class="quiz-score-label">שאלה<span class="fr-in">Question</span> <span id="q-num">1</span>/<span id="q-total">10</span></div>
+        <button style="background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:12px;" onclick="backToModes()">← מצב אחר<span class="fr-in">Autre mode</span></button>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="q-prog" style="width:10%"></div></div>
+      <div id="q-body"></div>
+      <div class="quiz-feedback" id="q-fb"></div>
+      <button class="btn-next" id="btn-next" onclick="nextQ()">הבא ←<span class="fr-in">Suivant</span></button>
+    </div>
+    <div id="q-result" style="display:none;">
+      <div class="result-screen">
+        <span class="result-emoji" id="r-emoji">🌟</span>
+        <div class="result-pts" id="r-pts"></div>
+        <div class="result-msg" id="r-msg"></div>
+        <button class="btn-restart" onclick="backToModes()">← בחר מצב אחר<span class="fr-in">Choisir un autre mode</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RECONSTRUCTION v3 ══ -->
+<div id="sec-recon" class="section">
+  <div class="recon-container">
+    <!-- Score banner -->
+    <div class="recon-scorebar">
+      <div class="recon-score-item s-ok">✓ <strong id="rs-ok">0</strong> נכון<span class="fr-in">juste</span></div>
+      <div class="recon-score-sep">|</div>
+      <div class="recon-score-item s-ko">✗ <strong id="rs-ko">0</strong> שגוי<span class="fr-in">faux</span></div>
+      <div class="recon-score-sep">|</div>
+      <div class="recon-score-item s-total">📊 <strong id="rs-pct">—</strong></div>
+      <div class="recon-dots" id="recon-dots"></div>
+    </div>
+    <!-- Phrase display -->
+    <div class="recon-phrase-header">
+      <span class="recon-num" id="recon-num">1 / 7</span>
+    </div>
+    <div class="recon-fr">
+      <span class="fr-text-inner" id="recon-fr">…</span>
+      <button class="sp-icon" id="sp-phrase-btn" title="écouter la phrase">🔊</button>
+    </div>
+    <!-- Drop zone -->
+    <div class="drop-zone" id="drop-zone"></div>
+    <!-- Auto-advance bar -->
+    <div class="advance-bar" id="advance-bar"></div>
+    <!-- Pool -->
+    <div class="tiles-pool" id="tiles-pool"></div>
+    <!-- Actions -->
+    <div class="recon-actions">
+      <button class="btn-check" id="btn-check" onclick="checkRecon()">בדוק ✓<span class="fr-in">Vérifier</span></button>
+      <button class="btn-reset" onclick="resetRecon()">אפס ↺<span class="fr-in">Effacer</span></button>
+    </div>
+    <div class="recon-result" id="recon-result"></div>
+    <!-- Final result -->
+    <div class="recon-final" id="recon-final">
+      <span class="rf-emoji" id="rf-emoji">🌟</span>
+      <div class="rf-pts" id="rf-pts"></div>
+      <div class="rf-msg" id="rf-msg"></div>
+      <button class="btn-restart" style="margin-top:16px;" onclick="restartRecon()">שוב מההתחלה ↺<span class="fr-in">Recommencer</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ISRIM ══ -->
+<div id="sec-isrim" class="section">
+  <div class="isrim-grid">
+    <div class="isrim-card">
+      <div class="isrim-letter">I</div>
+      <div class="isrim-label">Idées principales | רעיונות מרכזיים</div>
+      <div class="isrim-title">האירוניה של השקט<span class="fr">L'ironie du calme</span></div>
+      <div class="isrim-body">שַׁלְוָוָה הופכת את הדממה הצבאית לתמה מרכזית. שלוש תמות: <strong>הזמן המתמרח</strong>, <strong>הגעגוע</strong> (מכתב שלא מגיע), ו<strong>ההבטחות החוזרות</strong> של המפקד.
+        <span class="fr">« Shalva » fait du calme militaire son thème central. Trois thèmes : <strong>le temps qui s'étire</strong>, <strong>le manque</strong> (la lettre qui n'arrive pas) et <strong>les promesses répétées</strong> du commandant.</span></div>
+    </div>
+    <div class="isrim-card">
+      <div class="isrim-letter">S</div>
+      <div class="isrim-label">Structure | מבנה</div>
+      <div class="isrim-title">צורה מחזורית — תנועה ועצירה<span class="fr">Forme cyclique — mouvement et arrêt</span></div>
+      <div class="isrim-body">שלושה בתים + פזמון. בבית ב׳: <strong>רשימת פעולות שנסתיימו</strong> (קָרָאנוּ, שַׁרְנוּ, תָּפַרְנוּ, פָּתַרְנוּ). חריזת <strong>"-ֵחַ / -ֶרֶב / -יעַ"</strong> יוצרת קצב סחרחר.
+        <span class="fr">Trois couplets + refrain. Couplet 2 : <strong>une liste d'actions déjà terminées</strong> (on a lu, chanté, cousu, résolu). Les rimes <strong>-éa'h / -érev / -ia'</strong> (une par couplet) créent un rythme étourdissant.</span></div>
+    </div>
+    <div class="isrim-card">
+      <div class="isrim-letter">R</div>
+      <div class="isrim-label">Rhétorique | רטוריקה</div>
+      <div class="isrim-title">שלושה אמצעים רטוריים<span class="fr">Trois procédés rhétoriques</span></div>
+      <div class="isrim-body"><strong>אנפורה:</strong> "כְּבָר" שלוש פעמים.<br><strong>דימוי:</strong> "הַזְּמַן כְּמוֹ גוּמִי מִתְמָרֵחַ".<br><strong>פרדוקס:</strong> "הַשֶּׁקֶט אֶת הַלֵּב קוֹרֵעַ".
+        <span class="fr"><strong>Anaphore :</strong> « déjà » (כְּבָר) trois fois.<br><strong>Comparaison :</strong> « le temps s'étale comme du caoutchouc ».<br><strong>Paradoxe :</strong> « le silence déchire le cœur ».</span></div>
+    </div>
+    <div class="isrim-card">
+      <div class="isrim-letter">I</div>
+      <div class="isrim-label">Implications | השלכות</div>
+      <div class="isrim-title">מה מוסתר בין השורות<span class="fr">Ce qui se cache entre les lignes</span></div>
+      <div class="isrim-body"><strong>ביקורת:</strong> המפקד מבטיח ולא מקיים.<br><strong>רומנטי:</strong> "אַף מִכְתָּב מִמֵּךְ" — ושני כרטיסים ביציע.<br><strong>אוניברסלי:</strong> שיעמום כסכנה פסיכולוגית.
+        <span class="fr"><strong>Critique :</strong> le commandant promet et ne tient pas.<br><strong>Romantique :</strong> « pas une lettre de toi » — et deux places au balcon.<br><strong>Universel :</strong> l'ennui comme danger psychologique.</span></div>
+    </div>
+    <div class="isrim-full">
+      <div class="isrim-letter" style="font-size:32px;display:inline;">M</div>
+      <span class="isrim-label" style="display:inline;margin-right:10px;vertical-align:middle;">Morphologie | מורפולוגיה בולטת</span>
+      <div class="isrim-body" style="margin-top:12px;">
+        <strong>התפעל — פעולה רפלקסיבית:</strong> מִתְמָרֵחַ (הזמן "מורח את עצמו").<br>
+        <strong>הפעיל:</strong> יוֹפִיעַ, לְהַבְטִיחַ, הִגִּיעַ, אַגִּיעַ.<br><br>
+        <strong>עבר גוף 1 רבים:</strong> קָרָאנוּ, שַׁרְנוּ, תָּפַרְנוּ, פָּתַרְנוּ — קולקטיב מול "מִמֵּךְ".<br><br>
+        <strong>חריזה על שורשים שונים:</strong> יָרֵחַ / זוֹרֵחַ / מִתְמָרֵחַ / רֵיחַ — גאונות אבי קורן.
+        <span class="fr"><strong>Hitpa'el — action réfléchie :</strong> מִתְמָרֵחַ (le temps « s'étale lui-même »).<br>
+        <strong>Hif'il :</strong> יוֹפִיעַ (apparaîtra), לְהַבְטִיחַ (promettre), הִגִּיעַ (est arrivée), אַגִּיעַ (j'arriverai).<br><br>
+        <strong>Passé 1re pers. pluriel :</strong> on a lu, chanté, cousu, résolu — le collectif (« nous ») face au « toi » (מִמֵּךְ, féminin).<br><br>
+        <strong>Rimes sur des racines différentes :</strong> lune / brille / s'étale / odeur — tout le talent d'Avi Koren.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app -->
 <script>
-var BASE = "https://n8n.hebreu-zen.cloud/webhook";
+// ═══════ TTS ═══════
+function sp(txt){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang='he-IL'; u.rate=0.85;
+  // try to find a Hebrew voice
+  const voices=window.speechSynthesis.getVoices();
+  const hv=voices.find(v=>v.lang.startsWith('he'));
+  if(hv) u.voice=hv;
+  window.speechSynthesis.speak(u);
+}
+// Load voices async
+window.speechSynthesis && speechSynthesis.addEventListener && speechSynthesis.addEventListener('voiceschanged',()=>{});
 
-var ECRANS = {
-  accueil:     { el: "ecran-accueil",     etape: 0 },
-  inscription: { el: "ecran-inscription", etape: 1 },
-  paiement: { el: "ecran-paiement", etape: 1 },
-  connexion:   { el: "ecran-connexion",   etape: 2 },
-  menu:        { el: "ecran-menu",        etape: 3 }
-};
+// ═══════ DATA ═══════
+const lex=[
+  {h:"יָרֵחַ",r:"י-ר-ח",cat:"nom",tr:"lune",ana:"שם עצם זכר יחיד — שירי",anaFr:"nom masculin singulier — registre poétique",fr:"Racine י-ר-ח. Plus courant que לְבָנָה (poétique). Image nocturne inaugurale."},
+  {h:"נִדְלַק",r:"ד-ל-ק",cat:"verbe",tr:"s'est allumée",ana:"נפעל עבר גוף 3 זכר יחיד",anaFr:"Nif'al, passé, 3e pers. masc. sing.",fr:"Passif Nif'al. Racine ד-ל-ק = brûler, allumer. La lune comme une lampe qui s'allume."},
+  {h:"כּוֹכָב",r:"כ-כ-ב",cat:"nom",tr:"étoile",ana:"שם עצם זכר יחיד — שורש כפול",anaFr:"nom masculin singulier — racine redoublée",fr:"Racine כ-כ-ב (le ו est une voyelle). Parallèle poétique à יָרֵחַ."},
+  {h:"זוֹרֵחַ",r:"ז-ר-ח",cat:"verbe",tr:"brille / se lève",ana:"בינוני פעל זכר יחיד",anaFr:"Pa'al, présent, masc. sing.",fr:"Pa'al présent. Racine ז-ר-ח = se lever (pour un astre)."},
+  {h:"מִתְמָרֵחַ",r:"מ-ר-ח",cat:"verbe",tr:"s'étale / s'étire",ana:"בינוני התפעל זכר יחיד",anaFr:"Hitpa'el, présent, masc. sing.",fr:"Hitpa'el réfléchi. Racine מ-ר-ח = étaler. Image centrale : le temps s'étire."},
+  {h:"גּוּמִי",r:"—",cat:"nom",tr:"caoutchouc",ana:"שם עצם זכר — מילה שאולה",anaFr:"nom masculin — mot emprunté",fr:"Emprunt (gomme / gummi). כְּמוֹ גּוּמִי = comparaison de l'ennui."},
+  {h:"שַׁלְוָוָה",r:"ש-ל-ו",cat:"nom",tr:"quiétude / sérénité",ana:"שם עצם נקבה יחיד",anaFr:"nom féminin singulier",fr:"Racine ש-ל-ו. Mot-titre ironique : la « paix » insupportable du camp militaire."},
+  {h:"קוֹרֵעַ",r:"ק-ר-ע",cat:"verbe",tr:"déchire",ana:"בינוני פעל זכר יחיד",anaFr:"Pa'al, présent, masc. sing.",fr:"Pa'al présent. Racine ק-ר-ע = déchirer. Paradoxe : le silence qui déchire."},
+  {h:"בְּלִי הֶרֶף",r:"ר-פ-ה",cat:"expr",tr:"sans arrêt",ana:"ביטוי קבוע — שלילה + שם עצם",anaFr:"expression figée — négation + nom",fr:"בְּלִי + הֶרֶף (pause). Racine ר-פ-ה = relâcher. Inlassablement."},
+  {h:"בְּלִי טַעַם",r:"ט-ע-ם",cat:"expr",tr:"sans goût / sans sens",ana:"ביטוי שלילה",anaFr:"expression négative",fr:"Double sens : insipide (littéral) et absurde (figuré)."},
+  {h:"אֵיזוֹ מִין",r:"—",cat:"expr",tr:"quelle sorte de… !",ana:"ביטוי קריאה אירוני",anaFr:"exclamation ironique",fr:"Exclamation ironique : « tu parles d'une paix… »"},
+  {h:"כְּבָר",r:"—",cat:"adv",tr:"déjà",ana:"תואר זמן",anaFr:"adverbe de temps",fr:"Répété 3 fois = anaphore de l'épuisement."},
+  {h:"תַּשְׁבֵּץ",r:"ש-ב-ץ",cat:"nom",tr:"mots croisés",ana:"שם עצם זכר יחיד",anaFr:"nom masculin singulier",fr:"Racine ש-ב-ץ = insérer, enchâsser. Activité de dernier recours contre l'ennui."},
+  {h:"מִכְתָּב",r:"כ-ת-ב",cat:"nom",tr:"lettre",ana:"שם עצם זכר יחיד",anaFr:"nom masculin singulier",fr:"Racine כ-ת-ב = écrire. La lettre absente = le vrai drame."},
+  {h:"מְפַקֵּד",r:"פ-ק-ד",cat:"nom",tr:"commandant",ana:"בינוני פיעל המשמש כשם עצם",anaFr:"participe Pi'el employé comme nom",fr:"Racine פ-ק-ד = ordonner. Une autorité aux promesses vaines."},
+  {h:"לְהַבְטִיחַ",r:"ב-ט-ח",cat:"verbe",tr:"promettre",ana:"שם הפועל, בניין הפעיל",anaFr:"infinitif, binyan Hif'il",fr:"Infinitif Hif'il. Racine ב-ט-ח = confiance. Promesses creuses."},
+  {h:"לִרְגִילָה",r:"ר-ג-ל",cat:"nom",tr:"en permission",ana:"שם עצם נקבה + ל' יחס",anaFr:"nom féminin + préposition ל",fr:"Argot militaire : רְגִילָה = permission régulière (חוּפְשָׁה רְגִילָה). « Bientôt j'arriverai en perm. »"},
+  {h:"שֶׁתִּקְנִי",r:"ק-נ-ה",cat:"verbe",tr:"que tu achètes",ana:"ש + עתיד גוף 2 נקבה, בניין פעל",anaFr:"ש (que) + futur 2e pers. fém. sing., Pa'al",fr:"Racine ק-נ-ה = acheter. S'adresse à la bien-aimée (מִמֵּךְ) : qu'elle achète deux places au balcon."},
+  {h:"יָצִיעַ",r:"י-צ-ע",cat:"nom",tr:"balcon / tribune",ana:"שם עצם זכר יחיד",anaFr:"nom masculin singulier",fr:"Racine י-צ-ע (biblique : couche). Aujourd'hui : balcon d'une salle, tribune d'un stade."},
+  {h:"וַדַּאי",r:"—",cat:"adv",tr:"certainement (iron.)",ana:"תואר ודאות — אירוני",anaFr:"adverbe de certitude — ironique",fr:"Mot de l'hébreu mishnique (araméen). Certitude ironique sur les promesses répétées."},
+];
 
-/* la grille : entrée × sortie -> chemin du webhook */
-var CHEMINS = {
-  "theme|jeu":     "/lecon",
-  "theme|doc":     "/lecon-doc",
-  "chanson|jeu":   "/chanson-jeu",
-  "chanson|doc":   "/chanson-doc",
-  "perso|doc":     "/perso-doc",
-  "poesie|jeu":    "/poesie-jeu",
-  "poesie|doc":    "/poesie-jeu"
-};
+const sentences=[
+  {label:"1",fr:"Et le temps s'étale comme du caoutchouc",words:["וְהַזְּמַן","כְּמוֹ","גּוּמִי","מִתְמָרֵחַ"]},
+  {label:"2",fr:"Quelle sorte de quiétude — on ne fait absolument rien",words:["אֵיזוֹ","מִין","שַׁלְוָוָה","וְלֹא","עוֹשִׂים","שׁוּם","דָּבָר"]},
+  {label:"3",fr:"Et le silence déchire le cœur",words:["וְהַשֶּׁקֶט","אֶת","הַלֵּב","קוֹרֵעַ"]},
+  {label:"4",fr:"Le shabbat ne passe absolument pas",words:["הַשַּׁבָּת","בִּכְלָל","אֵינָהּ","עוֹבֶרֶת"]},
+  {label:"5",fr:"On a déjà cousu le trou dans la chaussette",words:["כְּבָר","תָּפַרְנוּ","אֶת","הַחוֹר","בַּגֶּרֶב"]},
+  {label:"6",fr:"Pas même une lettre de toi n'est arrivée",words:["אַף","מִכְתָּב","מִמֵּךְ","עוֹד","לֹא","הִגִּיעַ"]},
+  {label:"7",fr:"Et reviendra certainement promettre encore : « bientôt j'arriverai en permission »",words:["וְיַחְזֹר","וַדַּאי","שׁוּב","לְהַבְטִיחַ","בְּקָרוֹב","לִרְגִילָה","אַגִּיעַ"]},
+];
 
-var MAX_PAROLES = 250;
+const tfData=[
+  {h:"יָרֵחַ",claim:"פירושו: שמש",claimFr:"Signifie : soleil",correct:false,expl:"יָרֵחַ = lune. שֶׁמֶשׁ = soleil."},
+  {h:"נִדְלַק",claim:"פועל בבניין נפעל",claimFr:"Verbe au binyan Nif'al (passif)",correct:true,expl:"נִדְלַק = Nif'al de ד-ל-ק. Passif : « être allumé »."},
+  {h:"שַׁלְוָוָה",claim:"שורשו: ש-ל-ם (שלום)",claimFr:"Sa racine est ש-ל-ם (shalom, paix)",correct:false,expl:"שַׁלְוָוָה vient de ש-ל-ו (sérénité), pas de ש-ל-ם."},
+  {h:"כְּבָר",claim:"תואר זמן",claimFr:"Adverbe de temps : « déjà »",correct:true,expl:"כְּבָר = déjà. Répété en anaphore dans le couplet 2."},
+  {h:"מִתְמָרֵחַ",claim:"פועל בבניין פיעל",claimFr:"Verbe au binyan Pi'el",correct:false,expl:"מִתְמָרֵחַ = Hitpa'el (réfléchi), pas Pi'el."},
+  {h:"מִכְתָּב",claim:"שורשו: כ-ת-ב",claimFr:"Sa racine est כ-ת-ב (écrire)",correct:true,expl:"מִכְתָּב = lettre. Racine כ-ת-ב = écrire."},
+  {h:"לִרְגִילָה",claim:"פירושו: לחופשה מהצבא",claimFr:"Signifie : en permission (congé militaire)",correct:true,expl:"רְגִילָה = permission régulière, argot militaire. Racine ר-ג-ל."},
+  {h:"שֶׁתִּקְנִי",claim:"שורשו: ש-ת-ק (לשתוק)",claimFr:"Sa racine est ש-ת-ק (se taire)",correct:false,expl:"שֶׁתִּקְנִי = ש + תִּקְנִי, futur 2e pers. fém. de ק-נ-ה (acheter) : « que tu achètes »."},
+  {h:"יָצִיעַ",claim:"פירושו: מיטת שדה",claimFr:"Signifie : lit de camp",correct:false,expl:"יָצִיעַ = balcon / tribune (sens moderne). ≠ מִטָּה."},
+  {h:"וַדַּאי",claim:"מילה שאולה מערבית",claimFr:"Mot emprunté à l'arabe",correct:false,expl:"וַדַּאי vient de l'hébreu mishnique / araméen, pas de l'arabe."},
+];
 
-var identifiantCourant = "";
-var codeCourant = "";        /* gardé en mémoire seulement, jamais enregistré */
-var entreeCourante = "theme";
-var sortieCourante = "jeu";
-var poesieType = "moderne";
-var envoiEnCours = false;   /* verrou anti-double-envoi */
-
-function montrer(nom) {
-  for (var cle in ECRANS) {
-    document.getElementById(ECRANS[cle].el).classList.remove("visible");
-  }
-  document.getElementById(ECRANS[nom].el).classList.add("visible");
-
-  var courante = ECRANS[nom].etape;
-  var puces = document.querySelectorAll(".etape");
-  for (var i = 0; i < puces.length; i++) {
-    var n = parseInt(puces[i].getAttribute("data-etape"), 10);
-    puces[i].className = "etape" + (n < courante ? " faite" : (n === courante ? " active" : ""));
-  }
-  window.scrollTo(0, 0);
+// ═══════ UTILS ═══════
+// Fisher–Yates (le tri aléatoire par sort() est biaisé)
+const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
+const $=id=>document.getElementById(id);
+// Bilingue : hébreu + français (masquable par le bouton FR)
+const B=(he,fr)=>`${he}<span class="fr">${fr}</span>`;
+const Bi=(he,fr)=>`${he}<span class="fr-in">${fr}</span>`;
+function setFr(on){
+  document.body.classList.toggle('no-fr',!on);
+  const t=$('fr-toggle'); if(t) t.textContent='🇫🇷 FR : '+(on?'oui':'non');
+  try{localStorage.setItem('shilva-fr',on?'1':'0');}catch(e){}
+}
+function toggleFr(){ setFr(document.body.classList.contains('no-fr')); }
+(function(){let on=true;try{on=localStorage.getItem('shilva-fr')!=='0';}catch(e){}setFr(on);})();
+let reconStarted=false;
+function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  $('sec-'+id).classList.add('active'); btn.classList.add('active');
+  if(id==='lexique') buildLex();
+  // ne réinitialise pas la partie en cours quand on revient sur l'onglet
+  if(id==='recon' && !reconStarted){ reconStarted=true; setTimeout(()=>initRecon(), 0); }
 }
 
-function dire(id, texte, type) {
-  var el = document.getElementById(id);
-  el.textContent = texte;
-  el.className = "message visible " + (type || "");
-}
-function taire(id) { document.getElementById(id).className = "message"; }
-
-function appeler(chemin, donnees, bouton, idMsg, onSucces) {
-  /* verrou : si une demande est déjà partie, on ignore tout nouveau clic */
-  if (envoiEnCours) { return; }
-  envoiEnCours = true;
-
-  var libelle = bouton.textContent;
-  bouton.disabled = true;
-  bouton.textContent = "…";
-  taire(idMsg);
-
-  fetch(BASE + chemin, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(donnees)
-  })
-  .then(function (r) { return r.json().catch(function () { return {}; }); })
-  .then(function (reponse) { onSucces(reponse); })
-  .catch(function () {
-    dire(idMsg, "Le serveur ne répond pas. Réessayez dans un instant.", "erreur");
-  })
-  .then(function () {
-    bouton.textContent = libelle;
-    /* on garde le bouton neutralisé encore quelques secondes,
-       puis on relâche le verrou : impossible d'envoyer deux fois de suite */
-    setTimeout(function () {
-      envoiEnCours = false;
-      bouton.disabled = false;
-    }, 6000);
+// ═══════ LEXIQUE ═══════
+let lexFilter='all';
+const catMap={nom:'cat-nom',verbe:'cat-verbe',expr:'cat-expr',adv:'cat-adv',prep:'cat-prep'};
+const catLabel={nom:'שם עצם',verbe:'פועל',expr:'ביטוי',adv:'תואר הפועל',prep:'מילת יחס'};
+const catLabelFr={nom:'nom',verbe:'verbe',expr:'expression',adv:'adverbe',prep:'préposition'};
+function buildLex(){
+  const grid=$('lex-grid'); grid.innerHTML='';
+  lex.filter(w=>lexFilter==='all'||w.cat===lexFilter).forEach(w=>{
+    const d=document.createElement('div'); d.className='lex-card';
+    const sp_btn=`<button class="sp-icon" onclick="event.stopPropagation();sp('${w.h}')">🔊</button>`;
+    d.innerHTML=`<div class="flip-hint">+פרטים<span class="fr-in">détails</span></div>
+      <div class="heb-word">${w.h} ${sp_btn}</div>
+      <div class="root">${w.r!=='—'?Bi('שורש: '+w.r,'racine'):Bi('ללא שורש','sans racine')}</div>
+      <span class="cat-badge ${catMap[w.cat]||'cat-nom'}">${Bi(catLabel[w.cat]||w.cat,catLabelFr[w.cat]||w.cat)}</span>
+      <div class="translation">${w.tr}</div>
+      <div class="morpho"><strong>ניתוח:</strong> ${w.ana}<span class="fr" style="font-size:11px;"><strong>Analyse :</strong> ${w.anaFr||''}</span><br><strong>הסבר · Explication :</strong> <span dir="ltr" style="display:block;text-align:left;">${w.fr}</span></div>`;
+    d.onclick=()=>d.classList.toggle('flipped');
+    grid.appendChild(d);
   });
 }
-
-document.getElementById("vers-inscription").addEventListener("click", function () { montrer("inscription"); });
-document.getElementById("vers-connexion").addEventListener("click", function () { montrer("connexion"); });
-
-var retours = document.querySelectorAll("[data-retour]");
-for (var i = 0; i < retours.length; i++) {
-  retours[i].addEventListener("click", function () { montrer(this.getAttribute("data-retour")); });
+function filterLex(f,btn){
+  lexFilter=f;
+  document.querySelectorAll('.lex-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); buildLex();
 }
 
-/* --- inscription --- */
-function deuxChiffres(n) { return (String(n).length === 1 ? "0" : "") + n; }
-
-function dateExiste(a, m, j) {
-  var d = new Date(Number(a), Number(m) - 1, Number(j));
-  return d.getFullYear() === Number(a)
-      && d.getMonth() === Number(m) - 1
-      && d.getDate() === Number(j);
+// ═══════ QUIZ ═══════
+let qMode='',qList=[],qIdx=0,qScore=0;
+const QLEN=10;
+function backToModes(){$('quiz-mode-select').style.display='block';$('quiz-play').style.display='none';$('q-result').style.display='none';}
+function startQuiz(mode){
+  qMode=mode;qIdx=0;qScore=0;
+  $('quiz-mode-select').style.display='none';
+  $('quiz-play').style.display='block';
+  $('q-result').style.display='none';
+  $('q-body').style.display='block';
+  if(mode==='match'){initMatch();return;}
+  if(mode==='tf'){qList=shuffle(tfData).slice(0,QLEN);}
+  else if(mode==='root'){qList=shuffle(lex.filter(w=>w.r!=='—')).slice(0,QLEN);}
+  else{qList=shuffle(lex).slice(0,QLEN);}
+  $('q-total').textContent=QLEN; renderQ();
+}
+function renderQ(){
+  if(qIdx>=QLEN){showQResult();return;}
+  $('q-num').textContent=qIdx+1;
+  $('q-prog').style.width=((qIdx/QLEN)*100)+'%';
+  $('q-fb').className='quiz-feedback';$('btn-next').classList.remove('show');
+  const item=qList[qIdx]; let html='';
+  if(qMode==='qcm'||qMode==='fr2heb'){
+    const isHeb=(qMode==='qcm');
+    const q=isHeb?item.h:item.tr, correct=isHeb?item.tr:item.h;
+    const decoys=shuffle(lex.filter(w=>w.h!==item.h)).slice(0,3).map(w=>isHeb?w.tr:w.h);
+    const opts=shuffle([correct,...decoys]);
+    const spBtn=isHeb?`<button class="sp-icon" onclick="sp('${item.h}')" style="font-size:18px;margin-top:6px;">🔊</button>`:'';
+    html=`<div class="quiz-question" style="direction:${isHeb?'rtl':'ltr'}">${q}</div>${spBtn}
+      <div class="quiz-sub">${isHeb?B('מה הפירוש בצרפתית?','Quel est le sens en français ?'):B('מה המילה בעברית?','Quel est le mot en hébreu ?')}</div>
+      <div class="quiz-options">${opts.map(o=>`<button class="quiz-opt" onclick="selectOpt(this,'${escQ(o)}','${escQ(correct)}','${escQ(item.fr)}')">${o}</button>`).join('')}</div>`;
+  } else if(qMode==='type'){
+    html=`<div class="quiz-question">${item.h}</div>
+      <button class="sp-icon" onclick="sp('${item.h}')" style="font-size:20px;display:block;margin:4px auto;">🔊</button>
+      <div class="quiz-sub">${B('כתבו את התרגום לצרפתית:','Écrivez la traduction en français :')}</div>
+      <div class="type-input-wrap">
+        <input id="type-ans" class="type-input" type="text" placeholder="..." autocomplete="off" dir="ltr" onkeydown="if(event.key==='Enter')checkType('${escQ(item.tr)}','${escQ(item.fr)}')">
+        <br><button class="btn-submit" onclick="checkType('${escQ(item.tr)}','${escQ(item.fr)}')">בדוק ✓<span class="fr-in">Vérifier</span></button>
+      </div>`;
+  } else if(qMode==='tf'){
+    html=`<div class="tf-statement">${item.h}</div>
+      <button class="sp-icon" onclick="sp('${item.h}')" style="font-size:20px;display:block;margin:4px auto;">🔊</button>
+      <div class="tf-claim" dir="rtl">${B(item.claim,item.claimFr)}</div>
+      <div class="tf-btns">
+        <button class="tf-btn true-btn" onclick="checkTF(this,true,${item.correct},'${escQ(item.expl)}')">✓ נכון<span class="fr">Vrai</span></button>
+        <button class="tf-btn false-btn" onclick="checkTF(this,false,${item.correct},'${escQ(item.expl)}')">✗ שגוי<span class="fr">Faux</span></button>
+      </div>`;
+  } else if(qMode==='root'){
+    const correct=item.r;
+    const decoys=shuffle(lex.filter(w=>w.r!=='—'&&w.r!==item.r)).slice(0,3).map(w=>w.r);
+    const opts=shuffle([correct,...decoys]);
+    html=`<div class="quiz-question">${item.h}</div>
+      <button class="sp-icon" onclick="sp('${item.h}')" style="font-size:20px;display:block;margin:4px auto;">🔊</button>
+      <div class="quiz-sub">${B('מהו השורש?','Quelle est la racine ?')}</div>
+      <div class="quiz-options">${opts.map(o=>`<button class="quiz-opt" style="direction:rtl;text-align:center;" onclick="selectOpt(this,'${escQ(o)}','${escQ(correct)}','${escQ(item.fr)}')">${o}</button>`).join('')}</div>`;
+  }
+  $('q-body').innerHTML=html;
+  if(qMode==='type') setTimeout(()=>$('type-ans')&&$('type-ans').focus(),50);
+}
+function escQ(s){return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+function selectOpt(btn,chosen,correct,expl){
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+  const ok=chosen===correct;
+  btn.classList.add(ok?'correct':'wrong');
+  if(!ok) document.querySelectorAll('.quiz-opt').forEach(b=>{if(b.textContent===correct)b.classList.add('correct');});
+  feedback(ok,expl); if(ok)qScore++; $('q-score').textContent=qScore;
+  $('btn-next').classList.add('show');
+}
+function checkType(correct,expl){
+  const ans=($('type-ans').value||'').trim().toLowerCase();
+  const ok=ans===correct.toLowerCase()||(correct.toLowerCase().includes(ans)&&ans.length>3);
+  feedback(ok,'Réponse : '+correct+' — '+expl);
+  if(ok)qScore++; $('q-score').textContent=qScore;
+  if($('type-ans'))$('type-ans').disabled=true;
+  document.querySelectorAll('.btn-submit').forEach(b=>b.disabled=true);
+  $('btn-next').classList.add('show');
+}
+function checkTF(btn,chosen,correct,expl){
+  document.querySelectorAll('.tf-btn').forEach(b=>b.disabled=true);
+  const ok=chosen===correct;
+  btn.classList.add(ok?'correct':'wrong');
+  feedback(ok,expl); if(ok)qScore++; $('q-score').textContent=qScore;
+  $('btn-next').classList.add('show');
+}
+function feedback(ok,txt){
+  const fb=$('q-fb');
+  fb.className='quiz-feedback show '+(ok?'ok':'ko');
+  fb.textContent=(ok?'✓ נכון! · Juste ! — ':'✗ לא נכון · Faux — ')+txt;
+}
+function nextQ(){qIdx++;renderQ();}
+function showQResult(){
+  $('q-body').style.display='none';
+  $('q-fb').className='quiz-feedback';
+  $('btn-next').classList.remove('show');
+  $('q-result').style.display='block';
+  const pct=qScore/QLEN;
+  $('r-emoji').textContent=pct>=.9?'🌟':pct>=.7?'🎉':pct>=.5?'👍':'💪';
+  $('r-pts').textContent=`${qScore} / ${QLEN}`;
+  $('r-msg').innerHTML=pct>=.9?B('מצוין! שלטת בשיר!','Excellent ! Tu maîtrises la chanson !'):pct>=.7?B('כל הכבוד!','Bravo !'):pct>=.5?B('תוצאה טובה','Bon résultat'):B('נסה שוב!','Réessaie !');
 }
 
-document.getElementById("btn-inscrire").addEventListener("click", function () {
-  var j = document.getElementById("i-jour").value;
-  var m = document.getElementById("i-mois").value;
-  var a = document.getElementById("i-annee").value;
-
-  var donnees = {
-    identifiant:    document.getElementById("i-identifiant").value.trim(),
-    prenom:         document.getElementById("i-prenom").value.trim(),
-    email:          document.getElementById("i-email").value.trim(),
-    telephone:      document.getElementById("i-telephone").value.trim(),
-    date_naissance: (j && m && a) ? a + "-" + deuxChiffres(m) + "-" + deuxChiffres(j) : ""
-  };
-
-  if (!donnees.identifiant || !donnees.prenom || !donnees.email || !donnees.telephone || !donnees.date_naissance) {
-    dire("msg-inscription", "Tous les champs sont nécessaires.", "erreur");
-    return;
-  }
-  if (donnees.email.indexOf("@") === -1 || donnees.email.indexOf(".") === -1) {
-    dire("msg-inscription", "L'adresse e-mail ne semble pas valide.", "erreur");
-    return;
-  }
-  if (!dateExiste(a, m, j)) {
-    dire("msg-inscription", "Cette date n'existe pas.", "erreur");
-    return;
-  }
-  if (donnees.telephone.charAt(0) !== "+") {
-    dire("msg-inscription", "Le téléphone doit commencer par + et l'indicatif du pays.", "erreur");
-    return;
-  }
-
-  appeler("/inscription", donnees, this, "msg-inscription", function (r) {
-    if (r.statut === "inscrit") {
-      identifiantCourant = donnees.identifiant;
-      document.getElementById("c-identifiant").value = donnees.identifiant;
-      montrer("paiement");
-    } else if (r.statut === "refuse") {
-      dire("msg-inscription", r.message || "Accès refusé.", "erreur");
-    } else {
-      dire("msg-inscription", "Cet identifiant est peut-être déjà pris. Essayez-en un autre.", "erreur");
-    }
-  });
-});
-
-/* --- connexion --- */
-document.getElementById("btn-connecter").addEventListener("click", function () {
-  var donnees = {
-    identifiant: document.getElementById("c-identifiant").value.trim(),
-    code:        document.getElementById("code").value.trim().toUpperCase()
-  };
-
-  if (!donnees.identifiant || !donnees.code) {
-    dire("msg-connexion", "Identifiant et code sont nécessaires.", "erreur");
-    return;
-  }
-
-  appeler("/connexion", donnees, this, "msg-connexion", function (r) {
-    if (r.acces === "autorise") {
-      identifiantCourant = donnees.identifiant;
-      codeCourant = donnees.code;
-      document.getElementById("menu-nom").textContent = "Shalom " + (r.prenom || "");
-      montrer("menu");
-      chargerCompteur();
-      chargerAbonnement();
-    } else {
-      dire("msg-connexion", r.message || "Identifiant ou code incorrect, ou code expiré.", "erreur");
-    }
-  });
-});
-
-/* --- demande de code --- */
-document.getElementById("btn-demander").addEventListener("click", function () {
-  var identifiant = document.getElementById("c-identifiant").value.trim();
-  if (!identifiant) {
-    dire("msg-connexion", "Saisissez d'abord votre identifiant.", "erreur");
-    return;
-  }
-  appeler("/demande-code", { identifiant: identifiant }, this, "msg-connexion", function (r) {
-    dire("msg-connexion", r.message || "Votre code vous a été envoyé par e-mail.", "ok");
-  });
-});
-
-/* --- les deux choix segmentés --- */
-function brancherChoix(idGroupe, attribut, onChange) {
-  var groupe = document.getElementById(idGroupe);
-  var boutons = groupe.querySelectorAll("button");
-  for (var i = 0; i < boutons.length; i++) {
-    boutons[i].addEventListener("click", function () {
-      for (var j = 0; j < boutons.length; j++) { boutons[j].classList.remove("actif"); }
-      this.classList.add("actif");
-      taire("msg-lecon");
-      onChange(this.getAttribute(attribut));
-    });
-  }
+// ══ MATCH ══
+let matchLeft=[],matchRight=[],matchScore=0,matchTotal=0,matchSelSide=null,matchSelId=null;
+function initMatch(){
+  $('q-total').textContent='—';$('q-num').textContent='—';$('q-prog').style.width='0%';
+  const pairs=shuffle(lex).slice(0,7);
+  matchLeft=shuffle(pairs.map(w=>({h:w.h,id:w.h})));
+  matchRight=shuffle(pairs.map(w=>({tr:w.tr,id:w.h})));
+  matchScore=0;matchTotal=pairs.length;matchSelSide=null;matchSelId=null;
+  let html=`<div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Reliez chaque mot hébreu à sa traduction — <span id="mscore">0</span>/${matchTotal}</div>
+    <div class="match-area"><div><h4>עברית</h4>${matchLeft.map(w=>`<div class="match-item heb-item" id="ml-${w.id}" onclick="selectMatch('L','${w.id}')">${w.h}</div>`).join('')}</div>
+    <div><h4>Français</h4>${matchRight.map(w=>`<div class="match-item" id="mr-${w.id}" onclick="selectMatch('R','${w.id}')">${w.tr}</div>`).join('')}</div></div>`;
+  $('q-body').innerHTML=html;
+  $('q-fb').className='quiz-feedback';$('btn-next').classList.remove('show');
 }
-
-brancherChoix("choix-entree", "data-entree", function (valeur) {
-  entreeCourante = valeur;
-  document.getElementById("bloc-theme").className   = "bloc" + (valeur === "theme"   ? " visible" : "");
-  document.getElementById("bloc-chanson").className = "bloc" + (valeur === "chanson" ? " visible" : "");
-  document.getElementById("bloc-perso").className   = "bloc" + (valeur === "perso"   ? " visible" : "");
-  document.getElementById("bloc-poesie").className  = "bloc" + (valeur === "poesie"  ? " visible" : "");
-
-  /* Mes choix personnels ne donne qu'une fiche */
-  var btnJeu   = document.querySelector("[data-sortie='jeu']");
-  var btnFiche = document.querySelector("[data-sortie='doc']");
-  if (valeur === "perso") {
-    btnJeu.disabled = true;
-    btnJeu.classList.remove("actif");
-    btnFiche.classList.add("actif");
-    sortieCourante = "doc";
-  } else {
-    btnJeu.disabled = false;
-    btnJeu.classList.add("actif");
-    btnFiche.classList.remove("actif");
-    sortieCourante = "jeu";
+function selectMatch(side,id){
+  const el=$((side==='L'?'ml-':'mr-')+id);
+  if(!el||el.classList.contains('matched-ok')) return;
+  if(matchSelSide===side){
+    const prev=$((matchSelSide==='L'?'ml-':'mr-')+matchSelId);
+    if(prev) prev.classList.remove('selected');
+    matchSelSide=side;matchSelId=id;el.classList.add('selected');return;
   }
-});
-
-brancherChoix("choix-sortie", "data-sortie", function (valeur) {
-  sortieCourante = valeur;
-});
-
-brancherChoix("choix-ptype", "data-ptype", function (valeur) {
-  poesieType = valeur;
-});
-
-/* --- compteur de mots de la zone Paroles --- */
-function compterMots(t) {
-  var m = t.trim();
-  return m ? m.split(/\s+/).length : 0;
-}
-
-(function brancherCompteur() {
-  var champ  = document.getElementById("ch-paroles");
-  var compte = document.getElementById("ch-compte");
-  champ.addEventListener("input", function () {
-    var n = compterMots(champ.value);
-    compte.textContent = n + " / " + MAX_PAROLES + " mots";
-    compte.className = "compte-mots" + (n > MAX_PAROLES ? " trop" : "");
-  });
-})();
-
-(function brancherCompteurPoeme() {
-  var champ  = document.getElementById("po-poeme");
-  var compte = document.getElementById("po-compte");
-  champ.addEventListener("input", function () {
-    var n = compterMots(champ.value);
-    compte.textContent = n + " / 150 mots";
-    compte.className = "compte-mots" + (n > 150 ? " trop" : "");
-  });
-})();
-
-/* --- compteur pour mots personnels --- */
-(function brancherCompteurPerso() {
-  var textarea = document.getElementById("p-mots");
-  var compteur  = document.getElementById("p-compteur");
-  var bouton    = document.getElementById("btn-envoyer");
-  
-  textarea.addEventListener("input", function () {
-    var mots = textarea.value
-      .trim()
-      .split(/\s+/)
-      .filter(function (m) { return m.length; });
-    var n = mots.length;
-    compteur.textContent = n + "/10";
-    
-    if (n > 10) {
-      compteur.style.color = "var(--alerte)";
-      compteur.style.fontWeight = "600";
-      bouton.disabled = true;
-      bouton.style.opacity = "0.5";
-    } else {
-      compteur.style.color = "var(--gris)";
-      compteur.style.fontWeight = "normal";
-      bouton.disabled = false;
-      bouton.style.opacity = "1";
-    }
-  });
-})();
-
-/* --- demande de leçon --- */
-document.getElementById("btn-envoyer").addEventListener("click", function () {
-  var nikoud          = document.getElementById("o-nikoud").checked ? "oui" : "non";
-  var translitteration = document.getElementById("o-translitteration").checked ? "oui" : "non";
-
-  var donnees = {
-    identifiant:      identifiantCourant,
-    nikoud:           nikoud,
-    translitteration: translitteration
-  };
-  var quoi;
-
-  if (entreeCourante === "theme") {
-    var theme = document.getElementById("l-theme").value.trim();
-    if (!theme) {
-      dire("msg-lecon", "Indiquez un thème.", "erreur");
-      return;
-    }
-    donnees.theme  = theme;
-    donnees.niveau = document.getElementById("l-niveau").value;
-    donnees.n      = parseInt(document.getElementById("l-n").value, 10);
-    quoi = "« " + theme + " »";
-
-  } else if (entreeCourante === "perso") {
-    var mots = document.getElementById("p-mots").value
-                 .trim()
-                 .split(/\s+/)
-                 .filter(function (m) { return m.length; });
-    if (mots.length < 1 || mots.length > 10) {
-      dire("msg-lecon", "Donnez entre 1 et 10 mots au maximum.", "erreur");
-      return;
-    }
-    var options = [];
-    var cases = document.querySelectorAll(".p-opt");
-    for (var c = 0; c < cases.length; c++) {
-      if (cases[c].checked) { options.push(cases[c].value); }
-    }
-    if (!options.length) {
-      dire("msg-lecon", "Cochez au moins une case.", "erreur");
-      return;
-    }
-    donnees.mots    = mots;
-    donnees.options = options;
-    quoi = (mots.length === 1) ? "\u00ab " + mots[0] + " \u00bb"
-                               : "mes " + mots.length + " mots";
-
-  } else if (entreeCourante === "chanson") {
-    var titre   = document.getElementById("ch-titre").value.trim();
-    var paroles = document.getElementById("ch-paroles").value.trim();
-    if (!titre || !paroles) {
-      dire("msg-lecon", "Le titre et les paroles sont nécessaires.", "erreur");
-      return;
-    }
-    if (compterMots(paroles) > MAX_PAROLES) {
-      dire("msg-lecon", "Les paroles dépassent " + MAX_PAROLES + " mots. Raccourcissez l'extrait.", "erreur");
-      return;
-    }
-    donnees.titre    = titre;
-    donnees.artiste  = document.getElementById("ch-artiste").value.trim();
-    donnees.youtube  = document.getElementById("ch-youtube").value.trim();
-    donnees.shironet = document.getElementById("ch-shironet").value.trim();
-    donnees.paroles  = paroles;
-    quoi = "« " + titre + " »";
-
-  } else {
-    var potitre = document.getElementById("po-titre").value.trim();
-    var poeme   = document.getElementById("po-poeme").value.trim();
-    if (!potitre || !poeme) {
-      dire("msg-lecon", "Le titre et le poème sont nécessaires.", "erreur");
-      return;
-    }
-    if (compterMots(poeme) > 150) {
-      dire("msg-lecon", "Le poème dépasse 150 mots. Raccourcissez-le (4 quatrains max).", "erreur");
-      return;
-    }
-    donnees.titre       = potitre;
-    donnees.auteur      = document.getElementById("po-auteur").value.trim();
-    donnees.poeme       = poeme;
-    donnees.type_poesie = poesieType;
-    quoi = "« " + potitre + " »";
-  }
-
-  var chemin = CHEMINS[entreeCourante + "|" + sortieCourante];
-  var forme  = (sortieCourante === "jeu") ? "Votre jeu sur " : "Votre fiche sur ";
-
-  appeler(chemin, donnees, this, "msg-lecon", function () {
-    dire("msg-lecon",
-      forme + quoi + " est en préparation. Sa création prend quelques minutes, puis sa mise en ligne encore quelques minutes ; le lien arrive par e-mail dès qu'elle est prête.",
-      "ok");
-  });
-});
-
-/* --- compteur « utilisées / quota » --- */
-function majCompteur(reponse) {
-  var el = document.getElementById("compteur-lecons");
-  if (!reponse || typeof reponse.quota === "undefined") {
-    el.textContent = "";
-    el.className = "compteur-lecons";
-    return;
-  }
-  var u = reponse.utilisees || 0;
-  var q = reponse.quota || 0;
-  el.textContent = u + " / " + q + " fiches utilisées";
-  el.className = "compteur-lecons" + (u >= q ? " plein" : "");
-
-  /* blocage : plus de fiches -> on masque la demande, on montre les formules */
-  var zone = document.getElementById("zone-lecon");
-  var form = document.getElementById("msg-formule");
-  if (u >= q) {
-    if (zone) zone.style.display = "none";
-    if (form) {
-      form.textContent = "Veuillez choisir votre formule ci-dessous pour obtenir vos fiches.";
-      form.style.display = "block";
+  if(!matchSelSide){matchSelSide=side;matchSelId=id;el.classList.add('selected');return;}
+  const lId=side==='R'?matchSelId:id, rId=side==='R'?id:matchSelId;
+  const lEl=$('ml-'+lId), rEl=$('mr-'+rId);
+  if(lEl) lEl.classList.remove('selected');
+  if(rEl) rEl.classList.remove('selected');
+  if(lId===rId){
+    lEl.classList.add('matched-ok');rEl.classList.add('matched-ok');
+    matchScore++;
+    if($('mscore')) $('mscore').textContent=matchScore;
+    sp(lId);
+    if(matchScore===matchTotal){
+      $('q-fb').className='quiz-feedback show ok';
+      $('q-fb').textContent='🎉 כל הזוגות נמצאו! מצוין! · Toutes les paires trouvées !';
+      qScore=QLEN;showQResult();
     }
   } else {
-    if (zone) zone.style.display = "";
-    if (form) form.style.display = "none";
+    lEl.classList.add('matched-ko');rEl.classList.add('matched-ko');
+    setTimeout(()=>{lEl.classList.remove('matched-ko');rEl.classList.remove('matched-ko');},600);
   }
+  matchSelSide=null;matchSelId=null;
 }
 
-/* --- abonnements Mishpatim (Sectoriel / Complet) --- */
-/* Liens RÉELS (passage en réel le 14 nov. 2026) */
-var STRIPE_ABO = {
-  sectoriel: "https://buy.stripe.com/4gM6oH0qpaqN8b8d4S57W05",
-  complet:   "https://buy.stripe.com/3cI4gz2yxgPbfDAaWK57W06"
-};
-var STRIPE_PORTAIL = "https://billing.stripe.com/p/login/aFa3cv3CBdCZezw5Cq57W00";
-var MISHPATIM_URL  = "mishpatim-essai-e2c239.html";
+// ═══════ RECONSTRUCTION v3 ═══════
+let reconOk=0, reconKo=0, reconOrder=[], reconCurrent=0, dragSrc=null, placedTiles=[], poolTiles=[], reconDone=false;
+let dotResults=[];
+let reconAdvanceTimer=null;
 
-function payerAbonnement(formule) {
-  if (!identifiantCourant) {
-    dire("msg-lecon", "Connectez-vous d'abord.", "erreur");
-    return;
-  }
-  var url = STRIPE_ABO[formule] + "?client_reference_id=" + encodeURIComponent(identifiantCourant);
-  window.open(url, "_blank");
+// safe getter — returns null without throwing if section hidden
+function safe(id){ return document.getElementById(id); }
+function setText(id,val){ const el=safe(id); if(el) el.textContent=val; }
+
+function initRecon(){
+  reconOk=0; reconKo=0; reconCurrent=0; reconDone=false;
+  dotResults=new Array(sentences.length).fill(null);
+  if(reconAdvanceTimer){ clearTimeout(reconAdvanceTimer); reconAdvanceTimer=null; }
+  reconOrder=shuffle([...Array(sentences.length).keys()]);
+  updateScorebar();
+  buildDots();
+  const fin=safe('recon-final'); if(fin) fin.classList.remove('show');
+  const res=safe('recon-result'); if(res) res.className='recon-result';
+  const bar=safe('advance-bar');
+  if(bar){ bar.style.transition='none'; bar.style.width='0%'; }
+  loadReconSentence();
 }
 
-function dateFr(iso, moinsUnJour) {
-  var d = new Date(iso); if (isNaN(d)) return "";
-  if (moinsUnJour) d.setDate(d.getDate() - 1);   /* la date de fin inclut un jour de marge */
-  return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
-}
+function restartRecon(){ initRecon(); }
 
-function afficherAbonnement(r) {
-  var actif = !!(r && r.ok);
-  document.getElementById("abo-actif").style.display = actif ? "" : "none";
-  document.getElementById("abo-offre").style.display = actif ? "none" : "";
-  if (!actif) return;
-  var nom = r.formule === "complet" ? "Complet" : "Sectoriel";
-  var fin = dateFr(r.fin, true);
-  var badge = document.getElementById("abo-badge");
-  badge.textContent = r.resilie ? "Résilié" : "Actif";
-  badge.className = "abo-badge" + (r.resilie ? " resilie" : "");
-  document.getElementById("abo-etat").innerHTML = r.resilie
-    ? "Abonnement <b>" + nom + "</b> résilié : l’accès reste ouvert jusqu’au " + fin + ". Vous avez changé d’avis ? Réactivez-le depuis « Gérer mon abonnement »."
-    : "Abonnement <b>" + nom + "</b>, payé jusqu’au " + fin + ", renouvelé chaque mois.";
-  var q = r.quota || { utilises: 0, max: 0 };
-  document.getElementById("abo-ia").textContent = "Demandes à l’IA ce mois-ci : " + q.utilises + " / " + q.max;
-  document.getElementById("abo-fiches").textContent = (r.formule === "complet" ? 12 : 6) + " fiches du site incluses chaque mois (déjà comptées dans votre compteur de fiches).";
-  document.getElementById("lien-portail").href = STRIPE_PORTAIL;
-  var zone = document.getElementById("abo-changer");
-  zone.style.display = r.resilie ? "none" : "";
-  var btn = document.getElementById("btn-changer");
-  btn.href = STRIPE_PORTAIL;
-  if (r.formule === "complet") {
-    document.getElementById("abo-changer-texte").innerHTML =
-      "Revenir au <b>Sectoriel</b> (20 € par mois, 50 demandes à l’IA, 6 fiches) : le changement prendra effet au prochain renouvellement, le " + fin + ".";
-    btn.textContent = "Revenir au Sectoriel";
-  } else {
-    document.getElementById("abo-changer-texte").innerHTML =
-      "Passer au <b>Complet</b> (30 € par mois, 150 demandes à l’IA, 12 fiches) : le changement est immédiat. Vous payez seulement la différence pour les jours qui restent, et vous recevez tout de suite la part correspondante de demandes et de fiches.";
-    btn.textContent = "Passer au Complet";
-  }
-}
-
-function chargerAbonnement() {
-  afficherAbonnement(null);
-  if (!identifiantCourant || !codeCourant) return;
-  fetch(BASE + "/mishpatim", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ identifiant: identifiantCourant, code: codeCourant, type: "statut" })
-  })
-  .then(function (r) { return r.json(); })
-  .then(afficherAbonnement)
-  .catch(function () {});
-}
-
-/* ouvre Mishpatim dans le même onglet, déjà connecté (même site : la session passe) */
-function ouvrirMishpatim() {
-  try {
-    sessionStorage.setItem("hz-mishpatim-acces", JSON.stringify({ identifiant: identifiantCourant, code: codeCourant }));
-    sessionStorage.setItem("hz-mishpatim-activite", String(Date.now()));
-  } catch (e) {}
-  /* Dans le cadre de « Mon compte » (site principal), Mishpatim s'ouvrait dans le cadre :
-     sur téléphone, deux pages défilaient l'une dans l'autre et le menu devenait inaccessible.
-     On l'ouvre donc en pleine page, dans un nouvel onglet (la session y est recopiée). */
-  var dansCadre = false;
-  try { dansCadre = window.top !== window.self; } catch (e) { dansCadre = true; }
-  if (dansCadre) {
-    var w = window.open(new URL(MISHPATIM_URL, location.href).href, "_blank");
-    if (w) return;
-  }
-  location.href = MISHPATIM_URL;
-}
-
-/* --- achat d'un pack par CARTE : ouvre le lien Stripe avec l'identifiant --- */
-/* ✓ Liens LIVE — 15 août 2026 */
-var STRIPE_LINKS = {
-  6:  "https://buy.stripe.com/bJe5kDc97aqNfDAgh457W02",
-  12: "https://buy.stripe.com/9B64gzc97cyV7746Gu57W01",
-  20: "https://buy.stripe.com/8x228r8WVdCZbnk9SG57W04"
-};
-function payerStripe(pack) {
-  if (!identifiantCourant) {
-    dire("msg-lecon", "Connectez-vous d'abord.", "erreur");
-    return;
-  }
-  var url = STRIPE_LINKS[pack] + "?client_reference_id=" + encodeURIComponent(identifiantCourant);
-  window.open(url, "_blank");
-}
-
-function chargerCompteur() {
-  fetch(BASE + "/mes-lecons", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ identifiant: identifiantCourant })
-  })
-  .then(function (r) { return r.json().catch(function () { return {}; }); })
-  .then(function (reponse) { majCompteur(reponse); })
-  .catch(function () {});
-}
-
-/* --- mes leçons --- */
-document.getElementById("btn-mes-lecons").addEventListener("click", function () {
-  var bouton = this;
-  var liste = document.getElementById("liste-lecons");
-  var libelle = bouton.textContent;
-  bouton.disabled = true;
-  bouton.textContent = "…";
-  liste.innerHTML = "";
-
-  fetch(BASE + "/mes-lecons", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ identifiant: identifiantCourant })
-  })
-  .then(function (r) { return r.json().catch(function () { return {}; }); })
-  .then(function (reponse) {
-    majCompteur(reponse);
-    var lecons = (reponse && reponse.lecons) || [];
-    if (lecons.length === 0) {
-      liste.innerHTML = '<div class="lecon-vide">Aucune leçon pour le moment.</div>';
-      return;
-    }
-    var html = "";
-    for (var i = 0; i < lecons.length; i++) {
-      var l = lecons[i];
-      var detail = [l.niveau, l.date].filter(Boolean).join(" · ");
-      html += '<a class="lecon-item" href="' + l.url + '" target="_blank" rel="noopener">'
-            + '<span class="lecon-titre">' + (l.theme || "Leçon") + '</span>'
-            + '<span class="lecon-detail">' + detail + '</span>'
-            + '</a>';
-    }
-    liste.innerHTML = html;
-  })
-  .catch(function () {
-    liste.innerHTML = '<div class="lecon-vide">Le serveur ne répond pas. Réessayez dans un instant.</div>';
-  })
-  .then(function () {
-    bouton.disabled = false;
-    bouton.textContent = libelle;
+function buildDots(){
+  const d=safe('recon-dots'); if(!d) return;
+  d.innerHTML='';
+  sentences.forEach((_,i)=>{
+    const dot=document.createElement('div');
+    dot.className='rdot'+(i===0?' current':'');
+    dot.id='rdot-'+i;
+    d.appendChild(dot);
   });
-});
+}
 
-/* --- sortir --- */
-document.getElementById("btn-sortir").addEventListener("click", function () {
-  document.getElementById("code").value = "";
-  document.getElementById("ch-paroles").value = "";
-  document.getElementById("ch-compte").textContent = "0 / " + MAX_PAROLES + " mots";
-  document.getElementById("ch-compte").className = "compte-mots";
-  document.getElementById("p-mots").value = "";
-  document.getElementById("liste-lecons").innerHTML = "";
-  document.getElementById("compteur-lecons").textContent = "";
-  document.getElementById("compteur-lecons").className = "compteur-lecons";
-  identifiantCourant = "";
-  codeCourant = "";
-  afficherAbonnement(null);
-  montrer("accueil");
-});
+function updateScorebar(){
+  setText('rs-ok', reconOk);
+  setText('rs-ko', reconKo);
+  const done=reconOk+reconKo;
+  setText('rs-pct', done>0 ? Math.round((reconOk/done)*100)+'%' : '—');
+}
 
-/* --- remplissage des trois listes de date --- */
-(function remplirDate() {
-  var jour = document.getElementById("i-jour");
-  for (var j = 1; j <= 31; j++) { jour.appendChild(new Option(j, j)); }
+function loadReconSentence(){
+  if(reconCurrent>=sentences.length){ showReconFinal(); return; }
+  const idx=reconOrder[reconCurrent];
+  const s=sentences[idx];
+  placedTiles=[];
+  poolTiles=shuffle([...s.words]);
 
-  var noms = ["janvier", "février", "mars", "avril", "mai", "juin",
-              "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-  var mois = document.getElementById("i-mois");
-  for (var m = 0; m < 12; m++) { mois.appendChild(new Option(noms[m], m + 1)); }
+  setText('recon-num', (reconCurrent+1)+' / '+sentences.length);
 
-  var annee = document.getElementById("i-annee");
-  var actuelle = new Date().getFullYear();
-  for (var a = actuelle - 18; a >= 1925; a--) { annee.appendChild(new Option(a, a)); }
-})();
-
-montrer("accueil");
-
-async function envoyerAvis(){
-  var t = document.getElementById('avis-texte').value.trim();
-  if(!t) return;
-  var b = document.getElementById('avis-envoi'); b.disabled = true;
-  try{
-    await fetch(BASE + "/avis", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ identifiant: identifiantCourant, message: t })
-    });
-    document.getElementById('avis-msg').textContent = "Merci, votre avis a été envoyé.";
-    document.getElementById('avis-texte').value = "";
-  }catch(e){
-    document.getElementById('avis-msg').textContent = "Erreur, réessayez.";
+  // safe inner text update
+  const frEl=safe('recon-fr');
+  if(frEl){
+    const inner=frEl.querySelector('.fr-text-inner');
+    if(inner) inner.textContent=s.fr;
   }
-  b.disabled = false;
+
+  const spBtn=safe('sp-phrase-btn');
+  if(spBtn) spBtn.onclick=()=>sp(s.words.join(' '));
+
+  const res=safe('recon-result'); if(res) res.className='recon-result';
+  const bar=safe('advance-bar');
+  if(bar){ bar.style.transition='none'; bar.style.width='0%'; }
+  const btnChk=safe('btn-check'); if(btnChk) btnChk.disabled=false;
+
+  updateDots();
+  renderDrop();
+  renderPool();
+}
+
+function updateDots(){
+  sentences.forEach((_,pos)=>{
+    const dot=safe('rdot-'+pos);
+    if(!dot) return;
+    if(pos===reconCurrent){ dot.className='rdot current'; }
+    else if(dotResults[pos]==='ok'){ dot.className='rdot done-ok'; }
+    else if(dotResults[pos]==='ko'){ dot.className='rdot done-ko'; }
+    else{ dot.className='rdot'; }
+  });
+}
+
+function renderDrop(){
+  const dz=$('drop-zone'); dz.innerHTML='';
+  dz.className='drop-zone';
+  if(placedTiles.length===0){
+    const hint=document.createElement('span');
+    hint.className='drop-zone-hint';
+    hint.innerHTML=B('גררו או לחצו על המילים לפי הסדר הנכון ▸','Glissez ou cliquez les mots dans le bon ordre');
+    dz.appendChild(hint);
+  }
+  placedTiles.forEach((w,i)=>{const t=mkTile(w,'placed',i,'placed');dz.appendChild(t);});
+  dz.ondragover=e=>{e.preventDefault();dz.classList.add('drag-over');};
+  dz.ondragleave=()=>dz.classList.remove('drag-over');
+  dz.ondrop=e=>{e.preventDefault();dz.classList.remove('drag-over');dropTo('drop');};
+}
+
+function renderPool(){
+  const pool=$('tiles-pool'); pool.innerHTML='';
+  poolTiles.forEach((w,i)=>{const t=mkTile(w,'',i,'pool');pool.appendChild(t);});
+  pool.ondragover=e=>e.preventDefault();
+  pool.ondrop=e=>{e.preventDefault();dropTo('pool');};
+}
+
+function mkTile(word,extraClass,idx,from){
+  const t=document.createElement('div');
+  t.className='tile '+(extraClass||'');
+  // audio btn inside tile
+  const spSpan=document.createElement('button');
+  spSpan.className='tile-sp'; spSpan.textContent='🔊';
+  spSpan.onclick=e=>{e.stopPropagation();sp(word);};
+  const txt=document.createTextNode(word);
+  t.appendChild(txt); t.appendChild(spSpan);
+  t.draggable=true; t.dataset.word=word; t.dataset.idx=idx; t.dataset.from=from;
+  t.ondragstart=()=>{dragSrc={word,idx,from};t.style.opacity='.4';};
+  t.ondragend=()=>{t.style.opacity='1';};
+  t.onclick=()=>tileClick(word,idx,from);
+  return t;
+}
+
+function tileClick(word,idx,from){
+  if(from==='pool'){poolTiles.splice(idx,1);placedTiles.push(word);}
+  else{placedTiles.splice(idx,1);poolTiles.push(word);}
+  $('recon-result').className='recon-result';
+  renderDrop();renderPool();
+}
+
+function dropTo(dest){
+  if(!dragSrc) return;
+  if(dest==='drop'&&dragSrc.from==='pool'){poolTiles.splice(dragSrc.idx,1);placedTiles.push(dragSrc.word);}
+  else if(dest==='pool'&&dragSrc.from==='placed'){placedTiles.splice(dragSrc.idx,1);poolTiles.push(dragSrc.word);}
+  dragSrc=null;renderDrop();renderPool();
+}
+
+function checkRecon(){
+  if(reconAdvanceTimer) return; // already advancing
+  const idx=reconOrder[reconCurrent];
+  const correct=sentences[idx].words;
+  const res=safe('recon-result');
+  if(!placedTiles.length){
+    if(res){ res.className='recon-result show ko'; res.textContent='⚠ הניחו לפחות מילה אחת · Placez au moins un mot'; }
+    return;
+  }
+  const ok=placedTiles.length===correct.length && placedTiles.every((w,i)=>w===correct[i]);
+  const dz=safe('drop-zone');
+  const btnChk=safe('btn-check'); if(btnChk) btnChk.disabled=true;
+
+  if(ok){
+    reconOk++;
+    dotResults[reconCurrent]='ok';
+    if(res){ res.className='recon-result show ok'; res.textContent='✓ מצוין! הסדר נכון! · Bravo, bon ordre ! — '+sentences[idx].fr; }
+    if(dz){
+      dz.className='drop-zone correct-zone';
+      dz.querySelectorAll('.tile').forEach(t=>{ t.classList.remove('placed'); t.classList.add('correct-tile'); });
+    }
+    setTimeout(()=>sp(correct.join(' ')), 300);
+  } else {
+    reconKo++;
+    dotResults[reconCurrent]='ko';
+    if(res){
+      res.className='recon-result show ko';
+      res.innerHTML='✗ לא נכון — הסדר הנכון<span class="fr-in">Faux — le bon ordre</span> : <span dir="rtl" style="font-family:\'Frank Ruhl Libre\',serif;font-size:15px;color:var(--star);">'+correct.join(' ')+'</span>';
+    }
+    if(dz){
+      dz.className='drop-zone wrong-zone';
+      dz.querySelectorAll('.tile').forEach(t=>{ t.classList.remove('placed'); t.classList.add('wrong-tile'); });
+    }
+  }
+  updateScorebar();
+  updateDots();
+
+  // ── Auto-advance bar ──
+  const bar=safe('advance-bar');
+  if(bar){
+    bar.style.transition='none';
+    bar.style.width='0%';
+    setTimeout(()=>{ bar.style.transition='width 2.2s linear'; bar.style.width='100%'; }, 60);
+  }
+  reconAdvanceTimer=setTimeout(()=>{
+    reconAdvanceTimer=null;
+    if(bar){ bar.style.transition='none'; bar.style.width='0%'; }
+    reconCurrent++;
+    loadReconSentence();
+  }, 2500);
+}
+
+function resetRecon(){
+  if(reconAdvanceTimer){ clearTimeout(reconAdvanceTimer); reconAdvanceTimer=null; }
+  const idx=reconOrder[reconCurrent];
+  placedTiles=[];
+  poolTiles=shuffle([...sentences[idx].words]);
+  const res=safe('recon-result'); if(res) res.className='recon-result';
+  const bar=safe('advance-bar'); if(bar){ bar.style.transition='none'; bar.style.width='0%'; }
+  const btnChk=safe('btn-check'); if(btnChk) btnChk.disabled=false;
+  renderDrop(); renderPool();
+}
+
+function showReconFinal(){
+  const fin=safe('recon-final'); if(fin) fin.classList.add('show');
+  const total=sentences.length;
+  const pct=Math.round((reconOk/total)*100);
+  setText('rf-emoji', pct>=85?'🌟':pct>=65?'🎉':pct>=50?'👍':'💪');
+  setText('rf-pts', reconOk+' / '+total+' — '+pct+'%');
+  const m=safe('rf-msg');
+  if(m) m.innerHTML=pct>=85?B('שלטת בשיר! מצוין!','Tu maîtrises la chanson ! Excellent !'):pct>=65?B('כל הכבוד! כמעט שם','Bravo ! Presque parfait'):pct>=50?B('תוצאה טובה — המשך להתאמן','Bon résultat — continue à t\'entraîner'):B('נסה שוב — תצליח!','Réessaie — tu vas y arriver !');
 }
 </script>
-
 </body>
 </html>
