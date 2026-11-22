@@ -734,6 +734,7 @@ var MAX_PAROLES = 250;
 
 var identifiantCourant = "";
 var codeCourant = "";        /* gardé en mémoire seulement, jamais enregistré */
+var finAbonnement = "";      /* 22 nov. 2026 : date de fin si abonné actif (renvoyée par /connexion) */
 var entreeCourante = "theme";
 var sortieCourante = "jeu";
 var poesieType = "moderne";
@@ -952,6 +953,7 @@ document.getElementById("btn-connecter").addEventListener("click", function () {
     if (r.acces === "autorise") {
       identifiantCourant = donnees.identifiant;
       codeCourant = donnees.code;
+      finAbonnement = r.fin || "";
       document.getElementById("menu-nom").textContent = "Shalom " + (r.prenom || "");
       montrer("menu");
       chargerCompteur();
@@ -1199,7 +1201,19 @@ function majCompteur(reponse) {
   if (u >= q) {
     if (zone) zone.style.display = "none";
     if (form) {
-      form.textContent = "Veuillez choisir votre formule ci-dessous pour obtenir vos fiches.";
+      if (finAbonnement) {
+        /* 22 nov. 2026 : abonné actif sans fiche -> il continue avec Mishpatim */
+        form.innerHTML = "Vos fiches du mois sont épuisées. Rechargez vos fiches si vous le souhaitez, " +
+          "ou continuez à travailler avec <b>Mishpatim</b> jusqu’au terme de votre abonnement, le " +
+          dateFr(finAbonnement, true) + ".";
+        var b = document.createElement("button");
+        b.className = "btn-mishpatim";
+        b.textContent = "Ouvrir Mishpatim";
+        b.onclick = ouvrirMishpatim;
+        form.appendChild(b);
+      } else {
+        form.textContent = "Veuillez choisir votre formule ci-dessous pour obtenir vos fiches.";
+      }
       form.style.display = "block";
     }
   } else {
@@ -1378,6 +1392,7 @@ document.getElementById("btn-sortir").addEventListener("click", function () {
   document.getElementById("compteur-lecons").className = "compteur-lecons";
   identifiantCourant = "";
   codeCourant = "";
+  finAbonnement = "";
   afficherAbonnement(null);
   montrer("accueil");
 });
