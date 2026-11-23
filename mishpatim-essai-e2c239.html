@@ -1449,10 +1449,11 @@ ${subj ? `Sujet souhaité (au moins dans deux phrases) : ${subj}.` : ''}
 - chaque phrase est ce qu'un Israélien dirait ou écrirait réellement : sens concret et logique, collocations naturelles, aucune phrase absurde ou forcée ;
 - chaque phrase contient un mot de la racine ${dash(r)} ;
 - n'invente aucun mot ; si un verbe du catalogue est rare ou littéraire, dis-le dans la note ou préfère un emploi courant ;
+- jamais de mot vulgaire, grossier, insultant ou sexuel : « familier » ne veut jamais dire vulgaire ;
 - nikoud complet et correct, accords exacts ;
 - la traduction française est naturelle.
 Réponds UNIQUEMENT en JSON :
-{"sens":"sens général de la racine, en quelques mots","phrases":[{"he":"phrase avec nikoud","male":"même phrase en écriture pleine sans nikoud","fr":"traduction","mot":"le mot de la racine tel qu'il apparaît","binyan":"binyan, ou nature du mot (nom, adjectif…)","moule":"lettre du moule",${SEGS_FMT},"note":"ce que cette phrase montre de la racine ou du binyan, en une phrase","registre":"courant, soutenu ou familier"}]}`;
+{"sens":"sens général de la racine, en quelques mots","phrases":[{"he":"phrase avec nikoud","male":"même phrase en écriture pleine sans nikoud","fr":"traduction","mot":"le mot de la racine tel qu'il apparaît","binyan":"binyan, ou nature du mot (nom, adjectif…)","moule":"lettre du moule",${SEGS_FMT},"note":"ce que cette phrase montre de la racine ou du binyan, en une phrase","registre":"courant, soutenu ou familier (familier = jamais vulgaire)"}]}`;
   try {
     const o = await sample.json(prompt, { modelTier: 'default', cache: false, signal: my.signal });
     if (my !== ctl || r !== root) return;
@@ -1588,7 +1589,7 @@ function renderTf(){
   tfBtn(C, 'mon sujet', '__SUBJ__', 'mon sujet');
   tfBtn(C, 'plus simple', 'Simplifie la phrase (vocabulaire de base) en gardant l’idée.', 'plus simple');
   tfBtn(C, 'plus soutenue', 'Rends la phrase plus soutenue ou littéraire, en gardant l’idée.', 'plus soutenue');
-  tfBtn(C, 'familière', 'Rends la phrase plus parlée, comme dans une conversation entre amis israéliens.', 'familière');
+  tfBtn(C, 'familière', 'Rends la phrase plus parlée, comme on la dirait aujourd’hui en Israël entre amis, en famille ou avec un collègue sympathique : tournures de l’oral, vocabulaire de tous les jours, petits mots (נוּ, אָז, יַאלְלָה…) seulement s’ils sont naturels. FAMILIER NE VEUT PAS DIRE VULGAIRE : interdits les gros mots, les jurons, les insultes, les allusions sexuelles, le langage de la rue ou du marché (שְׂפַת רְחוֹב, שׁוּק) et tout ce qu’un professeur ne dirait pas devant sa classe. Le test : la phrase peut être dite à table devant ses parents. Garde le sens et le niveau de l’élève. Dans la note, explique ce qui rend la phrase familière et donne l’équivalent en hébreu standard.', 'familière');
   tfBtn(C, 'slang', () => 'Réécris la phrase avec un peu d’argot israélien (סְלֶנְג) réellement employé en Israël, en gardant le sens. ' + slangConsigne('slang') + ' Dans la note, explique chaque mot d’argot utilisé, son origine (arabe, yiddish, anglais, armée…) et son équivalent en hébreu standard.', 'slang');
   tfBtn(C, 'langage d’aujourd’hui (jeunes)', () => 'Réécris la phrase comme la dirait aujourd’hui un jeune Israélien de 15 à 25 ans (à l’oral, sur WhatsApp ou TikTok) : expressions actuelles de la jeunesse, anglicismes courants, abréviations parlées, en gardant le sens et sans vulgarité. ' + slangConsigne('jeunes') + ' Dans la note, explique chaque expression jeune utilisée et donne son équivalent en hébreu standard.', 'langage jeune');
   const M = $('tf-m'); M.innerHTML = '';
@@ -1620,12 +1621,17 @@ ${v.he}
 Traduction : ${v.fr}
 Transformation demandée : ${instr}
 ${level === 1 ? 'IMPORTANT : l’élève est débutant (A1-A2). Le résultat doit rester une phrase courte et très simple du quotidien, avec des mots parmi les 1000 plus fréquents ; si la transformation complique trop, fais-en la version la plus simple.' : level === 3 ? 'L’élève est avancé (C1-C2) : un vocabulaire riche est bienvenu.' : ''}
-Applique cette transformation et seulement elle. Garde le reste (idée, racine, moule) autant que possible. Fais tous les accords et changements de préfixes nécessaires. La phrase finale doit rester naturelle et logique, avec un nikoud complet et correct. Si la transformation telle quelle donnerait une phrase absurde, fais le plus petit ajustement nécessaire et explique-le.
+Applique cette transformation et seulement elle. Garde le reste (idée, racine, moule) autant que possible.
+Quel que soit le registre demandé (familier, argot, jeunes…), JAMAIS de mot vulgaire, grossier, insultant ou sexuel : familier ne veut jamais dire vulgaire.${transform.retry ? '\nATTENTION : ta réponse précédente contenait un mot vulgaire. Refais la transformation sans AUCUN mot vulgaire.' : ''} Fais tous les accords et changements de préfixes nécessaires. La phrase finale doit rester naturelle et logique, avec un nikoud complet et correct. Si la transformation telle quelle donnerait une phrase absurde, fais le plus petit ajustement nécessaire et explique-le.
 Réponds UNIQUEMENT en JSON :
-{"he":"nouvelle phrase avec nikoud","male":"écriture pleine sans nikoud","fr":"traduction","mot":"mot de la racine dans la phrase","binyan":"binyan ou nature du mot","moule":"lettre du moule",${SEGS_FMT},"change":"ce qui a changé et pourquoi (accords, préfixes, ordre des mots), en une ou deux phrases","note":"remarque utile sur la nouvelle phrase, ou chaîne vide"}`;
+{"he":"nouvelle phrase avec nikoud","male":"écriture pleine sans nikoud","fr":"traduction","mot":"mot de la racine dans la phrase","binyan":"binyan ou nature du mot","moule":"lettre du moule",${SEGS_FMT},"change":"ce qui a changé et pourquoi (accords, préfixes, ordre des mots), en une ou deux phrases","note":"remarque utile sur la nouvelle phrase, ou chaîne vide","vulgaire":true si la phrase contient un mot vulgaire, grossier, insultant ou sexuel, sinon false}`;
   try {
     const o = await sample.json(prompt, { modelTier: 'default', cache: false });
     if (!valid(o)) throw { code: 'shape' };
+    if (o.vulgaire === true){
+      if (!transform.retry){ transform.retry = true; lock(false); try { return await transform(instr, label, newMoule); } finally { transform.retry = false; } }
+      $('tmsg').innerHTML = ''; $('tmsg').appendChild(el('div', 'hint', 'Claude n’a pas trouvé de version ' + label + ' correcte (sans vulgarité). Essayez à nouveau.')); return;
+    }
     const p = clean(o); if (!p.moule) p.moule = v.moule; p.label = label;
     $('tmsg').innerHTML = '';
     if (p.he === v.he){ $('tmsg').appendChild(el('div', 'hint', 'La phrase est déjà sous cette forme : rien à changer.')); return; }
