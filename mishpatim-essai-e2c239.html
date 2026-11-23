@@ -774,6 +774,7 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
 .forms b{font:600 1.12rem var(--heb);direction:rtl}
 .forms span{font-size:.68rem;color:var(--muted)}
 .forms button.on{border-color:var(--root);background:var(--root-soft)}
+.tfmh{display:block;flex-basis:100%;margin-top:4px;font-size:.84rem}
 .slots{display:flex;flex-wrap:wrap;gap:6px;direction:rtl}
 .slot{direction:ltr;border:1px dashed var(--accent);background:var(--accent-soft);color:var(--accent);border-radius:9px;padding:4px 10px;font-size:.84rem;font-weight:600}
 .slot.opt{opacity:.7;border-style:dotted}
@@ -1596,6 +1597,11 @@ function renderTf(){
   MOULES.forEach(m => { const o = el('option', '', m[0] + ' · ' + m[2]); o.value = m[0]; ms.appendChild(o); });
   ms.onchange = () => { const m = MO(ms.value); ms.value = ''; if (m) transform(`Réécris l'idée de la phrase avec le moule ${m[0]} — ${m[1]}. Règle : ${m[4]} Exemple : ${m[3]}. Garde la racine.`, 'moule ' + m[0], m[0]); };
   M.appendChild(ms);
+  const mh = el('span', 'hint tfmh');
+  mh.append('Même idée, autre construction : Claude redit ');
+  mh.appendChild(el('b', '', 'votre phrase de travail'));
+  mh.append(' avec le moule choisi. (Pour obtenir 4 nouvelles phrases, changez plutôt le moule à l’étape 2.)');
+  M.appendChild(mh);
   lock(busy);
 }
 async function transform(instr, label, newMoule){
@@ -3877,7 +3883,8 @@ attachStore();
     moule:
       '<h5>À quoi ça sert</h5><p>Le moule, c’est le modèle de phrase : verbe + infinitif, phrase avec <span dir="rtl">שֶׁ</span>, comparaison, but avec <span dir="rtl">כְּדֵי</span>… Il fixe la construction, la racine fixe le vocabulaire.</p>' +
       '<h5>Comment faire</h5><p>Laissez « Au choix de Claude » pour varier, ou choisissez un moule précis pour travailler une construction.</p>' +
-      '<h5>Pour aller plus loin</h5><p>Gardez le même moule et changez de racine : vous automatisez la construction. Gardez la racine et changez de moule : vous voyez le mot dans des phrases très différentes.</p>',
+      '<h5>Pour aller plus loin</h5><p>Gardez le même moule et changez de racine : vous automatisez la construction. Gardez la racine et changez de moule : vous voyez le mot dans des phrases très différentes.</p>' +
+      '<p>Deux façons d’utiliser les moules : ici, choisir un moule donne <b>4 nouvelles phrases</b> ; sous la phrase de travail, « Passer au moule… » <b>garde votre phrase</b> et la reconstruit sur un autre moule.</p>',
 
     reglages:
       '<h5>Contexte</h5><p><b>Général</b> : des phrases de la vie courante. <b>Particulier</b> : précisez une scène (au marché, à l’armée, dans un conte…) ; plus la scène est précise, plus les phrases sont vivantes.</p>' +
@@ -3891,7 +3898,7 @@ attachStore();
       '<li><b>Personne, Temps, Forme</b> : changer le sujet, le passé / présent / futur, la négation, la question, le pluriel, le féminin, le passif.</li>' +
       '<li><b>Racine</b> : passer à un autre binyan (faire faire, réfléchi) ou utiliser un nom de la même racine.</li>' +
       '<li><b>Contenu</b> : ajouter un adjectif, un adverbe, un lieu, une proposition ; rendre la phrase plus simple ou plus soutenue ; la passer en langue familière, en slang ou en langage des jeunes.</li>' +
-      '<li><b>Moule</b> : reconstruire la même idée sur un autre modèle.</li></ul>' +
+      '<li><b>Moule</b> : garder la même idée, mais la dire avec une autre construction. Exemple : <span dir="rtl">הוּא רוֹצֶה לִשְׁמֹר עַל הַיֶּלֶד</span> (moule A, verbe + infinitif : « il veut garder l’enfant ») devient <span dir="rtl">חָשׁוּב לוֹ לִשְׁמֹר עַל הַיֶּלֶד</span> (moule E, impersonnelle : « il est important pour lui de garder l’enfant »). Les autres boutons (Personne, Temps, Forme…) changent un détail de la phrase ; le moule change sa charpente.</li></ul>' +
       '<p>Chaque version s’ajoute à la <b>Famille de cette phrase</b> : cliquez sur une version pour repartir d’elle. 🔊 écoute, <span dir="rtl">אָ</span> affiche ou cache le nikoud, Copier copie la phrase.</p>' +
       '<h5>Pour aller plus loin</h5><p>Enchaînez deux ou trois transformations (passé → pluriel → négation) et lisez la famille à voix haute : c’est le meilleur exercice de conjugaison.</p>',
 
