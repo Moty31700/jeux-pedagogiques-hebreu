@@ -1450,5 +1450,163 @@ async function envoyerAvis(){
 }
 </script>
 
+<!-- ===== AIDES « LOUPE » (22 nov. 2026) — critique n° 1 des élèves ===== -->
+<style>
+  .loupe { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; margin-left:8px;
+    vertical-align:middle; border:1.5px solid var(--tekhelet,#2c4a7a); border-radius:50%; background:#fff;
+    color:var(--tekhelet,#2c4a7a); cursor:pointer; padding:0; line-height:0; flex:none; }
+  .loupe:hover, .loupe[aria-expanded="true"] { background:var(--tekhelet,#2c4a7a); color:#fff; }
+  .loupe svg { width:15px; height:15px; }
+  .aide { display:none; margin:6px 0 14px; padding:12px 14px; background:#FBF6EA; border:1px solid #E6D9B8;
+    border-left:4px solid var(--tekhelet,#2c4a7a); border-radius:6px; font-size:10.5pt; line-height:1.5;
+    color:#333; text-align:left; }
+  .aide.ouverte { display:block; }
+  .aide h5 { margin:8px 0 2px; font-size:10.5pt; color:var(--tekhelet,#2c4a7a); }
+  .aide h5:first-child { margin-top:0; }
+  .aide p { margin:2px 0 6px; }
+  .aide ul { margin:2px 0 6px; padding-left:1.2em; }
+  .aide li { margin:2px 0; }
+  .aide table { border-collapse:collapse; width:100%; margin:4px 0 8px; font-size:10pt; }
+  .aide td, .aide th { border:1px solid #E6D9B8; padding:4px 6px; vertical-align:top; }
+  .aide th { background:#F3EAD2; text-align:left; font-weight:600; }
+  .aide .ex { font-style:italic; }
+  .aide [dir="rtl"] { font-family:"Frank Ruhl Libre","David",serif; }
+  .ligne-loupe { display:flex; align-items:center; }
+</style>
+<script>
+(function(){
+  var ICONE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg>';
+
+  var AIDES = {
+    entree:
+      '<h5>À quoi ça sert</h5><p>Vous choisissez la matière de votre leçon.</p>' +
+      '<ul><li><b>Un thème</b> : du vocabulaire sur un sujet (la cuisine, la banque, le football…).</li>' +
+      '<li><b>Une chanson</b> : comprendre une chanson israélienne mot à mot.</li>' +
+      '<li><b>Mes choix personnels</b> : vous avez déjà quelques mots précis et vous voulez les creuser à fond.</li>' +
+      '<li><b>Poème / presse</b> : étudier un court texte (poème, verset, article).</li></ul>' +
+      '<p>Chaque choix ouvre ses propres cases à remplir, avec sa loupe.</p>',
+
+    sortie:
+      '<h5>Fiche interactive ou fiche rédigée ?</h5>' +
+      '<ul><li><b>Une fiche interactive</b> : un jeu en ligne (quiz, cartes, écoute). Idéal pour <b>mémoriser</b>.</li>' +
+      '<li><b>Une fiche rédigée</b> : un document à lire et à imprimer (tableaux, explications, exemples). Idéal pour <b>comprendre</b>.</li></ul>' +
+      '<h5>Nikoud et translittération</h5>' +
+      '<ul><li><b>Nikoud</b> : les voyelles sous les lettres. Gardez-le si vous débutez ou pour être sûr de la prononciation.</li>' +
+      '<li><b>Translittération</b> : l’hébreu en lettres latines (<i>shalom</i>). Utile au tout début ; retirez-la dès que vous lisez l’alphabet, vous progresserez plus vite.</li></ul>' +
+      '<h5>Pour aller plus loin</h5><p>Demandez le même thème deux fois : en fiche rédigée pour comprendre, puis en fiche interactive pour vous entraîner. Les mots déjà vus ne reviennent pas : la seconde fiche apporte du nouveau.</p>',
+
+    theme:
+      '<h5>À quoi ça sert</h5><p>L’IA choisit pour vous des mots autour de ce sujet et en fait une leçon.</p>' +
+      '<h5>Comment remplir</h5><p>Un mot suffit : <span class="ex">cuisine</span>. Mais plus vous êtes précis, plus la fiche est riche :</p>' +
+      '<table><tr><th>Vous écrivez</th><th>Vous obtenez</th></tr>' +
+      '<tr><td>cuisine</td><td>des mots généraux : table, manger, four, assiette…</td></tr>' +
+      '<tr><td>ustensiles de cuisine</td><td>louche, passoire, poêle, ouvre-boîte, planche à découper…</td></tr>' +
+      '<tr><td>cuisine : recette d’un gâteau</td><td>verbes d’action (battre, verser, cuire), quantités, ingrédients</td></tr>' +
+      '<tr><td>au restaurant : commander un repas</td><td>les mots et les phrases pour parler au serveur</td></tr></table>' +
+      '<h5>Pour aller plus loin</h5><ul>' +
+      '<li>Précisez <b>le lieu ou la situation</b> : <span class="ex">à la pharmacie</span>, <span class="ex">chez le médecin : décrire une douleur</span>.</li>' +
+      '<li>Précisez <b>ce que vous voulez surtout</b> : <span class="ex">des verbes</span>, <span class="ex">des adjectifs</span>, <span class="ex">des expressions</span>.</li>' +
+      '<li>Précisez <b>le registre</b> : <span class="ex">argot des jeunes</span>, <span class="ex">langue de la presse</span>, <span class="ex">hébreu biblique</span>.</li>' +
+      '<li>Vous pouvez écrire en français ou en hébreu.</li>' +
+      '<li>À l’inverse, un thème trop large (<span class="ex">la vie</span>) donne des mots trop généraux.</li></ul>' +
+      '<h5>Niveau et nombre de mots</h5>' +
+      '<p><b>A1</b> je débute · <b>A2</b> je me débrouille · <b>B1</b> je converse · <b>B2</b> je lis la presse · <b>C1</b> je maîtrise. En cas de doute, prenez le niveau en dessous.<br>' +
+      '<b>5 mots</b> pour approfondir, <b>10 mots</b> pour élargir.</p>',
+
+    chanson:
+      '<h5>À quoi ça sert</h5><p>Comprendre une chanson israélienne : mot à mot, vocabulaire, grammaire.</p>' +
+      '<h5>Comment remplir</h5><ul>' +
+      '<li><b>Titre</b> et <b>Artiste</b> : en hébreu de préférence (<span dir="rtl">לו הייתי רוטשילד</span>).</li>' +
+      '<li><b>Lien YouTube ou Spotify</b> : pour écouter la chanson depuis la fiche.</li>' +
+      '<li><b>Lien Shironet</b> : la page des paroles sur shironet.mako.co.il.</li>' +
+      '<li><b>Paroles</b> : copiez-les vous-même (250 mots au plus). Elles ne sont pas conservées.</li></ul>' +
+      '<h5>Pour aller plus loin</h5><p>Si la chanson est longue, copiez seulement le couplet ou le refrain qui vous intéresse : l’étude sera plus fouillée.</p>',
+
+    poesie:
+      '<h5>À quoi ça sert</h5><p>Étudier un court texte : poème, verset, extrait d’article.</p>' +
+      '<h5>Comment remplir</h5><p>Le titre et l’auteur (en hébreu si possible), le type de texte, puis le texte lui-même, copié par vous (150 mots au plus).</p>' +
+      '<h5>Pour aller plus loin</h5><p>Un extrait court et complet (une strophe, un paragraphe) donne une meilleure étude qu’un long texte coupé au hasard.</p>',
+
+    perso:
+      '<h5>À quoi ça sert</h5><p>Vous donnez vous-même de 1 à 10 mots, et vous cochez ce que vous voulez en savoir. Peu de mots, mais traités en profondeur.</p>' +
+      '<h5>Comment remplir</h5><p>Un mot par ligne, en hébreu. Puis cochez :</p><ul>' +
+      '<li><b>Morphologie</b> : la forme du mot (genre, pluriel, schème, conjugaison).</li>' +
+      '<li><b>Racine et sens général</b> : la racine et la famille de mots.</li>' +
+      '<li><b>Synonymes et homonymes</b> : les mots proches et les mots qui se ressemblent.</li>' +
+      '<li><b>Registre</b> : biblique, rabbinique, moderne, argot — dans quelle langue le mot s’emploie.</li>' +
+      '<li><b>Phrases d’exemple</b> : le mot en situation.</li>' +
+      '<li><b>Texte de situation</b> : un petit texte qui utilise tous vos mots.</li></ul>' +
+      '<h5>Pour aller plus loin</h5><p>Donnez des mots <b>de la même racine</b> (<span dir="rtl">שמר, שמירה, משמרת</span>) pour voir toute la famille, ou des mots <b>qui vous embrouillent</b> (<span dir="rtl">ספר / סיפור</span>) pour bien les distinguer. Cochez <b>Texte de situation</b> pour les retenir ensemble.</p>',
+
+    lecons:
+      '<p>La liste de toutes les fiches que vous avez déjà reçues. Cliquez sur un titre pour la rouvrir quand vous voulez.</p>',
+
+    offre:
+      '<ul><li><b>Fiches du site</b> : des fiches à l’unité, payées une fois ; elles ne se perdent jamais.</li>' +
+      '<li><b>Ouvrir Mishpatim</b> (abonnés) : l’atelier où vous fabriquez vos propres phrases hébraïques, que l’IA corrige.</li>' +
+      '<li><b>Gérer mon abonnement</b> : carte, factures, changement de formule, résiliation.</li></ul>',
+
+    avis:
+      '<p>Une remarque, une question, une difficulté : écrivez-la ici (3 lignes). Je vous réponds par e-mail, et les questions utiles à tous paraissent dans la FAQ.</p>'
+  };
+
+  function creer(cle){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'loupe'; b.innerHTML = ICONE;
+    b.setAttribute('aria-expanded','false');
+    b.setAttribute('aria-label','Explications'); b.title = 'Explications';
+    var p = document.createElement('div');
+    p.className = 'aide'; p.innerHTML = AIDES[cle];
+    b.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      var ouvre = !p.classList.contains('ouverte');
+      p.classList.toggle('ouverte', ouvre);
+      b.setAttribute('aria-expanded', ouvre ? 'true' : 'false');
+    });
+    return { bouton:b, panneau:p };
+  }
+
+  /* loupe à côté d'un titre ; le panneau se place après « apres » */
+  function poser(cle, titre, apres){
+    if (!titre) return;
+    var x = creer(cle);
+    titre.appendChild(x.bouton);
+    (apres || titre).insertAdjacentElement('afterend', x.panneau);
+  }
+  function libelleDe(id){
+    var champ = document.getElementById(id); if(!champ) return null;
+    var lab = champ.closest('label'); if(!lab) return null;
+    return { span: lab.querySelector('.libelle'), label: lab };
+  }
+  function libelleAvant(id){
+    var el = document.getElementById(id); if(!el) return null;
+    var s = el.previousElementSibling;
+    return (s && s.classList.contains('libelle')) ? s : null;
+  }
+
+  function installer(){
+    var s;
+    s = libelleAvant('choix-entree'); if (s) { s.classList.add('ligne-loupe'); poser('entree', s); }
+    s = libelleAvant('choix-sortie'); if (s) { s.classList.add('ligne-loupe'); poser('sortie', s); }
+    var t;
+    t = libelleDe('l-theme');  if (t) poser('theme',   t.span, t.label);
+    t = libelleDe('ch-titre'); if (t) poser('chanson', t.span, t.label);
+    t = libelleDe('po-titre'); if (t) poser('poesie',  t.span, t.label);
+    t = libelleDe('p-mots');   if (t) poser('perso',   t.span, t.label);
+
+    var bl = document.getElementById('btn-mes-lecons');
+    if (bl) {
+      var x = creer('lecons');
+      bl.insertAdjacentElement('afterend', x.bouton);
+      x.bouton.insertAdjacentElement('afterend', x.panneau);
+    }
+    var h = document.querySelector('#bloc-mishpatim .offre-entete h3'); if (h) poser('offre', h);
+    h = document.querySelector('#bloc-avis h3'); if (h) poser('avis', h);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installer);
+  else installer();
+})();
+</script>
+<!-- ===== fin des aides « loupe » ===== -->
 </body>
 </html>
