@@ -824,6 +824,12 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
 .mt-choix-b b{font-size:1.12rem}
 .mt-choix-b small{color:var(--muted);font-size:.84rem;line-height:1.35}
 .mt-sec.mt-sec-big{font-size:1.35rem}
+.mt-moule{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.mt-moule .mt-fb p{margin:4px 0}
+.mt-moule label{font-size:.8rem;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.mt-moule input,.mt-moule textarea{font:inherit;font-size:.95rem;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--paper,#fff);color:var(--ink)}
+.mt-moule textarea{min-height:70px}
+.mt-moule input[lang=he]{direction:rtl;font-family:var(--heb,serif);font-size:1.1rem}
 .crh{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:2px 12px;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--paper);align-items:start}
 .crh .sc{grid-row:span 3;font:600 1.3rem/1.2 var(--f-read);min-width:2.6em;text-align:center;border-radius:9px;padding:4px 2px;font-variant-numeric:tabular-nums}
 .crh .sc.ok{background:var(--ok-soft);color:var(--ok)} .crh .sc.mid{background:var(--close-soft);color:var(--close)} .crh .sc.ko{background:var(--miss-soft);color:var(--miss)}
@@ -1264,6 +1270,7 @@ setSpeed(speed);
 let sample = null, downloads = null, busy = false, ctl = null;
 let root = '', rootSense = '', pinVerb = null;          // pinVerb : ligne du catalogue imposée
 let moule = store.get('moule', '*');
+const mvAttente = (moule !== '*' && !MOULES.some(m => m[0] === moule)) ? moule : ''; if (mvAttente) moule = '*';
 let ctx = 'g', level = 2, nik = store.get('nik', true);
 let proposals = [], propSel = -1;
 let fam = null, curId = null;                             // fam = { id, root, items:[] }
@@ -1376,7 +1383,7 @@ function renderMoules(){
   MOULES.forEach(m => { const b = el('button', 'mo' + (moule === m[0] ? ' on' : '')); b.type = 'button'; b.title = m[1];
     b.appendChild(el('b', '', m[0])); b.appendChild(el('span', '', m[2])); b.onclick = () => setMoule(m[0]); box.appendChild(b); });
   const r = $('mrule'); r.innerHTML = '';
-  if (moule === '*'){ r.textContent = 'Claude choisit, pour chaque phrase, le moule qui va le mieux avec la racine.'; return; }
+  if (moule === '*' || !MO(moule)){ r.textContent = 'Claude choisit, pour chaque phrase, le moule qui va le mieux avec la racine.'; return; }
   const m = MO(moule); r.appendChild(el('b', '', m[1] + '. ')); r.appendChild(document.createTextNode(m[4])); r.appendChild(el('span', 'ex', m[3]));
 }
 function setMoule(k){ moule = k; store.set('moule', k); renderMoules(); if (root) propose(); }
@@ -2474,6 +2481,74 @@ function resetAll(){
 }
 $('rreset').onclick = resetAll;
 
+/* ===================== MOULES VALIDÉS PAR MOTY (moules-valides.json, 23 nov. 2026) ===================== */
+// Le fichier moules-valides.json (à côté de cette page) contient les moules validés par Moty : ils s'ajoutent pour tous.
+// Mode professeur (?prof=1, retenu sur cet appareil ; ?prof=0 pour l'enlever) : valider de nouveaux moules et exporter le fichier.
+const PROF = (() => { try { const q = new URLSearchParams(location.search).get('prof'); if (q === '1') localStorage.setItem('mp3.prof', '1'); if (q === '0') localStorage.removeItem('mp3.prof'); return localStorage.getItem('mp3.prof') === '1'; } catch (e) { return false; } })();
+let mvPublies = [];
+let mvLocaux = (() => { const v = store.get('moulesval', []); return Array.isArray(v) ? v : []; })();
+const mvOk = o => !!o && isStr(o.code) && isStr(o.nom) && isStr(o.court) && isStr(o.regle) && isStr(o.exemple);
+function mvAjouter(o){
+  if (!mvOk(o) || MO(o.code)) return false;
+  MOULES.push([o.code, o.nom + ' ⭐', o.court + ' ⭐', o.exemple, o.regle]);
+  if (Array.isArray(o.morceaux)) { const sl = o.morceaux.filter(isStr).slice(0, 6).map(t => [t.trim()]); if (sl.length) SLOTS[o.code] = sl; }
+  return true;
+}
+function mvRafraichir(){
+  if (mvAttente && MO(mvAttente)) moule = mvAttente;
+  const cm = store.get('crmoule', ''); if (cm && MO(cm)) crMoule = cm;
+  renderMoules();
+  if (!$('sp-c').hidden) crRender();
+  if (window.mtRefresh) window.mtRefresh();
+}
+function mvCodeSuivant(){
+  let n = 0; [...mvPublies, ...mvLocaux].forEach(o => { const k = /^M(\d+)$/.exec(o.code || ''); if (k) n = Math.max(n, +k[1]); });
+  return 'M' + (n + 1);
+}
+fetch('moules-valides.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
+  mvPublies = d && Array.isArray(d.moules) ? d.moules.filter(mvOk) : [];
+  const pub = new Set(mvPublies.map(o => o.code));
+  const avant = mvLocaux.length; mvLocaux = mvLocaux.filter(o => mvOk(o) && !pub.has(o.code));
+  if (mvLocaux.length !== avant) store.set('moulesval', mvLocaux);
+  let n = 0; mvPublies.forEach(o => { if (mvAjouter(o)) n++; });
+  if (PROF) mvLocaux.forEach(o => { if (mvAjouter(o)) n++; });
+  if (n || mvAttente) mvRafraichir();
+});
+window.mpProf = PROF;
+window.mpMoule = k => { const m = MO(k); return m ? { code: m[0], nom: m[1], regle: m[4], exemple: m[3] } : null; };
+window.mpTrouverMoule = async (he, fr) => {
+  if (!sample) throw new Error('Claude n’est pas disponible : connectez-vous.');
+  const liste = MOULES.map(m => m[0] + ' = ' + m[1] + ' — ' + m[4]).join('\n');
+  const prompt = `Tu es professeur d'hébreu moderne pour des francophones.
+Phrase hébraïque : ${he}${fr ? '\nTraduction : ' + fr : ''}
+Voici les MOULES déjà connus (modèles de construction de phrase) :
+${liste}
+Identifie la construction PRINCIPALE de cette phrase : sa charpente syntaxique, pas son vocabulaire.
+- Si elle correspond à un moule de la liste, donne son code.
+- Sinon, propose un NOUVEAU moule, général et réutilisable avec n'importe quelle racine (jamais propre à cette seule phrase).
+Dans "pourquoi", ne traduis pas la phrase : montre seulement les mots hébreux qui portent la construction.
+Réponds uniquement en JSON : {"connu": true ou false, "code": "code du moule si connu, sinon \\"\\"", "pourquoi": "1 ou 2 phrases en français", "nouveau": null si connu, sinon {"nom": "nom complet, ex. « Condition : אִם + futur »", "court": "nom court, 3 mots au plus", "regle": "la règle en 2 à 4 phrases pour un francophone : ordre des mots, accords, temps, différence avec le français", "exemple": "la partie de la phrase qui illustre le moule, avec nikoud", "morceaux": ["2 à 5 étiquettes courtes en français : les morceaux du moule dans l'ordre hébreu"]}}`;
+  const o = await sample.json(prompt, { modelTier: 'default', cache: true });
+  if (!o || typeof o !== 'object') throw new Error('réponse inattendue');
+  return o;
+};
+window.mpValiderMoule = o => {
+  const x = { code: mvCodeSuivant(), nom: String(o.nom || '').trim().slice(0, 80), court: String(o.court || '').trim().slice(0, 30), regle: String(o.regle || '').trim().slice(0, 700), exemple: String(o.exemple || '').trim().slice(0, 200), morceaux: (o.morceaux || []).filter(isStr).map(t => t.trim().slice(0, 40)).slice(0, 6), source: String(o.source || '').slice(0, 300), d: new Date().toISOString().slice(0, 10) };
+  if (!mvOk(x)) return null;
+  mvLocaux.push(x); store.set('moulesval', mvLocaux); mvAjouter(x); mvRafraichir();
+  return x.code;
+};
+window.mpMoulesEtat = () => ({ publies: mvPublies.length, locaux: mvLocaux.length });
+window.mpRetirerMoule = code => { mvLocaux = mvLocaux.filter(o => o.code !== code); store.set('moulesval', mvLocaux); };
+window.mpExporterMoules = () => {
+  const vus = new Set(), tous = [];
+  [...mvPublies, ...mvLocaux].forEach(o => { if (!vus.has(o.code)) { vus.add(o.code); tous.push(o); } });
+  const data = JSON.stringify({ version: 1, maj: new Date().toISOString().slice(0, 10), moules: tous }, null, 2) + '\n';
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = 'moules-valides.json';
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  return tous.length;
+};
+
 renderMoules(); showRoot();
 proposals = EXAMPLE.props.map(p => Object.assign({ example: true, registre: '', change: '' }, p));
 $('pinfo').textContent = 'Exemple : racine ' + dash(EXAMPLE.root);
@@ -3151,11 +3226,20 @@ function renderHome() {
       } }, lastItem ? "Continuer" : "Commencer"))),
     h("div", { class: "mt-panel" },
       h("span", { class: "mt-lbl", text: "Importer un fichier" }),
-      h("span", { class: "mt-big", style: "font-size:20px", text: "Export de Moules (.txt)" }),
+      h("span", { class: "mt-big", style: "font-size:20px", text: "Fichier de phrases (.txt)" }),
       h("span", { class: "mt-lbl", text: "Un fichier exporté, d'ici ou de l'ancienne application, devient un exercice : une racine par texte." }),
       h("div", { class: "mt-row" }, h("button", { class: "mt-btn", type: "button", onclick: () => go({ name: "import" }) }, "Choisir le fichier ou coller"))),
   );
 
+  let prof = null;
+  if (window.mpProf && window.mpMoulesEtat) {
+    const st = window.mpMoulesEtat(), pmsg = h("span", { class: "mt-lbl" });
+    prof = h("div", { class: "mt-panel" },
+      h("span", { class: "mt-lbl", text: "Mode professeur · Moules validés" }),
+      h("span", { class: "mt-big", style: "font-size:20px", text: st.locaux + (st.locaux > 1 ? " nouveaux moules" : " nouveau moule") + " à publier" }),
+      h("span", { class: "mt-lbl", text: st.publies + " déjà en ligne pour tous. « Exporter » crée le fichier moules-valides.json complet, à déposer sur GitHub à côté de Mishpatim." }),
+      h("div", { class: "mt-row" }, h("button", { class: "mt-btn mt-primary", type: "button", disabled: !(st.locaux + st.publies), onclick: () => { const n = window.mpExporterMoules(); pmsg.textContent = n + " moules dans le fichier téléchargé."; } }, "⬇ Exporter les moules validés"), pmsg));
+  }
   const tiles = h("div", { class: "mt-series" }, CAHIER.map(se => {
     const c = counts(keysOf("c", se.id));
     return h("button", { class: "mt-tile", type: "button", onclick: () => openSource("c", se.id, firstOpen("c", se.id)) },
@@ -3170,7 +3254,7 @@ function renderHome() {
     tx.length ? tx.map(t => textRow(t)) : h("div", { class: "mt-empty", text: "Collez un article, un passage de la paracha ou une chanson : il sera découpé en phrases à traduire une à une." }),
     h("div", { class: "mt-row" },
       h("button", { class: "mt-btn mt-primary", type: "button", onclick: () => go({ name: "new" }) }, "+ Ajouter un texte"),
-      h("button", { class: "mt-btn", type: "button", onclick: () => go({ name: "import" }) }, "Importer de Moules de phrases")));
+      h("button", { class: "mt-btn", type: "button", onclick: () => go({ name: "import" }) }, "Importer un fichier de phrases (.txt)")));
 
   const ar = atelierRoots();
   const atel = ar.length ? h("div", { class: "mt-series" }, ar.map(g => {
@@ -3184,6 +3268,7 @@ function renderHome() {
   $("t-main").replaceChildren(
     ...choix,
     today,
+    ...(prof ? [prof] : []),
     h("h2", { class: "mt-sec mt-sec-big", id: "mt-s-textes", text: "📝 Mes textes" }), textList,
     h("h2", { class: "mt-sec mt-sec-big", id: "mt-s-atelier", text: "🛠️ Phrases de l'atelier" }), atel,
     h("h2", { class: "mt-sec mt-sec-big", id: "mt-s-cahier", text: "📒 Cahier Targilim · 129 phrases" }), tiles);
@@ -3242,6 +3327,9 @@ function renderEx() {
   } }, S.nikud ? "Sans nikoud" : "Avec nikoud");
   const hintBtn = h("button", { class: "mt-btn", type: "button", onclick: () => nextHint() }, "Indice");
   const hints = h("div", { class: "mt-hints" });
+  const mouleBox = h("div", { class: "mt-moule", "aria-live": "polite" });
+  const mouleBtn = h("button", { class: "mt-btn", type: "button", title: "Quelle construction (moule) porte cette phrase ?", onclick: () => trouverMoule(it, mouleBox, mouleBtn) }, "🧩 Trouver le moule");
+  if (!window.mpTrouverMoule || sampleOK === false) mouleBtn.hidden = true;
   const ans = h("textarea", { class: "mt-ans", id: "t-answer", lang: "fr", placeholder: "Votre traduction en français…", "aria-label": "Votre traduction" });
   const prev = progress(key);
   const checkBtn = h("button", { class: "mt-btn mt-primary", type: "button", onclick: () => check() }, "Corriger");
@@ -3263,8 +3351,8 @@ function renderEx() {
     h("div", { class: "mt-sheet" },
       h("div", { class: "mt-tagline" }, h("span", { class: "mt-tag", text: it.tag }), run.src === "review" ? h("span", { class: "mt-kbd", text: it.where }) : null),
       hebEl,
-      h("div", { class: "mt-tools" }, listenBtn, nikBtn, hintBtn),
-      hints,
+      h("div", { class: "mt-tools" }, listenBtn, nikBtn, hintBtn, mouleBtn),
+      hints, mouleBox,
       h("label", { class: "mt-lab", for: "t-answer", text: "Votre traduction" }),
       ans,
       h("div", { class: "mt-row" }, checkBtn, showBtn, h("span", { class: "mt-kbd", text: "⌘ + Entrée pour corriger" })),
@@ -3273,6 +3361,52 @@ function renderEx() {
   if (prev?.ans) ans.value = prev.ans;
   updateStrip(); refreshTools();
   ans.focus({ preventScroll: true });
+}
+
+// ---------- 🧩 Trouver le moule (moules validés par Moty pour tous : moules-valides.json) ----------
+async function trouverMoule(it, box, btn) {
+  if (btn.disabled) return;
+  btn.disabled = true;
+  box.replaceChildren(h("p", { class: "mt-kbd", text: "Claude cherche la construction de cette phrase…" }));
+  let o;
+  try { o = await window.mpTrouverMoule(it.heb, ""); }
+  catch (e) { btn.disabled = false; return box.replaceChildren(h("p", { class: "mt-err", text: "Claude n'a pas pu répondre : " + ((e && e.message) || e) })); }
+  btn.disabled = false;
+  const pq = typeof o.pourquoi === "string" ? o.pourquoi : "";
+  const connu = o.connu && window.mpMoule(o.code);
+  if (connu) {
+    return box.replaceChildren(h("div", { class: "mt-fb mt-neutral" },
+      h("p", {}, "🧩 Moule ", h("b", { text: connu.code + " · " + connu.nom })),
+      pq ? h("p", { text: pq }) : null,
+      h("p", { class: "mt-kbd", text: connu.regle })));
+  }
+  const n = o.nouveau && typeof o.nouveau === "object" ? o.nouveau : null;
+  if (!n) return box.replaceChildren(h("p", { class: "mt-kbd", text: pq || "Claude n'a pas reconnu de construction particulière." }));
+  if (!window.mpProf) {
+    return box.replaceChildren(h("div", { class: "mt-fb mt-neutral" },
+      h("p", {}, "🧩 Construction nouvelle : ", h("b", { text: String(n.nom || "") })),
+      pq ? h("p", { text: pq }) : null,
+      n.regle ? h("p", { class: "mt-kbd", text: String(n.regle) }) : null,
+      h("p", { class: "mt-kbd", text: "Ce moule n'est pas encore dans la liste de l'Atelier." })));
+  }
+  // mode professeur : relire, corriger, valider
+  const fld = (lab, val, opt) => { const x = h(opt && opt.area ? "textarea" : "input", Object.assign({ value: val || "" }, opt && opt.he ? { lang: "he", dir: "rtl" } : {})); if (opt && opt.area) x.value = val || ""; return [h("label", {}, lab, x), x]; };
+  const [lNom, iNom] = fld("Nom complet", n.nom);
+  const [lCourt, iCourt] = fld("Nom court (3 mots)", n.court);
+  const [lRegle, iRegle] = fld("Règle", n.regle, { area: true });
+  const [lEx, iEx] = fld("Exemple (avec nikoud)", n.exemple, { he: true });
+  const [lMor, iMor] = fld("Morceaux, dans l'ordre hébreu (séparés par « / »)", (Array.isArray(n.morceaux) ? n.morceaux : []).join(" / "));
+  const msg = h("span", { class: "mt-kbd" });
+  const ok = h("button", { class: "mt-btn mt-primary", type: "button", onclick: () => {
+    const code = window.mpValiderMoule({ nom: iNom.value, court: iCourt.value, regle: iRegle.value, exemple: iEx.value, morceaux: iMor.value.split("/"), source: it.heb });
+    if (!code) { msg.textContent = "Remplissez le nom, le nom court, la règle et l'exemple."; return; }
+    box.replaceChildren(h("div", { class: "mt-fb mt-v-juste" }, h("p", {}, "✔ Moule ", h("b", { text: code }), " validé. Il apparaît déjà dans votre Atelier (⭐). Pour tous les élèves : « Exporter les moules validés » dans l'écran des 3 choix, puis dépôt du fichier sur GitHub.")));
+  } }, "✔ Valider ce moule");
+  box.replaceChildren(h("div", { class: "mt-fb mt-neutral" },
+    h("p", {}, "🧩 Construction nouvelle (mode professeur) : relisez, corrigez, puis validez."),
+    pq ? h("p", { class: "mt-kbd", text: pq }) : null,
+    lNom, lCourt, lRegle, lEx, lMor,
+    h("div", { class: "mt-row" }, ok, h("button", { class: "mt-btn mt-ghost", type: "button", onclick: () => box.replaceChildren() }, "Ignorer"), msg)));
 }
 
 function updateStrip() {
@@ -3680,7 +3814,7 @@ function renderImport() {
     go({ name: "home" });
   });
   $("t-main").replaceChildren(h("div", { class: "mt-sheet" },
-    h("div", { class: "mt-crumbs", style: "margin:0" }, h("h1", { style: "font-family:var(--f-read);font-size:24px", text: "Importer de Moules de phrases" }),
+    h("div", { class: "mt-crumbs", style: "margin:0" }, h("h1", { style: "font-family:var(--f-read);font-size:24px", text: "Importer un fichier de phrases (.txt)" }),
       h("button", { class: "mt-btn", type: "button", onclick: back }, RETOUR)),
     h("p", { class: "mt-kbd", text: "Chaque racine devient un texte à traduire. Les traductions de Moules servent de référence, et chaque phrase garde la lettre de son moule." }),
     h("div", { class: "mt-form" },
@@ -3773,6 +3907,7 @@ attachStore();
       '<li>le <b>cahier Targilim</b> (129 phrases en séries : commencez par la série 1) ;</li>' +
       '<li><b>vos textes</b> : collez un article, un passage de la paracha, une chanson ; il est découpé en phrases.</li></ul>' +
       '<p>« Révision du jour » vous redonne les phrases à retravailler.</p>' +
+      '<p><b>🧩 Trouver le moule</b> : sous une phrase, Claude montre sur quel moule (modèle de construction) elle est bâtie. Les moules ⭐ ont été ajoutés par votre professeur.</p>' +
       '<h5>Pour aller plus loin</h5><p>Traduisez d’abord sans regarder le nikoud, puis réécoutez la phrase : vous entraînez la lecture et l’oreille en même temps.</p>',
 
     creer:
