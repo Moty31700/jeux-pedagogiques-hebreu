@@ -3509,4 +3509,180 @@ attachStore();
 })();
 </script>
 
+<!-- ===== AIDES « LOUPE » MISHPATIM (23 nov. 2026) — critique n° 1 des élèves ===== -->
+<style>
+  .mloupe { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; margin-left:8px;
+    vertical-align:middle; border:1.5px solid var(--accent,#33489a); border-radius:50%; background:var(--paper,#fff);
+    color:var(--accent,#33489a); cursor:pointer; padding:0; line-height:0; flex:none; }
+  .mloupe:hover, .mloupe[aria-expanded="true"] { background:var(--accent,#33489a); color:var(--paper,#fff); }
+  .mloupe svg { width:15px; height:15px; }
+  .maide { display:none; margin:6px 0 14px; padding:12px 14px; background:var(--claude-soft,#f6ead9);
+    border:1px solid var(--line,#d3d9e3); border-left:4px solid var(--accent,#33489a); border-radius:6px;
+    font-family:var(--sans,sans-serif); font-size:14px; font-weight:400; line-height:1.5; letter-spacing:normal;
+    text-transform:none; color:var(--ink,#18202e); text-align:left; }
+  .maide.ouverte { display:block; }
+  .maide h5 { margin:8px 0 2px; font-size:14px; color:var(--accent,#33489a); text-transform:none; letter-spacing:normal; }
+  .maide h5:first-child { margin-top:0; }
+  .maide p { margin:2px 0 6px; }
+  .maide ul, .maide ol { margin:2px 0 6px; padding-left:1.3em; }
+  .maide li { margin:2px 0; }
+  .maide .ex { font-style:italic; }
+  .maide [dir="rtl"] { font-family:var(--heb,serif); font-size:1.1em; }
+  .mmode { display:flex; align-items:center; gap:4px; margin:0 0 8px; font-family:var(--sans,sans-serif);
+    font-size:13px; color:var(--muted,#5d6678); }
+</style>
+<script>
+(function(){
+  var ICONE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg>';
+
+  var AIDES = {
+    general:
+      '<h5>À quoi ça sert</h5><p>Mishpatim, c’est l’atelier où l’on fabrique ses propres phrases en hébreu, à partir d’une racine. Claude propose, transforme et corrige ; les phrases ratées reviennent en révision.</p>' +
+      '<h5>Le parcours conseillé</h5><ol>' +
+      '<li><b>Atelier</b> : choisissez une racine (ex. <span dir="rtl">ש.מ.ר</span>), un moule de phrase, puis « Proposer 4 phrases ».</li>' +
+      '<li>Transformez une phrase (passé, pluriel, question…) pour voir comment elle change.</li>' +
+      '<li><b>Trous</b>, <b>Escalier</b>, <b>Confusion</b> : jouez avec la même racine.</li>' +
+      '<li><b>Créer</b> : écrivez votre propre phrase, Claude la corrige.</li>' +
+      '<li><b>Traduire</b> et <b>Réviser</b> : vérifiez que vous comprenez, et revenez sur ce qui a résisté.</li></ol>' +
+      '<h5>Pour aller plus loin</h5><p>Une racine par séance suffit. Tous les onglets travaillent sur la racine choisie dans l’Atelier : commencez toujours par là.</p>' +
+      '<h5>Lecture (Lente / Moyenne / Normale)</h5><p>La vitesse de la voix pour tous les boutons 🔊. Commencez par « Lente ».</p>',
+
+    racine:
+      '<h5>À quoi ça sert</h5><p>La racine est le cœur du mot hébreu (trois lettres, le plus souvent). Toutes les phrases de la séance seront construites avec elle.</p>' +
+      '<h5>Comment faire</h5><p>Tapez une première lettre : les racines du catalogue s’affichent, cliquez sur celle que vous voulez. Ou « 🎲 Au hasard » pour être surpris.</p>' +
+      '<h5>Pour aller plus loin</h5><p>Si la racine est marquée 🔀 « Racine piégeuse », elle a plusieurs sens sans lien entre eux : regardez ses mots de confusion avant de commencer. Une racine absente du catalogue peut aussi être tapée : elle s’ajoute à « Mes racines ajoutées ».</p>',
+
+    moule:
+      '<h5>À quoi ça sert</h5><p>Le moule, c’est le modèle de phrase : verbe + infinitif, phrase avec <span dir="rtl">שֶׁ</span>, comparaison, but avec <span dir="rtl">כְּדֵי</span>… Il fixe la construction, la racine fixe le vocabulaire.</p>' +
+      '<h5>Comment faire</h5><p>Laissez « Au choix de Claude » pour varier, ou choisissez un moule précis pour travailler une construction.</p>' +
+      '<h5>Pour aller plus loin</h5><p>Gardez le même moule et changez de racine : vous automatisez la construction. Gardez la racine et changez de moule : vous voyez le mot dans des phrases très différentes.</p>',
+
+    reglages:
+      '<h5>Contexte</h5><p><b>Général</b> : des phrases de la vie courante. <b>Particulier</b> : précisez une scène (au marché, à l’armée, dans un conte…) ; plus la scène est précise, plus les phrases sont vivantes.</p>' +
+      '<h5>Mon sujet (facultatif)</h5><p>Qui fait l’action : <span class="ex">ma sœur</span>, <span class="ex">le boulanger</span>, <span dir="rtl">הַתַּלְמִידוֹת</span>. Pratique pour s’entraîner aux accords (féminin, pluriel).</p>' +
+      '<h5>Niveau</h5><p><b>A1-A2</b> : mots simples, phrases courtes. <b>B1-B2</b> : vocabulaire courant, phrases plus construites. <b>C1-C2</b> : langue soutenue. En cas de doute, prenez le niveau en dessous.</p>' +
+      '<h5>Pour aller plus loin</h5><p>Exemple : racine <span dir="rtl">ש.מ.ר</span>, contexte <i>Particulier</i> « au musée », sujet <i>la gardienne</i> → des phrases précises, au féminin, sur un lieu que vous pouvez visualiser.</p>',
+
+    travail:
+      '<h5>À quoi ça sert</h5><p>Cliquez sur une des 4 propositions : elle devient votre phrase de travail, découpée en sujet / verbe / complément / temps, avec une explication.</p>' +
+      '<h5>Comment faire</h5><p>Un clic sur un bouton transforme la phrase :</p><ul>' +
+      '<li><b>Personne, Temps, Forme</b> : changer le sujet, le passé / présent / futur, la négation, la question, le pluriel, le féminin, le passif.</li>' +
+      '<li><b>Racine</b> : passer à un autre binyan (faire faire, réfléchi) ou utiliser un nom de la même racine.</li>' +
+      '<li><b>Contenu</b> : ajouter un adjectif, un adverbe, un lieu, une proposition ; rendre la phrase plus simple ou plus soutenue ; la passer en langue familière, en slang ou en langage des jeunes.</li>' +
+      '<li><b>Moule</b> : reconstruire la même idée sur un autre modèle.</li></ul>' +
+      '<p>Chaque version s’ajoute à la <b>Famille de cette phrase</b> : cliquez sur une version pour repartir d’elle. 🔊 écoute, <span dir="rtl">אָ</span> affiche ou cache le nikoud, Copier copie la phrase.</p>' +
+      '<h5>Pour aller plus loin</h5><p>Enchaînez deux ou trois transformations (passé → pluriel → négation) et lisez la famille à voix haute : c’est le meilleur exercice de conjugaison.</p>',
+
+    consigne:
+      '<h5>À quoi ça sert</h5><p>Demander à Claude une transformation qui n’a pas de bouton.</p>' +
+      '<h5>Comment faire</h5><p>Écrivez en français ce que vous voulez : <span class="ex">ajoute « hier soir »</span>, <span class="ex">mets-la au pluriel</span>, <span class="ex">remplace le sujet par mes parents</span>, puis « ✨ Appliquer ».</p>' +
+      '<h5>Pour aller plus loin</h5><p>Une consigne précise donne un résultat précis : « ajoute un complément de lieu dans une cuisine » vaut mieux que « rallonge la phrase ».</p>',
+
+    traduire:
+      '<h5>À quoi ça sert</h5><p>Traduire de l’hébreu vers le français, phrase par phrase, pour vérifier que vous comprenez. Claude corrige ; les phrases ratées reviennent en révision.</p>' +
+      '<h5>Comment faire</h5><p>Trois sources :</p><ul>' +
+      '<li>les <b>phrases de l’Atelier</b>, rangées par racine ;</li>' +
+      '<li>le <b>cahier Targilim</b> (129 phrases en séries : commencez par la série 1) ;</li>' +
+      '<li><b>vos textes</b> : collez un article, un passage de la paracha, une chanson ; il est découpé en phrases.</li></ul>' +
+      '<p>« Révision du jour » vous redonne les phrases à retravailler.</p>' +
+      '<h5>Pour aller plus loin</h5><p>Traduisez d’abord sans regarder le nikoud, puis réécoutez la phrase : vous entraînez la lecture et l’oreille en même temps.</p>',
+
+    creer:
+      '<h5>À quoi ça sert</h5><p>Passer de la compréhension à la production : écrire vous-même une phrase en hébreu.</p>' +
+      '<h5>Comment faire</h5><p>Deux volets :</p><ul>' +
+      '<li><b>✍️ Construire ma phrase</b> : prenez les formes conjuguées de votre racine (1), choisissez un moule (2), écrivez votre phrase (3). Vous pouvez dire en français ce que vous voulez exprimer. 💡 Indice, ✨ Aide de Claude, puis ✔ Corriger.</li>' +
+      '<li><b>🇫🇷→🇮🇱 Traduire une phrase</b> : Claude vous donne une phrase française, vous l’écrivez en hébreu (sans nikoud), puis ✔ Corriger.</li></ul>' +
+      '<p><b>Mon historique</b> garde toutes vos phrases ; ⬇ PDF pour l’imprimer.</p>' +
+      '<h5>Pour aller plus loin</h5><p>Écrivez sans demander d’aide la première fois, même avec des fautes : la correction de Claude vous apprendra davantage.</p>',
+
+    phrases:
+      '<h5>À quoi ça sert</h5><p>Votre carnet : toutes les phrases travaillées dans l’Atelier, rangées par racine.</p>' +
+      '<h5>Comment faire</h5><p>Choisissez une racine ou cherchez un mot (hébreu ou français). 🧩 Exercice : remettre les mots d’une phrase dans l’ordre. ⬇ Texte ou ⬇ PDF pour garder une copie.</p>' +
+      '<h5>Pour aller plus loin</h5><p>Faites l’exercice 🧩 le lendemain de la séance : c’est le moment où la mémoire fixe le mieux.</p>',
+
+    reviser:
+      '<h5>À quoi ça sert</h5><p>Revoir les racines et les phrases déjà travaillées, de plus en plus espacées (le jour même, puis après 1, 3, 7, 14 et 30 jours), pour les garder en mémoire.</p>' +
+      '<h5>Comment faire</h5><p>Rien à régler : les racines de l’Atelier arrivent ici d’elles-mêmes. Ouvrez l’onglet au début de chaque séance.</p>' +
+      '<h5>Pour aller plus loin</h5><p>Quelques minutes par jour valent mieux qu’une longue séance par semaine.</p>',
+
+    escalier:
+      '<h5>À quoi ça sert</h5><p>Voir un même mot de la racine monter de niveau en niveau, du A1 (débutant) au C1 (soutenu) : cinq phrases de plus en plus riches.</p>' +
+      '<h5>Comment faire</h5><p>(1) « ✨ Mots-clés de la racine » et cliquez sur un mot, ou tapez directement un mot hébreu. (2) « 🪜 Construire l’escalier ». ⬇ Télécharger pour le garder.</p>' +
+      '<h5>Pour aller plus loin</h5><p>Lisez l’escalier de bas en haut, puis essayez d’écrire vous-même la marche suivante dans l’onglet Créer.</p>',
+
+    trous:
+      '<h5>À quoi ça sert</h5><p>Un jeu : retrouver le mot de la racine qui manque dans la phrase.</p>' +
+      '<h5>Comment faire</h5><p>Choisissez le type (verbe ou nom / adjectif), la forme (infinitif ou conjugué), le niveau, avec ou sans nikoud. Écrivez le mot, puis Vérifier. 💡 Indice, Réponse, Traduction et 🔊 si vous êtes bloqué. Next › pour la phrase suivante.</p>' +
+      '<h5>Pour aller plus loin</h5><p>Jouez « sans nikoud » dès que possible : c’est ainsi qu’on lit l’hébreu dans la vie. La <b>Fiche de la séance</b> garde vos réponses (⬇ Fiche PDF).</p>',
+
+    confusion:
+      '<h5>À quoi ça sert</h5><p>Certaines racines portent des sens sans lien entre eux (<span dir="rtl">ל.ח.ם</span> : pain / combattre). Cet onglet vous les montre pour éviter les contresens.</p>' +
+      '<h5>Comment faire</h5><p>La racine de l’Atelier s’affiche avec ses sens piégeux, ou « 🎲 Racine piégeuse au hasard ». Cliquez sur un mot hébreu pour l’écouter. Dans la liste des 57 racines, un clic en fait la racine de l’Atelier.</p>' +
+      '<h5>Pour aller plus loin</h5><p>Prenez une racine piégeuse dans l’Atelier et demandez une phrase pour chacun de ses sens : vous ne les confondrez plus.</p>'
+  };
+
+  function creer(cle){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'mloupe'; b.innerHTML = ICONE;
+    b.setAttribute('aria-expanded','false');
+    b.setAttribute('aria-label','Explications'); b.title = 'Explications';
+    var p = document.createElement('div');
+    p.className = 'maide'; p.innerHTML = AIDES[cle];
+    b.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      var ouvre = !p.classList.contains('ouverte');
+      p.classList.toggle('ouverte', ouvre);
+      b.setAttribute('aria-expanded', ouvre ? 'true' : 'false');
+    });
+    return { bouton:b, panneau:p };
+  }
+
+  /* loupe dans « dans » ; le panneau se place après « apres » */
+  function poser(cle, dans, apres){
+    if (!dans) return;
+    var x = creer(cle);
+    dans.appendChild(x.bouton);
+    (apres || dans).insertAdjacentElement('afterend', x.panneau);
+  }
+
+  /* ligne « Mode d'emploi » en haut d'un onglet */
+  function modeEmploi(cle, idSection, nom){
+    var s = document.getElementById(idSection); if (!s) return;
+    var ligne = document.createElement('div');
+    ligne.className = 'mmode';
+    ligne.textContent = 'Mode d’emploi : ' + nom;
+    s.insertAdjacentElement('afterbegin', ligne);
+    poser(cle, ligne);
+  }
+
+  function installer(){
+    var h1 = document.querySelector('h1');
+    var intro = h1 && h1.nextElementSibling;
+    if (intro && intro.tagName === 'P') poser('general', intro);
+
+    var h2 = document.querySelectorAll('#sp-w h2');
+    if (h2[0]) poser('racine', h2[0]);
+    if (h2[1]) poser('moule', h2[1]);
+    if (h2[2]) poser('reglages', h2[2]);
+
+    var tete = document.querySelector('#atelier .ahead');
+    if (tete) poser('travail', tete.querySelector('.lab') || tete, tete);
+
+    var free = document.getElementById('free');
+    var lab = free && free.parentElement && free.parentElement.previousElementSibling;
+    if (lab && lab.tagName === 'LABEL') poser('consigne', lab);
+
+    modeEmploi('traduire',  'sp-t', 'Traduire');
+    modeEmploi('creer',     'sp-c', 'Créer');
+    modeEmploi('phrases',   'sp-m', 'Mes phrases');
+    modeEmploi('reviser',   'sp-r', 'Réviser');
+    modeEmploi('escalier',  'sp-e', 'Escalier');
+    modeEmploi('trous',     'sp-q', 'Trous');
+    modeEmploi('confusion', 'sp-x', 'Confusion');
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installer);
+  else installer();
+})();
+</script>
+<!-- ===== fin des aides « loupe » Mishpatim ===== -->
 </body></html>
