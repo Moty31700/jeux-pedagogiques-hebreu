@@ -1263,6 +1263,27 @@ function mergeMyRoots(){
 mergeMyRoots();
 
 /* ===================== ÉTAT ===================== */
+/* ===================== VOIX ET NIKOUD (point 5, 23 nov. 2026) ===================== */
+// Voix : pour tout texte hébreu, la meilleure voix de l'appareil (premium, puis améliorée, puis non « compacte »).
+(function(){
+  if (!window.speechSynthesis) return;
+  const ss = window.speechSynthesis; let vs = [];
+  const load = () => { try { vs = ss.getVoices() || []; } catch (e) {} };
+  load(); try { ss.addEventListener('voiceschanged', load); } catch (e) {}
+  const best = () => { if (!vs.length) load(); const he = vs.filter(v => /^(he|iw)/i.test(v.lang || ''));
+    return he.find(v => /premium/i.test(v.name)) || he.find(v => /enhanced|amélior|verbessert|natural/i.test(v.name)) || he.find(v => !/compact/i.test(v.name)) || he[0] || null; };
+  const sp = ss.speak.bind(ss);
+  try { ss.speak = u => { try { if (u && /^(he|iw)/i.test(u.lang || '')) { const v = best(); if (v) u.voice = v; } } catch (e) {} return sp(u); }; } catch (e) {}
+  window.mpVoixHe = () => { const v = best(); return v ? v.name : ''; };
+})();
+// Norme de l'Académie de la langue hébraïque (Doc-Académie, décisions de Moty du 23 nov.) : ajoutée à toute demande qui parle de nikoud.
+const NORME_NIKOUD = `Nikoud et orthographe — norme de l'Académie de la langue hébraïque (règles de 2017) :
+1. Sans nikoud (écriture pleine, champ « male ») : כתיב מלא des règles de 2017 — ו pour tout son u et tout son o ; י pour i, sauf devant un shva muet et au hif'il (הצענו) ; pas de י pour é, sauf les mots fixés (תיאבון, שיער, הישג) ; וו et יי doublés au milieu du mot quand ils sont consonnes (תקווה, עניין), jamais en début ou en fin de mot.
+2. Avec nikoud : nikoud tibérien complet posé sur ce même squelette en כתיב מלא (annexe de 2017) : וּ pour u, וֹ pour o, nikoud sur la première lettre d'un וו ou יי doublé. Jamais de lettre-voyelle sans la voyelle correspondante ; ne mélange jamais l'orthographe biblique et l'orthographe moderne.
+3. Prononciation de référence : israélienne standard, d'origine séfarade, à cinq voyelles a, é, i, o, ou. Kamatz et patah se lisent a (le kamatz katan se lit o) ; tsere et segol se lisent é (jamais ei, jamais a). Le shva présent dans la forme de base est muet ; en début de mot ou sous un dagesh hazak, il se lit é bref.
+4. Vérifie chaque mot vocalisé avant de répondre : la voyelle notée doit correspondre à la prononciation réelle (attention aux confusions kamatz / tsere et patah / segol).`;
+const avecNorme = s => { if (!s || typeof s.json !== 'function' || s.__norme) return s;
+  const j = s.json.bind(s); s.json = (p, o) => j(typeof p === 'string' && /nikoud|ניקוד|vocalis/i.test(p) ? p + '\n\n' + NORME_NIKOUD : p, o); s.__norme = true; return s; };
 const RATES = [0.55, 0.8, 1];
 let speed = store.get('speed', 2); if (!(speed in RATES)) speed = 2;
 function setSpeed(n){ speed = n; store.set('speed', n); document.querySelectorAll('#speed button').forEach(b => { const on = +b.dataset.s === n; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); }); }
@@ -1965,7 +1986,12 @@ function crInsert(he){
 }
 function crResetAids(){ crHints = 0; crHelps = 0; crHelpData = []; $('cr-hints').innerHTML = ''; $('cr-helps').innerHTML = ''; crBtns(); }
 $('cr-new').onclick = () => { $('cr-in').value = ''; $('cr-fr').value = ''; crForm = ''; $('cr-res').innerHTML = ''; $('cr-msg').innerHTML = ''; crLast = null; crResetAids(); crRender(); $('cr-in').focus(); };
-$('cr-say').onclick = () => { const t = $('cr-in').value.trim(); if (t) sayHe(t); };
+function sayMaPhrase(t, last, box){
+  if (last && last.txt === t && isStr(last.he)) return sayHe(last.he);
+  sayHe(t);
+  const b = $(box); if (b && !b.querySelector('.saynote')) b.prepend(el('div', 'hint saynote', '🔊 Lecture indicative : votre phrase n’a pas de nikoud, la voix peut se tromper. Après « ✔ Corriger », 🔊 lit la correction vocalisée.'));
+}
+$('cr-say').onclick = () => { const t = $('cr-in').value.trim(); if (t) sayMaPhrase(t, crLast, 'cr-msg'); };
 
 /* ----- 1. indices (sans Claude) ----- */
 function crHintBox(title, body){ const d = el('div', 'crhint'); d.appendChild(el('h3', '', title)); d.appendChild(body); return d; }
@@ -2328,7 +2354,8 @@ Réponds UNIQUEMENT en JSON :
   } catch (e){ $('th-genmsg').innerHTML = ''; $('th-genmsg').appendChild(el('div', 'err', errTxt(e))); }
   finally { thBusy = false; thBtns(); }
 };
-$('th-say').onclick = () => { if (thDir === 'he'){ if (th) sayHe(th.he); return; } const t = $('th-in').value.trim(); if (t) sayHe(t); };
+let thLast = null;
+$('th-say').onclick = () => { if (thDir === 'he'){ if (th) sayHe(th.he); return; } const t = $('th-in').value.trim(); if (t) sayMaPhrase(t, thLast, 'th-msg'); };
 $('th-skip').onclick = () => { if (!th) return; const box = $('th-res'); box.innerHTML = ''; const d = el('div', 'crres');
   if (th.dir === 'he') d.appendChild(frLine('Traduction proposée', th.fr));
   else { d.appendChild(el('span', 'lab', 'Traduction proposée')); d.appendChild(thSegs(th.blocs.map((b, i) => [b.he, i]))); d.appendChild(el('div', 'hint', th.male)); }
@@ -2380,7 +2407,7 @@ Réponds UNIQUEMENT en JSON :
       erreurs: (Array.isArray(o.erreurs) ? o.erreurs : []).filter(x => x && (isStr(x.explication) || isStr(x.correction))).map(x => ({ type: isStr(x.type) ? x.type : '', extrait: isStr(x.extrait) ? x.extrait : '', correction: isStr(x.correction) ? x.correction : '', explication: isStr(x.explication) ? x.explication : '', bloc: Number.isInteger(+x.bloc) ? +x.bloc : -1 })),
       commentaire: isStr(o.commentaire) ? o.commentaire.trim() : '', belle: '', belle_fr: '', autres: (Array.isArray(o.autres) ? o.autres : []).filter(isStr).slice(0, 3),
       hints: thClues.size, helps: 0, added: false, prec: th.prec || '' };
-    creations.unshift(entry); crPersist();
+    creations.unshift(entry); crPersist(); thLast = entry;
     $('th-msg').innerHTML = ''; thShowResult(entry); crRenderHist();
   } catch (e){ $('th-msg').innerHTML = ''; $('th-msg').appendChild(el('div', 'err', errTxt(e))); }
   finally { thBusy = false; thBtns(); }
@@ -3017,7 +3044,7 @@ xFlag();
 lock(false);
 const noClaude = setTimeout(() => { if (!sample) $('noclaude').hidden = false; }, 4000);
 if (window.claude && claude.use){
-  claude.use('sample').then(s => { sample = s; if (s){ clearTimeout(noClaude); $('noclaude').hidden = true; } else $('noclaude').hidden = false; lock(false); crBtns(); thBtns(); esBtns(); qBtns(); if (!$('sp-e').hidden) esRender(); if (!$('sp-x').hidden) xRender(); }).catch(() => { $('noclaude').hidden = false; });
+  claude.use('sample').then(s => { sample = avecNorme(s); if (s){ clearTimeout(noClaude); $('noclaude').hidden = true; } else $('noclaude').hidden = false; lock(false); crBtns(); thBtns(); esBtns(); qBtns(); if (!$('sp-e').hidden) esRender(); if (!$('sp-x').hidden) xRender(); }).catch(() => { $('noclaude').hidden = false; });
   claude.use('downloads').then(d => { downloads = d; $('dl').hidden = !d; $('dlp').hidden = !d; renderMyRoots(); crRenderHist(); esBtns(); qBtns(); }).catch(() => {});
 } else { $('noclaude').hidden = false; }
 </script>
@@ -3879,7 +3906,8 @@ attachStore();
       '<li><b>Créer</b> : écrivez votre propre phrase, Claude la corrige.</li>' +
       '<li><b>Traduire</b> et <b>Réviser</b> : vérifiez que vous comprenez, et revenez sur ce qui a résisté.</li></ol>' +
       '<h5>Pour aller plus loin</h5><p>Une racine par séance suffit. Tous les onglets travaillent sur la racine choisie dans l’Atelier : commencez toujours par là.</p>' +
-      '<h5>Lecture (Lente / Moyenne / Normale)</h5><p>La vitesse de la voix pour tous les boutons 🔊. Commencez par « Lente ».</p>',
+      '<h5>Lecture (Lente / Moyenne / Normale)</h5><p>La vitesse de la voix pour tous les boutons 🔊. Commencez par « Lente ».</p>' +
+      '<h5>Pour une voix plus juste</h5><p>La page choisit la meilleure voix hébraïque de votre appareil. Installez la voix hébraïque « premium » ou « améliorée » : sur Mac, Réglages Système › Accessibilité › Contenu énoncé › Voix du système › Gérer les voix › Hébreu ; sur iPhone et iPad, Réglages › Accessibilité › Contenu énoncé › Voix › Hébreu. La voix lit toujours le texte avec son nikoud : c’est ce qui lui évite les erreurs de prononciation.</p>',
 
     racine:
       '<h5>À quoi ça sert</h5><p>La racine est le cœur du mot hébreu (trois lettres, le plus souvent). Toutes les phrases de la séance seront construites avec elle.</p>' +
