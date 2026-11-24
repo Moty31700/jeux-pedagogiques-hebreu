@@ -909,6 +909,15 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
 .q-fb{border-radius:10px;padding:9px 13px;font-size:.98rem}
 .q-fb.ok{background:var(--ok-soft);color:var(--ok)} .q-fb.ko{background:var(--miss-soft);color:var(--miss)}
 .q-fb .he{font-size:1.35rem;unicode-bidi:isolate}
+.q-cons{color:var(--muted);font-size:.92rem}
+.q-fb .bad,.q-oral .bad{color:var(--miss);text-decoration:underline wavy;text-underline-offset:4px}
+.q-fb .miss{color:var(--miss);font-weight:600}
+.q-oral{border-radius:10px;padding:9px 13px;background:var(--bg);font-size:.98rem}
+.q-oral .he{font-size:1.35rem;unicode-bidi:isolate}
+.q-oral .he span{margin:0 .12em}
+.q-oral .good{color:var(--ok)}
+.q-oral .pc{font-weight:600;margin-inline-start:8px}
+#q-mic.on{background:var(--miss);border-color:var(--miss);color:var(--paper)}
 .q-fr{color:var(--muted);font-style:italic;border-top:1px solid var(--line);padding-top:10px}
 .q-hint{background:var(--bg);border-radius:9px;padding:8px 12px;font-size:.93rem}
 .q-btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -1148,10 +1157,12 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
         <div class="grp2" id="q-formw"><span class="lab">Forme</span><div class="seg" id="q-form"><button type="button" data-v="infinitif">Infinitif</button><button type="button" data-v="conjugue">Conjugué</button></div></div>
         <div class="grp2"><span class="lab">Niveau</span><div class="seg" id="q-lvl"><button type="button" data-v="A1">A1</button><button type="button" data-v="A2">A2</button><button type="button" data-v="B1">B1</button><button type="button" data-v="B2">B2</button><button type="button" data-v="C1">C1</button></div></div>
         <div class="grp2"><span class="lab">Nikoud</span><div class="seg" id="q-nik"><button type="button" data-v="1">Avec</button><button type="button" data-v="0">Sans</button></div></div>
+        <div class="grp2"><span class="lab">Mode</span><div class="seg" id="q-mode"><button type="button" data-v="trouver">Trouver le mot</button><button type="button" data-v="dictee">Dictée</button></div></div>
       </div>
     </div>
     <section class="q-card" aria-live="polite">
       <div class="row" style="justify-content:space-between"><div class="row" id="q-meta"></div><span class="q-score">Réussies <b id="q-ok">0</b> / <b id="q-tot">0</b></span></div>
+      <div class="q-cons" id="q-cons"></div>
       <div class="q-sent" id="q-sent" lang="he"></div>
       <div class="q-hint" id="q-hint" hidden></div>
       <div class="q-fb" id="q-fb" hidden></div>
@@ -1162,8 +1173,11 @@ textarea.mt-ans:focus{border-color:var(--accent);outline:none}
         <button type="button" id="q-show">Réponse</button>
         <button type="button" id="q-frb">Traduction</button>
         <button type="button" id="q-say" title="Écouter (le trou reste muet tant que vous n’avez pas répondu)">🔊 Écouter</button>
+        <button type="button" id="q-slow" title="Écouter lentement" hidden>🐢 Lentement</button>
+        <button type="button" id="q-mic" title="Lisez la phrase complète à voix haute : la page compare mot à mot" hidden>🎙 Dites la phrase</button>
         <button type="button" id="q-next" class="cl pri nx">Next ›</button>
       </div>
+      <div class="q-oral" id="q-oral" hidden></div>
       <div id="q-msg"></div>
     </section>
     <div class="box">
@@ -2760,7 +2774,7 @@ function esRender(){
 }
 
 /* ===================== PHRASES À TROU ===================== */
-const Q = { kind: 'verbe', form: 'conjugue', lvl: store.get('qlvl', 'A2'), nik: store.get('qnik', true), item: null, done: false, busy: false, ok: 0, tot: 0 };
+const Q = { kind: 'verbe', form: 'conjugue', lvl: store.get('qlvl', 'A2'), nik: store.get('qnik', true), mode: store.get('qmode', 'trouver') === 'dictee' ? 'dictee' : 'trouver', tries: 0, item: null, done: false, busy: false, ok: 0, tot: 0 };
 let qHist = (() => { const v = store.get('trous', []); return Array.isArray(v) ? v.filter(o => o && isStr(o.answer) && typeof o.before === 'string') : []; })();
 const qShow = t => Q.nik ? String(t || '') : bare(t);
 const qNorm = t => bare(t).replace(/[\s־\-'"׳״.,!?:;]/g, '').replace(/[ךםןףץ]/g, c => FINALS[c]);
@@ -2776,6 +2790,33 @@ qSeg('q-kind', 'kind', null, () => { $('q-formw').hidden = Q.kind !== 'verbe'; }
 qSeg('q-form', 'form');
 qSeg('q-lvl', 'lvl', 'qlvl');
 qSeg('q-nik', 'nik', 'qnik', () => { qDraw(true); qRenderList(); });
+// 24 nov. 2026 (point 8) : mode Dictée (le mot manquant est prononcé) et lecture à voix haute
+qSeg('q-mode', 'mode', 'qmode', () => { qModeUi(); qDraw(true); });
+function qModeUi(){
+  const d = Q.mode === 'dictee';
+  $('q-cons').textContent = d
+    ? 'Dictée : écoutez la phrase (🔊), le mot manquant est prononcé. Écrivez-le en lettres hébraïques, sans nikoud, en écriture pleine (avec les ו et les י). Vous avez droit à deux essais.'
+    : 'Trouvez le mot de la racine qui manque. À l’écoute, le trou reste muet tant que vous n’avez pas répondu.';
+  $('q-say').title = d ? 'Écouter la phrase entière' : 'Écouter (le trou reste muet tant que vous n’avez pas répondu)';
+  $('q-slow').hidden = !(d || Q.done) || !window.speechSynthesis;
+  $('q-hintb').hidden = d && !Q.done;
+}
+// comparaison lettre à lettre (plus longue sous-suite commune)
+function qLcs(a, b){
+  const m = a.length, n = b.length, d = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++) d[i][j] = a[i-1] === b[j-1] ? d[i-1][j-1] + 1 : Math.max(d[i-1][j], d[i][j-1]);
+  const ka = new Set(), kb = new Set(); let i = m, j = n;
+  while (i && j){ if (a[i-1] === b[j-1]){ ka.add(i-1); kb.add(j-1); i--; j--; } else if (d[i-1][j] >= d[i][j-1]) i--; else j--; }
+  return { n: d[m][n], ka, kb };
+}
+// mot de l'élève, lettres fausses soulignées ; lettres oubliées comptées
+function qDiff(user, ans){
+  const a = [...qNorm(user)], b = [...qNorm(ans)], r = qLcs(a, b);
+  const span = el('span', 'he');
+  a.forEach((c, i) => { const x = el('span', r.ka.has(i) ? '' : 'bad', c); span.appendChild(x); });
+  const bad = a.length - r.n, lack = b.length - r.n;   // une lettre remplacée = une lettre fausse (pas « fausse + oubliée »)
+  return { span, bad, miss: Math.max(0, lack - bad), extra: Math.max(0, bad - lack) };
+}
 
 function qBtns(){
   $('q-next').disabled = Q.busy || !sample || !root;
@@ -2802,6 +2843,7 @@ function qDraw(keep){
   box.append(inp, ' ' + qShow(it.after));
   [it.binyan, it.form].filter(isStr).forEach(t => meta.appendChild(el('span', 'tag', t)));
   $('q-fr').textContent = it.fr || ''; $('q-hint').textContent = '💡 ' + (it.hint || '');
+  qModeUi();
 }
 function qScore(){ $('q-ok').textContent = Q.ok; $('q-tot').textContent = Q.tot; }
 function qFeedback(good, label){
@@ -2820,11 +2862,61 @@ function qCheck(){
   const it = Q.item; if (!it || Q.done) return;
   const inp = $('q-gap'), v = qNorm(inp.value);
   if (!v){ inp.focus(); return; }
+  if (Q.mode === 'dictee') return qCheckDictee(it, inp, v);
   const good = [it.answer, ...(it.accept || [])].some(a => qNorm(a) === v);
   Q.done = true; Q.tot++; if (good) Q.ok++; qScore();
   inp.className = 'q-gap ' + (good ? 'ok' : 'ko');
   qFeedback(good, good ? 'Juste ✓' : 'Pas tout à fait. Réponse :');
   qRecord(inp.value.trim(), good ? 'juste' : 'faux');
+  qModeUi(); qMicUi();
+}
+// écriture pleine tirée du nikoud : holam → וֹ, kubutz → וּ
+function qPlene(t){
+  const ch = [...String(t || '')], out = [];
+  for (let i = 0; i < ch.length; i++){
+    const c = ch[i];
+    if (c === '\u05BB'){ out.push('ו'); continue; }
+    out.push(c);
+    if (c === '\u05B9' && i > 0){
+      let j = i - 1; while (j >= 0 && /[\u0591-\u05C7]/.test(ch[j])) j--;
+      if (ch[j] !== 'ו' && ch[i + 1] !== 'ו') out.push('ו');
+    }
+  }
+  return out.join('');
+}
+// dictée : seul le mot prononcé compte, en écriture pleine (graphie la plus longue des variantes)
+function qDicteeForms(it){
+  const all = [...new Set([it.answer, qPlene(it.answer), ...(it.accept || [])].map(qNorm).filter(Boolean))];
+  const max = Math.max(...all.map(x => [...x].length));
+  return { male: all.filter(x => [...x].length === max), all };
+}
+function qCheckDictee(it, inp, v){
+  const F = qDicteeForms(it), good = F.male.includes(v), haser = !good && F.all.includes(v);
+  if (!good && Q.tries === 0){
+    Q.tries = 1;
+    const fb = $('q-fb');
+    fb.hidden = false; fb.className = 'q-fb ko'; fb.innerHTML = '';
+    if (haser){
+      fb.append('Presque ! Le mot est juste, mais en écriture défective. Écrivez-le en écriture pleine (ajoutez les ו ou les י qui notent les voyelles) : deuxième essai.');
+      inp.className = 'q-gap ko'; inp.focus(); inp.select(); return;
+    }
+    const d = qDiff(inp.value, F.male[0]);
+    fb.append((Math.max(d.bad, d.bad + d.miss) <= 1 ? 'Presque ! ' : 'Pas encore. ') + 'Votre mot : ');
+    fb.appendChild(d.span);
+    const parts = [];
+    if (d.bad) parts.push(d.bad + (d.bad > 1 ? ' lettres fausses (soulignées)' : ' lettre fausse (soulignée)'));
+    if (d.miss) parts.push(d.miss + (d.miss > 1 ? ' lettres oubliées' : ' lettre oubliée'));
+    if (parts.length){ fb.appendChild(el('br')); fb.appendChild(el('span', 'miss', parts.join(' ; ') + '.')); }
+    fb.appendChild(el('br')); fb.append('Réécoutez (🔊 ou 🐢) et corrigez : deuxième essai.');
+    inp.className = 'q-gap ko'; inp.focus(); inp.select();
+    return;
+  }
+  Q.done = true; Q.tot++; if (good) Q.ok++; qScore();
+  inp.className = 'q-gap ' + (good ? 'ok' : 'ko');
+  qFeedback(good, good ? (Q.tries ? 'Juste au deuxième essai ✓' : 'Juste ✓') : 'Pas tout à fait. Réponse :');
+  if (!good){ const d = qDiff(inp.value, F.male[0]), fb = $('q-fb'); fb.appendChild(el('br')); fb.append('Écriture pleine : '); fb.appendChild(el('span', 'he', F.male[0])); fb.append(' · votre mot : '); fb.appendChild(d.span); }
+  qRecord(inp.value.trim(), good ? (Q.tries ? 'juste2' : 'juste') : 'faux');
+  qModeUi(); qMicUi();
 }
 function qReveal(){
   const it = Q.item; if (!it) return;
@@ -2832,18 +2924,72 @@ function qReveal(){
   if (!Q.done){ Q.done = true; Q.tot++; qScore(); qRecord(inp.value.trim(), 'vu'); }
   inp.value = qShow(it.answer); inp.className = 'q-gap ko';
   qFeedback(false, 'Réponse :');
+  qModeUi(); qMicUi();
 }
-function qSay(){
+function qSay(slow){
   const it = Q.item; if (!it) return;
-  sayHe(Q.done ? it.before + ' ' + it.answer + ' ' + it.after : it.before + ' ... ' + it.after);
+  const t = Q.done || Q.mode === 'dictee' ? it.before + ' ' + it.answer + ' ' + it.after : it.before + ' ... ' + it.after;
+  if (!slow) return sayHe(t);
+  if (!window.speechSynthesis) return; speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'he-IL'; u.rate = 0.55; speechSynthesis.speak(u);
+}
+/* 🎙 Dites la phrase : reconnaissance vocale du navigateur (Chrome, Safari), comparaison mot à mot */
+const QSR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let qRec = null;
+function qMicUi(){ $('q-mic').hidden = !QSR || !Q.item || !Q.done; if (!Q.done) $('q-oral').hidden = true; }
+const qWords = t => bare(t).replace(/[־\-]/g, ' ').replace(/[^א-ת ]/g, ' ').replace(/[ךםןףץ]/g, c => FINALS[c]).split(/\s+/).filter(Boolean);
+function qOralShow(heard, final){
+  const it = Q.item, box = $('q-oral'); if (!it) return;
+  const exp = qWords(it.before + ' ' + it.answer + ' ' + it.after), got = qWords(heard), r = qLcs(exp, got);
+  const pc = exp.length ? Math.round(100 * r.n / exp.length) : 0;
+  box.hidden = false; box.innerHTML = '';
+  box.append(final ? 'Vous avez dit : ' : 'J’écoute… ');
+  const he = el('span', 'he'); he.dir = 'rtl';
+  got.forEach((w, i) => he.appendChild(el('span', final ? (r.kb.has(i) ? 'good' : 'bad') : '', w)));
+  box.appendChild(he);
+  if (!final) return;
+  const miss = exp.filter((w, i) => !r.ka.has(i));
+  box.appendChild(el('span', 'pc', pc + ' %'));
+  box.appendChild(el('br'));
+  if (pc === 100) box.appendChild(el('span', 'good', 'Parfait ✓ : chaque mot a été reconnu.'));
+  else {
+    box.append('Pas encore 100 % : redites la phrase. ');
+    if (miss.length){ box.append('Mots non reconnus : '); const m = el('span', 'he bad'); m.dir = 'rtl'; m.textContent = miss.join(' · '); box.appendChild(m); }
+  }
+  const last = qHist[qHist.length - 1];
+  if (last && last.before === it.before && last.answer === it.answer){ last.oral = Math.max(last.oral || 0, pc); store.set('trous', qHist); qRenderList(); }
+}
+function qMic(){
+  if (!QSR || !Q.item) return;
+  const b = $('q-mic');
+  if (qRec){ try { qRec.stop(); } catch (e) {} return; }
+  if (window.speechSynthesis) speechSynthesis.cancel();
+  const rec = new QSR(); qRec = rec;
+  rec.lang = 'he-IL'; rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
+  let heard = '';
+  rec.onresult = e => { heard = [...e.results].map(x => x[0].transcript).join(' '); qOralShow(heard, false); };
+  rec.onerror = e => {
+    const box = $('q-oral'); box.hidden = false;
+    box.textContent = e.error === 'not-allowed' || e.error === 'service-not-allowed'
+      ? 'Le micro est refusé : autorisez-le pour ce site dans le navigateur, puis réessayez.'
+      : e.error === 'no-speech' ? 'Je n’ai rien entendu : cliquez sur 🎙 et lisez la phrase à voix haute.' : 'La reconnaissance vocale n’a pas fonctionné. Réessayez.';
+    heard = '';
+  };
+  rec.onend = () => { qRec = null; b.classList.remove('on'); b.textContent = '🎙 Dites la phrase'; if (heard) qOralShow(heard, true); };
+  b.classList.add('on'); b.textContent = '⏹ Arrêter';
+  $('q-oral').hidden = false; $('q-oral').textContent = 'Lisez la phrase complète à voix haute…';
+  try { rec.start(); } catch (e) { qRec = null; b.classList.remove('on'); b.textContent = '🎙 Dites la phrase'; }
 }
 $('q-check').onclick = qCheck;
 $('q-show').onclick = qReveal;
 $('q-hintb').onclick = () => { if (Q.item) $('q-hint').hidden = !$('q-hint').hidden; };
 $('q-frb').onclick = () => { if (Q.item) $('q-fr').hidden = !$('q-fr').hidden; };
-$('q-say').onclick = qSay;
+$('q-say').onclick = () => qSay(false);
+$('q-slow').onclick = () => qSay(true);
+$('q-mic').onclick = qMic;
 $('q-next').onclick = () => qNext();
 if (!window.speechSynthesis) $('q-say').hidden = true;
+qModeUi();
 
 function qPrompt(){
   const r = root, verbs = CAT.filter(c => c[3] === r);
@@ -2864,7 +3010,7 @@ function qPrompt(){
     'Écris UNE phrase naturelle et idiomatique, avec nikoud complet et correct, dont le SENS permet de trouver le mot manquant sans ambiguïté. Le mot manquant est un seul mot (préfixes inséparables collés inclus).',
     'Ne reprends ni ces phrases ni ces mots-réponses déjà donnés :', hist,
     'Réponds uniquement par un objet JSON :',
-    '{"before":"partie AVANT le trou (vocalisée)","after":"partie APRÈS le trou (vocalisée, ponctuation finale incluse)","answer":"le mot manquant vocalisé","accept":["graphies sans nikoud acceptables : ktiv male et ktiv haser"],"binyan":"binyan en hébreu, ou nature du mot (ex. מִשְׁקַל)","form":"temps · personne, ou nature du mot, en français court","fr":"traduction française de la phrase complète","hint":"indice court en français, sans donner le mot"}'
+    '{"before":"partie AVANT le trou (vocalisée)","after":"partie APRÈS le trou (vocalisée, ponctuation finale incluse)","answer":"le mot manquant vocalisé SUR l’écriture pleine (וֹ pour o, וּ pour u, jamais de kubutz)","accept":["graphies sans nikoud acceptables : ktiv male et ktiv haser"],"binyan":"binyan en hébreu, ou nature du mot (ex. מִשְׁקַל)","form":"temps · personne, ou nature du mot, en français court","fr":"traduction française de la phrase complète","hint":"indice court en français, sans donner le mot"}'
   ].filter(Boolean).join('\n');
 }
 async function qNext(){
@@ -2880,7 +3026,8 @@ async function qNext(){
     Q.item = { root: r, before: o.before.trim(), after: o.after.trim(), answer: o.answer.trim(),
       accept: Array.isArray(o.accept) ? o.accept.filter(isStr) : [], binyan: isStr(o.binyan) ? o.binyan : '', form: isStr(o.form) ? o.form : '',
       fr: isStr(o.fr) ? o.fr : '', hint: isStr(o.hint) ? o.hint : '' };
-    Q.done = false; ['q-hint', 'q-fb', 'q-fr'].forEach(i => $(i).hidden = true);
+    Q.done = false; Q.tries = 0; if (qRec){ try { qRec.abort(); } catch (e) {} qRec = null; }
+    ['q-hint', 'q-fb', 'q-fr', 'q-oral'].forEach(i => $(i).hidden = true); qMicUi();
     qDraw(false); $('q-msg').innerHTML = '';
     const g = $('q-gap'); if (g) g.focus({ preventScroll: true });
   } catch (e) {
@@ -2893,7 +3040,7 @@ async function qNext(){
 
 /* ----- fiche de la séance ----- */
 function qFiltered(){ const f = $('q-froot').value; return qHist.filter(h => !f || h.root === f); }
-const Q_V = { juste: ['✓', 'ok', 'Juste'], faux: ['✗', 'ko', 'Faux'], vu: ['?', 'ko', 'Réponse vue'] };
+const Q_V = { juste: ['✓', 'ok', 'Juste'], juste2: ['✓', 'ok', 'Juste au 2ᵉ essai'], faux: ['✗', 'ko', 'Faux'], vu: ['?', 'ko', 'Réponse vue'] };
 function qRenderList(){
   const sel = $('q-froot'), cur = sel.value, roots = [...new Set(qHist.map(h => h.root))];
   sel.innerHTML = ''; const all = el('option', '', 'Toutes les racines (' + qHist.length + ')'); all.value = ''; sel.appendChild(all);
@@ -2906,7 +3053,7 @@ function qRenderList(){
     row.appendChild(el('span', 'v ' + v[1], v[0]));
     const mh = el('div', 'mh'); mh.append(qShow(h.before) + ' '); mh.appendChild(el('u', '', qShow(h.answer))); mh.append(' ' + qShow(h.after)); row.appendChild(mh);
     const sb = el('button', '', '🔊'); sb.type = 'button'; sb.title = 'Écouter'; sb.onclick = () => sayHe(h.before + ' ' + h.answer + ' ' + h.after); row.appendChild(sb);
-    const mf = el('div', 'mf'); mf.append('Ta réponse : '); mf.appendChild(el('span', 'he', h.user || '—')); mf.append(' · ' + [h.form, h.fr].filter(isStr).join(' · ')); row.appendChild(mf);
+    const mf = el('div', 'mf'); mf.append('Ta réponse : '); mf.appendChild(el('span', 'he', h.user || '—')); mf.append(' · ' + [h.form, h.fr].filter(isStr).join(' · ') + (h.verdict === 'juste2' ? ' · juste au 2ᵉ essai' : '') + (typeof h.oral === 'number' ? ' · 🎙 ' + h.oral + ' %' : '')); row.appendChild(mf);
     box.appendChild(row);
   });
   qBtns();
@@ -2921,14 +3068,14 @@ $('q-clr').onclick = () => {
 };
 function qPdfBlocks(list, title){
   const T = (tag, css, txt, dir) => { const e = document.createElement(tag); e.style.cssText = css; if (dir) e.dir = dir; if (txt !== undefined) e.textContent = txt; return e; };
-  const out = [], ok = list.filter(h => h.verdict === 'juste').length, roots = [...new Set(list.map(h => h.root))];
+  const out = [], ok = list.filter(h => h.verdict === 'juste' || h.verdict === 'juste2').length, roots = [...new Set(list.map(h => h.root))];
   const head = T('div', '');
   head.appendChild(T('div', 'font:700 26px "IBM Plex Sans",sans-serif;color:#1f2a44', title));
   head.appendChild(T('div', 'font:14px "IBM Plex Sans",sans-serif;color:#556;margin:4px 0 6px',
     new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) + ' · racine' + (roots.length > 1 ? 's ' : ' ') + roots.map(dash).join(', ') + ' · ' + ok + ' / ' + list.length + ' réussies'));
   out.push(head);
   list.forEach((h, i) => {
-    const v = Q_V[h.verdict] || Q_V.vu, good = h.verdict === 'juste';
+    const v = Q_V[h.verdict] || Q_V.vu, good = h.verdict === 'juste' || h.verdict === 'juste2';
     const c = T('div', 'padding:10px 4px 12px;border-bottom:1px solid #dde;display:flex;gap:12px;align-items:flex-start');
     c.appendChild(T('div', 'flex:none;width:30px;font:600 14px "IBM Plex Sans",sans-serif;color:#556;padding-top:10px', (i + 1) + '.'));
     const b = T('div', 'flex:1');
@@ -3977,6 +4124,7 @@ attachStore();
     trous:
       '<h5>À quoi ça sert</h5><p>Un jeu : retrouver le mot de la racine qui manque dans la phrase.</p>' +
       '<h5>Comment faire</h5><p>Choisissez le type (verbe ou nom / adjectif), la forme (infinitif ou conjugué), le niveau, avec ou sans nikoud. Écrivez le mot, puis Vérifier. 💡 Indice, Réponse, Traduction et 🔊 si vous êtes bloqué. Next › pour la phrase suivante.</p>' +
+      '<h5>Dictée et oral</h5><p>En mode <b>Dictée</b>, 🔊 prononce la phrase entière, mot manquant compris (🐢 pour l’écouter lentement). Écrivez le mot sans nikoud, en écriture pleine : les lettres fausses sont soulignées et vous avez un deuxième essai. Après la réponse, <b>🎙 Dites la phrase</b> : lisez-la à voix haute, la page compare mot à mot ; visez 100 %. (Micro : Chrome ou Safari.)</p>' +
       '<h5>Pour aller plus loin</h5><p>Jouez « sans nikoud » dès que possible : c’est ainsi qu’on lit l’hébreu dans la vie. La <b>Fiche de la séance</b> garde vos réponses (⬇ Fiche PDF).</p>',
 
     confusion:
@@ -4008,7 +4156,7 @@ attachStore();
       '<h5>Comment faire</h5><p>Vous pouvez aussi taper vous-même un mot hébreu dans la case, puis « 🪜 Construire l’escalier ». Vous obtenez cinq phrases avec ce mot, de A1 à C1.</p>' +
       '<h5>Pour aller plus loin</h5><p>« Déjà construits » garde vos escaliers : un clic suffit pour les revoir.</p>',
     qreg:
-      '<ul><li><b>Type</b> : le mot caché est un verbe, ou un nom / adjectif.</li><li><b>Forme</b> (verbes) : l’infinitif, ou le verbe conjugué.</li><li><b>Niveau</b> : la difficulté des phrases, de A1 à C1.</li><li><b>Nikoud</b> : avec, pour commencer ; sans, dès que possible.</li></ul>',
+      '<ul><li><b>Type</b> : le mot caché est un verbe, ou un nom / adjectif.</li><li><b>Forme</b> (verbes) : l’infinitif, ou le verbe conjugué.</li><li><b>Niveau</b> : la difficulté des phrases, de A1 à C1.</li><li><b>Nikoud</b> : avec, pour commencer ; sans, dès que possible.</li><li><b>Mode</b> : « Trouver le mot » (le trou reste muet) ou « Dictée » (le mot est prononcé : vous l’écrivez, deux essais).</li></ul>',
     trev:
       '<p>Les phrases ratées reviennent le jour même ; les phrases justes reviennent de plus en plus tard. Faites la révision au début de chaque séance.</p>',
     ttextes:
